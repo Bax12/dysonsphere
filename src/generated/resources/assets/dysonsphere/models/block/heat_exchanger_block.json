@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "dysonsphere:block/heat_exchanger_block_end",
+    "side": "dysonsphere:block/heat_exchanger_block_side"
+  }
+}

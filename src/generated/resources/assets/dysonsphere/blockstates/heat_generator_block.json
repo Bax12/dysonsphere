@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "dysonsphere:block/heat_generator_block"
+    }
+  }
+}

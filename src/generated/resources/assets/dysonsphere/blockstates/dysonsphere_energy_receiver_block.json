@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "dysonsphere:block/dysonsphere_energy_receiver_block"
+    }
+  }
+}

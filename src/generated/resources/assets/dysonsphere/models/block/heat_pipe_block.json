@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "dysonsphere:block/heat_pipe_block"
+  }
+}

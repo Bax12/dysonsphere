@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "dysonsphere:block/dysonsphere_monitor_block",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "dysonsphere:block/dysonsphere_monitor_block"
+    },
+    "facing=south": {
+      "model": "dysonsphere:block/dysonsphere_monitor_block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "dysonsphere:block/dysonsphere_monitor_block",
+      "y": 270
+    }
+  }
+}

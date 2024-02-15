@@ -1,0 +1,18 @@
+{
+  "block.dysonsphere.dysonsphere_energy_receiver_block": "Dyson Sphere Energy Receiver",
+  "block.dysonsphere.dysonsphere_monitor_block": "Dyson Sphere Observer",
+  "block.dysonsphere.heat_exchanger_block": "Thermal Exchanger",
+  "block.dysonsphere.heat_generator_block": "Thermoelectric Generator",
+  "block.dysonsphere.heat_pipe_block": "Thermal Coupler",
+  "block.dysonsphere.railgun_block": "Electromagnetic Orbital Launcher",
+  "item.dysonsphere.bucket_steam": "Steam Bucket",
+  "item.dysonsphere.capsule_empty": "Space Transfer Capsule (Empty)",
+  "item.dysonsphere.capsule_solar": "Solar Satellite Space Capsule",
+  "item.dysonsphere.coil_copper": "Copper Wire Coil",
+  "item.dysonsphere.coil_iron": "Iron Wire Coil",
+  "item.dysonsphere.heat_shielding": "Heat Shielding",
+  "item.dysonsphere.railgun": "Electromagnetic Launcher",
+  "item.dysonsphere.solar_foil": "Solar Foil",
+  "item.dysonsphere.thermopile": "Iron-Copper Thermopile",
+  "itemGroup.dysonsphere_tab": "Dyson Sphere Project"
+}
