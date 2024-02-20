@@ -14,5 +14,5 @@ public class ModTiles {
     public static final DeferredRegister<BlockEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, DysonSphere.MODID);
 
     public static final RegistryObject<BlockEntityType<?>> HEAT_PIPE = TILES.register("heat_pipe", () -> new BlockEntityType<HeatPipeTile>(HeatPipeTile::new, Set.of(ModBlocks.HEAT_PIPE_BLOCK.get()), null));
-
+    public static final RegistryObject<BlockEntityType<?>> RAILGUN = TILES.register("railgun", () -> new BlockEntityType<>(RailgunTile::new, Set.of(ModBlocks.RAILGUN_BLOCK.get()), null));
 }

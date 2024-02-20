@@ -9,5 +9,9 @@ public class HeatPipeTile extends BlockEntity {
     public HeatPipeTile(BlockPos pos, BlockState state) {
         super(ModTiles.HEAT_PIPE.get(), pos, state);
     }
+
     
+
+    
+
 }

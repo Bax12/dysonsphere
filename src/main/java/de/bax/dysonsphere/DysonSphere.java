@@ -8,6 +8,7 @@ import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.tabs.ModTabs;
+import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,7 +26,7 @@ public class DysonSphere
     // Define mod id in a common place for everything to reference
     public static final String MODID = "dysonsphere";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
 
 
@@ -45,6 +46,7 @@ public class DysonSphere
         // Register the Deferred Register to the mod event bus so tabs get registered
         ModTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModFluids.FLUIDS.register(modEventBus);
+        ModTiles.TILES.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

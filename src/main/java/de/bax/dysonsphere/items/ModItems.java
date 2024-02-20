@@ -21,7 +21,7 @@ public class ModItems {
     public static final RegistryObject<Item> CAPSULE_SOLAR = registerItem("capsule_solar");
     public static final RegistryObject<Item> HEAT_SHIELDING = registerItem("heat_shielding");
     public static final RegistryObject<Item> RAILGUN = registerItem("railgun");
-    public static final RegistryObject<Item> STEAM_BUCKET = ITEMS.register("bucket_steam", () -> new BucketItem(ModFluids.STEAM, new Item.Properties()));
+    public static final RegistryObject<Item> STEAM_BUCKET = ITEMS.register("bucket_steam", () -> new BucketItem(ModFluids.STEAM, new Item.Properties().stacksTo(1)));
 
 
 
