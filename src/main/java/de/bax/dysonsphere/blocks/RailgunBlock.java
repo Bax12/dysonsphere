@@ -7,13 +7,10 @@ import javax.annotation.Nullable;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import de.bax.dysonsphere.tileentities.RailgunTile;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -58,14 +55,13 @@ public class RailgunBlock extends Block implements EntityBlock {
     }
 
 
-
     @Override
-    public void onRemove(BlockState oldState, Level level, BlockPos pos, BlockState newState, boolean flag) {
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
         BlockEntity tile = level.getBlockEntity(pos);
-        if(tile != null && tile.getType().equals(ModTiles.RAILGUN.get())){
+        if(!level.isClientSide && willHarvest && tile != null && tile.getType().equals(ModTiles.RAILGUN.get())){
             ((RailgunTile) tile).dropContent();
         }
-        super.onRemove(oldState, level, pos, newState, flag);
+        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     }
     
 }

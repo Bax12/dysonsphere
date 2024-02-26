@@ -1,7 +1,7 @@
 package de.bax.dysonsphere.capabilities.heat;
 
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
-/** balant adaption of IEnergyStorage
+/** shameless adaption of IEnergyStorage
 *   Enables transfer of heat, should split equally
 *   heat in °Kelvin
 */
