@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Containers;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -98,11 +99,12 @@ public class RailgunTile extends BlockEntity {
         tag.put("Inventory", inventory.serializeNBT());
     }
 
-    //TODO: Not dropping, item stack is passed correctly
     public void dropContent() {
         for(int i = 0; i < inventory.getSlots(); i++){
             DysonSphere.LOGGER.info("Dropping item: {}", inventory.getStackInSlot(i));
-            Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getY(), inventory.getStackInSlot(i));
+            // Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getY(), inventory.getStackInSlot(i));
+            ItemEntity entity = new ItemEntity(level, getBlockPos().getX(),getBlockPos().getY(), getBlockPos().getZ(), inventory.getStackInSlot(i));
+            level.addFreshEntity(entity);
         }
     }
 
