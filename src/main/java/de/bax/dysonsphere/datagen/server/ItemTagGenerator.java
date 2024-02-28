@@ -21,7 +21,7 @@ public class ItemTagGenerator extends ItemTagsProvider {
 
     @Override
     protected void addTags(Provider provider) {
-        tag(DSTags.itemOrbitCapsule).add(ModItems.CAPSULE_SOLAR.get(), ModItems.CAPSULE_EMPTY.get());
+        // tag(DSTags.itemOrbitCapsule).add(ModItems.CAPSULE_SOLAR.get(), ModItems.CAPSULE_EMPTY.get());
     }
     
     

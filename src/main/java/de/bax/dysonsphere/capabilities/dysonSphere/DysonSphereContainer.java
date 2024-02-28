@@ -84,8 +84,8 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             parts.forEach((item, count) -> {
                 LazyOptional<IDSPart> cap = new ItemStack(item).getCapability(DSCapabilities.DS_PART);
                 cap.ifPresent((part) -> {
-                    energy += part.getEnergyProvided();
-                    completion += part.getCompletionProgress();
+                    energy += (part.getEnergyProvided() * count);
+                    completion += (part.getCompletionProgress() * count);
                 });
             });
         }
@@ -148,8 +148,18 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             if(energyReceiver.isPresent()){
                 receivers.add(energyReceiver);
             }
+            energyReceiver.addListener((receiver) -> {
+                receivers.remove(receiver);
+            });
+        }
+
+        @Override
+        public void removeEnergyReceiver(LazyOptional<IDSEnergyReceiver> energyReceiver) {
+            receivers.remove(energyReceiver);
         }
         
     }
+
+    
 
 }

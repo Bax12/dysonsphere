@@ -1,8 +1,12 @@
 package de.bax.dysonsphere.blocks;
 
+import java.util.Locale;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
+
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
@@ -69,7 +73,12 @@ public static final VoxelShape Shape_W = Stream.of(Block.box(2,0,1,9,15,15), Blo
         if(!level.isClientSide){
             DysonSphere.LOGGER.info("DSMonitorBlock Mark1");
             level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
-                DysonSphere.LOGGER.info("DysonSphere Completion: {}", ds.getCompletionPercentage());
+                DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+                df.setMaximumFractionDigits(30);
+                DysonSphere.LOGGER.info("DysonSphere Completion: {}%", df.format(ds.getCompletionPercentage()));
+                DysonSphere.LOGGER.info("DysonSphere Energy available: {}", ds.getDysonSphereEnergy());
+                DysonSphere.LOGGER.info("DysonSphere unique Part Count: {}", ds.getDysonSphereParts().size());
+                DysonSphere.LOGGER.info("DysonSphere a Part Count: {}", ds.getDysonSphereParts().entrySet().iterator().next().getValue());
             });
         }
         return InteractionResult.PASS;

@@ -4,12 +4,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.DysonSphere;
-import de.bax.dysonsphere.tags.DSTags;
+import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.Containers;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -21,6 +21,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class RailgunTile extends BlockEntity {
+
+    public static final int LAUNCH_ENERGY = 100000;
 
     protected EnergyStorage energyStorage = new EnergyStorage(100000){
         public int receiveEnergy(int maxReceive, boolean simulate) {
@@ -42,7 +44,7 @@ public class RailgunTile extends BlockEntity {
             return 1;
         };
         public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
-            return stack.is(DSTags.itemOrbitCapsule);
+            return stack.getCapability(DSCapabilities.DS_PART).isPresent();
         };
     };
 
@@ -73,10 +75,19 @@ public class RailgunTile extends BlockEntity {
     public void tick() {
         if(!level.isClientSide){
             // DysonSphere.LOGGER.info("Railgun E: {}", energyStorage.getEnergyStored());
-            // energyStorage.receiveEnergy(5, false);
+            // energyStorage.receiveEnergy(50000, false);
 
             // DysonSphere.LOGGER.info("Railgun I: {}", inventory.getStackInSlot(0));
-
+            ItemStack invStack = inventory.getStackInSlot(0);
+            if(energyStorage.getEnergyStored() >= LAUNCH_ENERGY && !invStack.isEmpty()){
+                level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
+                    if(ds.addDysonSpherePart(invStack.copyWithCount(1), false)){
+                        DysonSphere.LOGGER.info("Railgun Launched: {}", invStack);
+                        invStack.shrink(1);
+                        inventory.setStackInSlot(0, invStack);
+                    }
+                });
+            }
         }
     }
 

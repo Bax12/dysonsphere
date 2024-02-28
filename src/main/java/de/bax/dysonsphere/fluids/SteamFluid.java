@@ -13,6 +13,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fluids.FluidType;
 
 public class SteamFluid extends Fluid {
 
@@ -69,6 +70,11 @@ public class SteamFluid extends Fluid {
     @Override
     public VoxelShape getShape(FluidState p_76137_, BlockGetter p_76138_, BlockPos p_76139_) {
         return Shapes.empty();
+    }
+
+    @Override
+    public FluidType getFluidType() {
+        return new FluidType(FluidType.Properties.create().temperature(450).viscosity(1).canSwim(false).canConvertToSource(false));
     }
     
 }

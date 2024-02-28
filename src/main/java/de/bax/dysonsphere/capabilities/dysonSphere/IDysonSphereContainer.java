@@ -57,6 +57,12 @@ public interface IDysonSphereContainer {
      */
     void registerEnergyReceiver(LazyOptional<IDSEnergyReceiver> energyReceiver);
 
-    
+    /**
+     * remove a @see IDSEnergyReceiver from the Dyson Sphere
+     * receiver should call this method when being separated from the Dyson Sphere.
+     * On Removal or Destruction of the receiver invalidating the LazyOptional is enough.
+     * @param energyReceiver a LazyOptional of the IDSEnergyReceiver to be removed
+     */
+    void removeEnergyReceiver(LazyOptional<IDSEnergyReceiver> energyReceiver);
 
 }

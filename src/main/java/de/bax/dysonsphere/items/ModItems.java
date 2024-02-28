@@ -18,7 +18,7 @@ public class ModItems {
     public static final RegistryObject<Item> THERMOPILE = registerItem("thermopile");
     public static final RegistryObject<Item> SOLAR_FOIL = registerItem("solar_foil");
     public static final RegistryObject<Item> CAPSULE_EMPTY = registerItem("capsule_empty");
-    public static final RegistryObject<Item> CAPSULE_SOLAR = registerItem("capsule_solar");
+    public static final RegistryObject<Item> CAPSULE_SOLAR = ITEMS.register("capsule_solar", () -> new CapsuleSolarItem());
     public static final RegistryObject<Item> HEAT_SHIELDING = registerItem("heat_shielding");
     public static final RegistryObject<Item> RAILGUN = registerItem("railgun");
     public static final RegistryObject<Item> STEAM_BUCKET = ITEMS.register("bucket_steam", () -> new BucketItem(ModFluids.STEAM, new Item.Properties().stacksTo(1)));
