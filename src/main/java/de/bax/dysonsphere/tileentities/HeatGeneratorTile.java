@@ -1,11 +1,18 @@
 package de.bax.dysonsphere.tileentities;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -14,6 +21,10 @@ public class HeatGeneratorTile extends BlockEntity {
 
     public static final double maxHeat = 1500;
     public static final double maxHeatTransfer = 5;
+    public static final int energyCapacity = 25000;
+
+    public static final double minHeatDifference = 10;
+    public static final int energyGenerated = 1;
 
     protected HeatHandler heatHandler = new HeatHandler(300, maxHeat){
         public double getMaxSplitShareAmount() {
@@ -30,26 +41,28 @@ public class HeatGeneratorTile extends BlockEntity {
             return super.receiveHeat(maxReceive, simulate);
         };
     };
-    protected EnergyStorage energyStorage = new EnergyStorage(25000){
-        public int receiveEnergy(int maxReceive, boolean simulate) {
-            if(!simulate) setChanged();
-            return super.receiveEnergy(maxReceive, simulate);
-        };
-
-        public int extractEnergy(int maxExtract, boolean simulate) {
-            if(!simulate) setChanged();
-            return super.receiveEnergy(maxExtract, simulate);
-        };
-    };
+    protected EnergyStorage energyStorage = new EnergyStorage(energyCapacity);
 
     protected LazyOptional<IHeatContainer> lazyHeatContainer = LazyOptional.of(() -> heatHandler);
     protected LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
 
     protected int ticksElapsed = 0;
     protected double lastHeat = 0;
+    protected int lastEnergy = 0;
+    protected LazyOptional<IEnergyStorage>[] energyNeighbors = new LazyOptional[6];
 
     public HeatGeneratorTile(BlockPos pos, BlockState state) {
         super(ModTiles.HEAT_GENERATOR.get(), pos, state);
+    }
+
+    @Override
+    public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if(cap.equals(DSCapabilities.HEAT)){
+            return lazyHeatContainer.cast();
+        } else if (cap.equals(ForgeCapabilities.ENERGY)){
+            return lazyEnergyStorage.cast();
+        }
+        return super.getCapability(cap, side);
     }
 
     @Override
@@ -67,12 +80,18 @@ public class HeatGeneratorTile extends BlockEntity {
                     this.setChanged();
                     lastHeat = heatHandler.getHeatStored();
                 }
+                generateEnergy();
+                splitShareEnergy();
+                if(lastEnergy != energyStorage.getEnergyStored()){
+                    this.setChanged();
+                    lastEnergy = energyStorage.getMaxEnergyStored();
+                }
             }
-            //TODo: generate energy on heat difference and energy transfer
+            
         }
     }
 
-        @Override
+    @Override
     public void load(CompoundTag tag) {
         super.load(tag);
         if(tag.contains("Energy")){
@@ -92,13 +111,72 @@ public class HeatGeneratorTile extends BlockEntity {
     }
 
     public void onNeighborChange() {
-        heatHandler.updateNeighbors(level, getBlockPos());
+        updateNeighbors();
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
+        updateNeighbors();
+    }
+
+    protected void updateNeighbors(){
         heatHandler.updateNeighbors(level, getBlockPos());
+        for(Direction dir : Direction.values()){
+            BlockEntity neighbor = level.getBlockEntity(getBlockPos().relative(dir));
+            if(neighbor != null){
+                LazyOptional<IEnergyStorage> neighborHandler = neighbor.getCapability(ForgeCapabilities.ENERGY, dir.getOpposite());
+                if (neighborHandler.isPresent()){
+                    energyNeighbors[dir.ordinal()] = neighborHandler;
+                }
+            }
+        }
+    }
+
+    protected void splitShareEnergy(){
+        // List<LazyOptional<IEnergyStorage>> energyList = Arrays.asList(energyNeighbors);
+        // energyList.removeIf((pred) -> {
+        //     return (pred == null || !pred.isPresent());
+        // });
+        for (LazyOptional<IEnergyStorage> neighbor : energyNeighbors){
+            if(neighbor != null && neighbor.isPresent()){
+                neighbor.ifPresent((neiEnergy) -> {
+                    int maxTransfer = neiEnergy.receiveEnergy(energyStorage.getEnergyStored(), true);
+                    neiEnergy.receiveEnergy(energyStorage.extractEnergy(maxTransfer, false), false);
+                });
+            }
+        }
+    }
+
+    protected double heatDifference = 0.0d;
+    protected void generateEnergy(){
+        heatDifference = 0.0d;
+        for (Direction.Axis axis : Direction.Axis.values()){
+            Direction dirPos = Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE);
+            Direction dirNeg = dirPos.getOpposite();
+            BlockEntity tilePos = level.getBlockEntity(getBlockPos().relative(dirPos));
+            BlockEntity tileNeg = level.getBlockEntity(getBlockPos().relative(dirNeg));
+            if(tilePos != null && tileNeg != null){
+                LazyOptional<IHeatContainer> heatNegContainer = tilePos.getCapability(DSCapabilities.HEAT, dirNeg);
+                LazyOptional<IHeatContainer> heatPosContainer = tileNeg.getCapability(DSCapabilities.HEAT, dirPos);
+                if(heatNegContainer.isPresent() && heatPosContainer.isPresent()){
+                    heatNegContainer.ifPresent((heatNeg) -> {
+                        heatPosContainer.ifPresent((heatPos) -> {
+                            double heatDiff = heatNeg.getHeatStored() - heatPos.getHeatStored();
+                            if(heatDiff < 0){
+                                heatDiff *= -1;
+                            }
+                            if(heatDiff > heatDifference){
+                                heatDifference = heatDiff;
+                            }
+                        });
+                    });
+                }
+            }
+        }
+        if(heatDifference > 0){
+            energyStorage.receiveEnergy((int) (energyGenerated * heatDifference / minHeatDifference) * 5, false);//times 5 since only called once every 5 Ticks
+        }
     }
 
     

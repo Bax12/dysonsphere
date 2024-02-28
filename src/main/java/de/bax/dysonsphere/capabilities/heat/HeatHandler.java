@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -71,9 +72,13 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
         }
     }
 
+    public LazyOptional<IHeatContainer>[] getNeighborList() {
+        return neighborList;
+    }
+
     public void updateNeighbors(Level level, BlockPos pos){
         for(Direction dir : Direction.values()){
-            var neighbor = level.getBlockEntity(pos.relative(dir));
+            BlockEntity neighbor = level.getBlockEntity(pos.relative(dir));
             if(neighbor != null){
                 LazyOptional<IHeatContainer> neighborHandler = neighbor.getCapability(DSCapabilities.HEAT, dir.getOpposite());
                 if (neighborHandler.isPresent()){
