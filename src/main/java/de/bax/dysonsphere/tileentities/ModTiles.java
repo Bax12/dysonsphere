@@ -17,4 +17,5 @@ public class ModTiles {
     public static final RegistryObject<BlockEntityType<?>> RAILGUN = TILES.register("railgun", () -> new BlockEntityType<RailgunTile>(RailgunTile::new, Set.of(ModBlocks.RAILGUN_BLOCK.get()), null));
     public static final RegistryObject<BlockEntityType<?>> DS_ENERGY_RECEIVER = TILES.register("ds_energy_receiver", () -> new BlockEntityType<DSEnergyReceiverTile>(DSEnergyReceiverTile::new, Set.of(ModBlocks.DS_ENERGY_RECEIVER_BLOCK.get()), null));
     public static final RegistryObject<BlockEntityType<?>> HEAT_GENERATOR = TILES.register("heat_generator", () -> new BlockEntityType<HeatGeneratorTile>(HeatGeneratorTile::new, Set.of(ModBlocks.HEAT_GENERATOR_BLOCK.get()), null));
+    public static final RegistryObject<BlockEntityType<?>> HEAT_EXCHANGER = TILES.register("heat_exchanger", () -> new BlockEntityType<HeatExchangerTile>(HeatExchangerTile::new, Set.of(ModBlocks.HEAT_EXCHANGER_BLOCK.get()), null));
 }
