@@ -2,7 +2,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
 
 version = '0.1'
@@ -120,12 +120,6 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
-    maven { url 'https://maven.rover656.dev/releases' }
-
-    maven {
-        name = "Jared's maven"
-        url = "https://maven.blamejared.com/"
-    }
 }
 
 dependencies {
@@ -140,7 +134,7 @@ dependencies {
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.20.2-forge:16.0.0.2")
+    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
@@ -150,7 +144,6 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
