@@ -17,7 +17,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class HeatGeneratorTile extends BlockEntity {
+public class HeatGeneratorTile extends BaseTile {
 
     public static final double maxHeat = 1500;
     public static final double maxHeatTransfer = 5;

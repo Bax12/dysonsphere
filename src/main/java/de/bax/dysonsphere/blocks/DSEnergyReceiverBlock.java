@@ -4,9 +4,16 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import de.bax.dysonsphere.containers.DSEnergyReceiverContainer;
 import de.bax.dysonsphere.tileentities.DSEnergyReceiverTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -15,10 +22,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.NetworkHooks;
 
 public class DSEnergyReceiverBlock extends Block implements EntityBlock{
 
@@ -45,6 +54,21 @@ public class DSEnergyReceiverBlock extends Block implements EntityBlock{
         return type == ModTiles.DS_ENERGY_RECEIVER.get() ? (teLevel, pos, teState, tile) -> {
             ((DSEnergyReceiverTile) tile).tick();
         } : null;
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if(!level.isClientSide && player instanceof ServerPlayer serverPlayer){
+            BlockEntity tile = level.getBlockEntity(pos);
+            if(tile != null && tile.getType().equals(ModTiles.DS_ENERGY_RECEIVER.get())){
+                NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
+                new DSEnergyReceiverContainer(containerId, playerInventory, (DSEnergyReceiverTile) tile), 
+                Component.translatable("container.dysonsphere.ds_energy_receiver")), pos);
+            }
+
+            return InteractionResult.CONSUME;
+        }
+        return InteractionResult.SUCCESS;
     }
 
 }

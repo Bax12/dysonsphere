@@ -38,11 +38,17 @@ public class en_usGenerator extends LanguageProvider{
 
 
         //guis
-
-
+        add("container.dysonsphere.railgun", "Electromagnetic Orbital Launcher");
+        add("container.dysonsphere.ds_energy_receiver", "Dyson Sphere Energy Receiver");
 
         //tooltips
+        add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
+        add("tooltip.dysonsphere.heat_display","%s°K / %s°K");
 
+
+        add("tooltip.dysonsphere.railgun_launch_energy", "Required Launch Energy: %s RF");
+        add("tooltip.dysonsphere.ds_energy_receiver_energy", "To Receive:");
+        add("tooltip.dysonsphere.ds_energy_receiver_nosky","Cannot see the sky!");
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");

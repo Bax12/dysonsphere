@@ -10,7 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -20,22 +19,12 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class RailgunTile extends BlockEntity {
+public class RailgunTile extends BaseTile {
 
-    public static final int LAUNCH_ENERGY = 100000;
+    public static final int LAUNCH_ENERGY = 90000;
 
-    protected EnergyStorage energyStorage = new EnergyStorage(100000){
-        public int receiveEnergy(int maxReceive, boolean simulate) {
-            if(!simulate) setChanged();
-            return super.receiveEnergy(maxReceive, simulate);
-        };
-
-        public int extractEnergy(int maxExtract, boolean simulate) {
-            if(!simulate) setChanged();
-            return super.receiveEnergy(maxExtract, simulate);
-        };
-    };
-    protected ItemStackHandler inventory = new ItemStackHandler(1) {
+    public EnergyStorage energyStorage = new EnergyStorage(150000);
+    public ItemStackHandler inventory = new ItemStackHandler(1) {
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             setChanged();
@@ -48,8 +37,11 @@ public class RailgunTile extends BlockEntity {
         };
     };
 
-    protected LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
-    protected LazyOptional<IItemHandler> lazyInventory = LazyOptional.of(() -> inventory);
+    public LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
+    public LazyOptional<IItemHandler> lazyInventory = LazyOptional.of(() -> inventory);
+
+    protected int ticksElapsed = 0;
+    protected int lastEnergy = 0;
 
     public RailgunTile(BlockPos pos, BlockState state) {
         super(ModTiles.RAILGUN.get(), pos, state);
@@ -85,11 +77,19 @@ public class RailgunTile extends BlockEntity {
                         DysonSphere.LOGGER.info("Railgun Launched: {}", invStack);
                         invStack.shrink(1);
                         inventory.setStackInSlot(0, invStack);
+                        energyStorage.extractEnergy(LAUNCH_ENERGY, false);
                     }
                 });
             }
+            if(ticksElapsed++ % 5 == 0 && lastEnergy != energyStorage.getEnergyStored()){
+                this.setChanged();
+                lastEnergy = energyStorage.getEnergyStored();
+                
+                sendSyncPackageToNearbyPlayers();
+            }   
         }
     }
+
 
 
     @Override
@@ -118,5 +118,7 @@ public class RailgunTile extends BlockEntity {
             level.addFreshEntity(entity);
         }
     }
+
+    
 
 }

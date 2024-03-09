@@ -1,4 +1,4 @@
-// 1.20.2	2024-02-12T23:19:06.604438829	Loot Tables
+// 1.20.1	2024-03-07T03:15:01.950126546	Loot Tables
 a60fb59f630e155ef5e78f66b0e1068336756439 data/dysonsphere/loot_tables/blocks/dysonsphere_energy_receiver_block.json
 09d6f7e4eb74d446bc1bda915f62b8025c300263 data/dysonsphere/loot_tables/blocks/dysonsphere_monitor_block.json
 c77db67a615c97a4e837a41daa38693f7fd95fd1 data/dysonsphere/loot_tables/blocks/heat_exchanger_block.json

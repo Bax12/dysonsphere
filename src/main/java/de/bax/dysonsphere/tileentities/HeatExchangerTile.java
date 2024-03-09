@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
-public class HeatExchangerTile extends BlockEntity {
+public class HeatExchangerTile extends BaseTile {
 
     public static final double maxHeat = 1500;
     public static final double minHeat = 450;

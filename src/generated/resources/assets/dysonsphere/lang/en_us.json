@@ -5,6 +5,8 @@
   "block.dysonsphere.heat_generator_block": "Thermoelectric Generator",
   "block.dysonsphere.heat_pipe_block": "Thermal Coupler",
   "block.dysonsphere.railgun_block": "Electromagnetic Orbital Launcher",
+  "container.dysonsphere.ds_energy_receiver": "Dyson Sphere Energy Receiver",
+  "container.dysonsphere.railgun": "Electromagnetic Orbital Launcher",
   "item.dysonsphere.bucket_steam": "Steam Bucket",
   "item.dysonsphere.capsule_empty": "Space Transfer Capsule (Empty)",
   "item.dysonsphere.capsule_solar": "Solar Satellite Space Capsule",
@@ -14,5 +16,10 @@
   "item.dysonsphere.railgun": "Electromagnetic Launcher",
   "item.dysonsphere.solar_foil": "Solar Foil",
   "item.dysonsphere.thermopile": "Iron-Copper Thermopile",
-  "itemGroup.dysonsphere_tab": "Dyson Sphere Project"
+  "itemGroup.dysonsphere_tab": "Dyson Sphere Project",
+  "tooltip.dysonsphere.ds_energy_receiver_energy": "To Receive:",
+  "tooltip.dysonsphere.ds_energy_receiver_nosky": "Cannot see the sky!",
+  "tooltip.dysonsphere.energy_display": "%s RF / %s RF",
+  "tooltip.dysonsphere.heat_display": "%s°K / %s°K",
+  "tooltip.dysonsphere.railgun_launch_energy": "Required Launch Energy: %s RF"
 }

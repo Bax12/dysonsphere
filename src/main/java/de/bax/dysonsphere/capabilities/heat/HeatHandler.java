@@ -68,7 +68,7 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
             heat = nbt.getDouble("heat");
         }
         if(nbt.contains("maxHeat")){
-            heat = nbt.getDouble("maxHeat");
+            maxHeat = nbt.getDouble("maxHeat");
         }
     }
 

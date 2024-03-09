@@ -71,17 +71,16 @@ public static final VoxelShape Shape_W = Stream.of(Block.box(2,0,1,9,15,15), Blo
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if(!level.isClientSide){
-            DysonSphere.LOGGER.info("DSMonitorBlock Mark1");
             level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
                 DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
                 df.setMaximumFractionDigits(30);
                 DysonSphere.LOGGER.info("DysonSphere Completion: {}%", df.format(ds.getCompletionPercentage()));
                 DysonSphere.LOGGER.info("DysonSphere Energy available: {}", ds.getDysonSphereEnergy());
                 DysonSphere.LOGGER.info("DysonSphere unique Part Count: {}", ds.getDysonSphereParts().size());
-                DysonSphere.LOGGER.info("DysonSphere a Part Count: {}", ds.getDysonSphereParts().entrySet().iterator().next().getValue());
+                // DysonSphere.LOGGER.info("DysonSphere a Part Count: {}", ds.getDysonSphereParts().entrySet().iterator().next().getValue());
             });
         }
-        return InteractionResult.PASS;
+        return InteractionResult.SUCCESS;
     }
 
 }

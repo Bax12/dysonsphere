@@ -7,12 +7,18 @@ import com.mojang.logging.LogUtils;
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereContainer;
+import de.bax.dysonsphere.containers.ModContainers;
 import de.bax.dysonsphere.fluids.ModFluids;
+import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
+import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
+import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.tabs.ModTabs;
 import de.bax.dysonsphere.tileentities.ModTiles;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,6 +26,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -51,6 +58,7 @@ public class DysonSphere
         ModTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModFluids.FLUIDS.register(modEventBus);
         ModTiles.TILES.register(modEventBus);
+        ModContainers.CONTAINERS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -60,11 +68,13 @@ public class DysonSphere
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DSConfig.SPEC);
+        ModPacketHandler.init();
     }
 
     @SubscribeEvent
     public void commonSetup(final FMLCommonSetupEvent event)
     {
+        
         // Some common setup code
         // LOGGER.info("HELLO FROM COMMON SETUP");
 
@@ -78,14 +88,11 @@ public class DysonSphere
 
     @SubscribeEvent
     public void attachCaps(AttachCapabilitiesEvent<Level> event){
-        DysonSphere.LOGGER.info("DysonSphere Mark1");
         if(event.getObject().dimension().equals(Level.OVERWORLD)){
-            DysonSphere.LOGGER.info("DysonSphere Mark2");
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "dysonsphere"), new DysonSphereContainer());
             event.addListener(() -> {
                 event.getObject().getCapability(DSCapabilities.DYSON_SPHERE).invalidate();
             });
-            DysonSphere.LOGGER.info("DysonSphere Mark3");
         }
         
     }
@@ -106,16 +113,16 @@ public class DysonSphere
     //     LOGGER.info("HELLO from server starting");
     // }
 
-    // // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    // @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    // public static class ClientModEvents
-    // {
-    //     @SubscribeEvent
-    //     public static void onClientSetup(FMLClientSetupEvent event)
-    //     {
-    //         // Some client setup code
-    //         LOGGER.info("HELLO FROM CLIENT SETUP");
-    //         LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
-    //     }
-    // }
+    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    public static class ClientModEvents
+    {
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event)
+        {
+            event.enqueueWork(() -> {
+                MenuScreens.register(ModContainers.RAILGUN_CONTAINER.get(), RailgunGui::new);
+                MenuScreens.register(ModContainers.DS_ENERGY_RECEIVER_CONTAINER.get(), DSEnergyReceiverGui::new);
+            });
+        }
+    }
 }
