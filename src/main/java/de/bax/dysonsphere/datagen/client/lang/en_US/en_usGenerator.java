@@ -36,15 +36,21 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.RAILGUN, "Electromagnetic Launcher");
         addItem(ModItems.STEAM_BUCKET, "Steam Bucket");
 
+        //fluids
+        add("fluid.dysonsphere.steam", "Steam");
+
 
         //guis
         add("container.dysonsphere.railgun", "Electromagnetic Orbital Launcher");
         add("container.dysonsphere.ds_energy_receiver", "Dyson Sphere Energy Receiver");
         add("container.dysonsphere.heat_generator", "Thermoelectric Generator");
+        add("container.dysonsphere.heat_exchanger", "Thermal Exchanger");
 
         //tooltips
         add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
         add("tooltip.dysonsphere.heat_display","%s°K / %s°K");
+        add("tooltip.dysonsphere.fluid_display","%s %s mB / %s mB");
+        add("tooltip.dysonsphere.heat_exchanger_producing", "Producing: %s mB/t");
 
 
         add("tooltip.dysonsphere.railgun_launch_energy", "Required Launch Energy: %s RF");

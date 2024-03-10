@@ -2,7 +2,6 @@ package de.bax.dysonsphere.blocks;
 
 import javax.annotation.Nullable;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.containers.HeatGeneratorContainer;
 import de.bax.dysonsphere.tileentities.HeatGeneratorTile;
 import de.bax.dysonsphere.tileentities.ModTiles;

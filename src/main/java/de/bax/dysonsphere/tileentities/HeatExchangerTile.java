@@ -12,6 +12,7 @@ import de.bax.dysonsphere.fluids.ModFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -19,12 +20,15 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.items.ItemStackHandler;
 
 public class HeatExchangerTile extends BaseTile {
 
-    public static final double maxHeat = 1500;
+    public static final double maxHeat = 1700;
     public static final double minHeat = 450;
     public static final int baseProduce = 5;
     public static final int bonusProduce = 1;
@@ -32,14 +36,17 @@ public class HeatExchangerTile extends BaseTile {
     public static final int fluidCapacity = 4000;
     public static final float heatConsumtion = 5;
 
-    protected HeatHandler heatHandler = new HeatHandler(300, maxHeat);
-    protected FluidTankCustom inputTank = new FluidTankCustom(fluidCapacity){
+    public static final int slotInput = 0;
+    public static final int slotOutput = 1;
+
+    public HeatHandler heatHandler = new HeatHandler(300, maxHeat);
+    public FluidTankCustom inputTank = new FluidTankCustom(fluidCapacity){
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return stack.isFluidEqual(new FluidStack(ModFluids.STEAM.get(), 5));
+            return stack.isFluidEqual(new FluidStack(Fluids.WATER, 5));
         }
         protected void onContentsChanged() {
-            setChanged();
+            shouldUpdate = true;
         };
         @Override
         public boolean canDrain() {
@@ -47,17 +54,43 @@ public class HeatExchangerTile extends BaseTile {
         }
         
     };
-    protected FluidTankCustom outputTank = new FluidTankCustom(fluidCapacity){
+    public FluidTankCustom outputTank = new FluidTankCustom(fluidCapacity){
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return stack.isFluidEqual(new FluidStack(Fluids.WATER, 5));
+            return stack.isFluidEqual(new FluidStack(ModFluids.STEAM.get(), 5));
         }
         protected void onContentsChanged() {
-            setChanged();
+            shouldUpdate = true;
         };
         public boolean canFill() {
             return false;
         };
+    };
+
+    public ItemStackHandler inventory = new ItemStackHandler(2){
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+            setChanged();
+        };
+        public int getSlotLimit(int slot) {
+            return 1;
+        };
+        public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
+            if(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()){
+                if(slot == slotInput){
+                    return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((handler) -> {
+                        return handler.drain(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), FluidAction.SIMULATE).getAmount() > 0;
+                    }).get();
+                } else if (slot == slotOutput){
+                    ItemStack copyStack = stack.copyWithCount(1);
+                    return copyStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((handler) -> {
+                        return handler.fill(new FluidStack(ModFluids.STEAM.get(), Integer.MAX_VALUE), FluidAction.SIMULATE) > 0;
+                    }).get();
+                }
+            }
+            return false;
+        };
+
     };
 
     protected FluidHandlerMap handlerMap = new FluidHandlerMap();   
@@ -68,6 +101,7 @@ public class HeatExchangerTile extends BaseTile {
     protected double lastHeat = 0;
     protected int ticksElapsed = 0;
     protected LazyOptional<IFluidHandler>[] fluidNeighbors = new LazyOptional[6];
+    protected boolean shouldUpdate;
 
 
     public HeatExchangerTile(BlockPos pos, BlockState state) {
@@ -96,12 +130,18 @@ public class HeatExchangerTile extends BaseTile {
     public void tick(){
         if(!level.isClientSide){
             if(ticksElapsed++ % 5 == 0){
+                pushPullFluids();
+                heatHandler.splitShare();
+                generateSteam();
                 if(lastHeat != heatHandler.getHeatStored()){
-                    this.setChanged();
+                    shouldUpdate = true;
                     lastHeat = heatHandler.getHeatStored();
                 }
-                pushPullFluids();
-                generateSteam();
+                if(shouldUpdate){
+                    this.setChanged();
+                    sendSyncPackageToNearbyPlayers();
+                    shouldUpdate = false;
+                }
             }
         }
     }
@@ -112,6 +152,7 @@ public class HeatExchangerTile extends BaseTile {
         heatHandler.deserializeNBT(tag.getCompound("Heat"));
         inputTank.readFromNBT(tag.getCompound("inputTank"));
         outputTank.readFromNBT(tag.getCompound("outputTank"));
+        inventory.deserializeNBT(tag.getCompound("inventory"));
     }
 
     @Override
@@ -124,6 +165,7 @@ public class HeatExchangerTile extends BaseTile {
         nbt = new CompoundTag();
         outputTank.writeToNBT(nbt);
         tag.put("outputTank", nbt);
+        tag.put("inventory", inventory.serializeNBT());
     }
 
     public void onNeighborChange() {
@@ -150,6 +192,35 @@ public class HeatExchangerTile extends BaseTile {
     }
 
     protected void pushPullFluids(){
+        //internal fluid item interaction
+        if(!inventory.getStackInSlot(slotInput).isEmpty()){
+            // LazyOptional<IFluidHandlerItem> itemFluidhandler = FluidUtil.getFluidHandler(inventory.getStackInSlot(slotInput));
+            // itemFluidhandler.ifPresent((handler) -> {
+            //     FluidUtil.tryFluidTransfer(inputTank, handler, inputTank.getCapacity(), true);
+            //     inventory.setStackInSlot(slotInput, handler.getContainer());
+            // });
+            LazyOptional<IFluidHandlerItem> lazyHandler = inventory.getStackInSlot(slotInput).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
+            lazyHandler.ifPresent((handler) -> {
+                FluidStack fluid = handler.drain(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), FluidAction.SIMULATE);
+                if(fluid.getAmount() > 0){
+                    int fillAmount = inputTank.fillInternal(fluid, FluidAction.SIMULATE);
+                    if(fillAmount > 0){
+                        fluid.setAmount(fillAmount);
+                        handler.drain(fluid, FluidAction.EXECUTE);
+                        inputTank.fillInternal(fluid, FluidAction.EXECUTE);
+                        inventory.setStackInSlot(slotInput, handler.getContainer());
+                    }
+                }
+            });
+        }
+        if(!inventory.getStackInSlot(slotOutput).isEmpty()){
+            LazyOptional<IFluidHandlerItem> itemFluidhandler = FluidUtil.getFluidHandler(inventory.getStackInSlot(slotOutput));
+            itemFluidhandler.ifPresent((handler) -> {
+                FluidUtil.tryFluidTransfer(handler, outputTank, outputTank.getCapacity(), true);
+                inventory.setStackInSlot(slotOutput, handler.getContainer());
+            });
+        }
+        //neighbor tile interaction
         for (LazyOptional<IFluidHandler> neighbor : fluidNeighbors){
             if(neighbor != null && neighbor.isPresent()){
                 neighbor.ifPresent((neiFluid) -> {

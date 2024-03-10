@@ -79,7 +79,7 @@ public class SteamFluid extends Fluid {
 
     @Override
     public FluidType getFluidType() {
-        return new FluidType(FluidType.Properties.create().temperature(450).viscosity(1).canSwim(false).canConvertToSource(false)){
+        return new FluidType(FluidType.Properties.create().temperature(450).viscosity(1).canSwim(false).canConvertToSource(false).descriptionId("fluid.dysonsphere.steam")){
             @Override
             public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
                 consumer.accept(new IClientFluidTypeExtensions() {
