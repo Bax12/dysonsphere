@@ -49,6 +49,7 @@ public class HeatPipeTile extends BaseTile {
                 if(lastHeat != heatHandler.getHeatStored()){
                     this.setChanged();
                     lastHeat = heatHandler.getHeatStored();
+                    sendSyncPackageToNearbyPlayers();
                 }
             }
         }
@@ -58,7 +59,7 @@ public class HeatPipeTile extends BaseTile {
     public void load(CompoundTag tag) {
         super.load(tag);
         if(tag.contains("Heat")) {
-            heatHandler.deserializeNBT(tag.getCompound("heat"));
+            heatHandler.deserializeNBT(tag.getCompound("Heat"));
         }
     }
 

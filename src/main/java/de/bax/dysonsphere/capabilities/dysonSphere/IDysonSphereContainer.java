@@ -49,6 +49,18 @@ public interface IDysonSphereContainer {
      */
     float getUtilization();
 
+    /**
+     * get the current energy provided by the Dyson Sphere to receivers
+     * @return energy provided per Tick
+     */
+    double getEnergyProvided();
+
+    /**
+     * get the toptal energy requested from the Dyson Sphere
+     * @return energy requester per Tick
+     */
+    double getEnergyRequested();
+
 
     /**
      * add a new @see IDSEnergyReceiver to the Dyson Sphere

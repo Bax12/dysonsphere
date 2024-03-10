@@ -127,20 +127,27 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             return (float) ((getEnergyProvided() / energy) * 100f);
         }
 
-        protected double energyProvided = 0.0d;
+        @Override
         public double getEnergyProvided(){
-            energyProvided = 0.0d;
-            receivers.forEach((receiver) -> {
-                receiver.ifPresent((rec) -> {
-                    if(rec.canReceive()){
-                        energyProvided += rec.getMaxReceive();
-                    }
-                });
-            });
+            double energyProvided = getEnergyRequested();
             if(energyProvided >= energy){
                 energyProvided = energy;
             }
             return energyProvided;
+        }
+
+        protected double energyRequested = 0.0d;
+        @Override
+        public double getEnergyRequested() {
+            energyRequested = 0.0d;
+            receivers.forEach((receiver) -> {
+                receiver.ifPresent((rec) -> {
+                    if(rec.canReceive()){
+                        energyRequested += rec.getMaxReceive();
+                    }
+                });
+            });
+            return energyRequested;
         }
 
         @Override

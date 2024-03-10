@@ -10,6 +10,7 @@ import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereContainer;
 import de.bax.dysonsphere.containers.ModContainers;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
+import de.bax.dysonsphere.gui.HeatGeneratorGui;
 import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.network.ModPacketHandler;
@@ -122,6 +123,7 @@ public class DysonSphere
             event.enqueueWork(() -> {
                 MenuScreens.register(ModContainers.RAILGUN_CONTAINER.get(), RailgunGui::new);
                 MenuScreens.register(ModContainers.DS_ENERGY_RECEIVER_CONTAINER.get(), DSEnergyReceiverGui::new);
+                MenuScreens.register(ModContainers.HEAT_GENERATOR.get(), HeatGeneratorGui::new);
             });
         }
     }

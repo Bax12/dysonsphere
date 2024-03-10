@@ -6,6 +6,7 @@
   "block.dysonsphere.heat_pipe_block": "Thermal Coupler",
   "block.dysonsphere.railgun_block": "Electromagnetic Orbital Launcher",
   "container.dysonsphere.ds_energy_receiver": "Dyson Sphere Energy Receiver",
+  "container.dysonsphere.heat_generator": "Thermoelectric Generator",
   "container.dysonsphere.railgun": "Electromagnetic Orbital Launcher",
   "item.dysonsphere.bucket_steam": "Steam Bucket",
   "item.dysonsphere.capsule_empty": "Space Transfer Capsule (Empty)",
@@ -21,5 +22,9 @@
   "tooltip.dysonsphere.ds_energy_receiver_nosky": "Cannot see the sky!",
   "tooltip.dysonsphere.energy_display": "%s RF / %s RF",
   "tooltip.dysonsphere.heat_display": "%s°K / %s°K",
+  "tooltip.dysonsphere.heat_generator_axis": "Axis: %s",
+  "tooltip.dysonsphere.heat_generator_diff": "Diff: %s°K",
+  "tooltip.dysonsphere.heat_generator_neighbor_neg": "Neighbor of Negative %s",
+  "tooltip.dysonsphere.heat_generator_neighbor_pos": "Neighbor of Positive %s",
   "tooltip.dysonsphere.railgun_launch_energy": "Required Launch Energy: %s RF"
 }

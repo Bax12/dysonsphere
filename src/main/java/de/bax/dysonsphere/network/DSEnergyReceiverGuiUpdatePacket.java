@@ -11,37 +11,31 @@ import net.minecraftforge.network.NetworkEvent;
 
 public class DSEnergyReceiverGuiUpdatePacket {
     
-    public final int x,y,z,powerDraw;
+    public final int powerDraw;
+    public final BlockPos pos;
 
 
-    public DSEnergyReceiverGuiUpdatePacket(int targetHeat, int x, int y, int z){
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.powerDraw = targetHeat;
+    public DSEnergyReceiverGuiUpdatePacket(int powerDraw, BlockPos pos){
+        this.pos = pos;
+        this.powerDraw = powerDraw;
 
     }
 
 
     public void encode(FriendlyByteBuf buf){
-        buf.writeInt(x);
-        buf.writeInt(y);
-        buf.writeInt(z);
+        buf.writeBlockPos(pos);
         buf.writeInt(powerDraw);
     }
 
     public static DSEnergyReceiverGuiUpdatePacket decode(FriendlyByteBuf buf){
-        int x,y,z,targetHeat;
-        x = buf.readInt();
-        y = buf.readInt();
-        z = buf.readInt();
-        targetHeat = buf.readInt();
-        return new DSEnergyReceiverGuiUpdatePacket(targetHeat,x,y,z);
+        BlockPos pos = buf.readBlockPos();
+        int targetHeat = buf.readInt();
+        return new DSEnergyReceiverGuiUpdatePacket(targetHeat, pos);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx){
         ctx.get().enqueueWork(() -> {
-            BlockEntity tile = ctx.get().getSender().level().getBlockEntity(new BlockPos(x, y, z));
+            BlockEntity tile = ctx.get().getSender().level().getBlockEntity(pos);
             if(tile != null && tile.getType().equals(ModTiles.DS_ENERGY_RECEIVER.get())){
                 ((DSEnergyReceiverTile) tile).setDsPowerDraw(powerDraw);
             }

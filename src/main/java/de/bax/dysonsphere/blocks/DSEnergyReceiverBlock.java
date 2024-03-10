@@ -16,6 +16,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -54,6 +55,14 @@ public class DSEnergyReceiverBlock extends Block implements EntityBlock{
         return type == ModTiles.DS_ENERGY_RECEIVER.get() ? (teLevel, pos, teState, tile) -> {
             ((DSEnergyReceiverTile) tile).tick();
         } : null;
+    }
+
+    @Override
+    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
+        BlockEntity te = level.getBlockEntity(pos);
+        if(te != null && te.getType().equals(ModTiles.DS_ENERGY_RECEIVER.get())) {
+            ((DSEnergyReceiverTile) te).onNeighborChange();
+        }
     }
 
     @Override

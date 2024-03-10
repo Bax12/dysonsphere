@@ -40,6 +40,7 @@ public class en_usGenerator extends LanguageProvider{
         //guis
         add("container.dysonsphere.railgun", "Electromagnetic Orbital Launcher");
         add("container.dysonsphere.ds_energy_receiver", "Dyson Sphere Energy Receiver");
+        add("container.dysonsphere.heat_generator", "Thermoelectric Generator");
 
         //tooltips
         add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
@@ -49,6 +50,10 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.railgun_launch_energy", "Required Launch Energy: %s RF");
         add("tooltip.dysonsphere.ds_energy_receiver_energy", "To Receive:");
         add("tooltip.dysonsphere.ds_energy_receiver_nosky","Cannot see the sky!");
+        add("tooltip.dysonsphere.heat_generator_neighbor_neg", "Neighbor of Negative %s");
+        add("tooltip.dysonsphere.heat_generator_neighbor_pos", "Neighbor of Positive %s");
+        add("tooltip.dysonsphere.heat_generator_axis", "Axis: %s");
+        add("tooltip.dysonsphere.heat_generator_diff", "Diff: %s°K");
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");

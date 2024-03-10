@@ -1,8 +1,12 @@
 package de.bax.dysonsphere.fluids;
 
+import java.util.function.Consumer;
+
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.items.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
@@ -13,6 +17,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
 
 public class SteamFluid extends Fluid {
@@ -74,7 +79,21 @@ public class SteamFluid extends Fluid {
 
     @Override
     public FluidType getFluidType() {
-        return new FluidType(FluidType.Properties.create().temperature(450).viscosity(1).canSwim(false).canConvertToSource(false));
+        return new FluidType(FluidType.Properties.create().temperature(450).viscosity(1).canSwim(false).canConvertToSource(false)){
+            @Override
+            public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+                consumer.accept(new IClientFluidTypeExtensions() {
+                    @Override
+                    public ResourceLocation getStillTexture() {
+                        return new ResourceLocation(DysonSphere.MODID, "block/steam_still");
+                    }
+                    @Override
+                    public ResourceLocation getFlowingTexture() {
+                        return new ResourceLocation(DysonSphere.MODID, "block/steam_still");
+                    }
+                });
+            }
+        };
     }
     
 }

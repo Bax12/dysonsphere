@@ -1,5 +1,7 @@
 package de.bax.dysonsphere.tileentities;
 
+import java.util.Random;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,14 +21,14 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class HeatGeneratorTile extends BaseTile {
 
-    public static final double maxHeat = 1500;
-    public static final double maxHeatTransfer = 5;
+    public static final double maxHeat = 1700;
+    public static final double maxHeatTransfer = 25;
     public static final int energyCapacity = 25000;
 
-    public static final double minHeatDifference = 10;
+    public static final double minHeatDifference = 25;
     public static final int energyGenerated = 1;
 
-    protected HeatHandler heatHandler = new HeatHandler(300, maxHeat){
+    public HeatHandler heatHandler = new HeatHandler(300, maxHeat){
         public double getMaxSplitShareAmount() {
             return maxHeatTransfer;
         };
@@ -41,7 +43,7 @@ public class HeatGeneratorTile extends BaseTile {
             return super.receiveHeat(maxReceive, simulate);
         };
     };
-    protected EnergyStorage energyStorage = new EnergyStorage(energyCapacity);
+    public EnergyStorage energyStorage = new EnergyStorage(energyCapacity);
 
     protected LazyOptional<IHeatContainer> lazyHeatContainer = LazyOptional.of(() -> heatHandler);
     protected LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
@@ -49,6 +51,10 @@ public class HeatGeneratorTile extends BaseTile {
     protected int ticksElapsed = 0;
     protected double lastHeat = 0;
     protected int lastEnergy = 0;
+
+    protected double heatDifference = 0.0d;
+    protected char lastAxis;
+
     protected LazyOptional<IEnergyStorage>[] energyNeighbors = new LazyOptional[6];
 
     public HeatGeneratorTile(BlockPos pos, BlockState state) {
@@ -76,15 +82,20 @@ public class HeatGeneratorTile extends BaseTile {
         if(!level.isClientSide){
             if(ticksElapsed++ % 5 == 0){
                 heatHandler.splitShare();
+                boolean shouldSync = false;
                 if(lastHeat != heatHandler.getHeatStored()){
-                    this.setChanged();
                     lastHeat = heatHandler.getHeatStored();
+                    shouldSync = true;
                 }
                 generateEnergy();
                 splitShareEnergy();
                 if(lastEnergy != energyStorage.getEnergyStored()){
-                    this.setChanged();
                     lastEnergy = energyStorage.getMaxEnergyStored();
+                    shouldSync = true;
+                }
+                if(shouldSync){
+                    this.setChanged();
+                    sendSyncPackageToNearbyPlayers();
                 }
             }
             
@@ -98,8 +109,9 @@ public class HeatGeneratorTile extends BaseTile {
             energyStorage.deserializeNBT(tag.get("Energy"));
         } 
         if(tag.contains("Heat")) {
-            heatHandler.deserializeNBT(tag.getCompound("heat"));
+            heatHandler.deserializeNBT(tag.getCompound("Heat"));
         }
+        heatDifference = tag.getInt("HeatDifference");
     }
 
     @Override
@@ -107,7 +119,7 @@ public class HeatGeneratorTile extends BaseTile {
         super.saveAdditional(tag);
         tag.put("Energy", energyStorage.serializeNBT());
         tag.put("Heat", heatHandler.serializeNBT());
-
+        tag.putInt("HeatDifference", getHeatDifference());
     }
 
     public void onNeighborChange() {
@@ -118,6 +130,7 @@ public class HeatGeneratorTile extends BaseTile {
     public void onLoad() {
         super.onLoad();
         updateNeighbors();
+        ticksElapsed = this.level.getRandom().nextInt(4); //set ticksElapsed to 0-4 on load to not calculate all generators on the same server tick. Probably useless
     }
 
     protected void updateNeighbors(){
@@ -148,7 +161,7 @@ public class HeatGeneratorTile extends BaseTile {
         }
     }
 
-    protected double heatDifference = 0.0d;
+    
     protected void generateEnergy(){
         heatDifference = 0.0d;
         for (Direction.Axis axis : Direction.Axis.values()){
@@ -168,6 +181,7 @@ public class HeatGeneratorTile extends BaseTile {
                             }
                             if(heatDiff > heatDifference){
                                 heatDifference = heatDiff;
+                                lastAxis = axis.getName().toUpperCase().charAt(0);
                             }
                         });
                     });
@@ -179,5 +193,13 @@ public class HeatGeneratorTile extends BaseTile {
         }
     }
 
+
+    public char getLastAxis() {
+        return lastAxis;
+    }
+
+    public int getHeatDifference() {
+        return (int) Math.round(heatDifference);
+    }
     
 }

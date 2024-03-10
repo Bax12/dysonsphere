@@ -19,7 +19,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.Inventory;
 
 public class DSEnergyReceiverGui extends BaseGui<DSEnergyReceiverContainer> {
@@ -51,7 +50,7 @@ public class DSEnergyReceiverGui extends BaseGui<DSEnergyReceiverContainer> {
                 target = Integer.parseInt(text);
             }
             tile.setDsPowerDraw(target); //screw send and resync
-            ModPacketHandler.INSTANCE.sendToServer(new DSEnergyReceiverGuiUpdatePacket(target, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ()));
+            ModPacketHandler.INSTANCE.sendToServer(new DSEnergyReceiverGuiUpdatePacket(target, tile.getBlockPos()));
         });
         inputBox.setFilter((String text) -> {
             return StringUtils.isNumeric(text) || text.isEmpty();

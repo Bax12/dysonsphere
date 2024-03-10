@@ -109,7 +109,7 @@ public class HeatExchangerTile extends BaseTile {
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        heatHandler.deserializeNBT(tag.getCompound("heat"));
+        heatHandler.deserializeNBT(tag.getCompound("Heat"));
         inputTank.readFromNBT(tag.getCompound("inputTank"));
         outputTank.readFromNBT(tag.getCompound("outputTank"));
     }
@@ -117,7 +117,7 @@ public class HeatExchangerTile extends BaseTile {
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put("heat",heatHandler.serializeNBT());
+        tag.put("Heat",heatHandler.serializeNBT());
         CompoundTag nbt = new CompoundTag();
         inputTank.writeToNBT(nbt);
         tag.put("inputTank", nbt);

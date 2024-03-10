@@ -1,5 +1,6 @@
 package de.bax.dysonsphere.capabilities.heat;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -78,14 +79,20 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
 
     public void updateNeighbors(Level level, BlockPos pos){
         for(Direction dir : Direction.values()){
-            BlockEntity neighbor = level.getBlockEntity(pos.relative(dir));
+            BlockPos neiPos = pos.relative(dir);
+            BlockEntity neighbor = level.getBlockEntity(neiPos);
             if(neighbor != null){
                 LazyOptional<IHeatContainer> neighborHandler = neighbor.getCapability(DSCapabilities.HEAT, dir.getOpposite());
                 if (neighborHandler.isPresent()){
                     neighborList[dir.ordinal()] = neighborHandler;
                 }
+            } else if(level.getBlockState(neiPos).isAir()){
+                neighborList[dir.ordinal()] = LazyOptional.of(() -> new AirHeatHandler());
+            } else {
+                neighborList[dir.ordinal()] = LazyOptional.empty();
             }
         }
+        
     }
 
     public double getMaxSplitShareAmount(){

@@ -2,6 +2,8 @@ package de.bax.dysonsphere.tileentities;
 
 import java.util.Optional;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 
 import de.bax.dysonsphere.DysonSphere;
@@ -11,8 +13,10 @@ import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
 public class DSEnergyReceiverTile extends BaseTile {
@@ -50,11 +54,12 @@ public class DSEnergyReceiverTile extends BaseTile {
 
         @Override
         public int getCurrentReceive(IDysonSphereContainer dysonSphere) {
-            int recieve = getMaxReceive();
-            if(dysonSphere.getUtilization() > 100){ //TODO handle overuse nicer
-                recieve = recieve / 2;
+            if(!canReceive()) return 0;
+            int recieve = Math.min(getMaxReceive(), (int) dysonSphere.getDysonSphereEnergy());
+            if(dysonSphere.getUtilization() > 100){
+                recieve = (int) Math.floor(recieve * dysonSphere.getDysonSphereEnergy() / dysonSphere.getEnergyRequested());
             }
-            return canReceive() ? recieve : 0;
+            return recieve;
         }
         
     };
@@ -69,6 +74,16 @@ public class DSEnergyReceiverTile extends BaseTile {
         super(ModTiles.DS_ENERGY_RECEIVER.get(), pos, state);
     }
 
+@   Override
+    public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if(cap.equals(DSCapabilities.HEAT)){
+            return lazyHeatContainer.cast();
+        } else if (cap.equals(DSCapabilities.DS_ENERGY_RECEIVER)){
+            return lazyDSReceiver.cast();
+        }
+        return super.getCapability(cap, side);
+    }
+    
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
@@ -103,6 +118,7 @@ public class DSEnergyReceiverTile extends BaseTile {
         level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
             dsReceiver.registerToDysonSphere(ds);
         });       
+        updateNeighbors();
     }
 
     @Override
@@ -131,7 +147,13 @@ public class DSEnergyReceiverTile extends BaseTile {
         DysonSphere.LOGGER.info("DsEnergyReceiverTile dsPowerDraw set: {}", dsPowerDraw);
     }
 
+    public void onNeighborChange() {
+        updateNeighbors();
+    }
     
+    protected void updateNeighbors(){
+        heatHandler.updateNeighbors(level, worldPosition);
+    }
     
 
 
