@@ -3,6 +3,7 @@
     "java.debug.settings.onBuildFailureProceed": true,
     "java.configuration.updateBuildConfiguration": "interactive",
     "cSpell.words": [
-        "dysonsphere"
+        "dysonsphere",
+        "Railgun"
     ]
 }

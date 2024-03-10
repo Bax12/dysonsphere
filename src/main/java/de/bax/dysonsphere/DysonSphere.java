@@ -16,11 +16,15 @@ import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.tabs.ModTabs;
+import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
+import de.bax.dysonsphere.tileentities.RailgunTile;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -127,6 +131,11 @@ public class DysonSphere
                 MenuScreens.register(ModContainers.HEAT_GENERATOR.get(), HeatGeneratorGui::new);
                 MenuScreens.register(ModContainers.HEAT_EXCHANGER.get(), HeatExchangerGui::new);
             });
+        }
+
+        @SubscribeEvent
+        public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event){
+            event.registerBlockEntityRenderer(ModTiles.RAILGUN.get(), RailgunRenderer::new);
         }
     }
 }
