@@ -17,7 +17,7 @@ public class HeatPipeTile extends BaseTile {
 
     public static final double maxHeat = 1950;
 
-    protected HeatHandler heatHandler = new HeatHandler(300, maxHeat);
+    public HeatHandler heatHandler = new HeatHandler(300, maxHeat);
 
     protected LazyOptional<IHeatContainer> lazyHeatContainer = LazyOptional.of(() -> heatHandler);
 

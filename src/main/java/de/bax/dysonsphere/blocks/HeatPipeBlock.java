@@ -1,10 +1,17 @@
 package de.bax.dysonsphere.blocks;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import javax.annotation.Nullable;
 
 import de.bax.dysonsphere.tileentities.HeatPipeTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -13,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class HeatPipeBlock extends Block implements EntityBlock {
     
@@ -40,6 +48,17 @@ public class HeatPipeBlock extends Block implements EntityBlock {
         if(te != null && te.getType().equals(ModTiles.HEAT_PIPE.get())) {
             ((HeatPipeTile) te).onNeighborChange();
         }
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        BlockEntity tile = level.getBlockEntity(pos);
+        if(tile != null && tile.getType().equals(ModTiles.HEAT_PIPE.get())){
+            NumberFormat format = NumberFormat.getNumberInstance(Locale.ENGLISH);
+            player.displayClientMessage(Component.translatable("tooltip.dysonsphere.heat_pipe", format.format(((HeatPipeTile) tile).heatHandler.getHeatStored())), true);
+        }
+        
+        return InteractionResult.SUCCESS;
     }
     
 

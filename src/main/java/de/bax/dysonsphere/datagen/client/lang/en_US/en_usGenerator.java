@@ -51,8 +51,7 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.heat_display","%s°K / %s°K");
         add("tooltip.dysonsphere.fluid_display","%s %s mB / %s mB");
         add("tooltip.dysonsphere.heat_exchanger_producing", "Producing: %s mB/t");
-
-
+        
         add("tooltip.dysonsphere.railgun_launch_energy", "Required Launch Energy: %s RF");
         add("tooltip.dysonsphere.ds_energy_receiver_energy", "To Receive:");
         add("tooltip.dysonsphere.ds_energy_receiver_nosky","Cannot see the sky!");
@@ -60,6 +59,7 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.heat_generator_neighbor_pos", "Neighbor of Positive %s");
         add("tooltip.dysonsphere.heat_generator_axis", "Axis: %s");
         add("tooltip.dysonsphere.heat_generator_diff", "Diff: %s°K");
+        add("tooltip.dysonsphere.heat_pipe", "Current Heat: %s°K");
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");
