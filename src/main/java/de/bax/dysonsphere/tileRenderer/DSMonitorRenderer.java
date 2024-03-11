@@ -10,9 +10,8 @@ import org.joml.Matrix4f;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 
-import de.bax.dysonsphere.DysonSphere;
-import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.tileentities.DSMonitorTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -20,9 +19,11 @@ import net.minecraft.client.gui.Font.DisplayMode;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 
 public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
 
@@ -36,12 +37,27 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
     public void render(@Nonnull DSMonitorTile tile, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         poseStack.pushPose();
 
-        //north alignment
-        poseStack.translate(0.8F, 0.8F, 0.124F);
-        //--
+        Direction facing = tile.getLevel().getBlockState(tile.getBlockPos()).getValue(HorizontalDirectionalBlock.FACING);
 
+        switch (facing) {
+            case NORTH:
+                poseStack.translate(0.8F, 0.8F, 0.124F);
+                break;
+            case EAST:
+                poseStack.mulPose(Axis.YN.rotationDegrees(90f));
+                poseStack.translate(0.8F, 0.8F, -0.876F);
+                break;
+            case SOUTH:
+                poseStack.mulPose(Axis.YN.rotationDegrees(180f));
+                poseStack.translate(-0.2F, 0.8F, -0.876F);
+                break;
+            case WEST:
+                poseStack.mulPose(Axis.YN.rotationDegrees(270f));
+                poseStack.translate(-0.2F, 0.8F, 0.124F);
+                break;
+        }
 
-        poseStack.pushPose();
+        // poseStack.pushPose();
 
         // poseStack.translate(-60F, 0F, 60F);
         // poseStack.mulPose(Axis.YP.rotationDegrees(90));
@@ -86,7 +102,7 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
         // font.drawInBatch(Component.literal("  - Solar Capsule: 15"), 0, 40F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
 
 
-        poseStack.popPose();
+        // poseStack.popPose();
         poseStack.popPose();
     }
     
