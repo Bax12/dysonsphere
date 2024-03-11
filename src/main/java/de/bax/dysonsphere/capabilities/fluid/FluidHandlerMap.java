@@ -72,7 +72,7 @@ public class FluidHandlerMap implements IFluidHandler {
     public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
         for (IFluidHandler handler : handlerMap.values()) {
             FluidStack drain = handler.drain(maxDrain, action);
-            if (drain != null)
+            if (drain != null && !drain.isEmpty())
                 return drain;
         }
         return FluidStack.EMPTY;
