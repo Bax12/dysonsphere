@@ -23,7 +23,7 @@ public class RailgunRenderer implements BlockEntityRenderer<RailgunTile> {
     public void render(@Nonnull RailgunTile tile, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         poseStack.pushPose();
         poseStack.translate(0.5F, 2.0F, 0.5F);
-        float rotation = (360f * tile.getLevel().getDayTime() / 24000) - 90f % 360f;
+        float rotation = -(360f * tile.getLevel().getDayTime() / 24000) -90f % 360f;
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
         // poseStack.translate(0.0F, 0.0F, -0.5F);
         poseStack.mulPose(Axis.XP.rotationDegrees(65f));
