@@ -16,6 +16,7 @@ import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.tabs.ModTabs;
+import de.bax.dysonsphere.tileRenderer.DSMonitorRenderer;
 import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import de.bax.dysonsphere.tileentities.RailgunTile;
@@ -136,6 +137,7 @@ public class DysonSphere
         @SubscribeEvent
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event){
             event.registerBlockEntityRenderer(ModTiles.RAILGUN.get(), RailgunRenderer::new);
+            event.registerBlockEntityRenderer(ModTiles.DS_MONITOR.get(), DSMonitorRenderer::new);
         }
     }
 }

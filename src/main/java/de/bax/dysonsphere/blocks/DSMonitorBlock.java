@@ -4,12 +4,15 @@ import java.util.Locale;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.tileentities.DSMonitorTile;
+import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -19,7 +22,11 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.phys.BlockHitResult;
@@ -28,7 +35,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class DSMonitorBlock extends HorizontalDirectionalBlock /*implements EntityBlock*/{
+public class DSMonitorBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
 public static final VoxelShape Shape_N = Stream.of(Block.box(1,0,2,15,15,9), Block.box(1,0,9,15,9,15), Block.box(1,0,1,2,15,2), Block.box(14,0,1,15,15,2), Block.box(2,0,1,14,1,2), Block.box(2,14,1,14,15,2), Block.box(11,9,12,11.2,13,12.2), Block.box(10.5,13,11.5,11.7,14.2,12.7)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
@@ -82,5 +89,21 @@ public static final VoxelShape Shape_W = Stream.of(Block.box(2,0,1,9,15,15), Blo
         }
         return InteractionResult.SUCCESS;
     }
+
+    @Override
+    @Nullable
+    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
+        return new DSMonitorTile(pos, state);
+    }
+
+    @Override
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return type.equals(ModTiles.DS_MONITOR.get()) ? (teLevel, pos, teState, tile) -> {
+            ((DSMonitorTile) tile).tick();
+        } : null;
+    }
+
+
 
 }
