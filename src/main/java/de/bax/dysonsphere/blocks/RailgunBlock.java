@@ -33,7 +33,7 @@ import net.minecraftforge.network.NetworkHooks;
 
 public class RailgunBlock extends Block implements EntityBlock {
 
-    public static final VoxelShape Shape = Stream.of(Block.box(0,0,0,16,15,16), Block.box(4,15,4,12,30,12), Block.box(-6,0.05,-6,4,8,4), Block.box(-9,0,-9,0,4,0), Block.box(-5,0.05,12,4,8,21), Block.box(-9,0,16,0,4,25), Block.box(12,0.05,12,21,8,21), Block.box(16,0,16,25,4,25), Block.box(12,0.1,-5,21,8,4), Block.box(16,0,-9,25,4,0)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+    public static final VoxelShape Shape = Stream.of(Block.box(0,0,0,16,15,16), Block.box(4.5,15,4.5,11.5,29.5,11.5), Block.box(-6,0.05,-6,4,8,4), Block.box(-9,0,-9,-0.25,4,-0.25), Block.box(-5,0.05,12,4,8,21), Block.box(-9,0,16.25,-0.25,4,25), Block.box(12,0.05,12,21,8,21), Block.box(16.25,0,16.25,25,4,25), Block.box(12,0.1,-5,21,8,4), Block.box(16.25,0,-9,25,4,-0.25)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public RailgunBlock() {
         super(ModBlocks.defaultMetal);
