@@ -9,8 +9,11 @@ import de.bax.dysonsphere.containers.RailgunContainer;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import de.bax.dysonsphere.tileentities.RailgunTile;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
@@ -80,11 +83,11 @@ public class RailgunBlock extends Block implements EntityBlock {
             if(tile != null && tile.getType().equals(ModTiles.RAILGUN.get())){
                 // player.openMenu(new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
                 // new RailgunContainer(containerId, playerInventory, (RailgunTile) tile), Component.translatable("container.dysonsphere.railgun")));
-                if(player.isCrouching()){
-                    ((RailgunTile) tile).energyStorage.receiveEnergy(5000, false);
-                    DysonSphere.LOGGER.info("RailgunBlock: Added Energy. Stored: {}", ((RailgunTile) tile).energyStorage.getEnergyStored());
-                    return InteractionResult.SUCCESS;
-                }
+                // if(player.isCrouching()){
+                //     ((RailgunTile) tile).energyStorage.receiveEnergy(5000, false);
+                //     DysonSphere.LOGGER.info("RailgunBlock: Added Energy. Stored: {}", ((RailgunTile) tile).energyStorage.getEnergyStored());
+                //     return InteractionResult.SUCCESS;
+                // }
                 NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
                 new RailgunContainer(containerId, playerInventory, (RailgunTile) tile), Component.translatable("container.dysonsphere.railgun")), pos);
 
@@ -94,6 +97,23 @@ public class RailgunBlock extends Block implements EntityBlock {
         
         
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if(level.isClientSide){
+            BlockEntity tile = level.getBlockEntity(pos);
+            if(tile != null && tile.getType().equals(ModTiles.RAILGUN.get())){
+                int energy = ((RailgunTile) tile).energyStorage.getEnergyStored();
+                int energyCap = ((RailgunTile) tile).energyStorage.getMaxEnergyStored();
+                int i = energy == energyCap ? 0 : (int) (50f * energy / RailgunTile.LAUNCH_ENERGY);
+                DysonSphere.LOGGER.info("RailgunBlock animate i: {}", i);
+                for (; i > 0; i--){
+                    level.addParticle(ParticleTypes.MYCELIUM, (double)pos.getX() + random.nextDouble() * 3 - 1d, (double)pos.getY() + random.nextDouble() * 2, (double)pos.getZ() + random.nextDouble() * 3 - 1d, 0d, 5.5d, 0d);
+                }
+            }
+            
+        }
     }
 
     
