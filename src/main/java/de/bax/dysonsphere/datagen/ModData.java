@@ -4,6 +4,7 @@ import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.datagen.client.lang.en_US.en_usGenerator;
 import de.bax.dysonsphere.datagen.client.model.BlockStateGenerator;
 import de.bax.dysonsphere.datagen.client.model.ItemModelGenerator;
+import de.bax.dysonsphere.datagen.client.sound.SoundDefinitionGenerator;
 import de.bax.dysonsphere.datagen.server.BlockLootGenerator;
 import de.bax.dysonsphere.datagen.server.BlockTagGenerator;
 import de.bax.dysonsphere.datagen.server.FluidTagGenerator;
@@ -27,6 +28,7 @@ public class ModData {
         generator.addProvider(event.includeClient(), new en_usGenerator(output));
         generator.addProvider(event.includeClient(), new BlockStateGenerator(output, helper));
         generator.addProvider(event.includeClient(), new ItemModelGenerator(output, helper));
+        generator.addProvider(event.includeClient(), new SoundDefinitionGenerator(output, helper));
         //server
         generator.addProvider(event.includeServer(), new BlockLootGenerator(output));
         generator.addProvider(event.includeServer(), new FluidTagGenerator(output, provider, helper));

@@ -15,6 +15,7 @@ import de.bax.dysonsphere.gui.HeatGeneratorGui;
 import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.network.ModPacketHandler;
+import de.bax.dysonsphere.sounds.ModSounds;
 import de.bax.dysonsphere.tabs.ModTabs;
 import de.bax.dysonsphere.tileRenderer.DSMonitorRenderer;
 import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
@@ -66,6 +67,7 @@ public class DysonSphere
         ModFluids.FLUIDS.register(modEventBus);
         ModTiles.TILES.register(modEventBus);
         ModContainers.CONTAINERS.register(modEventBus);
+        ModSounds.SOUNDS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

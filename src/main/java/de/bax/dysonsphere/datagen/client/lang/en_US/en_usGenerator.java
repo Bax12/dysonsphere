@@ -69,6 +69,10 @@ public class en_usGenerator extends LanguageProvider{
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");
+
+        //sound - subtitles
+        add("sound.dysonsphere.railgun_shot", "Railgun Shot");
+        add("sound.dysonsphere.railgun_charge", "Railgun Charging");
     }
     
     

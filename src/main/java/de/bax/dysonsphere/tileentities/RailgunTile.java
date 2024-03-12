@@ -5,9 +5,13 @@ import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.sounds.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -78,6 +82,7 @@ public class RailgunTile extends BaseTile {
                         invStack.shrink(1);
                         inventory.setStackInSlot(0, invStack);
                         energyStorage.extractEnergy(LAUNCH_ENERGY, false);
+                        level.playSound(null, worldPosition, ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS);
                     }
                 });
             }

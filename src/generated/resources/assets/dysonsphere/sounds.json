@@ -1,0 +1,17 @@
+{
+  "railgun_charge": {
+    "sounds": [
+      {
+        "name": "dysonsphere:railgun_charge",
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "sound.dysonsphere.railgun_charge"
+  },
+  "railgun_shot": {
+    "sounds": [
+      "dysonsphere:railgun_shot"
+    ],
+    "subtitle": "sound.dysonsphere.railgun_shot"
+  }
+}

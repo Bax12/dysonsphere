@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.containers.RailgunContainer;
+import de.bax.dysonsphere.sounds.ModSounds;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import de.bax.dysonsphere.tileentities.RailgunTile;
 import net.minecraft.core.BlockPos;
@@ -13,6 +14,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -107,6 +109,7 @@ public class RailgunBlock extends Block implements EntityBlock {
                 int energy = ((RailgunTile) tile).energyStorage.getEnergyStored();
                 int energyCap = ((RailgunTile) tile).energyStorage.getMaxEnergyStored();
                 int i = energy == energyCap ? 0 : (int) (50f * energy / RailgunTile.LAUNCH_ENERGY);
+                level.playLocalSound(pos.getX() + 0.5f, pos.getY() + 1.5f, pos.getZ() + 0.5f, ModSounds.RAILGUN_CHARGE.get(), SoundSource.BLOCKS, 0.3f * i / 50f, 0.9f, false);
                 for (; i > 0; i--){
                     level.addParticle(ParticleTypes.MYCELIUM, (double)pos.getX() + random.nextDouble() * 3 - 1d, (double)pos.getY() + random.nextDouble() * 2, (double)pos.getZ() + random.nextDouble() * 3 - 1d, 0d, 5.5d, 0d);
                 }

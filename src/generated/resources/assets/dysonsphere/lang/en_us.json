@@ -20,6 +20,8 @@
   "item.dysonsphere.solar_foil": "Solar Foil",
   "item.dysonsphere.thermopile": "Iron-Copper Thermopile",
   "itemGroup.dysonsphere_tab": "Dyson Sphere Project",
+  "sound.dysonsphere.railgun_charge": "Railgun Charging",
+  "sound.dysonsphere.railgun_shot": "Railgun Shot",
   "tooltip.dysonsphere.ds_energy_receiver_energy": "To Receive:",
   "tooltip.dysonsphere.ds_energy_receiver_nosky": "Cannot see the sky!",
   "tooltip.dysonsphere.ds_monitor_capacity": "Capacity: %s RF/t",
