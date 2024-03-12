@@ -75,7 +75,6 @@ public class RailgunTile extends BaseTile {
             if(energyStorage.getEnergyStored() >= LAUNCH_ENERGY && !invStack.isEmpty() && level.canSeeSky(worldPosition)){
                 level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
                     if(ds.addDysonSpherePart(invStack.copyWithCount(1), false)){
-                        DysonSphere.LOGGER.info("Railgun Launched: {}", invStack);
                         invStack.shrink(1);
                         inventory.setStackInSlot(0, invStack);
                         energyStorage.extractEnergy(LAUNCH_ENERGY, false);

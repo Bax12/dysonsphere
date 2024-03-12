@@ -45,7 +45,13 @@ public class HeatGeneratorGui extends BaseGui<HeatGeneratorContainer> {
     @Override
     protected void init() {
         super.init();
-        this.energy = new EnergyDisplay(this.leftPos + 148, this.topPos + 5, tile.energyStorage);
+        this.energy = new EnergyDisplay(this.leftPos + 148, this.topPos + 5, tile.energyStorage){
+            @Override
+            protected void addTooltip(List<Component> tooltip) {
+                super.addTooltip(tooltip);
+                tooltip.add(Component.translatable("tooltip.dysonsphere.heat_generator_production", (int) Math.floor(tile.energyGenerated * tile.getHeatDifference() / tile.minHeatDifference)));
+            }
+        };
         this.heat = new HeatDisplay(this.leftPos + 7, this.topPos + 5, tile.heatHandler);
 
         IHeatContainer n1Handler = null, n2Handler = null;

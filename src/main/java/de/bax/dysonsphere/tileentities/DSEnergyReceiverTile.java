@@ -144,7 +144,6 @@ public class DSEnergyReceiverTile extends BaseTile {
 
     public void setDsPowerDraw(int dsPowerDraw) {
         this.dsPowerDraw = dsPowerDraw;
-        DysonSphere.LOGGER.info("DsEnergyReceiverTile dsPowerDraw set: {}", dsPowerDraw);
     }
 
     public void onNeighborChange() {

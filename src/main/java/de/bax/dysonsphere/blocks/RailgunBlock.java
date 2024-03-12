@@ -107,7 +107,6 @@ public class RailgunBlock extends Block implements EntityBlock {
                 int energy = ((RailgunTile) tile).energyStorage.getEnergyStored();
                 int energyCap = ((RailgunTile) tile).energyStorage.getMaxEnergyStored();
                 int i = energy == energyCap ? 0 : (int) (50f * energy / RailgunTile.LAUNCH_ENERGY);
-                DysonSphere.LOGGER.info("RailgunBlock animate i: {}", i);
                 for (; i > 0; i--){
                     level.addParticle(ParticleTypes.MYCELIUM, (double)pos.getX() + random.nextDouble() * 3 - 1d, (double)pos.getY() + random.nextDouble() * 2, (double)pos.getZ() + random.nextDouble() * 3 - 1d, 0d, 5.5d, 0d);
                 }

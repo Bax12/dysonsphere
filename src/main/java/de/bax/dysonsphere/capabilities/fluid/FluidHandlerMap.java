@@ -53,7 +53,7 @@ public class FluidHandlerMap implements IFluidHandler {
         if (resource == FluidStack.EMPTY)
             return 0;
         IFluidHandler handler = handlerMap.get(resource.getFluid());
-        if (handler == FluidStack.EMPTY)
+        if (handler == null)
             return 0;
         return handler.fill(resource, action);
     }

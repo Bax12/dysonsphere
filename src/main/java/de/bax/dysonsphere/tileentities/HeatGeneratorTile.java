@@ -34,13 +34,13 @@ public class HeatGeneratorTile extends BaseTile {
         };
 
         public double extractHeat(double maxExtract, boolean simulate) {
-            maxExtract = Math.min(maxExtract, maxHeatTransfer);
-            return super.extractHeat(maxExtract, simulate);
+            // maxExtract = Math.min(maxExtract, maxHeatTransfer);
+            return super.extractHeat(maxExtract / 4f, simulate);
         };
 
         public double receiveHeat(double maxReceive, boolean simulate) {
-            maxReceive = Math.min(maxReceive, maxHeatTransfer);
-            return super.receiveHeat(maxReceive, simulate);
+            // maxReceive = Math.min(maxReceive, maxHeatTransfer);
+            return super.receiveHeat(maxReceive / 4f, simulate);
         };
     };
     public EnergyStorage energyStorage = new EnergyStorage(energyCapacity);
@@ -82,13 +82,13 @@ public class HeatGeneratorTile extends BaseTile {
         if(!level.isClientSide){
             if(ticksElapsed++ % 5 == 0){
                 heatHandler.splitShare();
+                generateEnergy();
+                splitShareEnergy();
                 boolean shouldSync = false;
                 if(lastHeat != heatHandler.getHeatStored()){
                     lastHeat = heatHandler.getHeatStored();
                     shouldSync = true;
                 }
-                generateEnergy();
-                splitShareEnergy();
                 if(lastEnergy != energyStorage.getEnergyStored()){
                     lastEnergy = energyStorage.getMaxEnergyStored();
                     shouldSync = true;

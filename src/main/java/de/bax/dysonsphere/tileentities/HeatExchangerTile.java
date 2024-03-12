@@ -34,7 +34,7 @@ public class HeatExchangerTile extends BaseTile {
     public static final int bonusProduce = 1;
     public static final double bonusHeat = 50;
     public static final int fluidCapacity = 4000;
-    public static final float heatConsumtion = 5;
+    public static final float heatConsumtion = 2.5f;
 
     public static final int slotInput = 0;
     public static final int slotOutput = 1;
@@ -242,11 +242,11 @@ public class HeatExchangerTile extends BaseTile {
         if(curHeat >= minHeat){
             curHeat -= minHeat;
             int produce = (int) (baseProduce + (bonusProduce * curHeat / bonusHeat) * 5);//executed once every 5 ticks
-            produce = outputTank.fillInternal(new FluidStack(ModFluids.STEAM.get(), inputTank.drainInternal(produce, FluidAction.SIMULATE).getAmount()), FluidAction.SIMULATE);
+            produce = outputTank.fillInternal(new FluidStack(ModFluids.STEAM.get(), inputTank.drainInternal(produce, FluidAction.SIMULATE).getAmount() * 10), FluidAction.SIMULATE);//*10 for steam expansion */
             if(produce > 0){
                 outputTank.fillInternal(new FluidStack(ModFluids.STEAM.get(), produce), FluidAction.EXECUTE);
-                inputTank.drainInternal(produce, FluidAction.EXECUTE);
-                heatHandler.extractHeat(produce * heatConsumtion, false);
+                inputTank.drainInternal(produce / 10, FluidAction.EXECUTE); //accounting expansion
+                heatHandler.extractHeat(produce * heatConsumtion / 10, false); //accounting expansion
             }
         }
     }

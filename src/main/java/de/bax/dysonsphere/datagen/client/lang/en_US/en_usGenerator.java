@@ -58,6 +58,7 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.heat_generator_neighbor_pos", "Neighbor of Positive %s");
         add("tooltip.dysonsphere.heat_generator_axis", "Axis: %s");
         add("tooltip.dysonsphere.heat_generator_diff", "Diff: %s°K");
+        add("tooltip.dysonsphere.heat_generator_production", "%s RF/t");
         add("tooltip.dysonsphere.heat_pipe", "Current Heat: %s°K");
         add("tooltip.dysonsphere.heat_exchanger_producing", "Producing: %s mB/t");
         add("tooltip.dysonsphere.ds_monitor_status", ">Dyson Sphere Status");

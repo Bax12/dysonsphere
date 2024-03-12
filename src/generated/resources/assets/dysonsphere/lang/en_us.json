@@ -35,6 +35,7 @@
   "tooltip.dysonsphere.heat_generator_diff": "Diff: %s°K",
   "tooltip.dysonsphere.heat_generator_neighbor_neg": "Neighbor of Negative %s",
   "tooltip.dysonsphere.heat_generator_neighbor_pos": "Neighbor of Positive %s",
+  "tooltip.dysonsphere.heat_generator_production": "%s RF/t",
   "tooltip.dysonsphere.heat_pipe": "Current Heat: %s°K",
   "tooltip.dysonsphere.railgun_launch_energy": "Required Launch Energy: %s RF"
 }
