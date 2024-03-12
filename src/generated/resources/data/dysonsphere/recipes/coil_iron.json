@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "ISI",
+    "ISI",
+    "ISI"
+  ],
+  "result": {
+    "count": 4,
+    "item": "dysonsphere:coil_iron"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "tag": "forge:storage_blocks/copper"
+    },
+    "H": {
+      "item": "dysonsphere:heat_shielding"
+    },
+    "c": {
+      "tag": "forge:ingots/copper"
+    }
+  },
+  "pattern": [
+    "HcH",
+    "cCc",
+    "HcH"
+  ],
+  "result": {
+    "item": "dysonsphere:heat_pipe_block"
+  },
+  "show_notification": true
+}

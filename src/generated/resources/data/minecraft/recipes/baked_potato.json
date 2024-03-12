@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:potato"
+    },
+    {
+      "item": "minecraft:potato"
+    },
+    {
+      "item": "minecraft:potato"
+    },
+    {
+      "item": "minecraft:potato"
+    },
+    {
+      "item": "minecraft:potato"
+    },
+    {
+      "item": "minecraft:potato"
+    },
+    {
+      "item": "minecraft:potato"
+    },
+    {
+      "item": "minecraft:potato"
+    },
+    {
+      "item": "dysonsphere:bucket_steam"
+    }
+  ],
+  "result": {
+    "count": 8,
+    "item": "minecraft:baked_potato"
+  }
+}

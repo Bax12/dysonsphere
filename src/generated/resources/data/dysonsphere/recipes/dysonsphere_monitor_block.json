@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "dysonsphere:coil_iron"
+    },
+    "G": {
+      "tag": "forge:glass"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "T": {
+      "item": "minecraft:redstone_torch"
+    }
+  },
+  "pattern": [
+    " IG",
+    "TIG",
+    "ICI"
+  ],
+  "result": {
+    "item": "dysonsphere:dysonsphere_monitor_block"
+  },
+  "show_notification": true
+}

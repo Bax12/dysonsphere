@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "tag": "forge:ingots/copper"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "CSC",
+    "CSC",
+    "CSC"
+  ],
+  "result": {
+    "count": 4,
+    "item": "dysonsphere:coil_copper"
+  },
+  "show_notification": true
+}

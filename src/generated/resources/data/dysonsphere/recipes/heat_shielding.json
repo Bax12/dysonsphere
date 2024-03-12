@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "forge:ingots/brick"
+    },
+    "C": {
+      "tag": "forge:storage_blocks/coal"
+    }
+  },
+  "pattern": [
+    "BBB",
+    "BCB",
+    "BBB"
+  ],
+  "result": {
+    "item": "dysonsphere:heat_shielding"
+  },
+  "show_notification": true
+}

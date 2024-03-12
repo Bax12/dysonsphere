@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:anvil"
+    },
+    "I": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "R": {
+      "item": "dysonsphere:railgun"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    " R ",
+    "iIi",
+    "IAI"
+  ],
+  "result": {
+    "item": "dysonsphere:railgun_block"
+  },
+  "show_notification": true
+}

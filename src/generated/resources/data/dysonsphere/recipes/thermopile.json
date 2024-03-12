@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "dysonsphere:coil_copper"
+    },
+    "I": {
+      "item": "dysonsphere:coil_iron"
+    }
+  },
+  "pattern": [
+    "CCC",
+    "III",
+    "CCC"
+  ],
+  "result": {
+    "item": "dysonsphere:thermopile"
+  },
+  "show_notification": true
+}

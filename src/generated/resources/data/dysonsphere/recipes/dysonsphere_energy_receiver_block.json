@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "dysonsphere:heat_pipe_block"
+    },
+    "C": {
+      "item": "dysonsphere:coil_copper"
+    },
+    "H": {
+      "item": "dysonsphere:heat_shielding"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "CCC",
+    "CIC",
+    "HBH"
+  ],
+  "result": {
+    "item": "dysonsphere:dysonsphere_energy_receiver_block"
+  },
+  "show_notification": true
+}

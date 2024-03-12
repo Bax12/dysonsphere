@@ -9,6 +9,7 @@ import de.bax.dysonsphere.datagen.server.BlockLootGenerator;
 import de.bax.dysonsphere.datagen.server.BlockTagGenerator;
 import de.bax.dysonsphere.datagen.server.FluidTagGenerator;
 import de.bax.dysonsphere.datagen.server.ItemTagGenerator;
+import de.bax.dysonsphere.datagen.server.RecipeGenerator;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -35,6 +36,7 @@ public class ModData {
         var blockGenerator = new BlockTagGenerator(output, provider, helper);
         generator.addProvider(event.includeServer(), blockGenerator);
         generator.addProvider(event.includeServer(), new ItemTagGenerator(output, provider, blockGenerator.contentsGetter(), helper));
+        generator.addProvider(event.includeServer(), new RecipeGenerator(output));
     }
 
 }

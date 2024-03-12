@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "H": {
+      "item": "dysonsphere:heat_shielding"
+    },
+    "P": {
+      "item": "dysonsphere:heat_pipe_block"
+    },
+    "c": {
+      "item": "dysonsphere:coil_iron"
+    }
+  },
+  "pattern": [
+    "HPH",
+    "cBc",
+    "HPH"
+  ],
+  "result": {
+    "item": "dysonsphere:heat_exchanger_block"
+  },
+  "show_notification": true
+}

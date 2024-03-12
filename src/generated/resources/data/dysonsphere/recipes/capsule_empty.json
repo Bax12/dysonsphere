@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "H": {
+      "item": "dysonsphere:heat_shielding"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "HHH",
+    "I I",
+    "IBI"
+  ],
+  "result": {
+    "item": "dysonsphere:capsule_empty"
+  },
+  "show_notification": true
+}

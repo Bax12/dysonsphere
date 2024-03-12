@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "forge:glass"
+    },
+    "I": {
+      "item": "dysonsphere:coil_iron"
+    },
+    "L": {
+      "tag": "forge:gems/lapis"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "ILI",
+    "LIL"
+  ],
+  "result": {
+    "item": "dysonsphere:solar_foil"
+  },
+  "show_notification": true
+}

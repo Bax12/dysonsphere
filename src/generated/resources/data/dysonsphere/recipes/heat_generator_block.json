@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "H": {
+      "item": "dysonsphere:heat_shielding"
+    },
+    "T": {
+      "item": "dysonsphere:thermopile"
+    }
+  },
+  "pattern": [
+    "HTH",
+    "TTT",
+    "HTH"
+  ],
+  "result": {
+    "item": "dysonsphere:heat_generator_block"
+  },
+  "show_notification": true
+}

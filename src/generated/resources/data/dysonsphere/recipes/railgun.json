@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "dysonsphere:coil_copper"
+    },
+    "H": {
+      "item": "dysonsphere:heat_shielding"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "CIC",
+    "CIC",
+    "HCH"
+  ],
+  "result": {
+    "item": "dysonsphere:railgun"
+  },
+  "show_notification": true
+}
