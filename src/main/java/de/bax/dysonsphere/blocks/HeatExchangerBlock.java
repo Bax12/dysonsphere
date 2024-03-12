@@ -46,7 +46,7 @@ public class HeatExchangerBlock extends Block implements EntityBlock {
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
         BlockEntity te = level.getBlockEntity(pos);
-        if(te != null && te.getType().equals(ModTiles.HEAT_GENERATOR.get())) {
+        if(te != null && te.getType().equals(ModTiles.HEAT_EXCHANGER.get())) {
             ((HeatExchangerTile) te).onNeighborChange();
         }
     }

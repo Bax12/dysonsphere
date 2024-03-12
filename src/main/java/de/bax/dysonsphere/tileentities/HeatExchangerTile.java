@@ -131,8 +131,8 @@ public class HeatExchangerTile extends BaseTile {
         if(!level.isClientSide){
             if(ticksElapsed++ % 5 == 0){
                 pushPullFluids();
-                heatHandler.splitShare();
                 generateSteam();
+                heatHandler.splitShare();
                 if(lastHeat != heatHandler.getHeatStored()){
                     shouldUpdate = true;
                     lastHeat = heatHandler.getHeatStored();
