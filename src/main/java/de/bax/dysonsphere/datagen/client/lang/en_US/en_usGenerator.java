@@ -71,8 +71,9 @@ public class en_usGenerator extends LanguageProvider{
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");
 
         //sound - subtitles
-        add("sound.dysonsphere.railgun_shot", "Railgun Shot");
-        add("sound.dysonsphere.railgun_charge", "Railgun Charging");
+        add("sound.dysonsphere.railgun_shot", "Electromagnetic Orbital Launcher Shot");
+        add("sound.dysonsphere.railgun_charge", "Electromagnetic Orbital Launcher Charging");
+        add("sound.dysonsphere.ds_energy_receiver_work", "Dyson Sphere Energy Receiver Charging");
     }
     
     

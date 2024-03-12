@@ -1,4 +1,14 @@
 {
+  "ds_renergy_receiver_work": {
+    "sounds": [
+      {
+        "name": "dysonsphere:railgun_charge",
+        "pitch": 0.25,
+        "volume": 0.4
+      }
+    ],
+    "subtitle": "sound.dysonsphere.ds_energy_receiver_work"
+  },
   "railgun_charge": {
     "sounds": [
       {

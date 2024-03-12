@@ -21,6 +21,9 @@ public class SoundDefinitionGenerator extends SoundDefinitionsProvider {
         add(ModSounds.RAILGUN_CHARGE, definition()
         .subtitle("sound.dysonsphere.railgun_charge")
         .with(sound(ModSounds.RAILGUN_CHARGE.get().getLocation()).volume(0.5)));
+        add(ModSounds.DS_ENERGY_RECEIVER_WORK, definition()
+        .subtitle("sound.dysonsphere.ds_energy_receiver_work")
+        .with(sound(ModSounds.RAILGUN_CHARGE.get().getLocation()).volume(0.4).pitch(0.25)));
     }
     
 }

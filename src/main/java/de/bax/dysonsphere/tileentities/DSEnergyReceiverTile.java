@@ -12,9 +12,11 @@ import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
+import de.bax.dysonsphere.sounds.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -97,8 +99,11 @@ public class DSEnergyReceiverTile extends BaseTile {
             Optional<IDysonSphereContainer> dysonsphere = level.getCapability(DSCapabilities.DYSON_SPHERE).map((ds) -> {return ds;});
             if(dysonsphere.isPresent()){
                 int recieve = dsReceiver.getCurrentReceive(dysonsphere.get());
-                if(recieve >= 0){
+                if(recieve > 0){
                     heatHandler.receiveHeat(recieve / 10f, false);
+                    if(ticksElapsed % 100 == 0){
+                        level.playSound(null, worldPosition, ModSounds.DS_ENERGY_RECEIVER_WORK.get(), SoundSource.BLOCKS, 0.2f, 0.8f);
+                    }
                 }
             }
             //splitshare heat
