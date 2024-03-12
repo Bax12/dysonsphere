@@ -241,7 +241,7 @@ public class HeatExchangerTile extends BaseTile {
         double curHeat = heatHandler.getHeatStored();
         if(curHeat >= minHeat){
             curHeat -= minHeat;
-            int produce = (int) (baseProduce + (bonusProduce * curHeat / bonusHeat));
+            int produce = (int) (baseProduce + (bonusProduce * curHeat / bonusHeat) * 5);//executed once every 5 ticks
             produce = outputTank.fillInternal(new FluidStack(ModFluids.STEAM.get(), inputTank.drainInternal(produce, FluidAction.SIMULATE).getAmount()), FluidAction.SIMULATE);
             if(produce > 0){
                 outputTank.fillInternal(new FluidStack(ModFluids.STEAM.get(), produce), FluidAction.EXECUTE);
