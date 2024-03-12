@@ -23,7 +23,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class DSEnergyReceiverTile extends BaseTile {
 
-    public static final double maxHeat = 1700;
+    public static double maxHeat = 1700;
 
     protected int dsPowerDraw;
 

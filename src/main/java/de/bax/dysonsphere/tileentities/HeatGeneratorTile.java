@@ -21,12 +21,12 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class HeatGeneratorTile extends BaseTile {
 
-    public static final double maxHeat = 1700;
+    public static double maxHeat = 1700;
     public static final double maxHeatTransfer = 25;
-    public static final int energyCapacity = 25000;
+    public static int energyCapacity = 25000;
 
-    public static final double minHeatDifference = 25;
-    public static final int energyGenerated = 1;
+    public static double minHeatDifference = 25;
+    public static int energyGenerated = 1;
 
     public HeatHandler heatHandler = new HeatHandler(300, maxHeat){
         public double getMaxSplitShareAmount() {

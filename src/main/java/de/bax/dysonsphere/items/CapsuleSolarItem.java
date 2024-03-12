@@ -15,6 +15,9 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class CapsuleSolarItem extends Item {
 
+    public static int energyProvided = 10;
+    public static float completionProgress = 0.00001f;
+
     public CapsuleSolarItem() {
         super(new Item.Properties());
     }
@@ -28,12 +31,12 @@ public class CapsuleSolarItem extends Item {
                 return cap.equals(DSCapabilities.DS_PART) ? LazyOptional.of(() -> new IDSPart() {
                     @Override
                     public int getEnergyProvided() {
-                        return 10;
+                        return energyProvided;
                     }
                     
                     @Override
                     public float getCompletionProgress() {
-                        return 0.00001f;
+                        return completionProgress;
                     }
                 }).cast() : LazyOptional.empty();
             }

@@ -15,7 +15,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class HeatPipeTile extends BaseTile {
 
-    public static final double maxHeat = 1950;
+    public static double maxHeat = 1950;
 
     public HeatHandler heatHandler = new HeatHandler(300, maxHeat);
 

@@ -28,13 +28,13 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class HeatExchangerTile extends BaseTile {
 
-    public static final double maxHeat = 1700;
-    public static final double minHeat = 450;
-    public static final int baseProduce = 5;
-    public static final int bonusProduce = 1;
-    public static final double bonusHeat = 50;
-    public static final int fluidCapacity = 4000;
-    public static final float heatConsumtion = 2.5f;
+    public static double maxHeat = 1700;
+    public static double minHeat = 450;
+    public static int baseProduce = 5;
+    public static int bonusProduce = 1;
+    public static double bonusHeat = 50;
+    public static int fluidCapacity = 4000;
+    public static float heatConsumption = 2.5f;
 
     public static final int slotInput = 0;
     public static final int slotOutput = 1;
@@ -246,7 +246,7 @@ public class HeatExchangerTile extends BaseTile {
             if(produce > 0){
                 outputTank.fillInternal(new FluidStack(ModFluids.STEAM.get(), produce), FluidAction.EXECUTE);
                 inputTank.drainInternal(produce / 10, FluidAction.EXECUTE); //accounting expansion
-                heatHandler.extractHeat(produce * heatConsumtion / 10, false); //accounting expansion
+                heatHandler.extractHeat(produce * heatConsumption / 10, false); //accounting expansion
             }
         }
     }

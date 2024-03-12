@@ -9,8 +9,6 @@ import de.bax.dysonsphere.sounds.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,9 +23,10 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class RailgunTile extends BaseTile {
 
-    public static final int LAUNCH_ENERGY = 90000;
+    public static int launchEnergy = 90000;
+    public static int energyCapacity = 150000;
 
-    public EnergyStorage energyStorage = new EnergyStorage(150000);
+    public EnergyStorage energyStorage = new EnergyStorage(energyCapacity);
     public ItemStackHandler inventory = new ItemStackHandler(1) {
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
@@ -76,12 +75,12 @@ public class RailgunTile extends BaseTile {
             // DysonSphere.LOGGER.info("Railgun I: {}", inventory.getStackInSlot(0));
 
             ItemStack invStack = inventory.getStackInSlot(0);
-            if(energyStorage.getEnergyStored() >= LAUNCH_ENERGY && !invStack.isEmpty() && level.canSeeSky(worldPosition)){
+            if(energyStorage.getEnergyStored() >= launchEnergy && !invStack.isEmpty() && level.canSeeSky(worldPosition)){
                 level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
                     if(ds.addDysonSpherePart(invStack.copyWithCount(1), false)){
                         invStack.shrink(1);
                         inventory.setStackInSlot(0, invStack);
-                        energyStorage.extractEnergy(LAUNCH_ENERGY, false);
+                        energyStorage.extractEnergy(launchEnergy, false);
                         level.playSound(null, worldPosition, ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS);
                     }
                 });
