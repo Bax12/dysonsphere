@@ -40,7 +40,7 @@ public class HeatExchangerGui extends BaseGui<HeatExchangerContainer> {
                 super.addTooltip(tooltip);
                 int produce = 0;
                 if(tile.heatHandler.getHeatStored() >= tile.minHeat){
-                    produce = (int) (tile.baseProduce + (tile.bonusProduce * (tile.heatHandler.getHeatStored() - tile.minHeat) / tile.bonusHeat));
+                    produce = (int) (tile.baseProduce + (tile.bonusProduce * (tile.heatHandler.getHeatStored() - tile.minHeat) / tile.bonusHeat) * 10);//steam expansion
                 }
                 tooltip.add(Component.translatable("tooltip.dysonsphere.heat_exchanger_producing", produce)); 
             }
