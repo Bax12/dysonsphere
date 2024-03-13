@@ -1,0 +1,15 @@
+{
+    "name": "Solar Satellite Space Capsule",
+    "icon": "dysonsphere:capsule_solar",
+    "category": "dysonsphere:space_capsules",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Solar Satellite Space Capsule$() provides energy after being launched and furthers the completion of the $(thing)Dyson Sphere$().$(br)A single capsule provides 10RF/t inside the $(thing)Dyson Sphere$() and adds 0.00001% to the completion"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:capsule_solar"
+        }
+    ]
+}

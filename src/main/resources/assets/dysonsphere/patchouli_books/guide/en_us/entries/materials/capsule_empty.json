@@ -1,0 +1,15 @@
+{
+    "name": "Space Transfer Capsule (Empty)",
+    "icon": "dysonsphere:capsule_empty",
+    "category": "dysonsphere:materials",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Space Transfer Capsule (Empty)$() is an empty shell used to create capsules that can be launched to the $(thing)Dyson Sphere$()"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:capsule_empty"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "name": "The Dyson Sphere Project",
+    "landing_text": "A compact guide to everything you need to know about the Dyson Sphere Project",
+    "version": 1,
+    "creative_tab": "dysonsphere:dysonsphere_tab",
+    "use_resource_pack": true,
+    "model": "dysonsphere:guide",
+    "show_progress": false,
+    "text_overflow_mode": "resize"
+}

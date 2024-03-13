@@ -1,0 +1,26 @@
+{
+    "name": "Basic Materials",
+    "icon": "dysonsphere:coil_copper",
+    "category": "dysonsphere:materials",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Various materials used in different crafting recipes."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:coil_copper",
+            "recipe2": "dysonsphere:coil_iron"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:thermopile",
+            "recipe2": "dysonsphere:solar_foil"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:heat_shielding",
+            "recipe2": "dysonsphere:railgun"
+        }
+    ]
+}

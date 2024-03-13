@@ -1,0 +1,5 @@
+{
+    "name": "Machines",
+    "description": "Different machines used to build, monitor and harness the power of a $(thing)Dyson Sphere$()",
+    "icon": "dysonsphere:dysonsphere_energy_receiver_block"
+}
