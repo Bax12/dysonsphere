@@ -1,0 +1,16 @@
+{
+    "name": "The Dyson Sphere Project",
+    "icon": "",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The Dyson Sphere Project aims to utilize 100% of the energy output of a star.$(br)It is a daunting task, seemingly impossible without the right tools and automation.$(br)But we are here to pioneer where others falter, to advance where others stop.$(br2)We shall realize our dream!"
+        },
+        {
+            "type": "patchouli:quest",
+            "trigger": "dysonsphere:ds_completed",
+            "text": "Can you complete the Dyson Sphere?"
+        }
+    ]
+}

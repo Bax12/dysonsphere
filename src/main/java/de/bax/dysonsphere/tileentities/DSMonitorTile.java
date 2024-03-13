@@ -3,12 +3,17 @@ package de.bax.dysonsphere.tileentities;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DSMonitorTile extends BaseTile {
@@ -33,6 +38,11 @@ public class DSMonitorTile extends BaseTile {
                 dsCompletionPercentage = ds.getCompletionPercentage();
             });
 
+            if(dsCompletionPercentage > 0){
+                for(Player player : level.getNearbyPlayers(TargetingConditions.forNonCombat().ignoreInvisibilityTesting(), null, AABB.ofSize(worldPosition.getCenter(), 5d, 5d, 5d))){
+                    ModAdvancements.DS_PROGRESS_TRIGGER.trigger((ServerPlayer) player, dsCompletionPercentage);
+                }
+            }
             
             boolean needsUpdate = false;
             if(lastEnergy != dsEnergy){

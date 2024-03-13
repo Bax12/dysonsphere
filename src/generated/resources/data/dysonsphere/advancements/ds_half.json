@@ -1,0 +1,33 @@
+{
+  "parent": "dysonsphere:ds_start",
+  "criteria": {
+    "completion": {
+      "conditions": {
+        "progress": 50.0
+      },
+      "trigger": "dysonsphere:ds_progress"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "achievement.dysonsphere.half.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "dysonsphere:coil_copper"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "achievement.dysonsphere.half"
+    }
+  },
+  "requirements": [
+    [
+      "completion"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

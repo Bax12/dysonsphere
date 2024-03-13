@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereContainer;
@@ -20,9 +21,8 @@ import de.bax.dysonsphere.tabs.ModTabs;
 import de.bax.dysonsphere.tileRenderer.DSMonitorRenderer;
 import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
-import de.bax.dysonsphere.tileentities.RailgunTile;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -55,7 +55,7 @@ public class DysonSphere
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         // Register the commonSetup method for modloading
-        // modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::commonSetup);
 
         // Register the Deferred Register to the mod event bus so blocks get registered
         ModBlocks.BLOCKS.register(modEventBus);
@@ -80,19 +80,10 @@ public class DysonSphere
         ModPacketHandler.init();
     }
 
-    @SubscribeEvent
-    public void commonSetup(final FMLCommonSetupEvent event)
-    {
-        
-        // Some common setup code
-        // LOGGER.info("HELLO FROM COMMON SETUP");
-
-        // if (Config.logDirtBlock)
-        //     LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
-
-        // LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
-
-        // Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
+    public void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            ModAdvancements.register();
+        });
     }
 
     @SubscribeEvent
@@ -106,21 +97,6 @@ public class DysonSphere
         
     }
 
-
-    // Add the example block item to the building blocks tab
-    // private void addCreative(BuildCreativeModeTabContentsEvent event)
-    // {
-    //     if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
-    //         event.accept(ModBlocks.HEAT_PIPE_BLOCK);
-    // }
-
-    // // You can use SubscribeEvent and let the Event Bus discover methods to call
-    // @SubscribeEvent
-    // public void onServerStarting(ServerStartingEvent event)
-    // {
-    //     // Do something when the server starts
-    //     LOGGER.info("HELLO from server starting");
-    // }
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents

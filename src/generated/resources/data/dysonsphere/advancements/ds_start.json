@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "completion": {
+      "conditions": {
+        "progress": 1.0E-6
+      },
+      "trigger": "dysonsphere:ds_progress"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "achievement.dysonsphere.start.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "dysonsphere:coil_iron"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "achievement.dysonsphere.start"
+    }
+  },
+  "requirements": [
+    [
+      "completion"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

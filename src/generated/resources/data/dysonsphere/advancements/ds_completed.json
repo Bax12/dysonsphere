@@ -1,0 +1,33 @@
+{
+  "parent": "dysonsphere:ds_half",
+  "criteria": {
+    "completion": {
+      "conditions": {
+        "progress": 100.0
+      },
+      "trigger": "dysonsphere:ds_progress"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "achievement.dysonsphere.completed.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "dysonsphere:railgun"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "achievement.dysonsphere.completed"
+    }
+  },
+  "requirements": [
+    [
+      "completion"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
