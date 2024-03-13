@@ -84,10 +84,10 @@ public class DSConfig {
         private static final Builder SOLAR_CAPSULE_BUILDER = RAILGUN_BUILDER.pop().push("solar_capsule");
         private static final ForgeConfigSpec.IntValue SOLAR_CAPSULE_ENERGY_PROVIDED = SOLAR_CAPSULE_BUILDER
                         .comment("The energy a single solar capsule provides per tick once added to the dyson sphere. 0-2147483647. Default 10")
-                        .defineInRange("", 10, 0, Integer.MAX_VALUE);
+                        .defineInRange("solarCapsuleEnergyProvided", 10, 0, Integer.MAX_VALUE);
         private static final ForgeConfigSpec.DoubleValue SOLAR_CAPSULE_COMPLETION = SOLAR_CAPSULE_BUILDER
                         .comment("The dyson sphere completion a single solar capsule adds. 0.0-1.0. Default 0.00001")
-                        .defineInRange("", 0.00001, 0, 1);
+                        .defineInRange("solarCapsuleCompletion", 0.00001, 0, 1);
 
 
         static final ForgeConfigSpec SPEC = BUILDER.build();
