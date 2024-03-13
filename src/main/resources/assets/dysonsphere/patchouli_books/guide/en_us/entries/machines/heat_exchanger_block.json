@@ -1,0 +1,15 @@
+{
+    "name": "Thermal Exchanger",
+    "icon": "dysonsphere:heat_exchanger_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Used to convert $(item)water$() into $(item)steam$() using heat. At least 450°K are required to start working, every 50°K above that increase the working speed. The base production rate is 5mB/t water to 50mB/t steam."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:heat_exchanger_block"
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "name": "Thermoelectric Generator",
+    "icon": "dysonsphere:heat_generator_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Used to convert $(thing)heat$() into $(thing)RF$(). The $(item)Thermoelectric Generator$() must be placed between a hot and a relatively cold heat container. Per 25°K heat difference 1RF/t is generated. Note that the Thermoelectric Generator itself conducts heat, although badly. The hot side will need constant heating and the cold side constant cooling."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:heat_generator_block"
+        }
+    ]
+}

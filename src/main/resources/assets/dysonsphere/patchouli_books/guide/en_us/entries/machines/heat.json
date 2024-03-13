@@ -1,0 +1,21 @@
+{
+    "name": "About Heat",
+    "icon": "dysonsphere:heat_shielding",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Many machines work with $(thing)heat$(). Heat is measured in °K and starts at 300°K.$(br)Heat propagates through all adjacent machines until all are at an equal temperature. The heat is slowly dissipated to the surrounding air."
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:machines/heat_pipe_block",
+                "dysonsphere:machines/dysonsphere_energy_receiver_block",
+                "dysonsphere:machines/heat_exchanger_block",
+                "dysonsphere:machines/heat_generator_block"
+            ],
+            "text": "Some machines utilizing or producing heat."
+        }
+    ]
+}

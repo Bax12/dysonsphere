@@ -1,0 +1,15 @@
+{
+    "name": "Electromagnetic Orbital Launcher",
+    "icon": "dysonsphere:railgun_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Used to launch $(l:dysonsphere:space_capsules)$(item)Space Capsules$() into the sun orbit to assemble a $(item)Dyson Sphere$().$(br)Requires 90000RF per launched item, only one item may be launched at a time."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:railgun_block"
+        }
+    ]
+}

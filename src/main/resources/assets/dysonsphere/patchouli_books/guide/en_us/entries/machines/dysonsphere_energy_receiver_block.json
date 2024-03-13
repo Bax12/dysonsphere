@@ -1,0 +1,15 @@
+{
+    "name": "Dyson Sphere Energy Receiver",
+    "icon": "dysonsphere:dysonsphere_energy_receiver_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Used to harness the power of the $(thing)Dyson Sphere$() to create $(thing)heat$(). Needs a clear sky to work and will slow down the higher the heat rises.$(br)The energy received per tick needs to be configured in the GUI."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:dysonsphere_energy_receiver_block"
+        }
+    ]
+}

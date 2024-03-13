@@ -1,0 +1,15 @@
+{
+    "name": "Thermal Coupler",
+    "icon": "dysonsphere:heat_pipe_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Used to connect multiple machines to share the same $(thing)heat$(). Heat propagates through the $(item)Thermal Coupler$() much like any other machine, so long distance lines are ill advised."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:heat_pipe_block"
+        }
+    ]
+}

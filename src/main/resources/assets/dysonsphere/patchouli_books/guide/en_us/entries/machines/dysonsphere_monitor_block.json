@@ -1,0 +1,15 @@
+{
+    "name": "Dyson Sphere Observer",
+    "icon": "dysonsphere:dysonsphere_monitor_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Used to display the current state of the $(thing)Dyson Sphere$(). Monitors completion, energy capacity and individual parts"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:dysonsphere_monitor_block"
+        }
+    ]
+}
