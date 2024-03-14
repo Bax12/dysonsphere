@@ -1,4 +1,10 @@
 {
+  "achievement.dysonsphere.completed": "The Dyson Sphere is complete!",
+  "achievement.dysonsphere.completed.desc": "Complete the Dyson Sphere",
+  "achievement.dysonsphere.half": "The Dyson Sphere takes Shape",
+  "achievement.dysonsphere.half.desc": "Reach 50% completion of the Dyson Sphere",
+  "achievement.dysonsphere.start": "The Dyson Sphere Project begins!",
+  "achievement.dysonsphere.start.desc": "Start constructing the Dyson Sphere with the Electromagnetic Orbital Launcher",
   "block.dysonsphere.dysonsphere_energy_receiver_block": "Dyson Sphere Energy Receiver",
   "block.dysonsphere.dysonsphere_monitor_block": "Dyson Sphere Observer",
   "block.dysonsphere.heat_exchanger_block": "Thermal Exchanger",

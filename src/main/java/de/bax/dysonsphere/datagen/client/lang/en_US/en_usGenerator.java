@@ -79,6 +79,14 @@ public class en_usGenerator extends LanguageProvider{
         //recipes
         add("dysonsphere.recipe.heat_exchanger", "Heat Exchange");
         add("dysonsphere.recipe.railgun", "Orbital Launching");
+
+        //advancements
+        add("achievement.dysonsphere.start", "The Dyson Sphere Project begins!");
+        add("achievement.dysonsphere.start.desc", "Start constructing the Dyson Sphere with the Electromagnetic Orbital Launcher");
+        add("achievement.dysonsphere.half", "The Dyson Sphere takes Shape");
+        add("achievement.dysonsphere.half.desc", "Reach 50% completion of the Dyson Sphere");
+        add("achievement.dysonsphere.completed", "The Dyson Sphere is complete!");
+        add("achievement.dysonsphere.completed.desc", "Complete the Dyson Sphere");
     }
     
     
