@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.items.ModItems;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -160,7 +161,7 @@ public class RecipeGenerator extends RecipeProvider {
         Recipe.shapeless(Items.BAKED_POTATO, 8)
             .requires(Items.POTATO, 8)
             .requires(ModItems.STEAM_BUCKET.get())
-            .save(consumer);
+            .save(consumer, new ResourceLocation(DysonSphere.MODID, "baked_potato"));
 
         
     }
