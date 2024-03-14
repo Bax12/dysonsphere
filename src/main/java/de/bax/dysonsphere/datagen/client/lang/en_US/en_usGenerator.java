@@ -61,6 +61,7 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.heat_generator_production", "%s RF/t");
         add("tooltip.dysonsphere.heat_pipe", "Current Heat: %s°K");
         add("tooltip.dysonsphere.heat_exchanger_producing", "Producing: %s mB/t");
+        add("tooltip.dysonsphere.heat_exchanger_min_heat", "Minimum Heat: %s°K");
         add("tooltip.dysonsphere.ds_monitor_status", ">Dyson Sphere Status");
         add("tooltip.dysonsphere.ds_monitor_completion","Completion: %s%%");
         add("tooltip.dysonsphere.ds_monitor_capacity","Capacity: %s RF/t");
@@ -74,6 +75,10 @@ public class en_usGenerator extends LanguageProvider{
         add("sound.dysonsphere.railgun_shot", "Electromagnetic Orbital Launcher Shot");
         add("sound.dysonsphere.railgun_charge", "Electromagnetic Orbital Launcher Charging");
         add("sound.dysonsphere.ds_energy_receiver_work", "Dyson Sphere Energy Receiver Charging");
+
+        //recipes
+        add("dysonsphere.recipe.heat_exchanger", "Heat Exchange");
+        add("dysonsphere.recipe.railgun", "Orbital Launching");
     }
     
     
