@@ -24,6 +24,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
 
@@ -35,10 +36,12 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
     // adapted from net.minecraft.client.renderer.entity.EntityRenderer:renderNamerTag()
     @Override
     public void render(@Nonnull DSMonitorTile tile, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
+        
+
+        BlockState state = tile.getLevel().getBlockState(tile.getBlockPos());
+        if(state == null || state.isAir()) return;
+        Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
         poseStack.pushPose();
-
-        Direction facing = tile.getLevel().getBlockState(tile.getBlockPos()).getValue(HorizontalDirectionalBlock.FACING);
-
         switch (facing) {
             case NORTH:
                 poseStack.translate(0.8F, 0.8F, 0.124F);
