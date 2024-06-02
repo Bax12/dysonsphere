@@ -31,6 +31,9 @@ public interface IDysonSphereContainer {
     ImmutableMap<Item, Integer> getDysonSphereParts();
 
 
+    int getDysonSpherePartCount(Item part);
+
+
     /**
      * get the energy generation capacity of the Dyson Sphere
      * @return RF the DysonSphere can produce per tick

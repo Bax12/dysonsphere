@@ -32,9 +32,11 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.SOLAR_FOIL,"Solar Foil");
         addItem(ModItems.CAPSULE_EMPTY, "Space Transfer Capsule (Empty)");
         addItem(ModItems.CAPSULE_SOLAR, "Solar Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_LASER, "Laser Satellite Space Capsule");
         addItem(ModItems.HEAT_SHIELDING, "Heat Shielding");
         addItem(ModItems.RAILGUN, "Electromagnetic Launcher");
         addItem(ModItems.STEAM_BUCKET, "Steam Bucket");
+        addItem(ModItems.LASER_CONTROLLER, "Orbital Uplink Bracelet");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");

@@ -9,6 +9,9 @@ import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereContainer;
 import de.bax.dysonsphere.containers.ModContainers;
+import de.bax.dysonsphere.entities.ModEntities;
+import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
+import de.bax.dysonsphere.entityRenderer.TargetDesignatorRenderer;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
 import de.bax.dysonsphere.gui.HeatExchangerGui;
@@ -21,7 +24,6 @@ import de.bax.dysonsphere.tabs.ModTabs;
 import de.bax.dysonsphere.tileRenderer.DSMonitorRenderer;
 import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -68,6 +70,7 @@ public class DysonSphere
         ModTiles.TILES.register(modEventBus);
         ModContainers.CONTAINERS.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
+        ModEntities.ENTITIES.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -116,6 +119,8 @@ public class DysonSphere
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event){
             event.registerBlockEntityRenderer(ModTiles.RAILGUN.get(), RailgunRenderer::new);
             event.registerBlockEntityRenderer(ModTiles.DS_MONITOR.get(), DSMonitorRenderer::new);
+            event.registerEntityRenderer(ModEntities.TARGET_DESIGNATOR.get(), TargetDesignatorRenderer::new);
+            event.registerEntityRenderer(ModEntities.LASER_STRIKE.get(), LaserStrikeRenderer::new);
         }
     }
 }

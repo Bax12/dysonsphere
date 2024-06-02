@@ -164,6 +164,11 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         public void removeEnergyReceiver(LazyOptional<IDSEnergyReceiver> energyReceiver) {
             receivers.remove(energyReceiver);
         }
+
+        @Override
+        public int getDysonSpherePartCount(Item part) {
+            return parts.get(part);
+        }
         
     }
 
