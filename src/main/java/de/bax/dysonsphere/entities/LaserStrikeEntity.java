@@ -1,8 +1,12 @@
 package de.bax.dysonsphere.entities;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import de.bax.dysonsphere.DysonSphere;
+import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
@@ -10,9 +14,15 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -21,18 +31,23 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
 
     protected int startAiming = 0;
     protected int startStriking = startAiming + 55;
-    protected int startLingering = startStriking + 20;
+    protected int startLingering = startStriking + 200;
     protected int end = startLingering + 1200;
     protected float dmg = 5f;
+    protected float blockDmg = 1f;
     protected int lifetime = 0;
+    protected float homingArea = 10f;
+    protected float homingSpeed = 1f;
 
     protected LivingEntity owner;
 
     public float size = 1f;
 
+    protected LivingEntity homingTarget;
 
     public LaserStrikeEntity(EntityType<?> type, Level level) {
         super(type, level);
+        this.noPhysics = true;
         
     }
 
@@ -43,16 +58,66 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
     @Override
     public void tick() {
         super.tick();
-        if(!level().isClientSide){
-            if(this.lifetime >= getLifeTime()){
-                this.discard();
+        
+        if(this.lifetime >= getLifeTime()){
+            this.discard();
+        }
+        if(isStriking()){
+            moveToSurface();
+            if(isHoming()){
+                //move towards nearest entity by homingSpeed, running on client and server prevents stuttering movement
+                if(homingTarget == null || homingTarget.isDeadOrDying()){
+                    homingTarget = level().getNearestEntity(LivingEntity.class, TargetingConditions.forCombat(), owner, this.getX(), this.getY(), this.getZ(), new AABB(this.getPosition(1).add(homingArea, level().getMaxBuildHeight(), homingArea), this.getPosition(1f).subtract(homingArea, homingArea, homingArea)));
+                } 
+                if(homingTarget != null) {
+                    Vec3 distance = homingTarget.getPosition(1f).subtract(this.getPosition(1f));
+                    distance = distance.multiply(1, 0, 1);
+                    if(distance.lengthSqr() > homingSpeed){
+                        distance = distance.scale(homingSpeed / homingArea);
+                    }
+                    // this.move(MoverType.SELF, distance);
+                    this.setPos(this.getX() + distance.x, this.getY() + distance.y, this.getZ() + distance.z);
+                    
+                }
             }
-            // DysonSphere.LOGGER.info("LaserStrikeEntity tick isStriking: {}, lifetime: {}, lt - sS mod: {}", isStriking(), lifetime, (this.lifetime - startStriking) % 10);
-            if(isStriking() && (this.lifetime - startStriking) % 10 == 0){
-                damageAOE();
+            if((this.lifetime - startStriking) % 10 == 0){
+                if(!level().isClientSide){
+                    damageAOE();
+                }
             }
+            dealBlockDamage();
         }
         lifetime++;
+    }
+
+    protected void moveToSurface(){
+        Vec3 startPos = new Vec3(this.getX(), level().getMaxBuildHeight(), this.getZ());
+        Vec3 endPos = new Vec3(this.getX(), level().getMinBuildHeight(), this.getZ());
+        BlockHitResult hit = this.level().clip(new ClipContext(startPos, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        this.setPos(this.getX(), hit.getLocation().y - 0.55f, this.getZ());
+    }
+
+    protected void dealBlockDamage(){
+        if(level().isClientSide) return;
+        if(this.blockDmg == 0)  return;
+        float radius = Math.min(0, size - 1);
+        Stream<BlockPos> blocks = BlockPos.betweenClosedStream(new AABB(this.getX() + radius, this.getY(), this.getZ() + radius, this.getX() - radius, this.getY(), this.getZ() -radius));
+
+        blocks.forEach((pos) -> {
+            BlockState state = level().getBlockState(pos);
+            boolean flammable = state.isFlammable(level(), pos, Direction.UP);
+            // Explosion explosion = level().explode(this, this.getX(), this.getY(), this.getZ(), 0, ExplosionInteraction.NONE);
+            Explosion explosion = new Explosion(level(), this, this.getX(), this.getY(), this.getZ(), 0, false, Explosion.BlockInteraction.KEEP);
+            float resistance = state.getExplosionResistance(level(), pos, explosion);
+            DysonSphere.LOGGER.info("LaserStrikeEntity moveToSurface flammable: {}, explosion: {}, resistance: {}", flammable, explosion.interactsWithBlocks(), resistance);
+            
+            if(!flammable){
+                resistance *= 2;
+            }
+            if(resistance < blockDmg){
+                level().destroyBlock(pos, false, this);
+            }
+        });        
     }
 
     public LaserStrikeEntity setStartAiming(int startAiming) {
@@ -80,7 +145,7 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
         return this;
     }
 
-    public LaserStrikeEntity setHoming(LivingEntity target){
+    public LaserStrikeEntity setAiming(LivingEntity target){
         this.startRiding(target, true);
         return this;
     }
@@ -93,6 +158,38 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
     public LaserStrikeEntity setDamage(float dmg){
         this.dmg = dmg;
         return this;
+    }
+
+    public LaserStrikeEntity setBlockDamage(float blockDmg){
+        this.blockDmg = blockDmg;
+        return this;
+    }
+
+    public LaserStrikeEntity setHoming(float area, float speed){
+        this.homingArea = area;
+        this.homingSpeed = speed;
+        return this;
+    }
+
+    public void setOrbitalStrikeParameters(OrbitalLaserAttackPattern pattern){
+        setSize(pattern.strikeSize);
+
+        if(pattern.aimingArea > 0){
+            setAiming(level().getNearestEntity(LivingEntity.class, TargetingConditions.forCombat(), owner, this.getX(), this.getY(), this.getZ(), getBoundingBox().inflate(pattern.aimingArea)));
+            startStriking = startAiming + pattern.callInDelay;
+        } else {
+            startStriking = 0;
+        }
+        setHoming(pattern.homingArea, pattern.homingSpeed);
+        setDamage(pattern.damage);
+        setBlockDamage(pattern.blockDamage);
+        startLingering = startStriking + pattern.strikeDuration;
+
+
+    }
+
+    public boolean isHoming() {
+        return homingArea > 0 && homingSpeed > 0;
     }
 
     protected void damageAOE(){
@@ -148,6 +245,11 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
         return false;
     }
 
+    @Override
+    public boolean fireImmune() {
+        return true;
+    }
+
     public int getLifeTime(){
         return end;
     }
@@ -176,6 +278,9 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
         if(tag.contains("dmg")){
             dmg = tag.getFloat("dmg");
         }
+        if(tag.contains("blockDmg")){
+            blockDmg = tag.getFloat("blockDmg");
+        }
         lifetime = tag.getInt("lifetime");
         
     }
@@ -191,6 +296,7 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
         }
         tag.putFloat("size", size);
         tag.putFloat("dmg", dmg);
+        tag.putFloat("blockDmg", blockDmg);
         tag.putInt("lifetime", lifetime);
     }
 
@@ -201,11 +307,30 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
 
     @Override
     public void writeSpawnData(FriendlyByteBuf buffer) {
+        buffer.writeInt(startAiming);
+        buffer.writeInt(startStriking);
+        buffer.writeInt(startLingering);
+        buffer.writeInt(end);
+        buffer.writeFloat(dmg);
+        buffer.writeFloat(blockDmg);
+        buffer.writeFloat(homingArea);
+        buffer.writeFloat(homingSpeed);
+
         buffer.writeInt(lifetime);
     }
 
     @Override
     public void readSpawnData(FriendlyByteBuf buffer) {
+        this.startAiming = buffer.readInt();
+        this.startStriking = buffer.readInt();
+        this.startLingering = buffer.readInt();
+        this.end = buffer.readInt();
+        this.dmg = buffer.readFloat();
+        this.blockDmg = buffer.readFloat();
+        this.homingArea = buffer.readFloat();
+        this.homingSpeed = buffer.readFloat();
+
+
         this.lifetime = buffer.readInt();
     }
 
@@ -214,4 +339,6 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
         return NetworkHooks.getEntitySpawningPacket(this);
     }
     
+    
+
 }

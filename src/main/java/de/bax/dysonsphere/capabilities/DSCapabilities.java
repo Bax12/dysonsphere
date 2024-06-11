@@ -4,6 +4,7 @@ import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dsPart.IDSPart;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
+import de.bax.dysonsphere.capabilities.orbitalLaser.IOrbitalLaserContainer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -19,4 +20,7 @@ public class DSCapabilities {
 
     //Level
     public static final Capability<IDysonSphereContainer> DYSON_SPHERE = CapabilityManager.get(new CapabilityToken<>(){});
+
+    //Players
+    public static final Capability<IOrbitalLaserContainer> ORBITAL_LASER = CapabilityManager.get(new CapabilityToken<>() {});
 }

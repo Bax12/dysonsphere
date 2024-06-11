@@ -8,6 +8,7 @@ import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereContainer;
+import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserPlayerContainer;
 import de.bax.dysonsphere.containers.ModContainers;
 import de.bax.dysonsphere.entities.ModEntities;
 import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
@@ -26,6 +27,8 @@ import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -90,7 +93,7 @@ public class DysonSphere
     }
 
     @SubscribeEvent
-    public void attachCaps(AttachCapabilitiesEvent<Level> event){
+    public void attachLevelCaps(AttachCapabilitiesEvent<Level> event){
         if(event.getObject().dimension().equals(Level.OVERWORLD)){
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "dysonsphere"), new DysonSphereContainer());
             event.addListener(() -> {
@@ -98,6 +101,16 @@ public class DysonSphere
             });
         }
         
+    }
+
+    @SubscribeEvent
+    public void attachPlayerCaps(AttachCapabilitiesEvent<Entity> event){
+        if(event.getObject() instanceof Player){
+            event.addCapability(new ResourceLocation(DysonSphere.MODID, "orbitallaser"),  new OrbitalLaserPlayerContainer((Player) event.getObject()));
+            event.addListener(() -> {
+                event.getObject().getCapability(DSCapabilities.ORBITAL_LASER).invalidate();
+            });
+        }
     }
 
 

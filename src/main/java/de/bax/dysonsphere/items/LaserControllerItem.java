@@ -5,8 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
+import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
 import de.bax.dysonsphere.entities.TargetDesignatorEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -65,17 +67,41 @@ public class LaserControllerItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
-            // if(energy.getEnergyStored() >= 750){
-                LazyOptional<IDysonSphereContainer> dysonSphere = level.getCapability(DSCapabilities.DYSON_SPHERE);
-                dysonSphere.ifPresent(ds -> {
-                    //spawn orbital strike entity
-                    TargetDesignatorEntity projectile = new TargetDesignatorEntity(player, level);
-                    level.addFreshEntity(projectile);
-                    // energy.extractEnergy(750, false);
-                });
-            // }
-        });
+        if(player.isCrouching()){
+            var orbitalLaserContainer = player.getCapability(DSCapabilities.ORBITAL_LASER);
+            orbitalLaserContainer.ifPresent((orbitalLaser) -> {
+                DysonSphere.LOGGER.info("LaserControllerItem use activePattern size pre : {}", orbitalLaser.getActivePatterns().size());
+                orbitalLaser.getActivePatterns().clear();
+                orbitalLaser.getActivePatterns().add(new OrbitalLaserAttackPattern());
+                DysonSphere.LOGGER.info("LaserControllerItem use activePattern size post : {}", orbitalLaser.getActivePatterns().size());
+            });
+            return InteractionResultHolder.success(stack);
+        }
+        if(!level.isClientSide){
+            stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
+                // if(energy.getEnergyStored() >= 750){
+                    // LazyOptional<IDysonSphereContainer> dysonSphere = level.getCapability(DSCapabilities.DYSON_SPHERE);
+                    // dysonSphere.ifPresent(ds -> {
+                    //     //spawn orbital strike entity
+                    //     TargetDesignatorEntity projectile = new TargetDesignatorEntity(player, level);
+                    //     level.addFreshEntity(projectile);
+                    //     // energy.extractEnergy(750, false);
+                    // });
+
+                    ItemStack targetDesignator = new ItemStack(ModItems.TARGET_DESIGNATOR.get());
+                    if(hand.equals(InteractionHand.MAIN_HAND)) {
+                        TargetDesignatorItem.setContainedStack(targetDesignator, stack);
+                    } else {
+                        ItemStack mainHandStack = player.getMainHandItem();
+                        TargetDesignatorItem.setContainedStack(targetDesignator, mainHandStack);
+                    }
+                    TargetDesignatorItem.setOrbitalStrikePatternIndex(targetDesignator, 0);
+                    player.setItemInHand(InteractionHand.MAIN_HAND, targetDesignator);
+                    
+
+                // }
+            });
+        }
 
         return InteractionResultHolder.success(stack);
     }
