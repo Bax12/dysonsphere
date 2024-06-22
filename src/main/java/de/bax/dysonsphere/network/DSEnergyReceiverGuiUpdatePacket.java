@@ -6,6 +6,7 @@ import de.bax.dysonsphere.tileentities.DSEnergyReceiverTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -35,11 +36,13 @@ public class DSEnergyReceiverGuiUpdatePacket {
 
     public void handle(Supplier<NetworkEvent.Context> ctx){
         ctx.get().enqueueWork(() -> {
-            BlockEntity tile = ctx.get().getSender().level().getBlockEntity(pos);
-            if(tile != null && tile.getType().equals(ModTiles.DS_ENERGY_RECEIVER.get())){
-                ((DSEnergyReceiverTile) tile).setDsPowerDraw(powerDraw);
+            Level level = ctx.get().getSender().level();
+            if(level.isLoaded(pos)){
+                BlockEntity tile = level.getBlockEntity(pos);
+                if(tile != null && tile.getType().equals(ModTiles.DS_ENERGY_RECEIVER.get())){
+                    ((DSEnergyReceiverTile) tile).setDsPowerDraw(powerDraw);
+                }
             }
-
         });
         ctx.get().setPacketHandled(true);
     }
