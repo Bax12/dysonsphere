@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "dysonsphere:block/laser_pattern_controller_block",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "dysonsphere:block/laser_pattern_controller_block"
+    },
+    "facing=south": {
+      "model": "dysonsphere:block/laser_pattern_controller_block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "dysonsphere:block/laser_pattern_controller_block",
+      "y": 270
+    }
+  }
+}

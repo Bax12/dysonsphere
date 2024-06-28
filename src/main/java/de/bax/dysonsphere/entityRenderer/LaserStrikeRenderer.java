@@ -26,9 +26,7 @@ public class LaserStrikeRenderer extends EntityRenderer<LaserStrikeEntity> {
     public static final float BEAM_MIN_U = 224f / TEXTURE_WIDTH;
     public static final float BEAM_MAX_U = 1;
     public static final float BEAM_TARGETING_SIZE = 0.025f;
-    public static final float BEAM_SMALL_SIZE = 0.25f;
-    public static final float BEAM_MEDIUM_SIZE = 1.0f;
-    public static final float BEAM_LARGE_SIZE = 2.0f;
+    public static final float BEAM_BASE_SIZE = 0.1f;
     
     public static final ResourceLocation RES_LOC = new ResourceLocation(DysonSphere.MODID, "textures/effects/laserstrike.png");
 
@@ -56,7 +54,8 @@ public class LaserStrikeRenderer extends EntityRenderer<LaserStrikeEntity> {
             drawBeam(BEAM_TARGETING_SIZE, 0.5f, 255, poseStack, builder, light);        
         } else if(entity.isStriking()){
             //strike
-            drawBeam(BEAM_SMALL_SIZE, 1f, 255, poseStack, builder, light);        
+            // DysonSphere.LOGGER.info("LaserStrikeRenderer render entitySize: {}", entity.getSize());
+            drawBeam(BEAM_BASE_SIZE * entity.getSize(), 1f, 255, poseStack, builder, light);        
         } else if (entity.isLingering()){
 
         }

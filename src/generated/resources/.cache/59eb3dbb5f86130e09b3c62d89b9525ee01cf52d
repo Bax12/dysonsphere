@@ -1,7 +1,8 @@
-// 1.20.1	2024-03-07T03:15:01.950126546	Loot Tables
+// 1.20.1	2024-06-22T00:41:31.810450207	Loot Tables
 a60fb59f630e155ef5e78f66b0e1068336756439 data/dysonsphere/loot_tables/blocks/dysonsphere_energy_receiver_block.json
 09d6f7e4eb74d446bc1bda915f62b8025c300263 data/dysonsphere/loot_tables/blocks/dysonsphere_monitor_block.json
 c77db67a615c97a4e837a41daa38693f7fd95fd1 data/dysonsphere/loot_tables/blocks/heat_exchanger_block.json
 c2c9fa2dfcb082aebc940eac3a5c09d12b6b8078 data/dysonsphere/loot_tables/blocks/heat_generator_block.json
 844ab09e4f14cb01ad6cebedfeb3c34bc631fe45 data/dysonsphere/loot_tables/blocks/heat_pipe_block.json
+f7e4f3d8f2ad645014dd55eed81805cc9ba5cdfe data/dysonsphere/loot_tables/blocks/laser_pattern_controller_block.json
 14f01b2d131c053a5688b7debc219f99d87cf68e data/dysonsphere/loot_tables/blocks/railgun_block.json

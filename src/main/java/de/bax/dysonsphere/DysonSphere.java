@@ -17,8 +17,10 @@ import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
 import de.bax.dysonsphere.gui.HeatExchangerGui;
 import de.bax.dysonsphere.gui.HeatGeneratorGui;
+import de.bax.dysonsphere.gui.LaserPatternControllerGui;
 import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
+import de.bax.dysonsphere.network.LaserPatternSyncPacket;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.sounds.ModSounds;
 import de.bax.dysonsphere.tabs.ModTabs;
@@ -27,6 +29,7 @@ import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -34,6 +37,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -42,6 +47,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.network.PacketDistributor;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(DysonSphere.MODID)
@@ -113,6 +119,29 @@ public class DysonSphere
         }
     }
 
+    @SubscribeEvent
+    public void syncPlayerCaps(EntityJoinLevelEvent event){
+        if(event.getLevel().isClientSide) return;
+        if(event.getEntity() instanceof ServerPlayer){
+            ServerPlayer player = (ServerPlayer) event.getEntity();
+            player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
+                ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new LaserPatternSyncPacket(laser.getActivePatterns()));
+            });
+            
+        }
+        
+    }
+
+    @SubscribeEvent
+    public void preservePlayerCaps(PlayerEvent.Clone event){
+        if(!event.isWasDeath()) return;
+        event.getOriginal().getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((originalLaser) -> {
+            event.getEntity().getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((newLaser) -> {
+                newLaser.setActivePatterns(originalLaser.getActivePatterns());
+            });
+        });
+    }
+
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
@@ -125,6 +154,7 @@ public class DysonSphere
                 MenuScreens.register(ModContainers.DS_ENERGY_RECEIVER_CONTAINER.get(), DSEnergyReceiverGui::new);
                 MenuScreens.register(ModContainers.HEAT_GENERATOR.get(), HeatGeneratorGui::new);
                 MenuScreens.register(ModContainers.HEAT_EXCHANGER.get(), HeatExchangerGui::new);
+                MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER.get(), LaserPatternControllerGui::new);
             });
         }
 

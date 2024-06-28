@@ -1,4 +1,4 @@
-// 1.20.1	2024-03-07T03:15:01.949255103	Item Models: dysonsphere
+// 1.20.1	2024-06-22T00:41:31.809671365	Item Models: dysonsphere
 08df4d89635e2e188dd96816aec2f9bae0ab9a10 assets/dysonsphere/models/item/bucket_steam.json
 0c919b80842cdf42590d975217ce52f08031c9a4 assets/dysonsphere/models/item/coil_copper.json
 b8734755e92b5bfc21c0d87305b6726dc96ac95b assets/dysonsphere/models/item/coil_iron.json
@@ -8,5 +8,6 @@ dc2c3454a33c4581da36bdc3659382f029f08a67 assets/dysonsphere/models/item/dysonsph
 fdcdd959d2223cc4a0a4711533250dda916ce0c2 assets/dysonsphere/models/item/heat_generator_block.json
 8e20d93bfb381a78f88a129e03b41119317e0cd8 assets/dysonsphere/models/item/heat_pipe_block.json
 b0b2a8a67fb8a55712064eff53a75ac1dd0159ba assets/dysonsphere/models/item/heat_shielding.json
+d70f9f57d4ffaad7b0938525033fc1fdcbf0293c assets/dysonsphere/models/item/laser_pattern_controller_block.json
 077b5b8e6d0e6f01511d1fbafa4371b1828d8ffa assets/dysonsphere/models/item/solar_foil.json
 f1fbc7c832d61e3d7808683fd87beb05f8646054 assets/dysonsphere/models/item/thermopile.json

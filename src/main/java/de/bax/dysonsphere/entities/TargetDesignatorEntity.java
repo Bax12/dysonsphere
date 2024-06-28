@@ -16,7 +16,8 @@ public class TargetDesignatorEntity extends ThrowableProjectile {
     
     public int deployedAt = 0;
     protected int lifetime = 0;
-    public OrbitalLaserAttackPattern orbitalAttackPattern = new OrbitalLaserAttackPattern();
+    protected OrbitalLaserAttackPattern orbitalAttackPattern = new OrbitalLaserAttackPattern();
+    protected int maxLifeTime = 750;
 
     public TargetDesignatorEntity(EntityType<? extends ThrowableProjectile> type, Level world) {
         super(type, world);
@@ -60,6 +61,7 @@ public class TargetDesignatorEntity extends ThrowableProjectile {
         tag.putInt("deployedAt", deployedAt);
         tag.putInt("lifetime", lifetime);
         tag.put("pattern", orbitalAttackPattern.serializeNBT());
+        tag.putInt("maxLifeTime", maxLifeTime);
     }
 
     @Override
@@ -69,12 +71,13 @@ public class TargetDesignatorEntity extends ThrowableProjectile {
         deployedAt = tag.getInt("deployedAt");
         lifetime = tag.getInt("lifetime");
         orbitalAttackPattern.deserializeNBT(tag.getCompound("pattern"));
+        maxLifeTime = tag.getInt("maxLifeTime");
     }
 
     @Override
     public void tick() {
         super.tick();
-        if(this.lifetime >= getLiveTime() || (this.deployedAt > 0 && this.lifetime >= this.deployedAt + 120)){
+        if(this.lifetime >= getLiveTime()){
             this.discard();
         }
         if(this.deployedAt > 0 && this.lifetime >= this.deployedAt + 10){
@@ -129,7 +132,7 @@ public class TargetDesignatorEntity extends ThrowableProjectile {
     }
 
     public int getLiveTime(){
-        return 750;
+        return maxLifeTime;
     }
 
     @Override
@@ -145,6 +148,11 @@ public class TargetDesignatorEntity extends ThrowableProjectile {
     @Override
     public boolean fireImmune() {
         return true;
+    }
+
+    public void setOrbitalAttackPattern(OrbitalLaserAttackPattern orbitalLaserAttackPattern) {
+        this.orbitalAttackPattern = orbitalLaserAttackPattern;
+        this.maxLifeTime = orbitalLaserAttackPattern.callInDelay + (orbitalLaserAttackPattern.repeatDelay * orbitalLaserAttackPattern.strikeCount) + 120;
     }
 
 

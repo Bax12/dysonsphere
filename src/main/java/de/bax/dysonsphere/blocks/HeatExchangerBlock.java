@@ -56,8 +56,8 @@ public class HeatExchangerBlock extends Block implements EntityBlock {
         if(!level.isClientSide && player instanceof ServerPlayer serverPlayer){
             BlockEntity tile = level.getBlockEntity(pos);
             if(tile != null && tile.getType().equals(ModTiles.HEAT_EXCHANGER.get())){
-                NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInvenory, playerProvided) -> 
-                new HeatExchangerContainer(containerId, playerInvenory, (HeatExchangerTile) tile), Component.translatable("container.dysonsphere.heat_exchanger")), pos);
+                NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
+                new HeatExchangerContainer(containerId, playerInventory, (HeatExchangerTile) tile), Component.translatable("container.dysonsphere.heat_exchanger")), pos);
 
                 return InteractionResult.CONSUME;
             }

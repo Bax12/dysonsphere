@@ -1,27 +1,26 @@
 package de.bax.dysonsphere.capabilities.orbitalLaser;
 
-import java.util.List;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public class OrbitalLaserAttackPattern implements INBTSerializable<CompoundTag> {
     
-    public static final List<Character> validCallInChars = List.of('w','a','s','d');
+    // public static final List<Character> validCallInChars = List.of('w','a','s','d');
+    public static final String validCallInChars = "^[w,a,s,d]{1,}$";
 
     //set by gui - length requirement based on complexity
     protected String callInSequence = "ddd";
 
     //set by gui
     public int strikeCount = 1;
-    public float strikeSize = 10; //1
-    public int strikeDuration = 50; //1
+    public float strikeSize = 1; 
+    public int strikeDuration = 20;
     public float aimingArea = 0;
     public float homingArea = 0;
     public float homingSpeed = 0;
     public float damage = 1;
     public float blockDamage = 1;
-    public int callInDelay = 0;
+    public int callInDelay = 5;
     public int repeatDelay = 0;
     public float spreadRadius = 0;
 
@@ -38,32 +37,52 @@ public class OrbitalLaserAttackPattern implements INBTSerializable<CompoundTag> 
     }
 
     protected float calcComplexity(){
-        return strikeCount * strikeSize * strikeDuration * Math.min(1, aimingArea / 4) * Math.min(1, homingArea / 8) * Math.min(1, homingSpeed / 2) * Math.min(1, damage - blockDamage / 6) / Math.min(1, callInDelay / 10) / Math.min(1, repeatDelay / 2) / Math.min(1, spreadRadius);
+        // return (strikeCount * Math.max(1f, strikeSize) * strikeDuration * Math.max(1f, aimingArea / 4f) * Math.max(1f, homingArea / 8f) * Math.max(1f, homingSpeed / 2f) * Math.max(1f, damage - blockDamage / 6f) / Math.max(1f, callInDelay / 10f) / Math.max(1f, repeatDelay / 2f) / Math.max(1f, spreadRadius)) / 200f;
+        return Math.min(9f, ((Math.max(1f, strikeCount) * 0.4f) + (Math.max(1.0F, strikeSize) * 0.25f) + (Math.max(20, strikeDuration) * 0.01f) + (Math.max(1f, aimingArea * aimingArea * 0.1f)) + (Math.max(1f, homingArea * homingArea * 0.1f)) + (Math.max(1f, homingSpeed * homingSpeed * 0.1f)) + (Math.max(1f, (damage - blockDamage) * damage * 0.05f)) - (Math.max(1, callInDelay / 8)) - (Math.max(1, repeatDelay / 7)) - spreadRadius));
     }
 
     protected int calcLasersRequired(){
-        return (int) Math.ceil(strikeCount * (strikeSize / 2) * (strikeCount / 5) * (Math.min(4, (damage - blockDamage)) / 4));
+        return (int) Math.ceil(strikeCount * (strikeSize / 2f) * (strikeCount / 5f) * (Math.min(4f, (damage - blockDamage)) / 4f));
     }
 
     protected int calcRechargeTime(){
-        return (int) (50 * damage) - (callInDelay * 5) - repeatDelay;
+        return (int) ((50 * damage) - (callInDelay * 5f) - repeatDelay);
     }
 
 
     public int getMinSequenceSize(){
-        return Math.min(3, (int) Math.ceil(complexity));
+        return Math.max(3, (int) Math.ceil(complexity));
     }
 
     public float getComplexity() {
+        if(Float.isNaN(complexity)){
+            finishPattern();
+        }
         return complexity;
     }
 
     public int getLasersRequired() {
+        if(lasersRequired == 0){
+            finishPattern();
+        }
         return lasersRequired;
     }
 
     public int getRechargeTime() {
+        if(rechargeTime == 0){
+            finishPattern();
+        }
         return rechargeTime;
+    }
+
+    public void setCallInSequence(String callInSequence) {
+        if(callInSequence.matches(validCallInChars)){
+            this.callInSequence = callInSequence;
+        }
+    }
+
+    public String getCallInSequence() {
+        return callInSequence;
     }
 
     @Override
@@ -95,7 +114,9 @@ public class OrbitalLaserAttackPattern implements INBTSerializable<CompoundTag> 
         this.finishPattern();
     }
 
-
+    public boolean isValid(){
+        return callInSequence.length() >= getMinSequenceSize();
+    }
 
 
 

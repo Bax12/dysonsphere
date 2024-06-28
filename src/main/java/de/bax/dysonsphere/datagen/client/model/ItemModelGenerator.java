@@ -27,7 +27,10 @@ public class ItemModelGenerator extends ItemModelProvider{
         Set<RegistryObject<Item>> complexItems = ImmutableSet.of(
             ModItems.CAPSULE_SOLAR,
             ModItems.CAPSULE_EMPTY,
-            ModItems.RAILGUN
+            ModItems.CAPSULE_LASER,
+            ModItems.RAILGUN,
+            ModItems.TARGET_DESIGNATOR,
+            ModItems.LASER_CONTROLLER
         );
 
         Set<Item> complexBlocks = ImmutableSet.of(

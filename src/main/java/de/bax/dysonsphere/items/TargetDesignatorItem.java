@@ -49,7 +49,7 @@ public class TargetDesignatorItem extends Item {
                 List<OrbitalLaserAttackPattern> patterns = orbitalLaser.getActivePatterns();
                 int index = getOrbitalStrikePatternIndex(stack);
                 if(patterns.size() > index){
-                    designator.orbitalAttackPattern = patterns.get(index);  
+                    designator.setOrbitalAttackPattern(patterns.get(index));  
                     level.addFreshEntity(designator);
                 }
             });

@@ -3,6 +3,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
 version = '0.1-1'
@@ -134,6 +135,15 @@ repositories {
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
     }
+
+    maven {
+        name = "K-u4 Mod maven"
+        url = "https://modmaven.dev/"
+        content {
+            includeGroup "mekanism"
+            includeGroup "me.desht.pneumaticcraft"
+        }
+    }
 }
 
 dependencies {
@@ -154,7 +164,13 @@ dependencies {
     runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.3.0.4"))
 
     // compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE")
+    runtimeOnly(fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE")) 
+
+    compileOnly(fg.deobf("mekanism:Mekanism:1.20.1-10.4.8.43:api"))
+    runtimeOnly(fg.deobf("mekanism:Mekanism:1.20.1-10.4.8.43"))
+
+    compileOnly(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1:api"))
+    runtimeOnly(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1"))
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

@@ -21,9 +21,11 @@ public class BlockStateGenerator extends BlockStateProvider{
         buildCubeAll(ModBlocks.HEAT_PIPE_BLOCK);
 
         buildHorizontalBlock(ModBlocks.DS_MONITOR_BLOCK);
+        buildHorizontalBlock(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK);
 
         buildModel(ModBlocks.RAILGUN_BLOCK);
         buildModel(ModBlocks.DS_ENERGY_RECEIVER_BLOCK);
+        
 
         buildPillarBlock(ModBlocks.HEAT_EXCHANGER_BLOCK);
         buildPillarBlock(ModBlocks.HEAT_GENERATOR_BLOCK);

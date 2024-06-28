@@ -12,7 +12,7 @@
       "args": "--launchTarget forgeclientuserdev --version MOD_DEV --assetIndex 5 --assetsDir /home/sebastian/.gradle/caches/forge_gradle/assets --gameDir . --fml.forgeVersion 47.2.0 --fml.mcVersion 1.20.1 --fml.forgeGroup net.minecraftforge --fml.mcpVersion 20230612.114412",
       "env": {
         "MOD_CLASSES": "dysonsphere%%${workspaceFolder}/build/resources/main:dysonsphere%%${workspaceFolder}/build/classes/java/main",
-        "MCP_MAPPINGS": "official_1.20.1"
+        "MCP_MAPPINGS": "parchment_2023.09.03-1.20.1"
       },
       "preLaunchTask": "prepareRunClientCompile"
     },
@@ -27,7 +27,7 @@
       "args": "--launchTarget forgedatauserdev --assetIndex 5 --assetsDir /home/sebastian/.gradle/caches/forge_gradle/assets --gameDir . --fml.forgeVersion 47.2.0 --fml.mcVersion 1.20.1 --fml.forgeGroup net.minecraftforge --fml.mcpVersion 20230612.114412 --mod dysonsphere --all --output \"/home/sebastian/Eclipse/dysonsphere 1.20.1/src/generated/resources\" --existing \"/home/sebastian/Eclipse/dysonsphere 1.20.1/src/main/resources\"",
       "env": {
         "MOD_CLASSES": "dysonsphere%%${workspaceFolder}/build/resources/main:dysonsphere%%${workspaceFolder}/build/classes/java/main",
-        "MCP_MAPPINGS": "official_1.20.1"
+        "MCP_MAPPINGS": "parchment_2023.09.03-1.20.1"
       },
       "preLaunchTask": "prepareRunDataCompile"
     },
@@ -42,7 +42,7 @@
       "args": "--launchTarget forgegametestserveruserdev --gameDir . --fml.forgeVersion 47.2.0 --fml.mcVersion 1.20.1 --fml.forgeGroup net.minecraftforge --fml.mcpVersion 20230612.114412",
       "env": {
         "MOD_CLASSES": "dysonsphere%%${workspaceFolder}/build/resources/main:dysonsphere%%${workspaceFolder}/build/classes/java/main",
-        "MCP_MAPPINGS": "official_1.20.1"
+        "MCP_MAPPINGS": "parchment_2023.09.03-1.20.1"
       },
       "preLaunchTask": "prepareRunGameTestServerCompile"
     },
@@ -57,7 +57,7 @@
       "args": "--launchTarget forgeserveruserdev --gameDir . --fml.forgeVersion 47.2.0 --fml.mcVersion 1.20.1 --fml.forgeGroup net.minecraftforge --fml.mcpVersion 20230612.114412 --nogui",
       "env": {
         "MOD_CLASSES": "dysonsphere%%${workspaceFolder}/build/resources/main:dysonsphere%%${workspaceFolder}/build/classes/java/main",
-        "MCP_MAPPINGS": "official_1.20.1"
+        "MCP_MAPPINGS": "parchment_2023.09.03-1.20.1"
       },
       "preLaunchTask": "prepareRunServerCompile"
     }

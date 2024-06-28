@@ -41,7 +41,7 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
 
     protected LivingEntity owner;
 
-    public float size = 1f;
+    protected float size = 1f;
 
     protected LivingEntity homingTarget;
 
@@ -83,9 +83,10 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
             if((this.lifetime - startStriking) % 10 == 0){
                 if(!level().isClientSide){
                     damageAOE();
+                    dealBlockDamage();
                 }
             }
-            dealBlockDamage();
+            
         }
         lifetime++;
     }
@@ -100,25 +101,39 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
     protected void dealBlockDamage(){
         if(level().isClientSide) return;
         if(this.blockDmg == 0)  return;
-        float radius = Math.min(0, size - 1);
-        Stream<BlockPos> blocks = BlockPos.betweenClosedStream(new AABB(this.getX() + radius, this.getY(), this.getZ() + radius, this.getX() - radius, this.getY(), this.getZ() -radius));
+        float radius = Math.max(0.5f, (size / 2f) - 1f);
+        Stream<BlockPos> blocks = BlockPos.betweenClosedStream(new AABB(this.getX() + radius, this.getY() + level().getMaxBuildHeight(), this.getZ() + radius, this.getX() - radius, this.getY(), this.getZ() -radius));
+
+
 
         blocks.forEach((pos) -> {
-            BlockState state = level().getBlockState(pos);
-            boolean flammable = state.isFlammable(level(), pos, Direction.UP);
-            // Explosion explosion = level().explode(this, this.getX(), this.getY(), this.getZ(), 0, ExplosionInteraction.NONE);
-            Explosion explosion = new Explosion(level(), this, this.getX(), this.getY(), this.getZ(), 0, false, Explosion.BlockInteraction.KEEP);
-            float resistance = state.getExplosionResistance(level(), pos, explosion);
-            DysonSphere.LOGGER.info("LaserStrikeEntity moveToSurface flammable: {}, explosion: {}, resistance: {}", flammable, explosion.interactsWithBlocks(), resistance);
-            
-            if(!flammable){
-                resistance *= 2;
-            }
-            if(resistance < blockDmg){
-                level().destroyBlock(pos, false, this);
-            }
+            if(this.horizontalDistanceSqr(pos) <= radius && level().canSeeSkyFromBelowWater(pos)){
+                BlockState state = level().getBlockState(pos);
+                boolean flammable = state.isFlammable(level(), pos, Direction.UP);
+                // Explosion explosion = level().explode(this, this.getX(), this.getY(), this.getZ(), 0, ExplosionInteraction.NONE);
+                Explosion explosion = new Explosion(level(), this, this.getX(), this.getY(), this.getZ(), 0, false, Explosion.BlockInteraction.DESTROY_WITH_DECAY);
+                float resistance = state.getExplosionResistance(level(), pos, explosion);
+                
+                // DysonSphere.LOGGER.info("LaserStrikeEntity dealBlockDamage flammable: {}, explosion: {}, resistance: {}", flammable, explosion.interactsWithBlocks(), resistance);
+                
+                if(!flammable){
+                    resistance *= 2;
+                }
+                if(resistance < blockDmg){
+                    level().destroyBlock(pos, false, this);
+                    // level().destroyBlockProgress(0, pos, 1);
+                }    
+            }          
         });        
+
     }
+
+    protected double horizontalDistanceSqr(BlockPos pos){
+        double x = (double)pos.getX() + 0.5d - this.getX();
+        double z = (double)pos.getZ() + 0.5d - this.getZ();
+        return x * x + z * z;
+    }
+
 
     public LaserStrikeEntity setStartAiming(int startAiming) {
         this.startAiming = startAiming;
@@ -151,7 +166,11 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
     }
 
     public LaserStrikeEntity setSize(float size){
-        this.size = size;
+        if(size <= 0){
+            this.size = 0.1f;
+        } else {
+            this.size = size;
+        }
         return this;
     }
 
@@ -317,6 +336,7 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
         buffer.writeFloat(homingSpeed);
 
         buffer.writeInt(lifetime);
+        buffer.writeFloat(size);
     }
 
     @Override
@@ -332,12 +352,39 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
 
 
         this.lifetime = buffer.readInt();
+        this.size = buffer.readFloat();
     }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
+
+    public float getSize() {
+        return size;
+    }
+
+    public float getDamage() {
+        return dmg;
+    }
+
+    public float getBlockDamage() {
+        return blockDmg;
+    }
+
+    public float getHomingArea() {
+        return homingArea;
+    }
+
+    public float getHomingSpeed() {
+        return homingSpeed;
+    }
+
+    public LivingEntity getOwner() {
+        return owner;
+    }
+
+
     
     
 

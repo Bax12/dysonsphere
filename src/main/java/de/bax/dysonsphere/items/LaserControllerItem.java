@@ -2,6 +2,7 @@ package de.bax.dysonsphere.items;
 
 import java.util.List;
 
+import org.checkerframework.common.value.qual.MinLen;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +11,7 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
 import de.bax.dysonsphere.entities.TargetDesignatorEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -60,7 +62,11 @@ public class LaserControllerItem extends Item {
         stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
             tooltip.add(Component.translatable("tooltip.dysonsphere.energy_display", energy.getEnergyStored(), energy.getMaxEnergyStored()));
         });
-        
+        if(level != null && level.isClientSide){
+            Minecraft.getInstance().player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
+                tooltip.add(Component.literal("Pattern: " + laser.getActivePatterns().get(0).getComplexity()));
+            });
+        }
     }
 
     @Override

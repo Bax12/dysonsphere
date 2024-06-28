@@ -109,5 +109,25 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
         public List<OrbitalLaserAttackPattern> getActivePatterns() {
             return activePatterns;
         }
+
+        @Override
+        public void setActivePatterns(List<OrbitalLaserAttackPattern> patterns) {
+            this.activePatterns.clear();
+            this.activePatterns.addAll(patterns);
+        }
+
+        @Override
+        public void setActivePattern(OrbitalLaserAttackPattern pattern, int index) {
+            if(index >= 0 && index < activePatterns.size()){
+                activePatterns.set(index, pattern);
+            }
+        }
+
+        @Override
+        public void addActivePattern(OrbitalLaserAttackPattern pattern) {
+            this.activePatterns.add(pattern);
+        }
+
+
     }
 }
