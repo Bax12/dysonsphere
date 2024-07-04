@@ -17,4 +17,5 @@ public class ModContainers {
     public static final RegistryObject<MenuType<HeatGeneratorContainer>> HEAT_GENERATOR = CONTAINERS.register("heat_generator_container", () -> IForgeMenuType.create(HeatGeneratorContainer::fromNetwork));
     public static final RegistryObject<MenuType<HeatExchangerContainer>> HEAT_EXCHANGER = CONTAINERS.register("heat_exchanger_container", () -> IForgeMenuType.create(HeatExchangerContainer::fromNetwork));
     public static final RegistryObject<MenuType<LaserPatternControllerContainer>> LASER_PATTERN_CONTROLLER = CONTAINERS.register("laser_pattern_controller", () -> IForgeMenuType.create(LaserPatternControllerContainer::fromNetwork));
+    public static final RegistryObject<MenuType<LaserControllerInventoryContainer>> LASER_CONTROLLER_INVENTORY_CONTAINER = CONTAINERS.register("laser_controller_inventory", () -> IForgeMenuType.create(LaserControllerInventoryContainer::fromNetwork));
 }

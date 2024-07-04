@@ -1,24 +1,22 @@
 package de.bax.dysonsphere.gui.components;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import de.bax.dysonsphere.gui.BaseGui;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 
 @OnlyIn(Dist.CLIENT)
 public class EnergyDisplay extends BaseDisplay{
     
-    protected EnergyStorage energy;
+    protected IEnergyStorage energy;
 
-    public EnergyDisplay(int x, int y, EnergyStorage energyStorage) {
+    public EnergyDisplay(int x, int y, IEnergyStorage energyStorage) {
         super(x, y);
 
         this.energy = energyStorage;

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.orbitalLaser.IOrbitalLaserContainer;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
@@ -11,6 +12,7 @@ import de.bax.dysonsphere.containers.LaserPatternControllerContainer;
 import de.bax.dysonsphere.gui.components.NumberInput;
 import de.bax.dysonsphere.network.LaserPatternSyncPacket;
 import de.bax.dysonsphere.network.ModPacketHandler;
+import de.bax.dysonsphere.tileentities.LaserPatternControllerTile;
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,6 +24,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 
 public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerContainer> {
@@ -50,11 +53,13 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
 
 
     protected Button applyButton;
-    protected Button prevIndexButton;
-    protected Button nextIndexButton;
+
+    protected final LaserPatternControllerTile tile;
 
     public LaserPatternControllerGui(LaserPatternControllerContainer container, Inventory inventory, Component pTitle) {
         super(container, inventory, pTitle);
+
+        this.tile = container.tile;
 
         this.imageWidth = 240;
         this.imageHeight = 220;
@@ -65,81 +70,63 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
         super.init();
 
 
-        laserContainer = Minecraft.getInstance().player.getCapability(DSCapabilities.ORBITAL_LASER);
+        // laserContainer = Minecraft.getInstance().player.getCapability(DSCapabilities.ORBITAL_LASER);
         
-        Optional<OrbitalLaserAttackPattern> optionalPattern = laserContainer.map((laser) -> {
-            return laser.getActivePatterns().get(0);
-        });
+        //replace with getting the pattern from pattern item in internal inventory
+        // Optional<OrbitalLaserAttackPattern> optionalPattern = laserContainer.map((laser) -> {
+        //     return laser.getActivePatterns().get(0);
+        // });
 
-        OrbitalLaserAttackPattern pattern = optionalPattern.orElse(new OrbitalLaserAttackPattern());
+        
 
-        patternTextbox = new EditBox(font, getGuiLeft() + 11, getGuiTop() + 22, 70, 16, Component.literal("Pattern:"));
+        patternTextbox = new EditBox(font, getGuiLeft() + 11, getGuiTop() + 22, 70, 16, Component.translatable("tooltip.dysonsphere.laser_pattern_call_in"));
         patternTextbox.setFilter((s) -> {
             return s.matches(OrbitalLaserAttackPattern.validCallInChars);
         });
         
-        // countInput = new ForgeSlider(getGuiLeft() + 15, getGuiTop() + 35, 90, 15, Component.literal("Count "), Component.literal(" "), 0, 100, pattern.strikeCount, true);
-        // sizeInput = new ForgeSlider(getGuiLeft() + 15, getGuiTop() + 55, 90, 15, Component.literal("Size "), Component.literal(" "), 0, 100, pattern.strikeSize, true);
-        // durationInput = new ForgeSlider(getGuiLeft() + 15, getGuiTop() + 75, 90, 15, Component.literal("Duration "), Component.literal(" "), 0, 100, pattern.strikeDuration, true);
-        // aimingAreaInput = new ForgeSlider(getGuiLeft() + 15, getGuiTop() + 95, 90, 15, Component.literal("Aim Area "), Component.literal(" "), 0, 100, pattern.aimingArea, true);
-        // homingAreaInput = new ForgeSlider(getGuiLeft() + 15, getGuiTop() + 115, 90, 15, Component.literal("Homing Area "), Component.literal(" "), 0, 100, pattern.homingArea, true);
-        // homingSpeedInput = new ForgeSlider(getGuiLeft() + 15, getGuiTop() + 135, 90, 15, Component.literal("Homing Speed "), Component.literal(" "), 0, 100, pattern.homingSpeed, true);
-        // damageInput = new ForgeSlider(getGuiLeft() + 15, getGuiTop() + 155, 90, 15, Component.literal("Damage "), Component.literal(" "), 0, 100, pattern.damage, true);
-        
-        // blockDamageInput = new ForgeSlider(getGuiLeft() + 135, getGuiTop() + 35, 90, 15, Component.literal("Block Damage "), Component.literal(" "), 0, 100, pattern.blockDamage, true);
-        // startDelayInput = new ForgeSlider(getGuiLeft() + 135, getGuiTop() + 55, 90, 15, Component.literal("Call-in Delay "), Component.literal(" "), 0, 100, pattern.callInDelay, true);
-        // repeatDelayInput = new ForgeSlider(getGuiLeft() + 135, getGuiTop() + 75, 90, 15, Component.literal("Wave Delay "), Component.literal(" "), 0, 100, pattern.repeatDelay, true);
-        // spreadInput = new ForgeSlider(getGuiLeft() + 135, getGuiTop() + 95, 90, 15, Component.literal("Inaccuracy "), Component.literal(" "), 0, 100, pattern.spreadRadius, true);
+        countInput = new NumberInput(getGuiLeft() + 10, getGuiTop() + 45, Component.translatable("tooltip.dysonsphere.laser_pattern_controller_count"), font, true);
+        sizeInput = new NumberInput(getGuiLeft() + 10, getGuiTop() + 80, Component.translatable("tooltip.dysonsphere.laser_pattern_controller_size"), font);
+        durationInput = new NumberInput(getGuiLeft() + 10, getGuiTop() + 115, Component.translatable("tooltip.dysonsphere.laser_pattern_controller_duration"), font, true);
+        aimingAreaInput = new NumberInput(getGuiLeft() + 10, getGuiTop() + 150, Component.translatable("tooltip.dysonsphere.laser_pattern_controller_aim_area"), font);
+        homingAreaInput = new NumberInput(getGuiLeft() + 10, getGuiTop() + 185, Component.translatable("tooltip.dysonsphere.laser_pattern_controller_homing_area"), font);
 
-        countInput = new NumberInput(getGuiLeft() + 10, getGuiTop() + 45, Component.literal("Count"), font, true);
-        sizeInput = new NumberInput(getGuiLeft() + 10, getGuiTop() + 80, Component.literal("Size"), font);
-        durationInput = new NumberInput(getGuiLeft() + 10, getGuiTop() + 115, Component.literal("Duration"), font, true);
-        aimingAreaInput = new NumberInput(getGuiLeft() + 10, getGuiTop() + 150, Component.literal("Aim Area"), font);
-        homingAreaInput = new NumberInput(getGuiLeft() + 10, getGuiTop() + 185, Component.literal("Homing Area"), font);
-
-        homingSpeedInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 10, Component.literal("Homing Speed"), font);
-        damageInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 45, Component.literal("Damage"), font);
-        blockDamageInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 80, Component.literal("Block Damage"), font);
-        startDelayInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 115, Component.literal("Call-in Delay"), font, true);
-        repeatDelayInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 150, Component.literal("Wave Delay"), font, true);
-        spreadInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 185, Component.literal("Inaccuracy"), font);
+        homingSpeedInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 10, Component.translatable("tooltip.dysonsphere.laser_pattern_controller_homing_speed"), font);
+        damageInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 45, Component.translatable("tooltip.dysonsphere.laser_pattern_controller_damage"), font);
+        blockDamageInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 80, Component.translatable("tooltip.dysonsphere.laser_pattern_controller_block_damage"), font);
+        startDelayInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 115, Component.translatable("tooltip.dysonsphere.laser_pattern_controller_start_delay"), font, true);
+        repeatDelayInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 150, Component.translatable("tooltip.dysonsphere.laser_pattern_controller_repeat_delay"), font, true);
+        spreadInput = new NumberInput(getGuiLeft() + 130, getGuiTop() + 185, Component.translatable("tooltip.dysonsphere.laser_pattern_controller_spread"), font);
         
 
-        displayPattern(pattern);
+
+
+        ItemStack stack = tile.inventory.getStackInSlot(0);
+
+        if(!stack.isEmpty()){
+            var foo = stack.getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER);
+            Optional<OrbitalLaserAttackPattern> optionalPattern = Optional.empty();
+            try {
+                optionalPattern = foo.map((container) -> {
+                    return container.getPattern();
+                });
+            } catch(Exception e) {
+                DysonSphere.LOGGER.debug("LaserPatterControllerGui init Exception: {}", e);
+            }
+            
+    
+            OrbitalLaserAttackPattern pattern = optionalPattern.orElse(new OrbitalLaserAttackPattern());
+    
+            displayPattern(pattern);
+        }
+        
 
 
 
-        applyButton = Button.builder(Component.literal("Apply"), (button) -> {
+        applyButton = Button.builder(Component.translatable("tooltip.dysonsphere.laser_pattern_controller_apply"), (button) -> {
             applyPattern();
         }).bounds(getGuiLeft() + 83, this.getGuiTop() + 20, 36, 20).build();
 
         
-
-        prevIndexButton = Button.builder(Component.literal("prev"), (button) -> {
-            changeIndex(index - 1);
-        }).bounds(this.getGuiLeft() + 12, this.getGuiTop() + 2, 30, 12).build();
-        
-
-
-        nextIndexButton = Button.builder(Component.literal("next"), (button) -> {
-            changeIndex(index + 1);
-        }).bounds(this.getGuiLeft() + 90, this.getGuiTop() + 2, 30, 12).build();
-
-        laserContainer.ifPresent((laser) -> {
-            maxIndex = laser.getActivePatterns().size() - 1;
-        });
-
-        if(index == maxIndex){
-            nextIndexButton.active = false;
-        } else {
-            nextIndexButton.active = true;
-        }
-        if(index == 0){
-            prevIndexButton.active = false;
-        } else {
-            prevIndexButton.active = true;
-        }
-
 
         
         this.addRenderableWidget(patternTextbox);
@@ -155,13 +142,7 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
         this.addRenderableWidget(repeatDelayInput);
         this.addRenderableWidget(spreadInput);
         this.addRenderableWidget(applyButton);
-        this.addRenderableWidget(prevIndexButton);
-        this.addRenderableWidget(nextIndexButton);
-
         
-        
-        
-
     }
 
     protected OrbitalLaserAttackPattern getCurrentPattern(){
@@ -184,16 +165,22 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
     }
 
     protected void applyPattern(){
+        if(tile.inventory.getStackInSlot(0).isEmpty()) return;
         var pattern = getCurrentPattern();
         if(pattern.isValid()){
             
-            laserContainer.ifPresent((laser) -> {
-                //clientside
-                laser.setActivePattern(pattern, index);
+            // laserContainer.ifPresent((laser) -> {
+            //     //clientside
+            //     laser.setActivePattern(pattern, index);
 
-                //serverside
-                ModPacketHandler.INSTANCE.sendToServer(new LaserPatternSyncPacket(laser.getActivePatterns()));
-            });
+            //     //serverside
+            //     ModPacketHandler.INSTANCE.sendToServer(new LaserPatternSyncPacket(laser.getActivePatterns()));
+            // });
+
+            // tile.inventory.getStackInSlot(0).copy().getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((container) -> {
+            //     container.setPattern(pattern);
+            // });
+            ModPacketHandler.INSTANCE.sendToServer(new LaserPatternSyncPacket(pattern, tile.getBlockPos()));
             
         } else {
             var player = Minecraft.getInstance().player;
@@ -220,44 +207,12 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
         patternTextbox.setValue(pattern.getCallInSequence());
     }
 
-    protected void changeIndex(int newIndex){
-        applyPattern();
-        if(newIndex <= maxIndex && newIndex >= 0){
-            laserContainer.map((laser) -> {
-                return laser.getActivePatterns().get(newIndex);
-            }).ifPresent((pattern) -> {
-                displayPattern(pattern);
-            });
-            index = newIndex;
-        } 
-        // else if(newIndex == maxIndex + 1){
-        //     laserContainer.ifPresent((laser) -> {
-        //         var pattern = new OrbitalLaserAttackPattern();
-        //         laser.addActivePattern(pattern);
-        //         displayPattern(pattern);
-        //     });
-        //     index = newIndex;
-        // }
-        if(index == maxIndex){
-            nextIndexButton.active = false;
-        } else {
-            nextIndexButton.active = true;
-        }
-        if(index == 0){
-            prevIndexButton.active = false;
-        } else {
-            prevIndexButton.active = true;
-        }
-    }
-
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float f, int x, int y) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         // guiGraphics.blit(GUI_INVENTORY_LOC, this.leftPos, this.topPos + 93, 0, 0, 176, 86);//resourcename, onscreenX, onscreenY, pngStartX, pngStartY, pngEndX, pngEndY
         guiGraphics.blit(RES_LOC, this.leftPos, this.topPos, 0, 0, 240, 220);
-
-        guiGraphics.drawString(this.font, Component.literal("Index: " + index), this.getGuiLeft() + 47, this.getGuiTop() + 4, 0xFFFFFF, false);
 
     }
 
@@ -281,7 +236,7 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
     @Override
     public void mouseMoved(double pMouseX, double pMouseY) {
         if(applyButton.isMouseOver(pMouseX, pMouseY)){
-            applyButton.setTooltip(Tooltip.create(Component.literal("Minimum Sequence Length: " + getCurrentPattern().getMinSequenceSize())));
+            applyButton.setTooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.laser_pattern_controller_min_sequence", getCurrentPattern().getMinSequenceSize())));
         }
 
     }

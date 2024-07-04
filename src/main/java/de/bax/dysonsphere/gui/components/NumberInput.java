@@ -61,11 +61,11 @@ public class NumberInput extends AbstractWidget {
         this.intOnly = intOnly;
         this.minValue = minValue;
         
-        minusButton = Button.builder(Component.literal("-"), (button) -> {
+        minusButton = Button.builder(Component.translatable("tooltip.dysonsphere.number_input.minus_button"), (button) -> {
             changeValueBy(-1);
         }).pos(getX() + 3, this.getY() + 13).size(29, 15).build();
 
-        textInput = new EditBox(font, getX() + 35, this.getY() + 12, 35, 15, Component.empty());
+        textInput = new EditBox(font, getX() + 35, this.getY() + 12, 35, 15, pMessage);
         
         textInput.setFilter(intOnly ? 
         (s) -> {
@@ -78,7 +78,7 @@ public class NumberInput extends AbstractWidget {
 
         
 
-        plusButton = Button.builder(Component.literal("+"), (button) -> {
+        plusButton = Button.builder(Component.translatable("tooltip.dysonsphere.number_input.plus_button"), (button) -> {
             changeValueBy(1);
         }).pos(getX() + 73, this.getY() + 13).size(29, 15).build();
         
@@ -108,20 +108,25 @@ public class NumberInput extends AbstractWidget {
         if(!intOnly && Screen.hasAltDown()){
             buttonValue /= 100;
         }
-        //todo write button value into all buttons and remove ++ and -- button
-        plusButton.setMessage(Component.literal("+" + format.format(buttonValue)));
-        minusButton.setMessage(Component.literal("-" + format.format(buttonValue)));
+        plusButton.setMessage(Component.translatable("tooltip.dysonsphere.number_input.plus_button", format.format(buttonValue)));
+        minusButton.setMessage(Component.translatable("tooltip.dysonsphere.number_input.minus_button", format.format(buttonValue)));
         
         
     }
 
     @Override
     protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) {
-        pNarrationElementOutput.add(NarratedElementType.TITLE, Component.literal(getMessage().toString() + textInput.getValue()));
+        textInput.updateNarration(pNarrationElementOutput);
     }
 
     public float getValue(){
-        return intOnly ? Integer.parseInt(textInput.getValue()) : Float.parseFloat(textInput.getValue());
+        float value = 0;
+        try{
+            value = intOnly ? Integer.parseInt(textInput.getValue()) : Float.parseFloat(textInput.getValue());
+        } catch(NumberFormatException e){
+
+        }
+        return value;
     }
 
     public int getValueInt(){
@@ -129,9 +134,9 @@ public class NumberInput extends AbstractWidget {
     }
 
     public void setValue(float value) {
-        DysonSphere.LOGGER.info("NumberInput setValue pre value: {}", value);
+        // DysonSphere.LOGGER.info("NumberInput setValue pre value: {}", value);
         textInput.setValue(intOnly ? Integer.toString((int) value) : Float.toString(value));
-        DysonSphere.LOGGER.info("NumberInput setValue post value: {}", getValue());
+        // DysonSphere.LOGGER.info("NumberInput setValue post value: {}", getValue());
     }
 
     protected void changeValueBy(float increaseValue){

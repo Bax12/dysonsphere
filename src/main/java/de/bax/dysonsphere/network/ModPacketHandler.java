@@ -16,7 +16,7 @@ public class ModPacketHandler {
     public static void init(){
         int id = 0;
         INSTANCE.registerMessage(id++, DSEnergyReceiverGuiUpdatePacket.class, DSEnergyReceiverGuiUpdatePacket::encode, (buf) -> DSEnergyReceiverGuiUpdatePacket.decode(buf), DSEnergyReceiverGuiUpdatePacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-        // INSTANCE.registerMessage(id++, LaserPatternToServerPacket.class, LaserPatternToServerPacket::encode, (buf) -> LaserPatternToServerPacket.decode(buf), LaserPatternToServerPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        
         INSTANCE.registerMessage(id++, LaserPatternSyncPacket.class, LaserPatternSyncPacket::encode, (buf) -> LaserPatternSyncPacket.decode(buf), LaserPatternSyncPacket::handle);
     }
 

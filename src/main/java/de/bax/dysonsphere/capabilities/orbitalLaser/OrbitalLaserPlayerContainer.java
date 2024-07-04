@@ -27,10 +27,6 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
 
     public OrbitalLaserPlayerContainer(Player player){
         containingEntity = player;
-        OrbitalLaserAttackPattern strike = new OrbitalLaserAttackPattern();
-        strike.finishPattern();
-        orbitalLaser.activePatterns.add(strike);
-        DysonSphere.LOGGER.info("OrbitalLaserPlayerContainer constructor clientSide: {}", player.level().isClientSide);
     }
 
     @Override
@@ -53,10 +49,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
 
     public class OrbitalLaserContainer implements IOrbitalLaserContainer {
 
-        public List<OrbitalLaserAttackPattern> activePatterns = new ArrayList<>();
-
-
-        public Map<Integer, Integer> laserCooldowns = new TreeMap<Integer, Integer>();
+        protected Map<Integer, Integer> laserCooldowns = new TreeMap<Integer, Integer>();//key: gameTick to be available again. value: amount of lasers on this cooldown.
 
 
         public int getLasersOnCooldown(int gameTick){
@@ -64,6 +57,11 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
                 return key <= gameTick;
             });
             return laserCooldowns.values().stream().mapToInt(Integer::intValue).sum();
+        }
+
+        @Override
+        public void putLasersOnCooldown(int gameTick, int laserCount, int cooldownDuration) {
+            laserCooldowns.put(gameTick + cooldownDuration, laserCount);
         }
 
         public CompoundTag save(int gameTick){
@@ -76,11 +74,6 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
                 }
             });
             tag.put("lasers", laserTag);
-            CompoundTag patternTag = new CompoundTag();
-            for (int i = 0; i < activePatterns.size(); i++){
-                patternTag.put(""+i, activePatterns.get(i).serializeNBT());
-            }
-            tag.put("patterns", patternTag);
             return tag;
         }
 
@@ -93,40 +86,9 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
                     laserCooldowns.put(key, value);
                 });
             }
-            activePatterns.clear();
-            if(tag.contains("patterns")){
-                CompoundTag patternTag = tag.getCompound("patterns");
-                Set<String> keys = patternTag.getAllKeys();
-                for(String key : keys){
-                    OrbitalLaserAttackPattern pattern = new OrbitalLaserAttackPattern();
-                    pattern.deserializeNBT(patternTag.getCompound(key));
-                    activePatterns.add(pattern);
-                }
-            }
         }
 
-        @Override
-        public List<OrbitalLaserAttackPattern> getActivePatterns() {
-            return activePatterns;
-        }
 
-        @Override
-        public void setActivePatterns(List<OrbitalLaserAttackPattern> patterns) {
-            this.activePatterns.clear();
-            this.activePatterns.addAll(patterns);
-        }
-
-        @Override
-        public void setActivePattern(OrbitalLaserAttackPattern pattern, int index) {
-            if(index >= 0 && index < activePatterns.size()){
-                activePatterns.set(index, pattern);
-            }
-        }
-
-        @Override
-        public void addActivePattern(OrbitalLaserAttackPattern pattern) {
-            this.activePatterns.add(pattern);
-        }
 
 
     }

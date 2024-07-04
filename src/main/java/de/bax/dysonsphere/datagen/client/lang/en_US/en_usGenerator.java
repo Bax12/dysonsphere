@@ -23,6 +23,7 @@ public class en_usGenerator extends LanguageProvider{
         addBlock(ModBlocks.DS_ENERGY_RECEIVER_BLOCK, "Dyson Sphere Energy Receiver");
         addBlock(ModBlocks.HEAT_EXCHANGER_BLOCK, "Thermal Exchanger");
         addBlock(ModBlocks.HEAT_GENERATOR_BLOCK, "Thermoelectric Generator");
+        addBlock(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK, "Laser Pattern Controller Terminal");
 
 
         //items
@@ -37,6 +38,8 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.RAILGUN, "Electromagnetic Launcher");
         addItem(ModItems.STEAM_BUCKET, "Steam Bucket");
         addItem(ModItems.LASER_CONTROLLER, "Orbital Uplink Bracelet");
+        addItem(ModItems.TARGET_DESIGNATOR, "Target Designator");
+        addItem(ModItems.LASER_PATTERN, "Orbital Laser Pattern");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");
@@ -47,11 +50,15 @@ public class en_usGenerator extends LanguageProvider{
         add("container.dysonsphere.ds_energy_receiver", "Dyson Sphere Energy Receiver");
         add("container.dysonsphere.heat_generator", "Thermoelectric Generator");
         add("container.dysonsphere.heat_exchanger", "Thermal Exchanger");
+        add("container.dysonsphere.laser_pattern_controller","Laser Pattern Controller Terminal");
+        add("container.dysonsphere.laser_controller_inventory", "Active Laser Patterns");
 
         //tooltips
         add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
         add("tooltip.dysonsphere.heat_display","%s°K / %s°K");
         add("tooltip.dysonsphere.fluid_display","%s %s mB / %s mB");
+        add("tooltip.dysonsphere.number_input.plus_button","+ %s");
+        add("tooltip.dysonsphere.number_input.minus_button","- %s");
         
         add("tooltip.dysonsphere.railgun_launch_energy", "Required Launch Energy: %s RF");
         add("tooltip.dysonsphere.ds_energy_receiver_energy", "To Receive:");
@@ -69,6 +76,20 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.ds_monitor_capacity","Capacity: %s RF/t");
         add("tooltip.dysonsphere.ds_monitor_parts","Parts:");
         add("tooltip.dysonsphere.ds_monitor_part", "  - %s: %sx");
+        add("tooltip.dysonsphere.laser_pattern_call_in","Call-In Sequence: %s");
+        add("tooltip.dysonsphere.laser_pattern_controller_apply","Apply");
+        add("tooltip.dysonsphere.laser_pattern_controller_count","Count");
+        add("tooltip.dysonsphere.laser_pattern_controller_size","Size");
+        add("tooltip.dysonsphere.laser_pattern_controller_duration","Duration");
+        add("tooltip.dysonsphere.laser_pattern_controller_aim_area","Aim Area");
+        add("tooltip.dysonsphere.laser_pattern_controller_homing_area","Homing Area");
+        add("tooltip.dysonsphere.laser_pattern_controller_homing_speed","Homing Speed");
+        add("tooltip.dysonsphere.laser_pattern_controller_damage","Damage");
+        add("tooltip.dysonsphere.laser_pattern_controller_block_damage","Block Damage");
+        add("tooltip.dysonsphere.laser_pattern_controller_start_delay","Call-In Delay");
+        add("tooltip.dysonsphere.laser_pattern_controller_repeat_delay","Wave Delay");
+        add("tooltip.dysonsphere.laser_pattern_controller_spread","Inaccuracy");
+        add("tooltip.dysonsphere.laser_pattern_controller_min_sequence","Minimum Sequence Length: %s");
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");

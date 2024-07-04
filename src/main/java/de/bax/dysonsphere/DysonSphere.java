@@ -17,14 +17,15 @@ import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
 import de.bax.dysonsphere.gui.HeatExchangerGui;
 import de.bax.dysonsphere.gui.HeatGeneratorGui;
+import de.bax.dysonsphere.gui.LaserControllerInventoryGui;
 import de.bax.dysonsphere.gui.LaserPatternControllerGui;
 import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
-import de.bax.dysonsphere.network.LaserPatternSyncPacket;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.sounds.ModSounds;
 import de.bax.dysonsphere.tabs.ModTabs;
 import de.bax.dysonsphere.tileRenderer.DSMonitorRenderer;
+import de.bax.dysonsphere.tileRenderer.LaserPatternControllerRenderer;
 import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -47,7 +48,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.PacketDistributor;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(DysonSphere.MODID)
@@ -125,7 +125,8 @@ public class DysonSphere
         if(event.getEntity() instanceof ServerPlayer){
             ServerPlayer player = (ServerPlayer) event.getEntity();
             player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
-                ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new LaserPatternSyncPacket(laser.getActivePatterns()));
+                //TODO Sync LaserCooldown
+                // ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new LaserPatternSyncPacket(laser.getActivePatterns()));
             });
             
         }
@@ -137,7 +138,7 @@ public class DysonSphere
         if(!event.isWasDeath()) return;
         event.getOriginal().getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((originalLaser) -> {
             event.getEntity().getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((newLaser) -> {
-                newLaser.setActivePatterns(originalLaser.getActivePatterns());
+                newLaser.load(originalLaser.save(0), 0);
             });
         });
     }
@@ -155,6 +156,7 @@ public class DysonSphere
                 MenuScreens.register(ModContainers.HEAT_GENERATOR.get(), HeatGeneratorGui::new);
                 MenuScreens.register(ModContainers.HEAT_EXCHANGER.get(), HeatExchangerGui::new);
                 MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER.get(), LaserPatternControllerGui::new);
+                MenuScreens.register(ModContainers.LASER_CONTROLLER_INVENTORY_CONTAINER.get(), LaserControllerInventoryGui::new);
             });
         }
 
@@ -162,6 +164,8 @@ public class DysonSphere
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event){
             event.registerBlockEntityRenderer(ModTiles.RAILGUN.get(), RailgunRenderer::new);
             event.registerBlockEntityRenderer(ModTiles.DS_MONITOR.get(), DSMonitorRenderer::new);
+            event.registerBlockEntityRenderer(ModTiles.LASER_PATTERN_CONTROLLER.get(), LaserPatternControllerRenderer::new);
+
             event.registerEntityRenderer(ModEntities.TARGET_DESIGNATOR.get(), TargetDesignatorRenderer::new);
             event.registerEntityRenderer(ModEntities.LASER_STRIKE.get(), LaserStrikeRenderer::new);
         }

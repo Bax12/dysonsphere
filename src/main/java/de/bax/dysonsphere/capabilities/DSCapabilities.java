@@ -5,6 +5,7 @@ import de.bax.dysonsphere.capabilities.dsPart.IDSPart;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.capabilities.orbitalLaser.IOrbitalLaserContainer;
+import de.bax.dysonsphere.capabilities.orbitalLaser.IOrbitalLaserPatternContainer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -17,6 +18,7 @@ public class DSCapabilities {
 
     //Items
     public static final Capability<IDSPart> DS_PART = CapabilityManager.get(new CapabilityToken<>(){});
+    public static final Capability<IOrbitalLaserPatternContainer> ORBITAL_LASER_PATTERN_CONTAINER = CapabilityManager.get(new CapabilityToken<>(){});
 
     //Level
     public static final Capability<IDysonSphereContainer> DYSON_SPHERE = CapabilityManager.get(new CapabilityToken<>(){});

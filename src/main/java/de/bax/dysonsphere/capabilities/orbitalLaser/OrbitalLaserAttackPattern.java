@@ -8,19 +8,21 @@ public class OrbitalLaserAttackPattern implements INBTSerializable<CompoundTag> 
     // public static final List<Character> validCallInChars = List.of('w','a','s','d');
     public static final String validCallInChars = "^[w,a,s,d]{1,}$";
 
+    public static final OrbitalLaserAttackPattern EMPTY = new OrbitalLaserAttackPattern("", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
     //set by gui - length requirement based on complexity
-    protected String callInSequence = "ddd";
+    protected String callInSequence = "";
 
     //set by gui
-    public int strikeCount = 1;
-    public float strikeSize = 1; 
-    public int strikeDuration = 20;
+    public int strikeCount = 0;
+    public float strikeSize = 0; 
+    public int strikeDuration = 00;
     public float aimingArea = 0;
     public float homingArea = 0;
     public float homingSpeed = 0;
-    public float damage = 1;
-    public float blockDamage = 1;
-    public int callInDelay = 5;
+    public float damage = 0;
+    public float blockDamage = 0;
+    public int callInDelay = 0;
     public int repeatDelay = 0;
     public float spreadRadius = 0;
 
@@ -28,6 +30,27 @@ public class OrbitalLaserAttackPattern implements INBTSerializable<CompoundTag> 
     protected float complexity;
     protected int lasersRequired;
     protected int rechargeTime;
+
+    public OrbitalLaserAttackPattern(){}
+
+    public OrbitalLaserAttackPattern(String callInSequence, int strikeCount, float strikeSize, int strikeDuration, float aimingArea, float homingArea, float homingSpeed, float damage, float blockDamage, int callInDelay, int repeatDelay, float spreadRadius){
+        setCallInSequence(callInSequence);
+        this.strikeCount = strikeCount;
+        this.strikeSize = strikeSize;
+        this.strikeDuration = strikeDuration;
+        this.aimingArea = aimingArea;
+        this.homingArea = homingArea;
+        this.homingSpeed = homingSpeed;
+        this.damage = damage;
+        this.blockDamage = blockDamage;
+        this.callInDelay = callInDelay;
+        this.repeatDelay = repeatDelay;
+        this.spreadRadius = spreadRadius;
+
+        finishPattern();
+    }
+
+
 
 
     public void finishPattern(){
@@ -116,6 +139,10 @@ public class OrbitalLaserAttackPattern implements INBTSerializable<CompoundTag> 
 
     public boolean isValid(){
         return callInSequence.length() >= getMinSequenceSize();
+    }
+
+    public boolean isEmpty() {
+        return this.equals(EMPTY);
     }
 
 
