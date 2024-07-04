@@ -5,6 +5,7 @@ import java.util.Map;
 
 import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DSMonitorTile extends BaseTile {
@@ -32,11 +34,19 @@ public class DSMonitorTile extends BaseTile {
 
     public void tick(){
         if(!level.isClientSide && ticksElapsed++ % 10 == 0){
-            level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
-                dsParts = new HashMap<>(ds.getDysonSphereParts());
-                dsEnergy = ds.getDysonSphereEnergy();
-                dsCompletionPercentage = ds.getCompletionPercentage();
-            });
+            boolean needsUpdate = false;
+            LazyOptional<IDysonSphereContainer> dysonsphere = level.getCapability(DSCapabilities.DYSON_SPHERE);
+            if(dysonsphere.isPresent()){
+                dysonsphere.ifPresent((ds) -> {
+                    dsParts = new HashMap<>(ds.getDysonSphereParts());
+                    dsEnergy = ds.getDysonSphereEnergy();
+                    dsCompletionPercentage = ds.getCompletionPercentage();
+                });
+            } else {
+                dsCompletionPercentage = -1;
+                needsUpdate = true;
+            }
+            
 
             if(dsCompletionPercentage > 0){
                 for(Player player : level.getNearbyPlayers(TargetingConditions.forNonCombat().ignoreInvisibilityTesting(), null, AABB.ofSize(worldPosition.getCenter(), 5d, 5d, 5d))){
@@ -44,7 +54,7 @@ public class DSMonitorTile extends BaseTile {
                 }
             }
             
-            boolean needsUpdate = false;
+            
             if(lastEnergy != dsEnergy){
                 lastEnergy = dsEnergy;
                 needsUpdate = true;

@@ -67,6 +67,8 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.ds_monitor_capacity","Capacity: %s RF/t");
         add("tooltip.dysonsphere.ds_monitor_parts","Parts:");
         add("tooltip.dysonsphere.ds_monitor_part", "  - %s: %sx");
+        add("tooltip.dysonsphere.ds_monitor_offline1","Unreachable - Offline - Critical!");
+        add("tooltip.dysonsphere.ds_monitor_offline2","Maybe move closer to the sun? By a dimension or two");
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");

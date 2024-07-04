@@ -35,6 +35,8 @@
   "tooltip.dysonsphere.ds_energy_receiver_nosky": "Cannot see the sky!",
   "tooltip.dysonsphere.ds_monitor_capacity": "Capacity: %s RF/t",
   "tooltip.dysonsphere.ds_monitor_completion": "Completion: %s%%",
+  "tooltip.dysonsphere.ds_monitor_offline1": "Unreachable - Offline - Critical!",
+  "tooltip.dysonsphere.ds_monitor_offline2": "Maybe move closer to the sun? By a dimension or two",
   "tooltip.dysonsphere.ds_monitor_part": "  - %s: %sx",
   "tooltip.dysonsphere.ds_monitor_parts": "Parts:",
   "tooltip.dysonsphere.ds_monitor_status": ">Dyson Sphere Status",

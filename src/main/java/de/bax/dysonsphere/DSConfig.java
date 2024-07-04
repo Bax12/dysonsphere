@@ -1,5 +1,7 @@
 package de.bax.dysonsphere;
 
+import java.util.List;
+
 import de.bax.dysonsphere.items.CapsuleSolarItem;
 import de.bax.dysonsphere.tileentities.DSEnergyReceiverTile;
 import de.bax.dysonsphere.tileentities.HeatExchangerTile;
@@ -17,6 +19,16 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 public class DSConfig {
         //this kind of builder chaining makes me feel like I'm doing it wrong. But it works...
         private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+
+        private static final Builder DYSON_SPHERE_BUILDER = BUILDER.push("dyson_sphere");
+        private static final ForgeConfigSpec.ConfigValue<List<? extends String>> DYSON_SPHERE_DIM_BLACKLIST = DYSON_SPHERE_BUILDER
+                        .comment("A list of dimensions where the Dyson Sphere should not be accessible. Add dimensions in the format 'minecraft:the_end', 'ad_astra:mercury'. Default: 'minecraft:the_end', 'minecraft:the_nether")
+                        .worldRestart()
+                        .defineList("dimensionBlacklist", List.of("minecraft:the_end", "minecraft:the_nether"), entry -> entry instanceof String);
+        private static final ForgeConfigSpec.BooleanValue DYSON_SPHERE_IS_WHITELIST = DYSON_SPHERE_BUILDER
+                        .comment("If the dimensionBlacklist should be used as a whitelist instead, Default: false")
+                        .worldRestart()
+                        .define("dimensionIsWhitelist", false);
 
 
         private static final Builder DS_ENERGY_RECEIVER_BUILDER = BUILDER.push("ds_energy_receiver");
@@ -93,9 +105,17 @@ public class DSConfig {
         static final ForgeConfigSpec SPEC = BUILDER.build();
 
 
+        public static List<String> DYSON_SPHERE_DIM_BLACKLIST_VALUE;
+        public static boolean DYSON_SPHERE_IS_WHITELIST_VALUE;
+
 
         @SubscribeEvent
         static void onLoad(final ModConfigEvent event) {
+
+                DYSON_SPHERE_DIM_BLACKLIST_VALUE = ((List<String>) DYSON_SPHERE_DIM_BLACKLIST.get());
+                DYSON_SPHERE_IS_WHITELIST_VALUE = DYSON_SPHERE_IS_WHITELIST.get();
+
+
                 DSEnergyReceiverTile.maxHeat = DS_ENERGY_RECEIVER_MAX_HEAT.get();
 
                 HeatExchangerTile.maxHeat = HEAT_EXCHANGER_MAX_HEAT.get();
@@ -118,5 +138,7 @@ public class DSConfig {
 
                 CapsuleSolarItem.energyProvided = SOLAR_CAPSULE_ENERGY_PROVIDED.get();
                 CapsuleSolarItem.completionProgress = SOLAR_CAPSULE_COMPLETION.get().floatValue();
+
+                DysonSphere.LOGGER.info("Config loaded!");
         }
 }
