@@ -78,7 +78,8 @@ public static final VoxelShape Shape_W = Stream.of(Block.box(2,0,1,9,15,15), Blo
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if(!level.isClientSide){
-            level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
+            level.getServer().getLevel(Level.OVERWORLD).getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
+            // level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
                 DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
                 df.setMaximumFractionDigits(30);
                 DysonSphere.LOGGER.info("DysonSphere Completion: {}%", df.format(ds.getCompletionPercentage()));

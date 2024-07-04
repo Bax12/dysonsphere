@@ -9,6 +9,7 @@ import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereContainer;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserPlayerContainer;
+import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereProxyContainer;
 import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.containers.ModContainers;
 import de.bax.dysonsphere.entities.ModEntities;
@@ -38,6 +39,7 @@ import de.bax.dysonsphere.tileRenderer.LaserPatternControllerRenderer;
 import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -117,12 +119,18 @@ public class DysonSphere
     }
 
     @SubscribeEvent
-    public void attachLevelCaps(AttachCapabilitiesEvent<Level> event){
-        if(event.getObject().dimension().equals(Level.OVERWORLD)){
+    public void attachCaps(AttachCapabilitiesEvent<Level> event){
+        DysonSphere.LOGGER.info("Attaching Level Capability!");
+        //the overworld is always loaded, so we put the dysonsphere there.
+        //if the overworld is blacklisted we get creative in the DysonSphereContainer
+        ResourceKey<Level> dimension = event.getObject().dimension();
+        if(dimension.equals(Level.OVERWORLD)){ 
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "dysonsphere"), new DysonSphereContainer());
             event.addListener(() -> {
                 event.getObject().getCapability(DSCapabilities.DYSON_SPHERE).invalidate();
             });
+        } else if(!(DSConfig.DYSON_SPHERE_DIM_BLACKLIST_VALUE.contains(dimension.location().toString()) ^ DSConfig.DYSON_SPHERE_IS_WHITELIST_VALUE)) {
+            event.addCapability(new ResourceLocation(DysonSphere.MODID, "dysonsphere_proxy"), new DysonSphereProxyContainer(event.getObject()));
         }
         
     }

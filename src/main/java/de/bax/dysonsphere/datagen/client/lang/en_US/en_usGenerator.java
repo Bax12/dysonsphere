@@ -126,6 +126,8 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.orbital_laser_hud_next_cooldown", "Next Laser: T-%s");
         add("tooltip.dysonsphere.orbital_laser_hud_pattern_name", "%s : %s");
         add("tooltip.dysonsphere.orbital_laser_hud_pattern_lasers", "Lasers: %sx %s:%s");
+        add("tooltip.dysonsphere.ds_monitor_offline1","Unreachable - Offline - Critical!");
+        add("tooltip.dysonsphere.ds_monitor_offline2","Maybe move closer to the sun? By a dimension or two");
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");
