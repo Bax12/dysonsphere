@@ -34,6 +34,25 @@ public interface IDSEnergyReceiver {
     void removeFromDysonSphere(IDysonSphereContainer dysonSphere);
 
 
+    /**
+     * Return the energy amount that can currently be drawn from the dysonsphere.
+     * Defaults to reduce the amount when the DysonSphere is overloaded,
+     * reducing all receivers by the overloaded percentage
+     * @param dysonSphere the dysonsphere to receive energy from
+     * @return the energy amount that can be currently received
+     */
+    default int getCurrentReceive(IDysonSphereContainer dysonSphere){
+        if(!canReceive()) return 0;
+            int receive = Math.min(getMaxReceive(), (int) dysonSphere.getDysonSphereEnergy());
+            if(dysonSphere.getUtilization() > 100){
+                receive = (int) Math.floor(receive * dysonSphere.getDysonSphereEnergy() / dysonSphere.getEnergyRequested());
+            }
+            return receive;
+    };
 
-    int getCurrentReceive(IDysonSphereContainer dysonSphere);
+    /**
+     * Called from the dysonsphere when the parts in the dysonsphere change.
+     * @param dysonSphere the changed dysonsphere
+     */
+    default void handleDysonSphereChange(IDysonSphereContainer dysonSphere) {};
 }

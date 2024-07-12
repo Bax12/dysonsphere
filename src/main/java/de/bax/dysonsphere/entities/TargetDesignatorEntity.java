@@ -22,7 +22,7 @@ public class TargetDesignatorEntity extends ThrowableProjectile {
         super(type, world);
     }
 
-    public TargetDesignatorEntity(EntityType<? extends ThrowableProjectile> type, LivingEntity thrower, Level world) {
+    public TargetDesignatorEntity(EntityType<? extends ThrowableProjectile> type, LivingEntity thrower, Level world, float force) {
         super(type, thrower, world);
     
         setOwner(thrower);
@@ -37,8 +37,12 @@ public class TargetDesignatorEntity extends ThrowableProjectile {
 
     }
 
+    public TargetDesignatorEntity(LivingEntity thrower, Level world, float force) {
+        this(ModEntities.TARGET_DESIGNATOR.get(), thrower, world, force);
+    }
+
     public TargetDesignatorEntity(LivingEntity thrower, Level world) {
-        this(ModEntities.TARGET_DESIGNATOR.get(), thrower, world);
+        this(ModEntities.TARGET_DESIGNATOR.get(), thrower, world, 2.5f);
     }
 
     @Override

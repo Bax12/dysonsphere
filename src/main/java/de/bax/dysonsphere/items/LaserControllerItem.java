@@ -107,37 +107,37 @@ public class LaserControllerItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if(!level.isClientSide){
-            if(player.isCrouching()){
+            // if(player.isCrouching()){
                 //feed itemstack into networkhooks.openscreen additionalData
                 NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
                     new LaserControllerInventoryContainer(containerId, playerInventory, stack), Component.translatable("container.dysonsphere.laser_controller_inventory")),
                     data -> data.writeItem(stack));
-            } else {
-                stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
-                    stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((inventory) -> {
-                        if(energy.getEnergyStored() >= usage){
-                            energy.extractEnergy(usage, false);
-                            ItemStack patternStack = inventory.getStackInSlot(0);
-                            if(!patternStack.isEmpty()){
-                                patternStack.getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((patternContainer) -> {
-                                    ItemStack targetDesignator = new ItemStack(ModItems.TARGET_DESIGNATOR.get());
-                                    if(hand.equals(InteractionHand.MAIN_HAND)) {
-                                        TargetDesignatorItem.setContainedStack(targetDesignator, stack);
-                                    } else {
-                                        ItemStack mainHandStack = player.getMainHandItem();
-                                        TargetDesignatorItem.setContainedStack(targetDesignator, mainHandStack);
-                                    }
-                                    TargetDesignatorItem.setOrbitalStrikePattern(targetDesignator, patternContainer.getPattern());
-                                    player.setItemInHand(InteractionHand.MAIN_HAND, targetDesignator);
+            // } else {
+            //     stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
+            //         stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((inventory) -> {
+            //             if(energy.getEnergyStored() >= usage){
+            //                 energy.extractEnergy(usage, false);
+            //                 ItemStack patternStack = inventory.getStackInSlot(0);
+            //                 if(!patternStack.isEmpty()){
+            //                     patternStack.getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((patternContainer) -> {
+            //                         ItemStack targetDesignator = new ItemStack(ModItems.TARGET_DESIGNATOR.get());
+            //                         if(hand.equals(InteractionHand.MAIN_HAND)) {
+            //                             TargetDesignatorItem.setContainedStack(targetDesignator, stack);
+            //                         } else {
+            //                             ItemStack mainHandStack = player.getMainHandItem();
+            //                             TargetDesignatorItem.setContainedStack(targetDesignator, mainHandStack);
+            //                         }
+            //                         TargetDesignatorItem.setOrbitalStrikePattern(targetDesignator, patternContainer.getPattern());
+            //                         player.setItemInHand(InteractionHand.MAIN_HAND, targetDesignator);
                                     
                                     
-                                });
-                            }
-                        }
-                    });
-                });
-            }
-            player.getInventory().setChanged();
+            //                     });
+            //                 }
+            //             }
+            //         });
+            //     });
+            // }
+            // player.getInventory().setChanged();
         }
 
         return InteractionResultHolder.success(stack);

@@ -72,7 +72,6 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         }
 
         public void load(CompoundTag tag){
-            //TODO
             CompoundTag inv = tag.getCompound("inv");
             if(inv != null){
                 for(String itemKey : inv.getAllKeys()){
@@ -100,6 +99,11 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                         energy += part.getEnergyProvided();
                         completion += part.getCompletionProgress();
                     });
+                    receivers.forEach((lazyReceiver) -> {
+                        lazyReceiver.ifPresent((receiver) -> {
+                            receiver.handleDysonSphereChange(this);
+                        });
+                    });
                 }
                 
                 return true;
@@ -124,15 +128,27 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
 
         @Override
         public float getUtilization() {
-            return (float) ((getEnergyProvided() / energy) * 100f);
+            if(energy <= 0){
+                return Float.NaN;
+            }
+            return (float) ((getEnergyRequested() / energy) * 100f);
         }
 
+        
         @Override
         public double getEnergyProvided(){
             double energyProvided = getEnergyRequested();
             if(energyProvided >= energy){
                 energyProvided = energy;
             }
+            // energyProvided = 0.0d;
+            // receivers.forEach((reciever) -> {
+            //     reciever.ifPresent((rec) -> {
+            //         if(rec.canReceive()){
+            //             energyProvided += rec.getCurrentReceive(this);
+            //         }
+            //     });
+            // });
             return energyProvided;
         }
 
@@ -167,7 +183,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
 
         @Override
         public int getDysonSpherePartCount(Item part) {
-            return parts.get(part);
+            return parts.get(part) != null ? parts.get(part) : 0;
         }
         
     }

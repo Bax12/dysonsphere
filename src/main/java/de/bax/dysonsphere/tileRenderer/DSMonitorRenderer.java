@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
 
     public DSMonitorRenderer(BlockEntityRendererProvider.Context context){
-
+        
     }
 
 
@@ -93,6 +93,9 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
             drawOffset += 10f;
             poseStack.popPose();
         }
+        matrix = poseStack.last().pose();
+        font.drawInBatch(Component.literal("Usage " + df.format(tile.getDsUsage()) + "%"), 0, drawOffset + 5, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+        font.drawInBatch(Component.literal("Energy Draw " + df.format(tile.getDsEnergyDraw()) + "RF/t"), 0, drawOffset + 15, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
         // Entry<Item, Integer> part = ds.getDysonSphereParts().entrySet().iterator().next();
         // font.drawInBatch(Component.literal("  - " + part.getKey().getName(ItemStack.EMPTY) + ":" + part.getValue()), 0, 40F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
         

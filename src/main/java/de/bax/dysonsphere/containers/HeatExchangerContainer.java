@@ -18,7 +18,7 @@ public class HeatExchangerContainer extends BaseContainer {
     }
 
     public HeatExchangerContainer(int windowId, Inventory inv, HeatExchangerTile tile){
-        super(ModContainers.HEAT_EXCHANGER.get(), windowId, inv);
+        super(ModContainers.HEAT_EXCHANGER_CONTAINER.get(), windowId, inv);
 
         this.tile = tile;
 

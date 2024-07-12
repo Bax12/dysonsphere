@@ -53,16 +53,6 @@ public class DSEnergyReceiverTile extends BaseTile {
         public void removeFromDysonSphere(IDysonSphereContainer dysonSphere) {
             dysonSphere.removeEnergyReceiver(lazyDSReceiver);
         }
-
-        @Override
-        public int getCurrentReceive(IDysonSphereContainer dysonSphere) {
-            if(!canReceive()) return 0;
-            int recieve = Math.min(getMaxReceive(), (int) dysonSphere.getDysonSphereEnergy());
-            if(dysonSphere.getUtilization() > 100){
-                recieve = (int) Math.floor(recieve * dysonSphere.getDysonSphereEnergy() / dysonSphere.getEnergyRequested());
-            }
-            return recieve;
-        }
         
     };
 

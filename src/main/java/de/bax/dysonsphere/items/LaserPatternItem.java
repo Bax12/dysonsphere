@@ -1,6 +1,7 @@
 package de.bax.dysonsphere.items;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +42,8 @@ public class LaserPatternItem extends Item {
     public void appendHoverText(ItemStack pStack, @javax.annotation.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         pStack.getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((patternContainer) -> {
             if(!patternContainer.isEmpty()){
-                pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.laser_pattern_call_in", patternContainer.getPattern().getCallInSequence()));
+                pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.orbital_laser_hud_pattern_name", patternContainer.getPattern().name, patternContainer.getPattern().getCallInSequenceArrows()));
+                pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.orbital_laser_hud_pattern_lasers", patternContainer.getPattern().getLasersRequired(), patternContainer.getPattern().getRechargeTime() / 20 / 60 , String.format(Locale.ENGLISH, "%02d", (patternContainer.getPattern().getRechargeTime() / 20) % 60)));
             }
         });
     }

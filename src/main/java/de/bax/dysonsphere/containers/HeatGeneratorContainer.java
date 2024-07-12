@@ -18,7 +18,7 @@ public class HeatGeneratorContainer extends BaseContainer {
     }
 
     public HeatGeneratorContainer(int windowId, Inventory inv, HeatGeneratorTile tile, char axis) {
-        super(ModContainers.HEAT_GENERATOR.get(), windowId, inv);
+        super(ModContainers.HEAT_GENERATOR_CONTAINER.get(), windowId, inv);
 
         this.tile = tile;
         this.axis = axis;

@@ -14,8 +14,9 @@ public class ModContainers {
 
     public static final RegistryObject<MenuType<RailgunContainer>> RAILGUN_CONTAINER = CONTAINERS.register("railgun_container", () -> IForgeMenuType.create(RailgunContainer::fromNetwork));
     public static final RegistryObject<MenuType<DSEnergyReceiverContainer>> DS_ENERGY_RECEIVER_CONTAINER = CONTAINERS.register("ds_energy_receiver_container", () -> IForgeMenuType.create(DSEnergyReceiverContainer::fromNetwork));
-    public static final RegistryObject<MenuType<HeatGeneratorContainer>> HEAT_GENERATOR = CONTAINERS.register("heat_generator_container", () -> IForgeMenuType.create(HeatGeneratorContainer::fromNetwork));
-    public static final RegistryObject<MenuType<HeatExchangerContainer>> HEAT_EXCHANGER = CONTAINERS.register("heat_exchanger_container", () -> IForgeMenuType.create(HeatExchangerContainer::fromNetwork));
-    public static final RegistryObject<MenuType<LaserPatternControllerContainer>> LASER_PATTERN_CONTROLLER = CONTAINERS.register("laser_pattern_controller", () -> IForgeMenuType.create(LaserPatternControllerContainer::fromNetwork));
-    public static final RegistryObject<MenuType<LaserControllerInventoryContainer>> LASER_CONTROLLER_INVENTORY_CONTAINER = CONTAINERS.register("laser_controller_inventory", () -> IForgeMenuType.create(LaserControllerInventoryContainer::fromNetwork));
+    public static final RegistryObject<MenuType<HeatGeneratorContainer>> HEAT_GENERATOR_CONTAINER = CONTAINERS.register("heat_generator_container", () -> IForgeMenuType.create(HeatGeneratorContainer::fromNetwork));
+    public static final RegistryObject<MenuType<HeatExchangerContainer>> HEAT_EXCHANGER_CONTAINER = CONTAINERS.register("heat_exchanger_container", () -> IForgeMenuType.create(HeatExchangerContainer::fromNetwork));
+    public static final RegistryObject<MenuType<LaserPatternControllerContainer>> LASER_PATTERN_CONTROLLER_CONTAINER = CONTAINERS.register("laser_pattern_controller_container", () -> IForgeMenuType.create(LaserPatternControllerContainer::fromNetwork));
+    public static final RegistryObject<MenuType<LaserControllerInventoryContainer>> LASER_CONTROLLER_INVENTORY_CONTAINER = CONTAINERS.register("laser_controller_inventory_container", () -> IForgeMenuType.create(LaserControllerInventoryContainer::fromNetwork));
+    public static final RegistryObject<MenuType<LaserPatternControllerInventoryContainer>> LASER_PATTERN_CONTROLLER_INVENTORY_CONTAINER = CONTAINERS.register("laser_pattern_controller_inventory_container", () -> IForgeMenuType.create(LaserPatternControllerInventoryContainer::fromNetwork));
 }

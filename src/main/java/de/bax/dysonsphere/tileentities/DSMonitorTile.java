@@ -20,11 +20,15 @@ public class DSMonitorTile extends BaseTile {
 
     protected float dsCompletionPercentage = 0;
     protected double dsEnergy = 0;
-    Map<Item, Integer> dsParts = new HashMap<>();
+    protected Map<Item, Integer> dsParts = new HashMap<>();
+    protected float dsUsage = 0;
+    protected double dsEnergyDraw = 0;
     protected int ticksElapsed = 0;
 
     protected double lastEnergy = 0;
-    protected int lashPartHash = 0;
+    protected int lastPartHash = 0;
+    protected float lastUsage = 0;
+    protected double lastEnergyDraw = 0;
 
     public DSMonitorTile(BlockPos pos, BlockState state) {
         super(ModTiles.DS_MONITOR.get(), pos, state);
@@ -36,6 +40,8 @@ public class DSMonitorTile extends BaseTile {
                 dsParts = new HashMap<>(ds.getDysonSphereParts());
                 dsEnergy = ds.getDysonSphereEnergy();
                 dsCompletionPercentage = ds.getCompletionPercentage();
+                dsUsage = ds.getUtilization();
+                dsEnergyDraw = ds.getEnergyRequested();
             });
 
             if(dsCompletionPercentage > 0){
@@ -44,17 +50,25 @@ public class DSMonitorTile extends BaseTile {
                 }
             }
             
-            boolean needsUpdate = false;
-            if(lastEnergy != dsEnergy){
-                lastEnergy = dsEnergy;
-                needsUpdate = true;
-            }
+            // boolean needsUpdate = false;
+            // if(lastEnergy != dsEnergy){
+            //     lastEnergy = dsEnergy;
+            //     needsUpdate = true;
+            // }
+            // int hash = dsParts.hashCode();
+            // if(lashPartHash != hash){
+            //     lashPartHash = hash;
+            //     needsUpdate = true;
+            // }
+            // if(needsUpdate){
+            //     sendSyncPackageToNearbyPlayers();
+            // }
             int hash = dsParts.hashCode();
-            if(lashPartHash != hash){
-                lashPartHash = hash;
-                needsUpdate = true;
-            }
-            if(needsUpdate){
+            if(lastEnergy != dsEnergy || lastPartHash != hash || lastUsage != dsUsage || lastEnergyDraw != dsEnergyDraw){
+                lastEnergy = dsEnergy;
+                lastPartHash = hash;
+                lastUsage = dsUsage;
+                lastEnergyDraw = dsEnergyDraw;
                 sendSyncPackageToNearbyPlayers();
             }
         }
@@ -65,6 +79,8 @@ public class DSMonitorTile extends BaseTile {
         super.saveAdditional(tag);
         tag.putFloat("completion", dsCompletionPercentage);
         tag.putDouble("energy", dsEnergy);
+        tag.putFloat("usage", dsUsage);
+        tag.putDouble("energy_draw", dsEnergyDraw);
         CompoundTag invTag = new CompoundTag();
         dsParts.forEach((item, count) -> {
             ResourceLocation itemKey = ForgeRegistries.ITEMS.getKey(item);
@@ -82,6 +98,8 @@ public class DSMonitorTile extends BaseTile {
         super.load(tag);
         dsCompletionPercentage = tag.getFloat("completion");
         dsEnergy = tag.getDouble("energy");
+        dsUsage = tag.getFloat("usage");
+        dsEnergyDraw = tag.getDouble("energy_draw");
         CompoundTag inv = tag.getCompound("parts");
             if(inv != null){
                 for(String itemKey : inv.getAllKeys()){
@@ -102,5 +120,13 @@ public class DSMonitorTile extends BaseTile {
     
     public float getDsCompletionPercentage() {
         return dsCompletionPercentage;
+    }
+
+    public float getDsUsage() {
+        return dsUsage;
+    }
+
+    public double getDsEnergyDraw() {
+        return dsEnergyDraw;
     }
 }

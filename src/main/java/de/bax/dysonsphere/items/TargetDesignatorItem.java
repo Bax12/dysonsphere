@@ -1,5 +1,6 @@
 package de.bax.dysonsphere.items;
 
+import org.antlr.v4.parse.ANTLRParser.localsSpec_return;
 import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
@@ -11,6 +12,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -30,26 +32,34 @@ public class TargetDesignatorItem extends Item {
     
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        spawnTargetDesignatorEntity(stack, level, entity);
+        spawnTargetDesignatorEntity(stack, level, entity, 3.0f);
         return getContainedStack(stack);
     }
 
-    protected void spawnTargetDesignatorEntity(ItemStack stack, Level level, LivingEntity entity){
+    @Override
+    public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity, int pTimeCharged) {
+        spawnTargetDesignatorEntity(pStack, pLevel, pLivingEntity, 2.5f);
+        pLivingEntity.setItemInHand(pLivingEntity.getUsedItemHand(), getContainedStack(pStack));
+    }
+        
+
+    protected void spawnTargetDesignatorEntity(ItemStack stack, Level level, LivingEntity entity, float force){
         if(!level.isClientSide){
-            TargetDesignatorEntity designator = new TargetDesignatorEntity(entity, level);
-            level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
+            TargetDesignatorEntity designator = new TargetDesignatorEntity(entity, level, force);
+            // level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
                 entity.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((orbitalLaser) -> {         
                     OrbitalLaserAttackPattern pattern = getOrbitalStrikePattern(stack);
-                    if(ds.getUtilization() < 100 && ds.getDysonSpherePartCount(ModItems.CAPSULE_LASER.get()) >= pattern.getLasersRequired() + orbitalLaser.getLasersOnCooldown(entity.tickCount)){
+                    // if(ds.getUtilization() < 100 && ds.getDysonSpherePartCount(ModItems.CAPSULE_LASER.get()) >= pattern.getLasersRequired() + orbitalLaser.getLasersOnCooldown(entity.tickCount)){
+                    if(orbitalLaser.getLasersAvailable(entity.tickCount) >= pattern.getLasersRequired()) {
                         designator.setOrbitalAttackPattern(pattern);  
                         level.addFreshEntity(designator);
 
                         orbitalLaser.putLasersOnCooldown(entity.tickCount, pattern.getLasersRequired(), pattern.getRechargeTime());
                     } else {
-                        ((Player) entity).displayClientMessage(Component.literal("lasers on cooldown!"), true);
+                        ((Player) entity).displayClientMessage(Component.literal("Not enough lasers available!"), true);
                     }
                 });
-            });
+            // });
             
             
         }
@@ -57,7 +67,7 @@ public class TargetDesignatorItem extends Item {
 
     @Override
     public int getUseDuration(ItemStack stack) {
-        return 10;
+        return 72000;
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
@@ -71,16 +81,24 @@ public class TargetDesignatorItem extends Item {
     }
 
     @Override
-    public @Nullable Entity createEntity(Level level, Entity location, ItemStack stack) {
-        TargetDesignatorEntity designator = new TargetDesignatorEntity((LivingEntity) null, level);
-        designator.setPos(location.getPosition(0.5f));
-        return designator;
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
     }
 
     @Override
+    public @Nullable Entity createEntity(Level level, Entity location, ItemStack stack) {
+        // TargetDesignatorEntity designator = new TargetDesignatorEntity((LivingEntity) null, level);
+        // designator.setPos(location.getPosition(0.5f));
+        ItemStack contained = getContainedStack(stack);
+
+        return new ItemEntity(level, location.getX(), location.getY(), location.getZ(), contained, location.getDeltaMovement().x, location.getDeltaMovement().y, location.getDeltaMovement().z);
+    }
+
+    //just cancel the call-in
+    @Override
     public boolean onDroppedByPlayer(ItemStack item, Player player) {
         
-        spawnTargetDesignatorEntity(item, player.level(), player);
+        // spawnTargetDesignatorEntity(item, player.level(), player);
         int selected = player.getInventory().selected;
         player.getInventory().setItem(selected, getContainedStack(item));
         return false;

@@ -6,9 +6,9 @@ import javax.annotation.Nullable;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.containers.LaserPatternControllerContainer;
+import de.bax.dysonsphere.containers.LaserPatternControllerInventoryContainer;
 import de.bax.dysonsphere.tileentities.LaserPatternControllerTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
-import de.bax.dysonsphere.tileentities.RailgunTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -61,27 +61,35 @@ public class LaserPatternControllerBlock extends HorizontalDirectionalBlock impl
             BlockEntity tile = level.getBlockEntity(pos);
             if(tile != null && tile.getType().equals(ModTiles.LASER_PATTERN_CONTROLLER.get())){
                 ItemStack playerStack = player.getMainHandItem();
+                LaserPatternControllerTile controllerTile = ((LaserPatternControllerTile) tile);
                 if(player.isCrouching()){
-                    ItemStack containerStack = ((LaserPatternControllerTile) tile).inventory.extractItem(0, 1, false);
+                    ItemStack containerStack = controllerTile.inventory.extractItem(0, 1, false);
                     if(playerStack.isEmpty()){
                         //remove internal itemstack
                         player.setItemInHand(InteractionHand.MAIN_HAND, containerStack);
                     } else  {
                         if(!player.getInventory().add(containerStack)){
-                            ((LaserPatternControllerTile) tile).dropContent();
+                            controllerTile.dropContent();
                         }
                     }
                 } else if(!playerStack.isEmpty() && playerStack.getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).isPresent()){
                     playerStack.getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((container) -> {
-                        ItemStack remainder = ((LaserPatternControllerTile) tile).inventory.insertItem(0, playerStack.copyWithCount(1), false);
+                        ItemStack remainder = controllerTile.inventory.insertItem(0, playerStack.copyWithCount(1), false);
                         if(remainder.isEmpty()){
                             playerStack.shrink(1);
                             player.setItemInHand(InteractionHand.MAIN_HAND, playerStack);
                         }
                     });
                 } else {
-                    NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
-                    new LaserPatternControllerContainer(containerId, playerInventory, (LaserPatternControllerTile) tile), Component.translatable("container.dysonsphere.laser_pattern_controller")), pos);
+                    if(controllerTile.inventory.getStackInSlot(0).isEmpty() && controllerTile.hasMinEnergy()){
+                        NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
+                        new LaserPatternControllerInventoryContainer(containerId, playerInventory, (LaserPatternControllerTile) tile), Component.translatable("container.dysonsphere.laser_pattern_controller")), pos);
+                        controllerTile.consumeEnergy();
+                    } else {
+                        NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
+                        new LaserPatternControllerContainer(containerId, playerInventory, (LaserPatternControllerTile) tile), Component.translatable("container.dysonsphere.laser_pattern_controller")), pos);
+                    }
+                    controllerTile.sendSyncPackageToNearbyPlayers();
                     return InteractionResult.CONSUME;
                 }
                 

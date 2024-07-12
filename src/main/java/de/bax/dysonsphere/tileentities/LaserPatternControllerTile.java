@@ -3,6 +3,8 @@ package de.bax.dysonsphere.tileentities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +23,7 @@ public class LaserPatternControllerTile extends BaseTile {
     public static int energyCapacity = 5000;
     public static int encodeEnergyUsage = 100;
 
-    
+    public OrbitalLaserAttackPattern inputPattern = OrbitalLaserAttackPattern.EMPTY;
 
     public EnergyStorage energyStorage = new EnergyStorage(energyCapacity){
         @Override
@@ -41,14 +43,13 @@ public class LaserPatternControllerTile extends BaseTile {
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             setChanged();
-            sendSyncPackageToNearbyPlayers();
         };
         public int getSlotLimit(int slot) {
             return 1;
         };
 
         public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
-            return true;
+            return stack.getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).isPresent();
         };
     };
 
@@ -63,7 +64,7 @@ public class LaserPatternControllerTile extends BaseTile {
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if(cap.equals(ForgeCapabilities.ENERGY)){
             return lazyEnergyStorage.cast();
-        } else if (cap.equals(ForgeCapabilities.ITEM_HANDLER)) {
+        } else if (cap.equals(ForgeCapabilities.ITEM_HANDLER) && side == null) {
             return lazyInventory.cast();
         }
         return super.getCapability(cap, side);
@@ -100,6 +101,24 @@ public class LaserPatternControllerTile extends BaseTile {
             level.addFreshEntity(entity);
         }
     }
+
+    public boolean hasMinEnergy(){
+        return energyStorage.getEnergyStored() >= encodeEnergyUsage;
+    }
+
+    public void consumeEnergy(){
+        energyStorage.extractEnergy(encodeEnergyUsage, false);
+    }
+
+    //without the item rendering doesn't work before opening the ui.
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        if(!level.isClientSide){
+            sendSyncPackageToNearbyPlayers();
+        }
+    }
+
     
     
 

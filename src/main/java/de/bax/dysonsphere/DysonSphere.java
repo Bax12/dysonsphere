@@ -17,10 +17,13 @@ import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
 import de.bax.dysonsphere.gui.HeatExchangerGui;
 import de.bax.dysonsphere.gui.HeatGeneratorGui;
+import de.bax.dysonsphere.gui.ModHuds;
 import de.bax.dysonsphere.gui.LaserControllerInventoryGui;
 import de.bax.dysonsphere.gui.LaserPatternControllerGui;
+import de.bax.dysonsphere.gui.LaserPatternControllerInventoryGui;
 import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
+import de.bax.dysonsphere.keybinds.ModKeyBinds;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.sounds.ModSounds;
 import de.bax.dysonsphere.tabs.ModTabs;
@@ -36,8 +39,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -84,6 +90,8 @@ public class DysonSphere
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
+        MinecraftForge.EVENT_BUS.addListener(ModKeyBinds::handleKeyPress);
+
         // Register the item to a creative tab
         // modEventBus.addListener(this::addCreative);
 
@@ -125,8 +133,8 @@ public class DysonSphere
         if(event.getEntity() instanceof ServerPlayer){
             ServerPlayer player = (ServerPlayer) event.getEntity();
             player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
-                //TODO Sync LaserCooldown
-                // ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new LaserPatternSyncPacket(laser.getActivePatterns()));
+                laser.putLasersOnCooldown(0, 0, 0);//call with zero laser to trigger sync
+                laser.getLasersAvailable(0);
             });
             
         }
@@ -153,10 +161,11 @@ public class DysonSphere
             event.enqueueWork(() -> {
                 MenuScreens.register(ModContainers.RAILGUN_CONTAINER.get(), RailgunGui::new);
                 MenuScreens.register(ModContainers.DS_ENERGY_RECEIVER_CONTAINER.get(), DSEnergyReceiverGui::new);
-                MenuScreens.register(ModContainers.HEAT_GENERATOR.get(), HeatGeneratorGui::new);
-                MenuScreens.register(ModContainers.HEAT_EXCHANGER.get(), HeatExchangerGui::new);
-                MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER.get(), LaserPatternControllerGui::new);
+                MenuScreens.register(ModContainers.HEAT_GENERATOR_CONTAINER.get(), HeatGeneratorGui::new);
+                MenuScreens.register(ModContainers.HEAT_EXCHANGER_CONTAINER.get(), HeatExchangerGui::new);
+                MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER_CONTAINER.get(), LaserPatternControllerGui::new);
                 MenuScreens.register(ModContainers.LASER_CONTROLLER_INVENTORY_CONTAINER.get(), LaserControllerInventoryGui::new);
+                MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER_INVENTORY_CONTAINER.get(), LaserPatternControllerInventoryGui::new);
             });
         }
 
@@ -169,5 +178,16 @@ public class DysonSphere
             event.registerEntityRenderer(ModEntities.TARGET_DESIGNATOR.get(), TargetDesignatorRenderer::new);
             event.registerEntityRenderer(ModEntities.LASER_STRIKE.get(), LaserStrikeRenderer::new);
         }
+
+        @SubscribeEvent
+        public static void registerGuiOverlay(RegisterGuiOverlaysEvent event){
+            event.registerAboveAll("orbital_laser_hud", ModHuds.ORBITAL_LASER_HUD::render);
+        }
+
+        @SubscribeEvent
+        public static void registerKeyBindings(RegisterKeyMappingsEvent event){
+            ModKeyBinds.registerKeyBindings(event);
+        }
+
     }
 }

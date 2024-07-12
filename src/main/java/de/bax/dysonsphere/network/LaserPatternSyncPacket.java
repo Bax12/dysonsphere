@@ -37,12 +37,6 @@ public class LaserPatternSyncPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx){
-        if(ctx.get().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)){
-            ctx.get().enqueueWork(() -> {
-                
-            });
-            ctx.get().setPacketHandled(true);
-        }
         if(ctx.get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)){
             ctx.get().enqueueWork(() -> {
                 Level level = ctx.get().getSender().level();

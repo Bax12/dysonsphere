@@ -76,7 +76,8 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.ds_monitor_capacity","Capacity: %s RF/t");
         add("tooltip.dysonsphere.ds_monitor_parts","Parts:");
         add("tooltip.dysonsphere.ds_monitor_part", "  - %s: %sx");
-        add("tooltip.dysonsphere.laser_pattern_call_in","Call-In Sequence: %s");
+        add("tooltip.dysonsphere.laser_pattern_call_in","Call-In Sequence");
+        add("tooltip.dysonsphere.laser_pattern_name", "Name:");
         add("tooltip.dysonsphere.laser_pattern_controller_apply","Apply");
         add("tooltip.dysonsphere.laser_pattern_controller_count","Count");
         add("tooltip.dysonsphere.laser_pattern_controller_size","Size");
@@ -90,6 +91,13 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.laser_pattern_controller_repeat_delay","Wave Delay");
         add("tooltip.dysonsphere.laser_pattern_controller_spread","Inaccuracy");
         add("tooltip.dysonsphere.laser_pattern_controller_min_sequence","Minimum Sequence Length: %s");
+        add("tooltip.dysonsphere.laser_pattern_controller_edit", "Edit");
+
+        add("tooltip.dysonsphere.orbital_laser_hud_lasers_available", "Lasers Available: %s");
+        add("tooltip.dysonsphere.orbital_laser_hud_lasers_cooldown", "Lasers on Cooldown: %s");
+        add("tooltip.dysonsphere.orbital_laser_hud_next_cooldown", "Next Laser: T-%s");
+        add("tooltip.dysonsphere.orbital_laser_hud_pattern_name", "%s : %s");
+        add("tooltip.dysonsphere.orbital_laser_hud_pattern_lasers", "Lasers: %sx %s:%s");
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");
