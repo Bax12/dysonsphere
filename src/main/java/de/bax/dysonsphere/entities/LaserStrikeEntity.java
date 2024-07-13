@@ -74,12 +74,15 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
                 if(homingTarget != null) {
                     Vec3 distance = homingTarget.getPosition(1f).subtract(this.getPosition(1f));
                     distance = distance.multiply(1, 0, 1);
-                    if(distance.lengthSqr() > homingSpeed){
-                        distance = distance.scale(homingSpeed / homingArea);
+                    if(distance.lengthSqr() > homingArea * homingArea){
+                        homingTarget = null;
+                    } else {
+                        if(distance.lengthSqr() > homingSpeed){
+                            distance = distance.scale(homingSpeed * homingSpeed / distance.lengthSqr());
+                        }
+                        // this.move(MoverType.SELF, distance);
+                        this.setPos(this.getX() + distance.x, this.getY() + distance.y, this.getZ() + distance.z);
                     }
-                    // this.move(MoverType.SELF, distance);
-                    this.setPos(this.getX() + distance.x, this.getY() + distance.y, this.getZ() + distance.z);
-                    
                 }
             }
             if((this.lifetime - startStriking) % 10 == 0){
