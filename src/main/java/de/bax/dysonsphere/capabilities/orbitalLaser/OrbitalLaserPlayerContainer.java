@@ -24,13 +24,14 @@ import net.minecraftforge.network.PacketDistributor;
 
 public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<CompoundTag> {
 
-    OrbitalLaserContainer orbitalLaser = new OrbitalLaserContainer();
+    OrbitalLaserContainer orbitalLaser;
     LazyOptional<OrbitalLaserContainer> lazyOrbitalLaser = LazyOptional.of(() -> orbitalLaser);
     Player containingEntity;
 
 
     public OrbitalLaserPlayerContainer(Player player){
         containingEntity = player;
+        orbitalLaser = new OrbitalLaserContainer();
     }
 
     @Override
@@ -60,6 +61,15 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
 
         protected LazyOptional<IDSEnergyReceiver> lazyDSReceiver = LazyOptional.of(() -> this);
 
+
+        public OrbitalLaserContainer(){
+            if(!containingEntity.level().isClientSide){
+                containingEntity.level().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
+                    dsLaserCount = dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(ModItems.CAPSULE_LASER.get()) : 0;
+                    dysonsphere.registerEnergyReceiver(lazyDSReceiver);
+                });
+            }
+        }
 
 
         public int getLasersOnCooldown(int gameTick){
