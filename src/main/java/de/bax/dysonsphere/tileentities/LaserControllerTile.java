@@ -311,7 +311,7 @@ public class LaserControllerTile extends BaseTile implements IButtonPressHandler
     }
 
     @Override
-    public void handleUpdate(CompoundTag updateTag) {
+    public void handleUpdate(CompoundTag updateTag, Player player) {
         setTargetX(updateTag.getInt("x"));
         setTargetY(updateTag.getInt("y"));
         setTargetZ(updateTag.getInt("z"));

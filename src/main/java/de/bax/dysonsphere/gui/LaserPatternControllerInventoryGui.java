@@ -4,8 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import de.bax.dysonsphere.containers.LaserPatternControllerInventoryContainer;
 import de.bax.dysonsphere.gui.components.EnergyDisplay;
-import de.bax.dysonsphere.network.LaserPatternControllerGuiSwapPackage;
-import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.tileentities.LaserPatternControllerTile;
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.gui.GuiGraphics;
@@ -37,7 +35,8 @@ public class LaserPatternControllerInventoryGui extends BaseGui<LaserPatternCont
 
         Button editButton = Button.builder(Component.translatable("tooltip.dysonsphere.laser_pattern_controller_edit"), (button) -> {
             if(!tile.inventory.getStackInSlot(0).isEmpty()){
-                ModPacketHandler.INSTANCE.sendToServer(new LaserPatternControllerGuiSwapPackage(false, tile.getBlockPos()));
+                // ModPacketHandler.INSTANCE.sendToServer(new LaserPatternControllerGuiSwapPackage(false, tile.getBlockPos()));
+                tile.sendGuiSwap(false);
             }
         }).bounds(getGuiLeft() + 92, this.getGuiTop() + 50, 36, 20).build();
 

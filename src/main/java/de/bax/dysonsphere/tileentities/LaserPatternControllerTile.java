@@ -5,10 +5,20 @@ import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
+import de.bax.dysonsphere.containers.LaserPatternControllerContainer;
+import de.bax.dysonsphere.containers.LaserPatternControllerInventoryContainer;
+import de.bax.dysonsphere.network.IUpdateReceiverTile;
+import de.bax.dysonsphere.network.ModPacketHandler;
+import de.bax.dysonsphere.network.TileUpdatePackage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -17,8 +27,9 @@ import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.NetworkHooks;
 
-public class LaserPatternControllerTile extends BaseTile {
+public class LaserPatternControllerTile extends BaseTile implements IUpdateReceiverTile {
 
     public static int energyCapacity = 5000;
     public static int encodeEnergyUsage = 100;
@@ -117,6 +128,47 @@ public class LaserPatternControllerTile extends BaseTile {
         if(!level.isClientSide){
             sendSyncPackageToNearbyPlayers();
         }
+    }
+
+    @Override
+    public void handleUpdate(CompoundTag updateTag, Player player) {
+        if(updateTag.contains("pattern")){
+            OrbitalLaserAttackPattern pattern = new OrbitalLaserAttackPattern();
+            pattern.deserializeNBT(updateTag.getCompound("pattern"));
+            ItemStack stack = inventory.getStackInSlot(0).copy();
+            if(!stack.isEmpty()){
+                stack.getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((container) -> {
+                    container.setPattern(pattern);
+                });
+                inventory.setStackInSlot(0, stack);
+            }
+        }
+        if(updateTag.contains("swapToInventory")){
+            boolean swapToInventoryView = updateTag.getBoolean("swapToInventory");
+            if(!swapToInventoryView){
+                if(this.hasMinEnergy()){
+                    this.consumeEnergy();
+                } else {
+                    player.displayClientMessage(Component.literal("not enough energy"), true);
+                    return;
+                }
+            }
+            NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
+            swapToInventoryView ? new LaserPatternControllerInventoryContainer(containerId, playerInventory, this) : new LaserPatternControllerContainer(containerId, playerInventory, this), Component.translatable("container.dysonsphere.laser_pattern_controller")), getBlockPos());
+        }
+    }
+
+    @Override
+    public void sendGuiUpdate() {
+        CompoundTag tag = new CompoundTag();
+        tag.put("pattern", inputPattern.serializeNBT());
+        ModPacketHandler.INSTANCE.sendToServer(new TileUpdatePackage(tag, getBlockPos()));
+    }
+
+    public void sendGuiSwap(boolean swapToInventory) {
+        CompoundTag tag = new CompoundTag();
+        tag.putBoolean("swapToInventory", swapToInventory);
+        ModPacketHandler.INSTANCE.sendToServer(new TileUpdatePackage(tag, getBlockPos()));
     }
 
     

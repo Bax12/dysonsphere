@@ -2,8 +2,6 @@ package de.bax.dysonsphere.containers;
 
 import java.util.Objects;
 
-import de.bax.dysonsphere.network.LaserPatternControllerGuiSwapPackage;
-import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.tileentities.LaserPatternControllerTile;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,7 +23,8 @@ public class LaserPatternControllerContainer extends BaseContainer {
             @Override
             public void onTake(Player pPlayer, ItemStack pStack) {
                 super.onTake(pPlayer, pStack);
-                ModPacketHandler.INSTANCE.sendToServer(new LaserPatternControllerGuiSwapPackage(true, tile.getBlockPos()));
+                // ModPacketHandler.INSTANCE.sendToServer(new LaserPatternControllerGuiSwapPackage(true, tile.getBlockPos()));
+                tile.sendGuiSwap(true);
             }
         });
 

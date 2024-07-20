@@ -38,7 +38,7 @@ public class TileUpdatePackage {
                 if(level.isLoaded(pos)){
                     BlockEntity tile = level.getBlockEntity(pos);
                     if(tile != null && tile instanceof IUpdateReceiverTile rec){
-                        rec.handleUpdate(updateTag);
+                        rec.handleUpdate(updateTag, ctx.get().getSender());
                     }
                 }
             });

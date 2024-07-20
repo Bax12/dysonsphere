@@ -6,22 +6,25 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
+import de.bax.dysonsphere.network.IUpdateReceiverTile;
+import de.bax.dysonsphere.network.ModPacketHandler;
+import de.bax.dysonsphere.network.TileUpdatePackage;
 import de.bax.dysonsphere.sounds.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class DSEnergyReceiverTile extends BaseTile {
+public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTile {
 
     public static double maxHeat = 1700;
 
@@ -148,8 +151,17 @@ public class DSEnergyReceiverTile extends BaseTile {
     protected void updateNeighbors(){
         heatHandler.updateNeighbors(level, worldPosition);
     }
-    
 
+    @Override
+    public void handleUpdate(CompoundTag updateTag, Player player) {
+        setDsPowerDraw(updateTag.getInt("target"));
+    }
 
+    @Override
+    public void sendGuiUpdate(){
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("target", dsPowerDraw);
+        ModPacketHandler.INSTANCE.sendToServer(new TileUpdatePackage(tag, getBlockPos()));
+    }
 
 }

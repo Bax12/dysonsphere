@@ -13,8 +13,6 @@ import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
 import de.bax.dysonsphere.containers.LaserPatternControllerContainer;
 import de.bax.dysonsphere.gui.components.EnergyDisplay;
 import de.bax.dysonsphere.gui.components.NumberInput;
-import de.bax.dysonsphere.network.LaserPatternSyncPacket;
-import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.tileentities.LaserPatternControllerTile;
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.Minecraft;
@@ -129,10 +127,7 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
                 DysonSphere.LOGGER.error("LaserPatterControllerGui init Exception: {}", e);
             }
 
-            OrbitalLaserAttackPattern pattern = optionalPattern.orElse(OrbitalLaserAttackPattern.EMPTY);
-            if(pattern.isEmpty()){
-                pattern = tile.inputPattern;
-            }
+            OrbitalLaserAttackPattern pattern = optionalPattern.orElse(tile.inputPattern);
             displayPattern(pattern);
         }
 
@@ -198,8 +193,10 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
             // -> {
             // container.setPattern(pattern);
             // });
-            tile.inputPattern = pattern.EMPTY;
-            ModPacketHandler.INSTANCE.sendToServer(new LaserPatternSyncPacket(pattern, tile.getBlockPos()));
+            tile.inputPattern = pattern;
+            tile.sendGuiUpdate();
+            tile.inputPattern = OrbitalLaserAttackPattern.EMPTY;
+            // ModPacketHandler.INSTANCE.sendToServer(new LaserPatternSyncPacket(pattern, tile.getBlockPos()));
         } else {
             var player = Minecraft.getInstance().player;
             player.displayClientMessage(Component.literal("Pattern invalid, try extending the call-in sequence"), true);
