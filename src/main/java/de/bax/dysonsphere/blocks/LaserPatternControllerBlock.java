@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -70,6 +71,8 @@ public class LaserPatternControllerBlock extends HorizontalDirectionalBlock impl
                     } else  {
                         if(!player.getInventory().add(containerStack)){
                             controllerTile.dropContent();
+                            ItemEntity entity = new ItemEntity(level, tile.getBlockPos().getX(), tile.getBlockPos().getY() + 1, tile.getBlockPos().getZ(), containerStack);
+                            level.addFreshEntity(entity);
                         }
                     }
                 } else if(!playerStack.isEmpty() && playerStack.getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).isPresent()){
@@ -81,13 +84,13 @@ public class LaserPatternControllerBlock extends HorizontalDirectionalBlock impl
                         }
                     });
                 } else {
-                    if(controllerTile.inventory.getStackInSlot(0).isEmpty() && controllerTile.hasMinEnergy()){
+                    if(!controllerTile.inventory.getStackInSlot(0).isEmpty() && controllerTile.hasMinEnergy()){
                         NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
-                        new LaserPatternControllerInventoryContainer(containerId, playerInventory, (LaserPatternControllerTile) tile), Component.translatable("container.dysonsphere.laser_pattern_controller")), pos);
+                        new LaserPatternControllerContainer(containerId, playerInventory, (LaserPatternControllerTile) tile), Component.translatable("container.dysonsphere.laser_pattern_controller")), pos);
                         controllerTile.consumeEnergy();
                     } else {
                         NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
-                        new LaserPatternControllerContainer(containerId, playerInventory, (LaserPatternControllerTile) tile), Component.translatable("container.dysonsphere.laser_pattern_controller")), pos);
+                        new LaserPatternControllerInventoryContainer(containerId, playerInventory, (LaserPatternControllerTile) tile), Component.translatable("container.dysonsphere.laser_pattern_controller")), pos);
                     }
                     controllerTile.sendSyncPackageToNearbyPlayers();
                     return InteractionResult.CONSUME;
