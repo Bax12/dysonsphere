@@ -10,7 +10,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.containers.DSEnergyReceiverContainer;
 import de.bax.dysonsphere.gui.components.HeatDisplay;
-import de.bax.dysonsphere.network.DSEnergyReceiverGuiUpdatePacket;
+import de.bax.dysonsphere.network.DSEnergyReceiverGuiUpdatePackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.tileentities.DSEnergyReceiverTile;
 import de.bax.dysonsphere.util.AssetUtil;
@@ -50,7 +50,7 @@ public class DSEnergyReceiverGui extends BaseGui<DSEnergyReceiverContainer> {
                 target = Integer.parseInt(text);
             }
             tile.setDsPowerDraw(target); //screw send and resync
-            ModPacketHandler.INSTANCE.sendToServer(new DSEnergyReceiverGuiUpdatePacket(target, tile.getBlockPos()));
+            ModPacketHandler.INSTANCE.sendToServer(new DSEnergyReceiverGuiUpdatePackage(target, tile.getBlockPos()));
         });
         inputBox.setFilter((String text) -> {
             return StringUtils.isNumeric(text) || text.isEmpty();

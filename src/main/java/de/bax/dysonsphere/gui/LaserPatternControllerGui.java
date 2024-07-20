@@ -17,7 +17,6 @@ import de.bax.dysonsphere.network.LaserPatternSyncPacket;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.tileentities.LaserPatternControllerTile;
 import de.bax.dysonsphere.util.AssetUtil;
-import io.netty.handler.codec.TooLongFrameException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;

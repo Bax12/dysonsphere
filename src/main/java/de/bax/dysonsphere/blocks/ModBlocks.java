@@ -32,7 +32,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> HEAT_EXCHANGER_BLOCK = registerBlock("heat_exchanger_block", () -> new HeatExchangerBlock());//5mb/t if >450° + 1mb/t per 50° over 450
     public static final RegistryObject<Block> HEAT_GENERATOR_BLOCK = registerBlock("heat_generator_block", () -> new HeatGeneratorBlock());//1RF/T per 10°difference
     public static final RegistryObject<Block> LASER_PATTERN_CONTROLLER_BLOCK = registerBlock("laser_pattern_controller_block", () -> new LaserPatternControllerBlock());
-
+    public static final RegistryObject<Block> LASER_CONTROLLER_BLOCK = registerBlock("laser_controller_block", () -> new LaserControllerBlock());
 
     
 

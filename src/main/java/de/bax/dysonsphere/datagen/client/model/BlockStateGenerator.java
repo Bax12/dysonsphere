@@ -25,6 +25,7 @@ public class BlockStateGenerator extends BlockStateProvider{
 
         buildModel(ModBlocks.RAILGUN_BLOCK);
         buildModel(ModBlocks.DS_ENERGY_RECEIVER_BLOCK);
+        buildModel(ModBlocks.LASER_CONTROLLER_BLOCK);
         
 
         buildPillarBlock(ModBlocks.HEAT_EXCHANGER_BLOCK);

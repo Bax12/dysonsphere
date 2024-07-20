@@ -17,6 +17,7 @@ import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
 import de.bax.dysonsphere.gui.HeatExchangerGui;
 import de.bax.dysonsphere.gui.HeatGeneratorGui;
+import de.bax.dysonsphere.gui.LaserControllerGui;
 import de.bax.dysonsphere.gui.ModHuds;
 import de.bax.dysonsphere.gui.LaserControllerInventoryGui;
 import de.bax.dysonsphere.gui.LaserPatternControllerGui;
@@ -28,6 +29,7 @@ import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.sounds.ModSounds;
 import de.bax.dysonsphere.tabs.ModTabs;
 import de.bax.dysonsphere.tileRenderer.DSMonitorRenderer;
+import de.bax.dysonsphere.tileRenderer.LaserControllerRenderer;
 import de.bax.dysonsphere.tileRenderer.LaserPatternControllerRenderer;
 import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
@@ -166,6 +168,7 @@ public class DysonSphere
                 MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER_CONTAINER.get(), LaserPatternControllerGui::new);
                 MenuScreens.register(ModContainers.LASER_CONTROLLER_INVENTORY_CONTAINER.get(), LaserControllerInventoryGui::new);
                 MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER_INVENTORY_CONTAINER.get(), LaserPatternControllerInventoryGui::new);
+                MenuScreens.register(ModContainers.LASER_CONTROLLER_CONTAINER.get(), LaserControllerGui::new);
             });
         }
 
@@ -174,6 +177,7 @@ public class DysonSphere
             event.registerBlockEntityRenderer(ModTiles.RAILGUN.get(), RailgunRenderer::new);
             event.registerBlockEntityRenderer(ModTiles.DS_MONITOR.get(), DSMonitorRenderer::new);
             event.registerBlockEntityRenderer(ModTiles.LASER_PATTERN_CONTROLLER.get(), LaserPatternControllerRenderer::new);
+            event.registerBlockEntityRenderer(ModTiles.LASER_CONTROLLER.get(), LaserControllerRenderer::new);
 
             event.registerEntityRenderer(ModEntities.TARGET_DESIGNATOR.get(), TargetDesignatorRenderer::new);
             event.registerEntityRenderer(ModEntities.LASER_STRIKE.get(), LaserStrikeRenderer::new);

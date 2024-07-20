@@ -116,7 +116,7 @@ public class RailgunTile extends BaseTile {
 
     public void dropContent() {
         for(int i = 0; i < inventory.getSlots(); i++){
-            DysonSphere.LOGGER.info("Dropping item: {}", inventory.getStackInSlot(i));
+            // DysonSphere.LOGGER.info("Dropping item: {}", inventory.getStackInSlot(i));
             // Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getY(), inventory.getStackInSlot(i));
             ItemEntity entity = new ItemEntity(level, getBlockPos().getX(),getBlockPos().getY(), getBlockPos().getZ(), inventory.getStackInSlot(i));
             level.addFreshEntity(entity);

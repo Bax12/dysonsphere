@@ -45,6 +45,14 @@ public class TargetDesignatorEntity extends ThrowableProjectile {
         this(ModEntities.TARGET_DESIGNATOR.get(), thrower, world, 2.5f);
     }
 
+    public TargetDesignatorEntity(LivingEntity thrower, Level world, float x, float y, float z){
+        super(ModEntities.TARGET_DESIGNATOR.get(), world);
+
+        setOwner(thrower);
+
+        this.setPos(x, y, z);
+    }
+
     @Override
     protected float getGravity() {
         return 0.05f;

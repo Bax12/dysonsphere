@@ -15,12 +15,13 @@ public class ModPacketHandler {
 
     public static void init(){
         int id = 0;
-        INSTANCE.registerMessage(id++, DSEnergyReceiverGuiUpdatePacket.class, DSEnergyReceiverGuiUpdatePacket::encode, (buf) -> DSEnergyReceiverGuiUpdatePacket.decode(buf), DSEnergyReceiverGuiUpdatePacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(id++, DSEnergyReceiverGuiUpdatePackage.class, DSEnergyReceiverGuiUpdatePackage::encode, (buf) -> DSEnergyReceiverGuiUpdatePackage.decode(buf), DSEnergyReceiverGuiUpdatePackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(id++, LaserPatternSyncPacket.class, LaserPatternSyncPacket::encode, (buf) -> LaserPatternSyncPacket.decode(buf), LaserPatternSyncPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(id++, LaserCooldownSyncRequestPackage.class, LaserCooldownSyncRequestPackage::encode, (buf) -> LaserCooldownSyncRequestPackage.decode(buf), LaserCooldownSyncRequestPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(id++, LaserPatternControllerGuiSwapPackage.class, LaserPatternControllerGuiSwapPackage::encode, (buf) -> LaserPatternControllerGuiSwapPackage.decode(buf), LaserPatternControllerGuiSwapPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(id++, LaserPatternActivatedPackage.class, LaserPatternActivatedPackage::encode, (buf) -> LaserPatternActivatedPackage.decode(buf), LaserPatternActivatedPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-        
+        INSTANCE.registerMessage(id++, GuiButtonPressedPackage.class, GuiButtonPressedPackage::encode, (buf) -> GuiButtonPressedPackage.decode(buf), GuiButtonPressedPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(id++, TileUpdatePackage.class, TileUpdatePackage::encode, (buf) -> TileUpdatePackage.decode(buf), TileUpdatePackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         INSTANCE.registerMessage(id++, LaserCooldownSyncPacket.class, LaserCooldownSyncPacket::encode, (buf) -> LaserCooldownSyncPacket.decode(buf), LaserCooldownSyncPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }

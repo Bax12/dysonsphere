@@ -10,13 +10,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkEvent;
 
-public class DSEnergyReceiverGuiUpdatePacket {
+public class DSEnergyReceiverGuiUpdatePackage {
     
     public final int powerDraw;
     public final BlockPos pos;
 
 
-    public DSEnergyReceiverGuiUpdatePacket(int powerDraw, BlockPos pos){
+    public DSEnergyReceiverGuiUpdatePackage(int powerDraw, BlockPos pos){
         this.pos = pos;
         this.powerDraw = powerDraw;
 
@@ -28,10 +28,10 @@ public class DSEnergyReceiverGuiUpdatePacket {
         buf.writeInt(powerDraw);
     }
 
-    public static DSEnergyReceiverGuiUpdatePacket decode(FriendlyByteBuf buf){
+    public static DSEnergyReceiverGuiUpdatePackage decode(FriendlyByteBuf buf){
         BlockPos pos = buf.readBlockPos();
         int targetHeat = buf.readInt();
-        return new DSEnergyReceiverGuiUpdatePacket(targetHeat, pos);
+        return new DSEnergyReceiverGuiUpdatePackage(targetHeat, pos);
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx){
