@@ -4,13 +4,11 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import de.bax.dysonsphere.containers.DSEnergyReceiverContainer;
+import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.containers.LaserControllerContainer;
-import de.bax.dysonsphere.tileentities.DSEnergyReceiverTile;
 import de.bax.dysonsphere.tileentities.LaserControllerTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,7 +21,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -58,7 +55,12 @@ public class LaserControllerBlock extends Block implements EntityBlock{
         if(!pLevel.isClientSide()){
             if(pLevel.hasNeighborSignal(pPos)){
                 if(pLevel.getBlockEntity(pPos) instanceof LaserControllerTile laserTile){
-                    laserTile.startLaunch();
+                    laserTile.getOwner().getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((orbitalLaser) -> {
+                        int laserCount = orbitalLaser.getLasersAvailable(laserTile.getOwner().tickCount);
+                        if(laserCount >= laserTile.getPattern().getLasersRequired()){
+                            laserTile.startLaunch();
+                        }
+                    });
                 }
             }
         }
