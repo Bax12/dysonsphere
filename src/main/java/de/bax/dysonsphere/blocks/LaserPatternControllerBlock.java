@@ -28,7 +28,6 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -63,14 +62,14 @@ public class LaserPatternControllerBlock extends HorizontalDirectionalBlock impl
             if(tile != null && tile.getType().equals(ModTiles.LASER_PATTERN_CONTROLLER.get())){
                 ItemStack playerStack = player.getMainHandItem();
                 LaserPatternControllerTile controllerTile = ((LaserPatternControllerTile) tile);
-                if(player.isCrouching()){
+                if(player.isShiftKeyDown()){
                     ItemStack containerStack = controllerTile.inventory.extractItem(0, 1, false);
                     if(playerStack.isEmpty()){
                         //remove internal itemstack
                         player.setItemInHand(InteractionHand.MAIN_HAND, containerStack);
                     } else  {
                         if(!player.getInventory().add(containerStack)){
-                            controllerTile.dropContent();
+                            // controllerTile.dropContent();
                             ItemEntity entity = new ItemEntity(level, tile.getBlockPos().getX(), tile.getBlockPos().getY() + 1, tile.getBlockPos().getZ(), containerStack);
                             level.addFreshEntity(entity);
                         }
@@ -133,13 +132,21 @@ public class LaserPatternControllerBlock extends HorizontalDirectionalBlock impl
         return new LaserPatternControllerTile(pPos, pState);
     }
 
-        @Override
-    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        BlockEntity tile = level.getBlockEntity(pos);
-        if(!level.isClientSide && willHarvest && tile != null && tile.getType().equals(ModTiles.RAILGUN.get())){
-            ((LaserPatternControllerTile) tile).dropContent();
+    //     @Override
+    // public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+    //     BlockEntity tile = level.getBlockEntity(pos);
+    //     if(!level.isClientSide && willHarvest && tile != null && tile.getType().equals(ModTiles.RAILGUN.get())){
+    //         ((LaserPatternControllerTile) tile).dropContent();
+    //     }
+    //     return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+    // }
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+        if(!pLevel.isClientSide && pLevel.getBlockEntity(pPos) instanceof LaserPatternControllerTile tile){
+            tile.dropContent();
         }
-        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+        super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
     }
 
 }

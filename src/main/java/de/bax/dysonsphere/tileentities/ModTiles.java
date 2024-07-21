@@ -23,5 +23,6 @@ public class ModTiles {
 
     public static final RegistryObject<BlockEntityType<LaserPatternControllerTile>> LASER_PATTERN_CONTROLLER = TILES.register("laser_pattern_controller", () -> new BlockEntityType<LaserPatternControllerTile>(LaserPatternControllerTile::new, Set.of(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK.get()), null));
     public static final RegistryObject<BlockEntityType<LaserControllerTile>> LASER_CONTROLLER = TILES.register("laser_controller", () -> new BlockEntityType<LaserControllerTile>(LaserControllerTile::new, Set.of(ModBlocks.LASER_CONTROLLER_BLOCK.get()), null));
+    public static final RegistryObject<BlockEntityType<LaserCrafterTile>> LASER_CRAFTER = TILES.register("laser_crafter", () -> new BlockEntityType<LaserCrafterTile>(LaserCrafterTile::new, Set.of(ModBlocks.LASER_CRAFTER_BLOCK.get()), null));
 
 }

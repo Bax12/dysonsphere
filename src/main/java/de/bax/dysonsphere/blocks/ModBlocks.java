@@ -23,8 +23,7 @@ public class ModBlocks {
     @SuppressWarnings("null")
     public static Properties defaultMetal = Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).destroyTime(0.7f).explosionResistance(6.0f).pushReaction(PushReaction.IGNORE);
 
-
-    
+        
     public static final RegistryObject<Block> HEAT_PIPE_BLOCK = registerBlock("heat_pipe_block", () -> new HeatPipeBlock());
     public static final RegistryObject<Block> DS_MONITOR_BLOCK = registerBlock("dysonsphere_monitor_block", () -> new DSMonitorBlock());
     public static final RegistryObject<Block> RAILGUN_BLOCK = registerBlock("railgun_block", () -> new RailgunBlock());
@@ -33,6 +32,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> HEAT_GENERATOR_BLOCK = registerBlock("heat_generator_block", () -> new HeatGeneratorBlock());//1RF/T per 10°difference
     public static final RegistryObject<Block> LASER_PATTERN_CONTROLLER_BLOCK = registerBlock("laser_pattern_controller_block", () -> new LaserPatternControllerBlock());
     public static final RegistryObject<Block> LASER_CONTROLLER_BLOCK = registerBlock("laser_controller_block", () -> new LaserControllerBlock());
+    public static final RegistryObject<Block> LASER_CRAFTER_BLOCK = registerBlock("laser_crafter_block", () -> new LaserCrafterBlock());
 
     
 

@@ -12,6 +12,7 @@ import de.bax.dysonsphere.datagen.server.BlockLootGenerator;
 import de.bax.dysonsphere.datagen.server.BlockTagGenerator;
 import de.bax.dysonsphere.datagen.server.FluidTagGenerator;
 import de.bax.dysonsphere.datagen.server.ItemTagGenerator;
+import de.bax.dysonsphere.datagen.server.LaserCraftingRecipeGenerator;
 import de.bax.dysonsphere.datagen.server.RecipeGenerator;
 import net.minecraftforge.common.data.ForgeAdvancementProvider;
 import net.minecraftforge.data.event.GatherDataEvent;

@@ -1,9 +1,13 @@
 package de.bax.dysonsphere.entities;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
+import mekanism.api.lasers.ILaserReceptor;
+import mekanism.api.math.FloatingLong;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -18,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -110,7 +115,6 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
         this.setPos(this.getX(), hit.getLocation().y - 0.55f, this.getZ());
     }
 
-    //breaks at y > 62 ...wtf
     protected void dealBlockDamage(){
         if(level().isClientSide) return;
         if(this.blockDmg == 0)  return;
@@ -127,6 +131,16 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
                 BlockState state = level().getBlockState(pos);
                 // DysonSphere.LOGGER.debug("laserStrikeEntity dealBlockDamage state: {}, pos: {}", state.getBlock().getName(), pos);
                 if(!state.isAir()){
+                    BlockEntity tile = level().getBlockEntity(pos);
+                    if(tile != null){
+                        Optional<ILaserReceptor> optionalReceptor = tile.getCapability(DSCapabilities.LASER_RECEPTOR, Direction.UP).resolve();
+                        if(optionalReceptor.isPresent()){
+                            optionalReceptor.get().receiveLaserEnergy(FloatingLong.create(dmg * blockDmg * 20000));
+                            if(!optionalReceptor.get().canLasersDig()){
+                                return;
+                            }
+                        }
+                    }
                     boolean flammable = state.isFlammable(level(), pos, Direction.UP);
                     // Explosion explosion = level().explode(this, this.getX(), this.getY(), this.getZ(), 0, ExplosionInteraction.NONE);
                     

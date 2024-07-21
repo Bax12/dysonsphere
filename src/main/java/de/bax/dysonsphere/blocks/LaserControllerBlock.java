@@ -27,7 +27,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -93,13 +92,21 @@ public class LaserControllerBlock extends Block implements EntityBlock{
         return 1;
     }
 
+    // @Override
+    // public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+    //     BlockEntity tile = level.getBlockEntity(pos);
+    //     if(!level.isClientSide && willHarvest && tile != null && tile.getType().equals(ModTiles.LASER_CONTROLLER.get())){
+    //         ((LaserControllerTile) tile).dropContent();
+    //     }
+    //     return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+    // }
+
     @Override
-    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        BlockEntity tile = level.getBlockEntity(pos);
-        if(!level.isClientSide && willHarvest && tile != null && tile.getType().equals(ModTiles.LASER_CONTROLLER.get())){
-            ((LaserControllerTile) tile).dropContent();
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+        if(!pLevel.isClientSide && pLevel.getBlockEntity(pPos) instanceof LaserControllerTile tile){
+            tile.dropContent();
         }
-        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+        super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
     }
 
     @Override
