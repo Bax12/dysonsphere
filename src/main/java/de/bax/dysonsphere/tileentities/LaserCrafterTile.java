@@ -1,14 +1,12 @@
 package de.bax.dysonsphere.tileentities;
 
-import org.antlr.v4.parse.ANTLRParser.prequelConstruct_return;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.recipes.ModRecipes;
-import mekanism.api.lasers.ILaserReceptor;
-import mekanism.api.math.FloatingLong;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,9 +19,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
-import net.minecraftforge.registries.ForgeRegistries;
 
-public class LaserCrafterTile extends BaseTile {
+public class LaserCrafterTile extends BaseTile implements ILaserReceiver{
 
 
     public static final int SLOT_INPUT = 0;
@@ -53,22 +50,8 @@ public class LaserCrafterTile extends BaseTile {
 
     
 
-    protected ILaserReceptor laserReceptor = new ILaserReceptor() {
-
-        @Override
-        public void receiveLaserEnergy(@NotNull FloatingLong energy) {
-            craft(energy.doubleValue());
-        }
-
-        @Override
-        public boolean canLasersDig() {
-            return false;
-        }
-        
-    };
-
     protected LazyOptional<IItemHandler> lazyInv = LazyOptional.of(() -> inventory);
-    protected LazyOptional<ILaserReceptor> lazyLaserReceptor = LazyOptional.of(() -> laserReceptor);
+    protected LazyOptional<ILaserReceiver> lazyLaserReceptor = LazyOptional.of(() -> this);
 
 
     protected boolean dirty = false;
@@ -81,7 +64,7 @@ public class LaserCrafterTile extends BaseTile {
 
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap.equals(DSCapabilities.LASER_RECEPTOR) && side != Direction.DOWN){
+        if(cap.equals(DSCapabilities.LASER_RECEIVER) && side != Direction.DOWN){
             return lazyLaserReceptor.cast();
         }
         if(cap.equals(ForgeCapabilities.ITEM_HANDLER)){
@@ -97,6 +80,10 @@ public class LaserCrafterTile extends BaseTile {
         super.invalidateCaps();
         lazyLaserReceptor.invalidate();
         lazyInv.invalidate();
+    }
+
+    public void receiveLaserEnergy(double energy) {
+        craft(energy);
     }
     
     protected void craft(double energyInput){

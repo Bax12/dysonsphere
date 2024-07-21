@@ -5,8 +5,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
-import mekanism.api.lasers.ILaserReceptor;
 import mekanism.api.math.FloatingLong;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -133,12 +133,10 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
                 if(!state.isAir()){
                     BlockEntity tile = level().getBlockEntity(pos);
                     if(tile != null){
-                        Optional<ILaserReceptor> optionalReceptor = tile.getCapability(DSCapabilities.LASER_RECEPTOR, Direction.UP).resolve();
+                        Optional<ILaserReceiver> optionalReceptor = tile.getCapability(DSCapabilities.LASER_RECEIVER, Direction.UP).resolve();
                         if(optionalReceptor.isPresent()){
-                            optionalReceptor.get().receiveLaserEnergy(FloatingLong.create(dmg * blockDmg * 20000));
-                            if(!optionalReceptor.get().canLasersDig()){
-                                return;
-                            }
+                            optionalReceptor.get().receiveLaserEnergy((dmg * blockDmg * 20_000d));
+                            return;
                         }
                     }
                     boolean flammable = state.isFlammable(level(), pos, Direction.UP);
