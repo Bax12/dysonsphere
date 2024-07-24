@@ -2,7 +2,7 @@ package de.bax.dysonsphere.blocks;
 
 import javax.annotation.Nullable;
 
-import de.bax.dysonsphere.DysonSphere;
+import de.bax.dysonsphere.color.ModColors.ITintableTileBlock;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.tileentities.LaserCrafterTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
@@ -16,17 +16,17 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class LaserCrafterBlock extends Block implements EntityBlock {
+public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTileBlock {
 
     public LaserCrafterBlock() {
         super(ModBlocks.defaultMetal.noOcclusion());
@@ -86,9 +86,14 @@ public class LaserCrafterBlock extends Block implements EntityBlock {
         return InteractionResult.CONSUME;
     }
 
-    public VoxelShape getVisualShape(BlockState pState, BlockGetter pReader, BlockPos pPos, CollisionContext pContext) {
-        return Shapes.empty();
-    }
+    // public VoxelShape getVisualShape(BlockState pState, BlockGetter pReader, BlockPos pPos, CollisionContext pContext) {
+    //     return Shapes.empty();
+    // }
+
+    // @Override
+    // public RenderShape getRenderShape(BlockState pState) {
+    //     return RenderShape.INVISIBLE;
+    // }
 
     @Override
     @Nullable
@@ -106,9 +111,15 @@ public class LaserCrafterBlock extends Block implements EntityBlock {
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
     }
 
-    
+    @Override
+    public boolean hasAnalogOutputSignal(BlockState pState) {
+        return true;
+    }
 
-    
-    
+    @Override
+    public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
+        return pLevel.getBlockEntity(pPos) instanceof LaserCrafterTile tile ? (int) tile.getNeededChargeRatio() : 0;
+    }
+
     
 }

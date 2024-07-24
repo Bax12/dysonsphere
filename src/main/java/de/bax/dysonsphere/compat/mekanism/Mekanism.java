@@ -29,13 +29,11 @@ public class Mekanism implements IModCompat {
     @SubscribeEvent
     public void attachTileCaps(AttachCapabilitiesEvent<BlockEntity> event){
         if(event.getObject() instanceof ILaserReceptor laser){
-            DysonSphere.LOGGER.info("foo");
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "mek2ds_laser_receiver"), new Mek2DSLaserReceiver(laser));
             event.addListener(() -> {
                 event.getObject().getCapability(DSCapabilities.LASER_RECEIVER).invalidate();
             });
         } else if (event.getObject() instanceof ILaserReceiver laser){
-            DysonSphere.LOGGER.info("bar");
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "ds2mek_laser_receiver"), new DS2MekLaserReceiver(laser));
             event.addListener(() -> {
                 event.getObject().getCapability(LASER_RECEPTOR).invalidate();
