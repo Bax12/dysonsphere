@@ -8,6 +8,7 @@ import de.bax.dysonsphere.capabilities.fluid.FluidHandlerMap;
 import de.bax.dysonsphere.capabilities.fluid.FluidTankCustom;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
+import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.fluids.ModFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,7 +27,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class HeatExchangerTile extends BaseTile {
+public class HeatExchangerTile extends BaseTile implements IHeatTile{
 
     public static double maxHeat = 1700;
     public static double minHeat = 450;
@@ -249,6 +250,11 @@ public class HeatExchangerTile extends BaseTile {
                 heatHandler.extractHeat(produce * heatConsumption / 10, false); //accounting expansion
             }
         }
+    }
+
+    @Override
+    public IHeatContainer getHeatContainer() {
+        return heatHandler;
     }
 
 }

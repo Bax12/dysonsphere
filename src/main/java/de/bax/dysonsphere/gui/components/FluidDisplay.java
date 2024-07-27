@@ -9,6 +9,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.fluid.FluidTankCustom;
 import de.bax.dysonsphere.gui.BaseGui;
+import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -52,9 +53,7 @@ public class FluidDisplay extends BaseDisplay {
 
     @Override
     protected void addTooltip(List<Component> tooltip) {    
-        NumberFormat format = NumberFormat.getNumberInstance(Locale.ENGLISH);
-
-        tooltip.add(Component.translatable("tooltip.dysonsphere.fluid_display", fluid.getFluid().getDisplayName(), format.format(Math.round(fluid.getFluidAmount())), format.format(Math.round(fluid.getCapacity()))));
+        tooltip.add(Component.translatable("tooltip.dysonsphere.fluid_display", fluid.getFluid().getDisplayName(), AssetUtil.FLOAT_FORMAT.format(Math.round(fluid.getFluidAmount())), AssetUtil.FLOAT_FORMAT.format(Math.round(fluid.getCapacity()))));
     }
     
 

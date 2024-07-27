@@ -43,7 +43,7 @@ public class LaserStrikeRenderer extends EntityRenderer<LaserStrikeEntity> {
     public void render(LaserStrikeEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
         poseStack.pushPose();
         
-        VertexConsumer builder = bufferSource.getBuffer(RenderType.beaconBeam(RES_LOC, true));
+        VertexConsumer builder = bufferSource.getBuffer(RenderType.entityTranslucent(RES_LOC, false));
         
         // poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
         poseStack.mulPose(new Quaternionf().rotateAxis((float)Math.PI * (-Minecraft.getInstance().gameRenderer.getMainCamera().getYRot() / 180f), 0, 1, 0));
@@ -51,11 +51,11 @@ public class LaserStrikeRenderer extends EntityRenderer<LaserStrikeEntity> {
         
         if(entity.isAiming()){
             //aim
-            drawBeam(BEAM_TARGETING_SIZE, 0.5f, 255, poseStack, builder, light);        
+            drawBeam(BEAM_TARGETING_SIZE, 0.5f, 255, poseStack, builder, 255);        
         } else if(entity.isStriking()){
             //strike
             // DysonSphere.LOGGER.info("LaserStrikeRenderer render entitySize: {}", entity.getSize());
-            drawBeam(BEAM_BASE_SIZE * entity.getSize(), 1f, 255, poseStack, builder, light);        
+            drawBeam(BEAM_BASE_SIZE * entity.getSize(), 0.9f, 255, poseStack, builder, 255);        
         } else if (entity.isLingering()){
 
         }

@@ -2,19 +2,13 @@ package de.bax.dysonsphere.gui.components;
 
 import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
-import java.util.random.RandomGenerator.StreamableGenerator;
 
-import org.joml.Math;
-
-import de.bax.dysonsphere.DysonSphere;
-import net.minecraft.client.Minecraft;
+import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -39,7 +33,7 @@ public class NumberInput extends AbstractWidget {
 
     protected final int minValue;
 
-    NumberFormat format = NumberFormat.getNumberInstance(Locale.ENGLISH);
+    NumberFormat format = AssetUtil.FLOAT_FORMAT;
 
     public NumberInput(int pX, int pY, Component pMessage, Font font) {
         this(pX, pY, pMessage, font, false, 0);

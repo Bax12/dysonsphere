@@ -6,22 +6,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 
-import de.bax.dysonsphere.DysonSphere;
-import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.capabilities.heat.HeatHandler;
+import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
+import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import de.bax.dysonsphere.recipes.LaserCraftingRecipe;
 import de.bax.dysonsphere.recipes.ModRecipes;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.structures.MineshaftPieces.MineShaftCorridor;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -29,13 +27,14 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITintableTile{
+public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITintableTile, IHeatTile{
 
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
-    public static final int ENERGY_BLEED_STATIC = 1000;
-    public static final float ENERGY_BLEED_SCALING = 0.01f;
+    public static final int ENERGY_BLEED_STATIC = 10000;
+    public static final float ENERGY_BLEED_SCALING = 0.05f;
+    public static final double MAX_HEAT = 1700;
 
 
     public ItemStackHandler input = new ItemStackHandler(1) {
@@ -59,10 +58,29 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
 
     public InvWrapper inventory = new InvWrapper();    
 
+    public HeatHandler heatHandler = new HeatHandler(300, MAX_HEAT){
+        @Override
+        public double receiveHeat(double maxReceive, boolean simulate) {
+            if(!simulate){
+                setChanged();
+            }
+            return super.receiveHeat(maxReceive, simulate);
+        }
+
+        @Override
+        public double extractHeat(double maxExtract, boolean simulate) {
+            if(!simulate){
+                setChanged();
+            }
+            return super.extractHeat(maxExtract, simulate);
+        }
+    };
+
     
 
     protected LazyOptional<IItemHandler> lazyInv = LazyOptional.of(() -> inventory);
     protected LazyOptional<ILaserReceiver> lazyLaserReceptor = LazyOptional.of(() -> this);
+    protected LazyOptional<IHeatContainer> lazyHeat = LazyOptional.of(() -> heatHandler);
 
 
     protected double energy = 0;
@@ -85,6 +103,9 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
         if(cap.equals(ForgeCapabilities.ITEM_HANDLER)){
             return lazyInv.cast();
         }
+        if(cap.equals(DSCapabilities.HEAT)){
+            return lazyHeat.cast();
+        }
 
 
         return super.getCapability(cap, side);
@@ -95,9 +116,13 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
         super.invalidateCaps();
         lazyLaserReceptor.invalidate();
         lazyInv.invalidate();
+        lazyHeat.invalidate();
     }
 
+    @Override
     public void receiveLaserEnergy(double energy) {
+        if(energy <= 0) return;
+        energy = energy / Math.max(1, (getHeatHandler() - 300d) / 50d);
         this.energy = this.energy + energy;
         dirty = true;
     }
@@ -119,41 +144,52 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
 
     public void tick(){
         if(!level.isClientSide){
-            if(energy > 0){
-                if(currentRecipe != null){
-                    if((currentRecipe.input().test(input.getStackInSlot(0)))){
-                        if(energy >= currentRecipe.inputEnergy()){
-                            if(canOutput()){
-                                input.extractItem(0, 1, false);
-                                output.insertItem(0, currentRecipe.output(), false);
-                                energy = Math.max(0, energy - currentRecipe.inputEnergy()); 
-                                currentRecipe = null;
+            ticksElapsed++;
+            if(ticksElapsed % 5 == 0){
+                if(energy > 0){
+                    if(currentRecipe != null){
+                        if((currentRecipe.input().test(input.getStackInSlot(0)))){
+                            if(energy >= currentRecipe.inputEnergy()){
+                                if(canOutput()){
+                                    input.extractItem(0, 1, false);
+                                    output.insertItem(0, currentRecipe.output(), false);
+                                    energy = Math.max(0, energy - currentRecipe.inputEnergy()); 
+                                    currentRecipe = null;
+                                }
                             }
+                        } else {
+                            currentRecipe = null;
                         }
-                    } else {
-                        currentRecipe = null;
                     }
-                }
-                if(currentRecipe == null){
-                    if(!input.getStackInSlot(0).isEmpty()){
-                        setCurrentRecipe();
+                    if(currentRecipe == null){
+                        if(!input.getStackInSlot(0).isEmpty()){
+                            setCurrentRecipe();
+                        }
                     }
+                    bleedEnergy();
+                    heatHandler.splitShare();
                 }
-                bleedEnergy();
-            }
-            if(ticksElapsed++ % 5 == 0 && dirty){
-                dirty = false;
-                sendSyncPackageToNearbyPlayers();
-                // level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 11, 512);
+                if(dirty){
+                    dirty = false;
+                    sendSyncPackageToNearbyPlayers();
+                    // level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 11, 512);
+                }
             }
         } else {
             level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0);
+            if(!input.getStackInSlot(0).isEmpty()){
+                setCurrentRecipe();
+            } else {
+                currentRecipe = null;
+            }
+            
         }
     }
 
     protected void bleedEnergy(){
         double toBleed = Math.max(ENERGY_BLEED_STATIC, ENERGY_BLEED_SCALING * this.energy);
         this.energy = Math.max(0, energy - toBleed);
+        this.heatHandler.receiveHeat(50d, false);
         dirty = true;
     }
 
@@ -178,6 +214,10 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
         return currentRecipe != null ? Optional.of(currentRecipe) : Optional.empty();
     }
 
+    public double getHeatHandler(){
+        return heatHandler.getHeatStored();
+    }
+
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
@@ -190,6 +230,9 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
         if(pTag.contains("energy")){
             energy = pTag.getDouble("energy");
         }
+        if(pTag.contains("heat")){
+            heatHandler.deserializeNBT(pTag.getCompound("heat"));
+        }
         // DysonSphere.LOGGER.info("laserCrafterTile load input: {}, output: {}, energy: {}", input.getStackInSlot(0), output.getStackInSlot(0), energy);
     }
 
@@ -197,8 +240,12 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     public void onLoad() {
         super.onLoad();
         setCurrentRecipe();
+        heatHandler.updateNeighbors(level, worldPosition);
     }
 
+    public void onNeighborChange(){
+        heatHandler.updateNeighbors(level, worldPosition);
+    }
 
     @Override
     protected void saveAdditional(CompoundTag pTag) {
@@ -206,6 +253,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
         pTag.put("invInput", input.serializeNBT());
         pTag.put("invOutput", output.serializeNBT());
         pTag.putDouble("energy", energy);
+        pTag.put("heat", heatHandler.serializeNBT());
         // DysonSphere.LOGGER.info("laserCrafterTile saveAdditional input: {}, output: {}, energy: {}", input.getStackInSlot(0), output.getStackInSlot(0), energy);
     }
 
@@ -224,10 +272,18 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
 
     @Override
     public int getTintColor(int tintIndex) {
-        int col = 0xFFFF0000;
-        int offset = 255 - (int) Math.min(this.energy / 100000, 255);
+        if(tintIndex == 0){
+            int col = 0xFFFF0000;
+            int offset = 255 - (int) Math.min(this.energy / 100000, 255);
 
-        return col + offset + (offset << 8);
+            return col + offset + (offset << 8);
+        } else if (tintIndex == 1){
+            int col = 0xFFFF0000;
+            int offset = 255 - (int) Math.min((this.getHeatHandler() - 300) / 5, 255);
+
+            return col + offset + (offset << 8);
+        }
+        return 0xFFFFFFFF;
     }
     private class InvWrapper implements IItemHandler {
 
@@ -261,6 +317,10 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
             return slot == SLOT_INPUT ? input.isItemValid(0, stack) : output.isItemValid(0, stack);
         }
         
+    }
+    @Override
+    public IHeatContainer getHeatContainer() {
+        return heatHandler;
     }
 
 

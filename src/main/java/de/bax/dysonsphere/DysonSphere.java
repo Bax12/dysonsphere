@@ -195,6 +195,8 @@ public class DysonSphere
         @SubscribeEvent
         public static void registerGuiOverlay(RegisterGuiOverlaysEvent event){
             event.registerAboveAll("orbital_laser_hud", ModHuds.ORBITAL_LASER_HUD::render);
+            event.registerAboveAll("laser_crafter_hud", ModHuds.LASER_CRAFTER_HUD::render);
+            event.registerAboveAll("heat_tile_hud", ModHuds.HEAT_HUD::render);
         }
 
         @SubscribeEvent

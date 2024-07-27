@@ -1,15 +1,13 @@
 package de.bax.dysonsphere.compat.jei;
 
 import java.util.List;
-import java.util.Locale;
-
-import com.ibm.icu.text.NumberFormat;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.gui.BaseGui;
 import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.tileentities.RailgunTile;
+import de.bax.dysonsphere.util.AssetUtil;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -20,7 +18,6 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public class RailgunRecipeCategory implements IRecipeCategory<RailgunRecipeCategory.RailgunRecipe> {
@@ -59,8 +56,8 @@ public class RailgunRecipeCategory implements IRecipeCategory<RailgunRecipeCateg
     @Override
     public List<Component> getTooltipStrings(RailgunRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if(mouseX >= 5 && mouseX <= 14 && mouseY >= 5 && mouseY <= 69){
-            NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
-            return List.of(Component.translatable("tooltip.dysonsphere.railgun_launch_energy", format.format(RailgunTile.launchEnergy)));
+            // NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
+            return List.of(Component.translatable("tooltip.dysonsphere.railgun_launch_energy", AssetUtil.FLOAT_FORMAT.format(RailgunTile.launchEnergy)));
         }
         return List.of();
     }

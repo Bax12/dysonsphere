@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.gui.BaseGui;
+import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
@@ -40,8 +41,7 @@ public class HeatDisplay extends BaseDisplay{
     @Override
     protected void addTooltip(List<Component> tooltip) {
         if(heat != null){
-            NumberFormat format = NumberFormat.getNumberInstance(Locale.ENGLISH);
-            tooltip.add(Component.translatable("tooltip.dysonsphere.heat_display", format.format(Math.round(heat.getHeatStored())), format.format(Math.round(heat.getMaxHeatStored()))));
+            tooltip.add(Component.translatable("tooltip.dysonsphere.heat_display", AssetUtil.FLOAT_FORMAT.format(Math.round(heat.getHeatStored())), AssetUtil.FLOAT_FORMAT.format(Math.round(heat.getMaxHeatStored()))));
         } else {
             tooltip.add(Component.translatable("tooltip.dysonsphere.heat_display", "???", "???"));
         }

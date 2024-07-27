@@ -109,7 +109,7 @@ public class DSConfig {
                 HeatGeneratorTile.maxHeat = HEAT_GENERATOR_MAX_HEAT.get();
                 HeatGeneratorTile.energyCapacity = HEAT_GENERATOR_ENERGY_CAPACITY.get();
                 HeatGeneratorTile.minHeatDifference = HEAT_GENERATOR_MIN_HEAT_DIF.get();
-                HeatGeneratorTile.energyCapacity = HEAT_GENERATOR_ENERGY_GENERATED.get();
+                HeatGeneratorTile.energyGenerated = HEAT_GENERATOR_ENERGY_GENERATED.get();
 
                 HeatPipeTile.maxHeat = HEAT_PIPE_MAX_HEAT.get();
 

@@ -1,8 +1,6 @@
 package de.bax.dysonsphere.gui;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -37,8 +35,7 @@ public class RailgunGui extends BaseGui<RailgunContainer> {
             @Override
             protected void addTooltip(List<Component> tooltip) {
                 super.addTooltip(tooltip);
-                NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
-                tooltip.add(Component.translatable("tooltip.dysonsphere.railgun_launch_energy", format.format(tile.launchEnergy)));
+                tooltip.add(Component.translatable("tooltip.dysonsphere.railgun_launch_energy", AssetUtil.FLOAT_FORMAT.format(tile.launchEnergy)));
             }
             @Override
             public void draw(GuiGraphics guiGraphics) {

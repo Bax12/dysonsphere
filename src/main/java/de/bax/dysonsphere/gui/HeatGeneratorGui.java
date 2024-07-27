@@ -1,8 +1,6 @@
 package de.bax.dysonsphere.gui;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 

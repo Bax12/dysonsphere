@@ -1,15 +1,12 @@
 package de.bax.dysonsphere.compat.jei;
 
 import java.util.List;
-import java.util.Locale;
-
-import com.ibm.icu.text.NumberFormat;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.gui.BaseGui;
 import de.bax.dysonsphere.gui.HeatExchangerGui;
-import de.bax.dysonsphere.tileentities.HeatExchangerTile;
+import de.bax.dysonsphere.util.AssetUtil;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -20,7 +17,6 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 public class HeatExchangerCategory implements IRecipeCategory<HeatExchangerCategory.HeatExchangerRecipe> {
@@ -61,8 +57,8 @@ public class HeatExchangerCategory implements IRecipeCategory<HeatExchangerCateg
     @Override
     public List<Component> getTooltipStrings(HeatExchangerRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if(mouseX >= 29 && mouseX <= 38 && mouseY >= 2 && mouseY <= 34){
-            NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
-            return List.of(Component.translatable("tooltip.dysonsphere.heat_exchanger_min_heat", format.format(recipe.heat)));
+            // NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
+            return List.of(Component.translatable("tooltip.dysonsphere.heat_exchanger_min_heat", AssetUtil.FLOAT_FORMAT.format(recipe.heat)));
         }
         return List.of();
     }

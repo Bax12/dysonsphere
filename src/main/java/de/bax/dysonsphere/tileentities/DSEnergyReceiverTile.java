@@ -11,6 +11,7 @@ import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
+import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.network.IUpdateReceiverTile;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.network.TileUpdatePackage;
@@ -24,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTile {
+public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTile, IHeatTile {
 
     public static double maxHeat = 1700;
 
@@ -162,6 +163,11 @@ public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTil
         CompoundTag tag = new CompoundTag();
         tag.putInt("target", dsPowerDraw);
         ModPacketHandler.INSTANCE.sendToServer(new TileUpdatePackage(tag, getBlockPos()));
+    }
+
+    @Override
+    public IHeatContainer getHeatContainer() {
+        return heatHandler;
     }
 
 }

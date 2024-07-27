@@ -1,10 +1,9 @@
 package de.bax.dysonsphere.gui.components;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import de.bax.dysonsphere.gui.BaseGui;
+import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
@@ -37,9 +36,7 @@ public class EnergyDisplay extends BaseDisplay{
 
 
     protected void addTooltip(List<Component> tooltip){
-        NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
-
-        tooltip.add(Component.translatable("tooltip.dysonsphere.energy_display", format.format(energy.getEnergyStored()), format.format(energy.getMaxEnergyStored())));
+        tooltip.add(Component.translatable("tooltip.dysonsphere.energy_display", AssetUtil.FLOAT_FORMAT.format(energy.getEnergyStored()), AssetUtil.FLOAT_FORMAT.format(energy.getMaxEnergyStored())));
     }
 
 

@@ -13,6 +13,7 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.energy.ItemEnergyHandler;
 import de.bax.dysonsphere.capabilities.items.ItemItemStackHandler;
 import de.bax.dysonsphere.containers.LaserControllerInventoryContainer;
+import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -85,9 +86,9 @@ public class LaserControllerItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @javax.annotation.Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        var format = NumberFormat.getInstance(Locale.ENGLISH);
+        // var format = NumberFormat.getInstance(Locale.ENGLISH);
         stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
-            tooltip.add(Component.translatable("tooltip.dysonsphere.energy_display", format.format(energy.getEnergyStored()), format.format(energy.getMaxEnergyStored())));
+            tooltip.add(Component.translatable("tooltip.dysonsphere.energy_display", AssetUtil.FLOAT_FORMAT.format(energy.getEnergyStored()), AssetUtil.FLOAT_FORMAT.format(energy.getMaxEnergyStored())));
         });
         //todo replace with hud gui
         stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((container) -> {
