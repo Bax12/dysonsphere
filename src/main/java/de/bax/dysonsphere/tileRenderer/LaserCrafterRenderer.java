@@ -52,7 +52,7 @@ public class LaserCrafterRenderer implements BlockEntityRenderer<LaserCrafterTil
         ItemStack output = pBlockEntity.output.getStackInSlot(0);
         if(!output.isEmpty()){
             pPoseStack.translate(0.5f, 0.75f, 0.5f);
-            float sway = (float) Math.sin((pBlockEntity.getLevel().getGameTime() / 25f) % (2 * Math.PI)) * 0.065f;
+            float sway = (float) Math.sin((pBlockEntity.getLevel().getGameTime() / 25f) % (2 * Math.PI)) * 0.05f;
             pPoseStack.translate(0, sway, 0);
             pPoseStack.mulPose(Axis.YP.rotationDegrees(pBlockEntity.getLevel().getGameTime() * 4f % 360));
 

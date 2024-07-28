@@ -90,18 +90,18 @@ public class LaserControllerItem extends Item {
         stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
             tooltip.add(Component.translatable("tooltip.dysonsphere.energy_display", AssetUtil.FLOAT_FORMAT.format(energy.getEnergyStored()), AssetUtil.FLOAT_FORMAT.format(energy.getMaxEnergyStored())));
         });
-        //todo replace with hud gui
-        stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((container) -> {
-            container.getStackInSlot(0).getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((pattern) -> {
-                tooltip.add(Component.literal("Pattern0: " + pattern.getPattern().getCallInSequence()));    
-            });
-        });
+        //todo replace with hud gui -- done
+        // stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((container) -> {
+        //     container.getStackInSlot(0).getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((pattern) -> {
+        //         tooltip.add(Component.literal("Pattern0: " + pattern.getPattern().getCallInSequence()));    
+        //     });
+        // });
 
-        Minecraft.getInstance().player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
-            tooltip.add(Component.literal("OnCooldown: " + laser.getLasersOnCooldown(Minecraft.getInstance().player.tickCount)));
-        });
+        // Minecraft.getInstance().player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
+        //     tooltip.add(Component.literal("OnCooldown: " + laser.getLasersOnCooldown(Minecraft.getInstance().player.tickCount)));
+        // });
 
-        tooltip.add(Component.literal("Stacks: " + stack.getOrCreateTagElement("inventory").getAsString()));
+        // tooltip.add(Component.literal("Stacks: " + stack.getOrCreateTagElement("inventory").getAsString()));
     }
 
     @Override

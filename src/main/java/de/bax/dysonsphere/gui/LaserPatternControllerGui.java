@@ -199,7 +199,7 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
             // ModPacketHandler.INSTANCE.sendToServer(new LaserPatternSyncPacket(pattern, tile.getBlockPos()));
         } else {
             var player = Minecraft.getInstance().player;
-            player.displayClientMessage(Component.literal("Pattern invalid, try extending the call-in sequence"), true);
+            player.displayClientMessage(Component.translatable("tooltip.dysonsphere.laser_pattern_controller_invalid_pattern"), true);
             // player.playSound(SoundEvents.DISPENSER_FAIL);
             Minecraft.getInstance().level.playLocalSound(player.blockPosition(), SoundEvents.DISPENSER_FAIL,
                     SoundSource.BLOCKS, 10, 1, true);

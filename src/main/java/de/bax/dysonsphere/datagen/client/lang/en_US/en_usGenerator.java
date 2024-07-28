@@ -24,6 +24,8 @@ public class en_usGenerator extends LanguageProvider{
         addBlock(ModBlocks.HEAT_EXCHANGER_BLOCK, "Thermal Exchanger");
         addBlock(ModBlocks.HEAT_GENERATOR_BLOCK, "Thermoelectric Generator");
         addBlock(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK, "Laser Pattern Controller Terminal");
+        addBlock(ModBlocks.LASER_CONTROLLER_BLOCK, "Laser Control Station");
+        addBlock(ModBlocks.LASER_CRAFTER_BLOCK, "Precision Laser Workbench");
 
 
         //items
@@ -40,6 +42,9 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.LASER_CONTROLLER, "Orbital Uplink Bracelet");
         addItem(ModItems.TARGET_DESIGNATOR, "Target Designator");
         addItem(ModItems.LASER_PATTERN, "Orbital Laser Pattern");
+        addItem(ModItems.UNIVERSE_WHISPER, "Whisper of the Universe");
+        addItem(ModItems.INGOT_SMART_ALLOY, "Smart Alloy Ingot");
+        addItem(ModItems.COMPONENT_SMART_ALLOY, "Smart Alloy Component");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");
@@ -52,6 +57,7 @@ public class en_usGenerator extends LanguageProvider{
         add("container.dysonsphere.heat_exchanger", "Thermal Exchanger");
         add("container.dysonsphere.laser_pattern_controller","Laser Pattern Controller Terminal");
         add("container.dysonsphere.laser_controller_inventory", "Active Laser Patterns");
+        add("container.dysonsphere.laser_controller_block", "Laser Control Station");
 
         //tooltips
         add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
@@ -63,6 +69,7 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.railgun_launch_energy", "Required Launch Energy: %s RF");
         add("tooltip.dysonsphere.ds_energy_receiver_energy", "To Receive:");
         add("tooltip.dysonsphere.ds_energy_receiver_nosky","Cannot see the sky!");
+        add("tooltip.dysonsphere.ds_energy_receiver_wanted", "Wanted Heat Input");
         add("tooltip.dysonsphere.heat_generator_neighbor_neg", "Neighbor of Negative %s");
         add("tooltip.dysonsphere.heat_generator_neighbor_pos", "Neighbor of Positive %s");
         add("tooltip.dysonsphere.heat_generator_axis", "Axis: %s");
@@ -76,6 +83,8 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.ds_monitor_capacity","Capacity: %s RF/t");
         add("tooltip.dysonsphere.ds_monitor_parts","Parts:");
         add("tooltip.dysonsphere.ds_monitor_part", "  - %s: %sx");
+        add("tooltip.dysonsphere.ds_monitor_usage", "Usage: %s%%");
+        add("tooltip.dysonsphere.ds_monitor_power_draw", "Energy Draw %s RF/t");
         add("tooltip.dysonsphere.laser_pattern_call_in","Call-In Sequence");
         add("tooltip.dysonsphere.laser_pattern_name", "Name:");
         add("tooltip.dysonsphere.laser_pattern_controller_apply","Apply");
@@ -92,6 +101,23 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.laser_pattern_controller_spread","Inaccuracy");
         add("tooltip.dysonsphere.laser_pattern_controller_min_sequence","Minimum Sequence Length: %s");
         add("tooltip.dysonsphere.laser_pattern_controller_edit", "Edit");
+        add("tooltip.dysonsphere.laser_pattern_controller_missing_energy", "Not enough energy!");
+        add("tooltip.dysonsphere.laser_pattern_controller_invalid_pattern", "Pattern invalid, try extending the call-in sequence");
+        add("tooltip.dysonsphere.orbital_lasers_unavailable", "Not enough lasers available!");
+        add("tooltip.dysonsphere.laser_controller_launch", "Launch");
+        add("tooltip.dysonsphere.laser_controller_launching", "Launching...");
+        add("tooltip.dysonsphere.laser_controller_claim", "Claim");
+        add("tooltip.dysonsphere.laser_controller_owner", "Owner: %s");
+        add("tooltip.dysonsphere.laser_controller_lasers", "Lasers Available: %s");
+        add("tooltip.dysonsphere.laser_controller_cooldown", "On Cooldown");
+        add("tooltip.dysonsphere.laser_controller_lasers_missing", "Not enough Lasers!");
+        
+        
+
+        add("tooltip.dysonsphere.coordinates_x","X");
+        add("tooltip.dysonsphere.coordinates_y","Y");
+        add("tooltip.dysonsphere.coordinates_z","Z");
+        
 
         add("tooltip.dysonsphere.orbital_laser_hud_lasers_available", "Lasers Available: %s");
         add("tooltip.dysonsphere.orbital_laser_hud_lasers_cooldown", "Lasers on Cooldown: %s");

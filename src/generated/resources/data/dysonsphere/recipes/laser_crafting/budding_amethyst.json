@@ -1,0 +1,10 @@
+{
+  "type": "dysonsphere:laser_crafting",
+  "input": {
+    "item": "minecraft:amethyst_block"
+  },
+  "inputEnergy": 5000000,
+  "output": {
+    "item": "minecraft:budding_amethyst"
+  }
+}

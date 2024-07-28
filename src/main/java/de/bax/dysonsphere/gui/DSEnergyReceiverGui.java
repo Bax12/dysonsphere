@@ -39,7 +39,7 @@ public class DSEnergyReceiverGui extends BaseGui<DSEnergyReceiverContainer> {
     protected void init() {
         super.init();
         this.heat = new HeatDisplay(this.leftPos + 15, this.topPos + 5, tile.heatHandler);
-        inputBox = new EditBox(font, this.leftPos + 124, this.topPos + 44, 40, 16, Component.literal("Wanted Heat Inputbox"));
+        inputBox = new EditBox(font, this.leftPos + 124, this.topPos + 44, 40, 16, Component.translatable("tooltip.dysonsphere.ds_energy_receiver_wanted"));
 
         inputBox.setValue(Integer.toString(tile.getDsPowerDraw()));
         inputBox.setResponder((text) -> {

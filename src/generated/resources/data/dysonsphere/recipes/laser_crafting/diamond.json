@@ -1,9 +1,9 @@
 {
   "type": "dysonsphere:laser_crafting",
   "input": {
-    "tag": "forge:dyes/light_blue"
+    "tag": "forge:storage_blocks/coal"
   },
-  "inputEnergy": 10000,
+  "inputEnergy": 10000000,
   "output": {
     "item": "minecraft:diamond"
   }

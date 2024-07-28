@@ -56,7 +56,7 @@ public class TargetDesignatorItem extends Item {
 
                         orbitalLaser.putLasersOnCooldown(entity.tickCount, pattern.getLasersRequired(), pattern.getRechargeTime());
                     } else {
-                        ((Player) entity).displayClientMessage(Component.literal("Not enough lasers available!"), true);
+                        ((Player) entity).displayClientMessage(Component.translatable("tooltip.dysonsphere.orbital_lasers_unavailable"), true);
                     }
                 });
             // });

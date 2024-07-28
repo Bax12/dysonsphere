@@ -149,7 +149,7 @@ public class LaserPatternControllerTile extends BaseTile implements IUpdateRecei
                 if(this.hasMinEnergy()){
                     this.consumeEnergy();
                 } else {
-                    player.displayClientMessage(Component.literal("not enough energy"), true);
+                    player.displayClientMessage(Component.translatable("tooltip.dysonsphere.laser_pattern_controller_missing_energy"), true);
                     return;
                 }
             }

@@ -45,25 +45,25 @@ public class LaserControllerGui extends BaseGui<LaserControllerContainer> {
         super.init();
         this.energy = new EnergyDisplay(this.leftPos - 25, this.topPos + 5, tile.energyStorage);
 
-        xInput = new NumberInput(getGuiLeft() + 65, getGuiTop() + 5, Component.literal("x"), font, true, Integer.MIN_VALUE);
-        yInput = new NumberInput(getGuiLeft() + 65, getGuiTop() + 35, Component.literal("y"), font, true, Integer.MIN_VALUE);
-        zInput = new NumberInput(getGuiLeft() + 65, getGuiTop() + 65, Component.literal("z"), font, true, Integer.MIN_VALUE);
+        xInput = new NumberInput(getGuiLeft() + 65, getGuiTop() + 5, Component.translatable("tooltip.dysonsphere.coordinates_x"), font, true, Integer.MIN_VALUE);
+        yInput = new NumberInput(getGuiLeft() + 65, getGuiTop() + 35, Component.translatable("tooltip.dysonsphere.coordinates_y"), font, true, Integer.MIN_VALUE);
+        zInput = new NumberInput(getGuiLeft() + 65, getGuiTop() + 65, Component.translatable("tooltip.dysonsphere.coordinates_z"), font, true, Integer.MIN_VALUE);
 
         xInput.setValue(tile.getTargetX());
         yInput.setValue(tile.getTargetY());
         zInput.setValue(tile.getTargetZ());
 
-        launchButton = Button.builder(Component.literal("Launch"), (button) -> {
+        launchButton = Button.builder(Component.translatable("tooltip.dysonsphere.laser_controller_launch"), (button) -> {
             ModPacketHandler.INSTANCE.sendToServer(new GuiButtonPressedPackage(tile.getBlockPos(), 0));
             launchButton.active = false;
-            launchButton.setTooltip(Tooltip.create(Component.literal("Launching...")));
+            launchButton.setTooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.laser_controller_launching")));
         }).bounds(getGuiLeft() + 5, getGuiTop() + 62, 39, 20).build();
 
-        claimButton = Button.builder(Component.literal("Claim"), (button) -> {
+        claimButton = Button.builder(Component.translatable("tooltip.dysonsphere.laser_controller_claim"), (button) -> {
             ModPacketHandler.INSTANCE.sendToServer(new GuiButtonPressedPackage(tile.getBlockPos(), 1));
         }).bounds(getGuiLeft() + 5, getGuiTop() + 29, 39, 20).build();
 
-        ownerLabel = new FittingMultiLineTextWidget(getGuiLeft() + 5, getGuiTop() + 10, 60, 20, Component.literal("Owner: " + tile.getOwner().getName().getString()), font);
+        ownerLabel = new FittingMultiLineTextWidget(getGuiLeft() + 5, getGuiTop() + 10, 60, 20, Component.translatable("tooltip.dysonsphere.laser_controller_owner", tile.getOwner().getName().getString()), font);
         updateComponents();
         
 
@@ -80,13 +80,13 @@ public class LaserControllerGui extends BaseGui<LaserControllerContainer> {
         if(tile.getOwner() != null) {
             tile.getOwner().getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((orbitalLaser) -> {
                 int laserCount = orbitalLaser.getLasersAvailable(tile.getOwner().tickCount);
-                ownerLabel.setTooltip(Tooltip.create(Component.literal("Lasers Available: " + laserCount)));
+                ownerLabel.setTooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.laser_controller_lasers", laserCount)));
                 if(tile.isWorking() || tile.isOnCooldown()){
                     launchButton.active = false;
-                    launchButton.setTooltip(Tooltip.create(tile.isWorking() ? Component.literal("Launching...") : Component.literal("On Cooldown")));
+                    launchButton.setTooltip(Tooltip.create(tile.isWorking() ? Component.translatable("tooltip.dysonsphere.laser_controller_launching") : Component.translatable("tooltip.dysonsphere.laser_controller_cooldown")));
                 } else {
                     if(laserCount < tile.getPattern().getLasersRequired()){
-                        launchButton.setTooltip(Tooltip.create(Component.literal("Not enough Lasers!")));
+                        launchButton.setTooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.laser_controller_lasers_missing")));
                         launchButton.active = false;
                     } else {
                         launchButton.setTooltip(null);

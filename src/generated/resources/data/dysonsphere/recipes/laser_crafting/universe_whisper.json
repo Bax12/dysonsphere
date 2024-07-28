@@ -1,0 +1,10 @@
+{
+  "type": "dysonsphere:laser_crafting",
+  "input": {
+    "item": "minecraft:echo_shard"
+  },
+  "inputEnergy": 2000000,
+  "output": {
+    "item": "dysonsphere:universe_whisper"
+  }
+}

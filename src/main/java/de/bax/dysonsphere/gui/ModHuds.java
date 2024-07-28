@@ -132,13 +132,13 @@ public class ModHuds {
             return recipe.output().copy();
         }).orElse(ItemStack.EMPTY);
         if(Minecraft.getInstance().player.isShiftKeyDown()){
-            Component msg = Component.literal("Energy: " + AssetUtil.FLOAT_FORMAT.format(tile.getCharge()) + "/" + tile.getRecipe().map((recipe) -> {return recipe.inputEnergy();}).orElse(0l));
+            Component msg = Component.translatable("tooltip.dysonsphere.energy_display", AssetUtil.FLOAT_FORMAT.format(tile.getCharge()), AssetUtil.FLOAT_FORMAT.format(tile.getRecipe().map((recipe) -> {return recipe.inputEnergy();}).orElse(0l)));
             font.drawInBatch(msg, screenWidth * 0.5f - (font.width(msg)/2), screenHeight * 0.6f, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
         }
-        
+
         if(!input.isEmpty()){
             int posX = (int) (screenWidth * 0.5f) - 20;
-            int posY = (int) (screenHeight * 0.54f);
+            int posY = (int) (screenHeight * 0.6f - 30);
             guiGraphics.blit(HUD_LOC, posX, posY, 15, 180, 16, 28);
             guiGraphics.renderItem(input, posX, posY + 12);
             if(!result.isEmpty()){
@@ -154,7 +154,7 @@ public class ModHuds {
         if(Minecraft.getInstance().screen != null) return;
         if(!Minecraft.getInstance().player.isShiftKeyDown()) return;
         Font font = Minecraft.getInstance().font;
-        Component msg = Component.literal("Heat: " + AssetUtil.FLOAT_FORMAT.format(tile.getHeat()) + "°K");
+        Component msg = Component.translatable("tooltip.dysonsphere.heat_pipe", AssetUtil.FLOAT_FORMAT.format(tile.getHeat()));
         font.drawInBatch(msg, screenWidth * 0.5f - (font.width(msg)/2), screenHeight * 0.6f + 10, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
     }
     
