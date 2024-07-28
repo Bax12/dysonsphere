@@ -111,6 +111,7 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.laser_controller_lasers", "Lasers Available: %s");
         add("tooltip.dysonsphere.laser_controller_cooldown", "On Cooldown");
         add("tooltip.dysonsphere.laser_controller_lasers_missing", "Not enough Lasers!");
+        add("tooltip.dysonsphere.laser_crafter_energy_needed", "Required Energy: %s");
         
         
 
@@ -136,6 +137,7 @@ public class en_usGenerator extends LanguageProvider{
         //recipes
         add("dysonsphere.recipe.heat_exchanger", "Heat Exchange");
         add("dysonsphere.recipe.railgun", "Orbital Launching");
+        add("dysonsphere.recipe.laser", "Orbital Laser Strike");
 
         //advancements
         add("achievement.dysonsphere.start", "The Dyson Sphere Project begins!");
