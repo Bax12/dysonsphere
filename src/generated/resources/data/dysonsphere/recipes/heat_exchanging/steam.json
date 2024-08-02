@@ -1,0 +1,15 @@
+{
+  "type": "dysonsphere:heat_exchanger",
+  "heatConsumption": 0.05,
+  "heatScaling": 50.0,
+  "input": {
+    "amount": 5,
+    "fluid": "minecraft:water"
+  },
+  "minHeat": 450.0,
+  "output": {
+    "amount": 50,
+    "fluid": "dysonsphere:steam"
+  },
+  "scalingFactor": 0.2
+}

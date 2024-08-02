@@ -60,7 +60,8 @@ public class DSJeiPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
         registration.addRecipes(RAILGUN.getRecipeType(), List.of(new RailgunRecipeCategory.RailgunRecipe(ModItems.CAPSULE_SOLAR.get().getDefaultInstance()), new RailgunRecipeCategory.RailgunRecipe(ModItems.CAPSULE_LASER.get().getDefaultInstance())));
-        registration.addRecipes(HEAT_EXCHANGER.getRecipeType(), List.of(new HeatExchangerCategory.HeatExchangerRecipe(new FluidStack(Fluids.WATER, 5), new FluidStack(ModFluids.STEAM.get(), 50), HeatExchangerTile.minHeat)));
+        // registration.addRecipes(HEAT_EXCHANGER.getRecipeType(), List.of(new HeatExchangerCategory.HeatExchangerRecipe(new FluidStack(Fluids.WATER, 5), new FluidStack(ModFluids.STEAM.get(), 50), HeatExchangerTile.minHeat)));
+        registration.addRecipes(HEAT_EXCHANGER.getRecipeType(), recipeManager.getAllRecipesFor(ModRecipes.HEAT_EXCHANGER_TYPE.get()));
         registration.addRecipes(LASER_CRAFTER.getRecipeType(), recipeManager.getAllRecipesFor(ModRecipes.LASER_CRAFTING_TYPE.get()));
     }
     

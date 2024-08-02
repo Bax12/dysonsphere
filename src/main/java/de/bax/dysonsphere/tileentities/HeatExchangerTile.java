@@ -1,5 +1,8 @@
 package de.bax.dysonsphere.tileentities;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +13,8 @@ import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.fluids.ModFluids;
+import de.bax.dysonsphere.recipes.HeatExchangerRecipe;
+import de.bax.dysonsphere.recipes.ModRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -30,12 +35,12 @@ import net.minecraftforge.items.ItemStackHandler;
 public class HeatExchangerTile extends BaseTile implements IHeatTile{
 
     public static double maxHeat = 1700;
-    public static double minHeat = 450;
-    public static int baseProduce = 5;
-    public static int bonusProduce = 1;
-    public static double bonusHeat = 50;
+    // public static double minHeat = 450;
+    // public static int baseProduce = 5;
+    // public static int bonusProduce = 1;
+    // public static double bonusHeat = 50;
     public static int fluidCapacity = 4000;
-    public static float heatConsumption = 2.5f;
+    // public static float heatConsumption = 2.5f;
 
     public static final int slotInput = 0;
     public static final int slotOutput = 1;
@@ -102,6 +107,8 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     protected double lastHeat = 0;
     protected int ticksElapsed = 0;
     protected LazyOptional<IFluidHandler>[] fluidNeighbors = new LazyOptional[6];
+    protected Optional<HeatExchangerTile>[] exchangerNeighbors = new Optional[6];
+    protected HeatExchangerRecipe curRecipe;
     protected boolean shouldUpdate;
 
 
@@ -132,7 +139,12 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
         if(!level.isClientSide){
             if(ticksElapsed++ % 5 == 0){
                 pushPullFluids();
-                generateSteam();
+                if((curRecipe == null && !inputTank.getFluid().isEmpty()) || (curRecipe != null && !inputTank.getFluid().isFluidEqual(curRecipe.input()))){
+                    setCurrentRecipe();
+                }
+                if(curRecipe != null){
+                    generateSteam();    
+                }
                 heatHandler.splitShare();
                 if(lastHeat != heatHandler.getHeatStored()){
                     shouldUpdate = true;
@@ -154,6 +166,9 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
         inputTank.readFromNBT(tag.getCompound("inputTank"));
         outputTank.readFromNBT(tag.getCompound("outputTank"));
         inventory.deserializeNBT(tag.getCompound("inventory"));
+        if(level.isClientSide){ 
+            updateNeighbors(); //don't want to sync it, onNeighbor change is server-only and handleUpdateTag isn't triggered
+        }
     }
 
     @Override
@@ -171,12 +186,16 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
 
     public void onNeighborChange() {
         updateNeighbors();
+        shouldUpdate = true;
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
+        Arrays.fill(exchangerNeighbors, Optional.empty());
+        Arrays.fill(fluidNeighbors, LazyOptional.empty());
         updateNeighbors();
+        setCurrentRecipe();
     }
     
     protected void updateNeighbors(){
@@ -184,10 +203,20 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
         for(Direction dir : Direction.values()){
             BlockEntity neighbor = level.getBlockEntity(getBlockPos().relative(dir));
             if(neighbor != null){
-                LazyOptional<IFluidHandler> neighborHandler = neighbor.getCapability(ForgeCapabilities.FLUID_HANDLER, dir.getOpposite());
-                if (neighborHandler.isPresent()){
-                    fluidNeighbors[dir.ordinal()] = neighborHandler;
+                if(neighbor instanceof HeatExchangerTile exchangerTile){
+                    exchangerNeighbors[dir.ordinal()] = Optional.of(exchangerTile);
+                    continue;
+                } else {
+                    exchangerNeighbors[dir.ordinal()] = Optional.empty();
                 }
+                // LazyOptional<IFluidHandler> neighborHandler = neighbor.getCapability(ForgeCapabilities.FLUID_HANDLER, dir.getOpposite());
+                // if (neighborHandler.isPresent()){
+                    // fluidNeighbors[dir.ordinal()] = neighborHandler;
+                // }
+                fluidNeighbors[dir.ordinal()] = neighbor.getCapability(ForgeCapabilities.FLUID_HANDLER, dir.getOpposite());
+            } else {
+                exchangerNeighbors[dir.ordinal()] = Optional.empty();
+                fluidNeighbors[dir.ordinal()] = LazyOptional.empty();
             }
         }
     }
@@ -221,9 +250,30 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
                 inventory.setStackInSlot(slotOutput, handler.getContainer());
             });
         }
+
+        //neighbor heat exchanger interaction //we just push up to equilibrium. We do not pull just let the other side push
+        for (Optional<HeatExchangerTile> neighbor : exchangerNeighbors){ //TODO needs more testing
+            if(neighbor.isPresent()){
+                HeatExchangerTile neiExchanger = neighbor.get();
+                if(!this.inputTank.isEmpty() && (this.inputTank.getFluid().isFluidEqual(neiExchanger.inputTank.getFluid())) || neiExchanger.inputTank.isEmpty()){
+                    int dif = (this.inputTank.getFluidAmount() - neiExchanger.inputTank.getFluidAmount()) / 2;
+                    if(dif > 0){
+                        neiExchanger.inputTank.fillInternal(this.inputTank.drainInternal(dif, FluidAction.EXECUTE), FluidAction.EXECUTE);
+                    }
+                }
+                if(!this.outputTank.isEmpty() && (this.outputTank.getFluid().isFluidEqual(neiExchanger.outputTank.getFluid())) || neiExchanger.outputTank.isEmpty()){
+                    int dif = (this.outputTank.getFluidAmount() - neiExchanger.outputTank.getFluidAmount()) / 2;
+                    if(dif > 0){
+                        neiExchanger.outputTank.fillInternal(this.outputTank.drainInternal(dif, FluidAction.EXECUTE), FluidAction.EXECUTE);
+                    }
+                }
+            }
+        }
+
+
         //neighbor tile interaction
         for (LazyOptional<IFluidHandler> neighbor : fluidNeighbors){
-            if(neighbor != null && neighbor.isPresent()){
+            // if(neighbor != null && neighbor.isPresent()){
                 neighbor.ifPresent((neiFluid) -> {
                     int filled = inputTank.fillInternal(neiFluid.drain(new FluidStack(Fluids.WATER, inputTank.getSpace()), FluidAction.SIMULATE), FluidAction.SIMULATE);
                     if(filled > 0){
@@ -234,27 +284,83 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
                         neiFluid.fill(outputTank.drainInternal(outputTank.getCapacity(), FluidAction.EXECUTE), FluidAction.EXECUTE);
                     }
                 });
+            // }
+        }
+    }
+
+    
+    protected void generateSteam() {
+        // double curHeat = heatHandler.getHeatStored();
+        // if(curHeat >= minHeat){
+            // curHeat -= minHeat;
+            // int produce = (int) (baseProduce + (bonusProduce * curHeat / bonusHeat) * 5);//executed once every 5 ticks
+        if(heatHandler.getHeatStored() >= curRecipe.minHeat()){
+            int produce = getCurrentProduce() * 5; //once every 5 ticks adjust
+            int toInput = curRecipe.input().getAmount() * 5; //once every 5 ticks adjust
+            int inputted = inputTank.drainInternal(toInput, FluidAction.SIMULATE).getAmount();
+            float inputRatio = (float) inputted / toInput;
+            produce = outputTank.fillInternal(new FluidStack(curRecipe.output().getFluid(), (int) (produce * inputRatio)), FluidAction.SIMULATE);
+            if(produce > 0){
+                outputTank.fillInternal(new FluidStack(curRecipe.output().getFluid(), produce), FluidAction.EXECUTE);
+                inputTank.drainInternal(toInput, FluidAction.EXECUTE); 
+                heatHandler.extractHeat(produce * curRecipe.heatConsumption() * 5f, false); //once every 5 ticks adjust
             }
         }
     }
 
-    protected void generateSteam() {
-        double curHeat = heatHandler.getHeatStored();
-        if(curHeat >= minHeat){
-            curHeat -= minHeat;
-            int produce = (int) (baseProduce + (bonusProduce * curHeat / bonusHeat) * 5);//executed once every 5 ticks
-            produce = outputTank.fillInternal(new FluidStack(ModFluids.STEAM.get(), inputTank.drainInternal(produce, FluidAction.SIMULATE).getAmount() * 10), FluidAction.SIMULATE);//*10 for steam expansion */
-            if(produce > 0){
-                outputTank.fillInternal(new FluidStack(ModFluids.STEAM.get(), produce), FluidAction.EXECUTE);
-                inputTank.drainInternal(produce / 10, FluidAction.EXECUTE); //accounting expansion
-                heatHandler.extractHeat(produce * heatConsumption / 10, false); //accounting expansion
-            }
+    protected void setCurrentRecipe(){
+        HeatExchangerRecipe lastRecipe = curRecipe;
+        if(inputTank.isEmpty()){
+            curRecipe = null;
+        } else {
+            Optional<HeatExchangerRecipe> recipe = level.getRecipeManager().getAllRecipesFor(ModRecipes.HEAT_EXCHANGER_TYPE.get()).stream().filter((heatRecipe) -> {
+                return heatRecipe.input().isFluidEqual(inputTank.getFluid());
+            }).findFirst();
+            curRecipe = recipe.orElse(null);
+            
+            // forEach((recipe) -> {
+            //     if(recipe.input().isFluidEqual(inputTank.getFluid())){
+            //         curRecipe = recipe;
+            //         return;
+            //     }
+            // });
+        }
+        if(curRecipe != lastRecipe){
+            shouldUpdate = true;
         }
     }
 
     @Override
     public IHeatContainer getHeatContainer() {
         return heatHandler;
+    }
+
+    public Optional<HeatExchangerRecipe> getCurrentRecipe(){
+        if(level.isClientSide){
+            if((curRecipe == null && !inputTank.getFluid().isEmpty()) || (curRecipe != null && !inputTank.getFluid().isFluidEqual(curRecipe.input()))){
+                setCurrentRecipe();
+            }
+        }
+        if(curRecipe == null){
+            return Optional.empty();
+        }
+        return Optional.of(curRecipe);
+    }
+
+    public int getCurrentProduce(){
+        if(getCurrentRecipe().isEmpty()) return 0;
+        double curHeat = heatHandler.getHeatStored();
+        if(curHeat < curRecipe.minHeat()) return 0;
+        int baseAmount = curRecipe.output().getAmount();
+        double bonusHeat = curHeat - curRecipe.minHeat();
+        // if(curRecipe.scalingFactor() != 0 && curRecipe.heatScaling() != 0){
+            return baseAmount + (int) (baseAmount * curRecipe.scalingFactor() * bonusHeat / curRecipe.heatScaling());
+        // }
+        // return baseAmount;
+    }
+
+    public Optional<HeatExchangerTile>[] getExchangerNeighbors() {
+        return exchangerNeighbors.clone();
     }
 
 }

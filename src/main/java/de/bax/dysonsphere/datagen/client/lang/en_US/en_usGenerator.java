@@ -78,6 +78,7 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.heat_pipe", "Current Heat: %s°K");
         add("tooltip.dysonsphere.heat_exchanger_producing", "Producing: %s mB/t");
         add("tooltip.dysonsphere.heat_exchanger_min_heat", "Minimum Heat: %s°K");
+        add("tooltip.dysonsphere.heat_exchanger_heat_bonus", "Output +%s%% per additional %s°K");
         add("tooltip.dysonsphere.ds_monitor_status", ">Dyson Sphere Status");
         add("tooltip.dysonsphere.ds_monitor_completion","Completion: %s%%");
         add("tooltip.dysonsphere.ds_monitor_capacity","Capacity: %s RF/t");

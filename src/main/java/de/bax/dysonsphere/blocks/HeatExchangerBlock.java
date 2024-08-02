@@ -2,6 +2,7 @@ package de.bax.dysonsphere.blocks;
 
 import javax.annotation.Nullable;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.containers.HeatExchangerContainer;
 import de.bax.dysonsphere.tileentities.HeatExchangerTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
@@ -12,6 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -63,5 +65,10 @@ public class HeatExchangerBlock extends Block implements EntityBlock {
             }
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        return 1;
     }
 }

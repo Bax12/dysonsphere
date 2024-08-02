@@ -39,8 +39,9 @@ public class HeatExchangerGui extends BaseGui<HeatExchangerContainer> {
             protected void addTooltip(List<Component> tooltip) {
                 super.addTooltip(tooltip);
                 int produce = 0;
-                if(tile.heatHandler.getHeatStored() >= tile.minHeat){
-                    produce = (int) (tile.baseProduce + (tile.bonusProduce * (tile.heatHandler.getHeatStored() - tile.minHeat) / tile.bonusHeat) * 10);//steam expansion
+                var recipe = tile.getCurrentRecipe();
+                if(recipe.isPresent() && tile.heatHandler.getHeatStored() >= recipe.get().minHeat()){
+                    produce = tile.getCurrentProduce();
                 }
                 tooltip.add(Component.translatable("tooltip.dysonsphere.heat_exchanger_producing", produce)); 
             }
@@ -55,10 +56,18 @@ public class HeatExchangerGui extends BaseGui<HeatExchangerContainer> {
 
         guiGraphics.blit(GUI_INVENTORY_LOC, this.leftPos, this.topPos + 93, 0, 0, 176, 86);//resourcename, onscreenX, onscreenY, pngStartX, pngStartY, pngEndX, pngEndY
         guiGraphics.blit(RES_LOC, this.leftPos, this.topPos, 0, 0, 176, 93);
+        
+        // if(tile.heatHandler.getHeatStored() >= tile.getCurrentRecipe().map((recipe) -> {
+        //         return recipe.minHeat();
+        //         }).orElse(HeatExchangerTile.maxHeat + 1)){
+        //     guiGraphics.blit(RES_LOC, this.leftPos + 36, this.topPos + 39, 0, 93, 104, 17);
+        // }
 
-        if(tile.heatHandler.getHeatStored() > tile.minHeat){
-            guiGraphics.blit(RES_LOC, this.leftPos + 36, this.topPos + 39, 0, 93, 104, 17);
-        }
+        tile.getCurrentRecipe().ifPresent((recipe) -> {
+            if(tile.heatHandler.getHeatStored() >= recipe.minHeat()){
+                guiGraphics.blit(RES_LOC, this.leftPos + 36, this.topPos + 39, 0, 93, 104, 17);
+            }
+        });
 
 
         heat.draw(guiGraphics);

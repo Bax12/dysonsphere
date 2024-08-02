@@ -61,6 +61,7 @@
   "tooltip.dysonsphere.energy_display": "%s RF / %s RF",
   "tooltip.dysonsphere.fluid_display": "%s %s mB / %s mB",
   "tooltip.dysonsphere.heat_display": "%s°K / %s°K",
+  "tooltip.dysonsphere.heat_exchanger_heat_bonus": "Output +%s%% per additional %s°K",
   "tooltip.dysonsphere.heat_exchanger_min_heat": "Minimum Heat: %s°K",
   "tooltip.dysonsphere.heat_exchanger_producing": "Producing: %s mB/t",
   "tooltip.dysonsphere.heat_generator_axis": "Axis: %s",
