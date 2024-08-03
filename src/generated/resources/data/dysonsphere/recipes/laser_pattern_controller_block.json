@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "forge:glass"
+    },
+    "I": {
+      "item": "dysonsphere:coil_iron"
+    },
+    "L": {
+      "item": "minecraft:redstone_lamp"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "ILI",
+    "IRI"
+  ],
+  "result": {
+    "item": "dysonsphere:laser_pattern_controller_block"
+  },
+  "show_notification": true
+}

@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "dysonsphere:solar_foil"
+        "recipe": "dysonsphere:laser_crafter_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "dysonsphere:solar_foil"
+      "dysonsphere:laser_crafter_block"
     ]
   },
   "sends_telemetry_event": false

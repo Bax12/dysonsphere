@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "dysonsphere:solar_foil"
+        "recipe": "dysonsphere:ingot_smart_alloy"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "dysonsphere:solar_foil"
+      "dysonsphere:ingot_smart_alloy"
     ]
   },
   "sends_telemetry_event": false

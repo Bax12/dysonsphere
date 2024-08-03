@@ -30,7 +30,7 @@ public class LaserCraftingRecipeGenerator {
     public static void buildRecipes(Consumer<FinishedRecipe> pWriter) {
         //energy: one mekansim laser: 10 000 full charged amplifier: 5 000 000 000 charge of 100 000 000Fe: 250 000 000 (amplifier has 2.5x higher peak when shooting a single pulse)
         // random orbital: 2 000 000
-        RecipeBuilder.of(Items.DIAMOND).input(Ingredient.of(Tags.Items.STORAGE_BLOCKS_COAL)).energyRequired(10_000_000).save(pWriter);
+        RecipeBuilder.of(Items.EMERALD).input(Ingredient.of(Tags.Items.GEMS_DIAMOND)).energyRequired(10_000_000).save(pWriter);
         RecipeBuilder.of(ModItems.UNIVERSE_WHISPER).input(Ingredient.of(Items.ECHO_SHARD)).energyRequired(2_000_000).save(pWriter);
         RecipeBuilder.of(ModItems.COMPONENT_SMART_ALLOY).input(Ingredient.of(ModItems.INGOT_SMART_ALLOY.get())).energyRequired(500_000).save(pWriter);
         RecipeBuilder.of(Items.BUDDING_AMETHYST).input(Ingredient.of(Items.AMETHYST_BLOCK)).energyRequired(5_000_000).save(pWriter);

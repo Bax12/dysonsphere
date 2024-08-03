@@ -1,6 +1,5 @@
 package de.bax.dysonsphere.datagen.server;
 
-import java.util.Arrays;
 import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
@@ -17,6 +16,7 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 
@@ -29,7 +29,7 @@ public class RecipeGenerator extends RecipeProvider {
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
+    protected void buildRecipes(@Nonnull Consumer<FinishedRecipe> consumer) {
         HeatExchangerRecipeGenerator.buildRecipes(consumer);
         LaserCraftingRecipeGenerator.buildRecipes(consumer);
 
@@ -103,7 +103,7 @@ public class RecipeGenerator extends RecipeProvider {
             .define('I', ModItems.COIL_IRON.get())
             .save(consumer);
 
-        Recipe.shaped(ModBlocks.HEAT_PIPE_BLOCK.get())
+        Recipe.shaped(ModBlocks.HEAT_PIPE_BLOCK.get(), 3)
             .pattern("HcH")
             .pattern("cCc")
             .pattern("HcH")
@@ -166,17 +166,74 @@ public class RecipeGenerator extends RecipeProvider {
             .requires(ModItems.STEAM_BUCKET.get())
             .save(consumer, new ResourceLocation(DysonSphere.MODID, "baked_potato"));
 
-        
+        Recipe.shaped(ModItems.LASER_CONTROLLER.get())
+            .pattern("SSC")
+            .pattern("SCI")
+            .define('S', ModItems.INGOT_SMART_ALLOY.get())
+            .define('I', Tags.Items.INGOTS_IRON)
+            .define('C', ModItems.COIL_COPPER.get())
+            .save(consumer);
+
+        Recipe.shaped(ModItems.LASER_PATTERN.get())
+            .pattern("ICI")
+            .pattern("CSC")
+            .pattern("ICI")
+            .define('S', ModItems.INGOT_SMART_ALLOY.get())
+            .define('I', ModItems.COIL_IRON.get())
+            .define('C', ModItems.COIL_COPPER.get())
+            .save(consumer);
+
+        Recipe.shapeless(ModItems.INGOT_SMART_ALLOY.get())
+            .requires(Items.POLISHED_DIORITE, 2)
+            .requires(Ingredient.of(Tags.Items.INGOTS_GOLD), 2)
+            .save(consumer);
+
+        Recipe.shaped(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK.get())
+            .pattern("GGG")
+            .pattern("ILI")
+            .pattern("IRI")
+            .define('G', Tags.Items.GLASS)
+            .define('I', ModItems.COIL_IRON.get())
+            .define('L', Items.REDSTONE_LAMP)
+            .define('R', Items.REDSTONE)
+            .save(consumer);
+
+        Recipe.shaped(ModBlocks.LASER_CONTROLLER_BLOCK.get())
+            .pattern("IEI")
+            .pattern("SCS")
+            .pattern("ScS")
+            .define('I', Tags.Items.INGOTS_IRON)
+            .define('E', Tags.Items.ENDER_PEARLS)
+            .define('S', ModItems.INGOT_SMART_ALLOY.get())
+            .define('C', ModItems.COMPONENT_SMART_ALLOY.get())
+            .define('c', ModItems.COIL_COPPER.get())
+            .save(consumer);
+
+        Recipe.shaped(ModBlocks.LASER_CRAFTER_BLOCK.get())
+            .pattern("IGI")
+            .pattern("GBG")
+            .pattern("SCS")
+            .define('I', ModItems.COIL_IRON.get())
+            .define('G', Tags.Items.GLASS)
+            .define('B', Tags.Items.STORAGE_BLOCKS_IRON)
+            .define('S', ModItems.INGOT_SMART_ALLOY.get())
+            .define('C', ModBlocks.HEAT_PIPE_BLOCK.get())
+            .save(consumer);
+
+        Recipe.shaped(ModItems.CAPSULE_LASER.get())
+            .pattern("SCS")
+            .pattern("TET")
+            .pattern("HRH")
+            .define('S', ModItems.INGOT_SMART_ALLOY.get())
+            .define('C', ModItems.COIL_COPPER.get())
+            .define('T', ModBlocks.HEAT_PIPE_BLOCK.get())
+            .define('E', ModItems.CAPSULE_EMPTY.get())
+            .define('H', ModItems.HEAT_SHIELDING.get())
+            .define('R', Tags.Items.STORAGE_BLOCKS_REDSTONE)
+            .save(consumer);
     }
     
 
-
-
-    /*
-     * Adapted from Actually Additions. All credit goes to the original author Ellpeck.
-     * Original Source: https://github.com/Ellpeck/ActuallyAdditions/blob/1.20.1/src/main/java/de/ellpeck/actuallyadditions/data/ItemRecipeGenerator.java
-     * License: https://github.com/Ellpeck/ActuallyAdditions/blob/1.20.1/LICENSE
-     */
     public static class Recipe {
         public static RecipeGenerator.Recipe.Shapeless shapeless(ItemLike result) {
             return new RecipeGenerator.Recipe.Shapeless(result);
@@ -195,7 +252,6 @@ public class RecipeGenerator extends RecipeProvider {
         }
 
         private static class Shapeless extends ShapelessRecipeBuilder {
-            private ResourceLocation name;
             public Shapeless(ItemLike result) {
                 this(result, 1);
             }
@@ -204,28 +260,14 @@ public class RecipeGenerator extends RecipeProvider {
                 super(RecipeCategory.MISC, result, countIn);
             }
 
-            public RecipeGenerator.Recipe.Shapeless ingredients(ItemLike... ingredients) {
-                Arrays.asList(ingredients).forEach(this::requires);
-                return this;
-            }
-
-            public RecipeGenerator.Recipe.Shapeless name(ResourceLocation name) {
-                this.name = name;
-                return this;
-            }
-
             @Override
             public void save(@Nonnull Consumer<FinishedRecipe> consumer) {
-                this.unlockedBy("has_book", UNLOCK);
-                if (this.name != null) {
-                    this.save(consumer, this.name);
-                } else {
-                    super.save(consumer);
-                }
+                // this.unlockedBy("has_book", UNLOCK);
+                super.save(consumer);
             }
             @Override
             public void save(@Nonnull Consumer<FinishedRecipe> consumer, @Nonnull ResourceLocation location) {
-                this.unlockedBy("", has(Items.AIR));
+                this.unlockedBy("has_book", UNLOCK);
                 super.save(consumer, location);
             }
         }
@@ -239,45 +281,17 @@ public class RecipeGenerator extends RecipeProvider {
                 super(RecipeCategory.MISC, resultIn, countIn);
             }
 
-            public RecipeGenerator.Recipe.Shaped pattern(String line1, String line2, String line3) {
-                this.pattern(line1);
-                this.pattern(line2);
-                this.pattern(line3);
-                return this;
-            }
-
-            public RecipeGenerator.Recipe.Shaped pattern(String line1, String line2) {
-                this.pattern(line1);
-                this.pattern(line2);
-                return this;
-            }
-
-            public RecipeGenerator.Recipe.Shaped patternSingleKey(char key, ItemLike resource, String... lines) {
-                this.define(key, resource);
-                for (String line : lines) {
-                    this.pattern(line);
-                }
-
-                return this;
-            }
-
-            // public RecipeGenerator.Recipe.Shaped requiresBook() {
-            //     this.unlockedBy("has_book", has(ActuallyItems.ITEM_BOOKLET.get()));
-            //     return this;
-            // }
-
             @Override
             public void save(@Nonnull Consumer<FinishedRecipe> consumerIn) {
-                this.unlockedBy("has_book", UNLOCK);
+                // this.unlockedBy("has_book", UNLOCK);
                 super.save(consumerIn);
             }
 
             @Override
             public void save(@Nonnull Consumer<FinishedRecipe> consumer, @Nonnull ResourceLocation location) {
-                this.unlockedBy("", has(Items.AIR));
+                this.unlockedBy("has_book", UNLOCK);
                 super.save(consumer, location);
             }
         }
     }
-    //Actually Additions end
 }

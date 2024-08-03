@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "": {
+    "has_book": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:air"
+              "minecraft:copper_ingot"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "",
+      "has_book",
       "has_the_recipe"
     ]
   ],

@@ -1,10 +1,10 @@
 {
   "type": "dysonsphere:laser_crafting",
   "input": {
-    "tag": "forge:storage_blocks/coal"
+    "tag": "forge:gems/diamond"
   },
   "inputEnergy": 10000000,
   "output": {
-    "item": "minecraft:diamond"
+    "item": "minecraft:emerald"
   }
 }
