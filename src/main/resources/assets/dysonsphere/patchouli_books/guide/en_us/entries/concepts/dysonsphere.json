@@ -1,0 +1,24 @@
+{
+    "name": "About the Dyson Sphere",
+    "icon": "dysonsphere:capsule_solar",
+    "category": "dysonsphere:concepts",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The Dyson Sphere is a mega structure constructed around a star to harvest its energy. Every component added to the Dyson Sphere adds to its energy capacity. Note that the Dyson Sphere has no energy buffer but a generation rate. Meaning all energy not used is lost and using more energy then generated will not work."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Every component also adds to the completion of the Dyson Sphere. Once the structure is completed, no more components can be added.$(br)There is only on sun in this world and it is shared by everyone. The same applies to the Dyson Sphere. (At least until we can extend our reach to other stars)"
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:machines/dysonsphere_energy_receiver_block",
+                "dysonsphere:machines/railgun_block",
+                "dysonsphere:machines/dysonsphere_monitor_block"
+            ],
+            "text": "Some machines interacting with the Dyson Sphere."
+        }
+    ]
+}

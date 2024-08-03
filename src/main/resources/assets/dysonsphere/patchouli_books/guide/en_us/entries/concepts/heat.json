@@ -1,7 +1,7 @@
 {
     "name": "About Heat",
     "icon": "dysonsphere:heat_shielding",
-    "category": "dysonsphere:machines",
+    "category": "dysonsphere:concepts",
     "pages": [
         {
             "type": "patchouli:text",

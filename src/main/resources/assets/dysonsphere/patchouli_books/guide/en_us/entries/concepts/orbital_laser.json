@@ -1,0 +1,24 @@
+{
+    "name": "About Orbital Lasers",
+    "icon": "dysonsphere:target_designator",
+    "category": "dysonsphere:concepts",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Orbital Lasers are high powered lasers, integrated in the Dyson Sphere. The lasers go into a cooldown after each use, depending on the $(item)Orbital Laser Pattern$() used. While the Dyson Sphere and its components are shared, the laser cooldowns are unique per user."
+        },{
+            "type": "patchouli:text",
+            "text": "Many $(item)Orbital Laser Pattern$() require multiple lasers at once to work.$(br)Whilst useful as energy delivery method, terraforming tool or defensive system the usability of the Orbital Lasers drops significantly underground or in distent dimensions"
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:tools/laser_pattern",
+                "dysonsphere:tools/laser_controller",
+                "dysonsphere:machines/laser_controller_block",
+                "dysonsphere:machines/laser_crafter_block"
+            ],
+            "text": "Some machines and tools working with orbital lasers."
+        }
+    ]
+}
