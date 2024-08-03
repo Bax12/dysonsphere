@@ -1,0 +1,24 @@
+{
+    "name": "Target Designator",
+    "icon": "dysonsphere:target_designator",
+    "category": "dysonsphere:tools",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Created by using a $(item)Orbital Uplink Bracelet$() with a configured $(item)Orbital Laser Pattern$()$(br)Will be placed in your main hand at creating, storing the item currently in your hand."
+        },
+        {
+            "type": "patchouli:spotlight",
+            "item": "dysonsphere:target_designator",
+            "link_recipe": true,
+            "text": "Can be dropped to turn back into the original item without using it or thrown to call down the laser strike and return the original item. The Target Designator will not work if a insufficient amount of $(thing)Orbital Lasers$() is available."
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:tools/laser_pattern",
+                "dysonsphere:machines/laser_pattern_controller_block"
+            ]
+        }
+    ]
+}

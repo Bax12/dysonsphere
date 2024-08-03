@@ -21,6 +21,10 @@
             "type": "patchouli:crafting",
             "recipe": "dysonsphere:heat_shielding",
             "recipe2": "dysonsphere:railgun"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:ingot_smart_alloy"
         }
     ]
 }

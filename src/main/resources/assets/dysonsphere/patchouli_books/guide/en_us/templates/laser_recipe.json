@@ -1,0 +1,90 @@
+{
+    "components": [
+        {
+            "type": "patchouli:header",
+            "x": -1,
+            "y": -1,
+            "text": "#output->iname"
+        },
+        {
+            "type" : "patchouli:item",
+            "x": 30,
+            "y": 27,
+            "item" : "#input"
+        },
+        {
+            "type" : "patchouli:item",
+            "x": 80,
+            "y": 21,
+            "item" : "#output",
+            "framed": true,
+            "link_recipe": true
+        },
+        {
+            "type": "patchouli:image",
+            "image": "dysonsphere:textures/gui/gui_lower.png",
+            "width": 65,
+            "height": 28,
+            "u": 15,
+            "v": 180,
+            "x": 30,
+            "y": 15
+        },
+        {
+            "type": "patchouli:tooltip",
+            "tooltip":[
+                "Required Energy: #energy#RF"
+            ],
+            "x": 30,
+            "y": 15,
+            "width": 16,
+            "height": 12
+        },
+        {
+            "type": "patchouli:header",
+            "x": -1,
+            "y": 70,
+            "text": "#output2->iname",
+            "guard": "#hasRecipe2"
+        },
+        {
+            "type" : "patchouli:item",
+            "x": 30,
+            "y": 97,
+            "item" : "#input2",
+            "guard": "#hasRecipe2"
+        },
+        {
+            "type" : "patchouli:item",
+            "x": 80,
+            "y": 91,
+            "item" : "#output2",
+            "framed": true,
+            "link_recipe": true,
+            "guard": "#hasRecipe2"
+        },
+        {
+            "type": "patchouli:image",
+            "image": "dysonsphere:textures/gui/gui_lower.png",
+            "width": 65,
+            "height": 28,
+            "u": 15,
+            "v": 180,
+            "x": 30,
+            "y": 85,
+            "guard": "#hasRecipe2"
+        },
+        {
+            "type": "patchouli:tooltip",
+            "tooltip":[
+                "Required Energy: #energy2#RF"
+            ],
+            "x": 30,
+            "y": 85,
+            "width": 16,
+            "height": 12,
+            "guard": "#hasRecipe2"
+        }
+    ],
+    "processor": "de.bax.dysonsphere.compat.patchouli.LaserCraftingRecipeProcessor"
+}

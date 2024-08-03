@@ -1,0 +1,21 @@
+{
+    "name": "Laser Control Station",
+    "icon": "dysonsphere:laser_controller_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Laser Control Station$() is used to launch $(item)Orbital Laser Patterns$() in a static way.$(br)It requires energy and target coordinates in the same dimension.$(br)The lasers of the owner will be used to deliver the orbital strike. Instead of the pressing the launch button a redstone signal may be supplied."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:laser_controller_block"
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:tools/laser_pattern"
+            ]
+        }
+    ]
+}

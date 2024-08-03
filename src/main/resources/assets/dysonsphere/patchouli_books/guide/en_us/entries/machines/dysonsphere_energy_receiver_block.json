@@ -1,5 +1,5 @@
 {
-    "name": "Dyson Sphere Energy Receiver",
+    "name": "DS Energy Receiver",
     "icon": "dysonsphere:dysonsphere_energy_receiver_block",
     "category": "dysonsphere:machines",
     "pages": [
@@ -9,7 +9,8 @@
         },
         {
             "type": "patchouli:crafting",
-            "recipe": "dysonsphere:dysonsphere_energy_receiver_block"
+            "recipe": "dysonsphere:dysonsphere_energy_receiver_block",
+            "title": "DS Energy Receiver"
         }
     ]
 }

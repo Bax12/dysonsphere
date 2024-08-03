@@ -1,0 +1,5 @@
+{
+    "name": "Tools",
+    "description": "Different tools obtained through or used in conjecture with a $(thing)Dyson Sphere$()",
+    "icon": "dysonsphere:laser_controller"
+}

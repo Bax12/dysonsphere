@@ -1,0 +1,35 @@
+{
+    "name": "Orbital Laser Pattern",
+    "icon": "dysonsphere:laser_pattern",
+    "category": "dysonsphere:tools",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Orbital Laser Pattern$() is used to configure the behavior of $(thing)Orbital Lasers$().$(br)It must be configured in a $(item)Laser Pattern Controller Terminal$() before in can be used.$(br) Required by the $(item)Orbital Uplink Bracelet$() and the $(item)laser Control Station$()"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:laser_pattern"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "The patterns have a few attributes that can be configured.$(br)$(li)Name: Display Attribute only$(li)Call-In Sequence: The pattern that needs to be inputted to call down the lasers. Minimum length depends on the pattern complexity$(li)Count: the amount of individual laser beams to call down.$(li)Size: The diameter (in blocks) of the laser beam(s)"
+        },
+        {
+            "type":"patchouli:text",
+            "text" : "$(li)Duration: the duration in ticks of the laser beam(s)$(li)Aim Area: the radius (in blocks) the beam will search for a target to strike before striking. Note: the laser can only aim if it has time to do so$(li)Homing Area: The area (in blocks) the laser will search for to home in on$(li)Homing Speed: The speed at witch the laser beam homes in on a target in its homing area"
+        },
+        {
+            "type":"patchouli:text",
+            "text": "$(li)Damage: The base damage (in half hearts) the laser deals$(li)Block damage: The block Damage the laser deals. Calculated against the blocks explosion resistance$(li)Call-In Delay: The delay (in ticks) before the initial laser strike. Needed for automatic aiming$(li)Wave Delay: The Delay (in ticks) between multiple lasers hitting. Only works with Count >= 2$(li)Inaccuracy: The radius (in blocks) the laser might be of target"
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:tools/laser_controller",
+                "dysonsphere:machines/laser_controller_block",
+                "dysonsphere:machines/laser_pattern_controller_block"
+            ]
+        }
+    ]
+}

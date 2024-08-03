@@ -1,0 +1,16 @@
+{
+    "name": "Laser Satellite",
+    "icon": "dysonsphere:capsule_laser",
+    "category": "dysonsphere:space_capsules",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Laser Satellite Space Capsule$() consumes energy after being launched and provides a single $(thing)Orbital Laser$().$(br)A single capsule consumes 50RF/t inside the $(thing)Dyson Sphere$() and adds 0.00001% to the completion"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:capsule_laser",
+            "title" : "Laser Satellite"
+        }
+    ]
+}

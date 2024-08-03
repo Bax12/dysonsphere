@@ -163,7 +163,7 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.3.0.4"))
     runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.3.0.4"))
 
-    // compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE:api")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE:api")
     runtimeOnly(fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE")) 
 
     compileOnly(fg.deobf("mekanism:Mekanism:1.20.1-10.4.8.43:api"))

@@ -1,0 +1,20 @@
+{
+    "name": "Laser Workbench",
+    "icon": "dysonsphere:laser_crafter_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Precision Laser Workbench$() is used to craft various items by striking them with an $(thing)Orbital Laser$().$(br)Different laser settings provide different amounts of energy. The energy of the laser scales primarily with the damage and block damage."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:laser_crafter_block",
+            "title": "Laser Workbench"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "The large amounts of energy focused in the small enclosure are hardly contained. The Workbench will constantly loose its energy and convert it into heat. The hotter the Workbench the harder it gets to add more energy. Active cooling is required"
+        }
+    ]
+}

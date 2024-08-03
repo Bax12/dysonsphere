@@ -1,5 +1,5 @@
 {
-    "name": "Space Transfer Capsule (Empty)",
+    "name": "Space Capsule (Empty)",
     "icon": "dysonsphere:capsule_empty",
     "category": "dysonsphere:materials",
     "pages": [
@@ -9,7 +9,8 @@
         },
         {
             "type": "patchouli:crafting",
-            "recipe": "dysonsphere:capsule_empty"
+            "recipe": "dysonsphere:capsule_empty",
+            "title": "Space Capsule (Empty)"
         }
     ]
 }

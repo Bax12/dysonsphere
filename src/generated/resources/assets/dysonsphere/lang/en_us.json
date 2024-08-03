@@ -77,7 +77,7 @@
   "tooltip.dysonsphere.laser_controller_launch": "Launch",
   "tooltip.dysonsphere.laser_controller_launching": "Launching...",
   "tooltip.dysonsphere.laser_controller_owner": "Owner: %s",
-  "tooltip.dysonsphere.laser_crafter_energy_needed": "Required Energy: %s",
+  "tooltip.dysonsphere.laser_crafter_energy_needed": "Required Energy: %sRF",
   "tooltip.dysonsphere.laser_pattern_call_in": "Call-In Sequence",
   "tooltip.dysonsphere.laser_pattern_controller_aim_area": "Aim Area",
   "tooltip.dysonsphere.laser_pattern_controller_apply": "Apply",

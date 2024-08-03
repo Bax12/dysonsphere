@@ -112,7 +112,7 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.laser_controller_lasers", "Lasers Available: %s");
         add("tooltip.dysonsphere.laser_controller_cooldown", "On Cooldown");
         add("tooltip.dysonsphere.laser_controller_lasers_missing", "Not enough Lasers!");
-        add("tooltip.dysonsphere.laser_crafter_energy_needed", "Required Energy: %s");
+        add("tooltip.dysonsphere.laser_crafter_energy_needed", "Required Energy: %sRF");
         
         
 

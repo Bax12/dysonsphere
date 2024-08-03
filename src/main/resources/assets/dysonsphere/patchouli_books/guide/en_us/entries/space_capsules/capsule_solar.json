@@ -1,5 +1,5 @@
 {
-    "name": "Solar Satellite Space Capsule",
+    "name": "Solar Satellite",
     "icon": "dysonsphere:capsule_solar",
     "category": "dysonsphere:space_capsules",
     "pages": [
@@ -9,7 +9,8 @@
         },
         {
             "type": "patchouli:crafting",
-            "recipe": "dysonsphere:capsule_solar"
+            "recipe": "dysonsphere:capsule_solar",
+            "title" : "Solar Satellite"
         }
     ]
 }

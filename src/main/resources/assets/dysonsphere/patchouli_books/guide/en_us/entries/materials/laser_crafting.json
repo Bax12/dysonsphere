@@ -1,0 +1,16 @@
+{
+    "name": "Laser Crafting Materials",
+    "icon": "dysonsphere:component_smart_alloy",
+    "category": "dysonsphere:materials",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Various materials created in a Precision Laser Workbench."
+        },
+        {
+            "type": "dysonsphere:laser_recipe",
+            "recipe": "dysonsphere:laser_crafting/component_smart_alloy",
+            "recipe2": "dysonsphere:laser_crafting/universe_whisper"
+        }
+    ]
+}

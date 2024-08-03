@@ -1,6 +1,6 @@
 {
-    "name": "The Dyson Sphere Project",
-    "icon": "minecraft:copper_ingot",
+    "name": "Dyson Sphere Project",
+    "icon": "dysonsphere:ingot_smart_alloy",
     "category": "dysonsphere:machines",
     "pages": [
         {

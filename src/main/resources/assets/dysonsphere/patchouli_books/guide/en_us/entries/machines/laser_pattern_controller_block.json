@@ -1,0 +1,22 @@
+{
+    "name": "Laser Pattern Terminal",
+    "icon": "dysonsphere:laser_pattern_controller_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Laser Pattern Controller Terminal$() is used to configure $(item)Orbital Laser Patterns$().$(br)It requires energy to do so."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:laser_pattern_controller_block",
+            "title": "Laser Pattern Terminal"
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:tools/laser_pattern"
+            ]
+        }
+    ]
+}
