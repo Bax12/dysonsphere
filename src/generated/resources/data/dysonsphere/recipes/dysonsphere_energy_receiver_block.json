@@ -6,7 +6,7 @@
       "item": "dysonsphere:heat_pipe_block"
     },
     "C": {
-      "item": "dysonsphere:coil_copper"
+      "tag": "forge:coils/copper"
     },
     "H": {
       "item": "dysonsphere:heat_shielding"

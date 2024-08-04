@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.items.ModItems;
+import de.bax.dysonsphere.tags.DSTags;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -47,8 +48,8 @@ public class RecipeGenerator extends RecipeProvider {
             .pattern("CEC")
             .pattern("GHG")
             .define('S', ModItems.SOLAR_FOIL.get())
-            .define('C', ModItems.COIL_COPPER.get())
-            .define('E', ModItems.CAPSULE_EMPTY.get())
+            .define('C', DSTags.itemCoilCopper)
+            .define('E', DSTags.itemCapsuleEmpty)
             .define('G', Tags.Items.INGOTS_GOLD)
             .define('H', ModItems.HEAT_SHIELDING.get())
             .save(consumer);
@@ -81,7 +82,7 @@ public class RecipeGenerator extends RecipeProvider {
             .pattern("CIC")
             .pattern("CIC")
             .pattern("HCH")
-            .define('C', ModItems.COIL_COPPER.get())
+            .define('C', DSTags.itemCoilCopper)
             .define('I', Tags.Items.INGOTS_IRON)
             .define('H', ModItems.HEAT_SHIELDING.get())
             .save(consumer);
@@ -91,7 +92,7 @@ public class RecipeGenerator extends RecipeProvider {
             .pattern("ILI")
             .pattern("LIL")
             .define('G', Tags.Items.GLASS)
-            .define('I', ModItems.COIL_IRON.get())
+            .define('I', DSTags.itemCoilIron)
             .define('L', Tags.Items.GEMS_LAPIS)
             .save(consumer);
 
@@ -99,8 +100,8 @@ public class RecipeGenerator extends RecipeProvider {
             .pattern("CCC")
             .pattern("III")
             .pattern("CCC")
-            .define('C', ModItems.COIL_COPPER.get())
-            .define('I', ModItems.COIL_IRON.get())
+            .define('C', DSTags.itemCoilCopper)
+            .define('I', DSTags.itemCoilIron)
             .save(consumer);
 
         Recipe.shaped(ModBlocks.HEAT_PIPE_BLOCK.get(), 3)
@@ -119,7 +120,7 @@ public class RecipeGenerator extends RecipeProvider {
             .define('I', Tags.Items.INGOTS_IRON)
             .define('G', Tags.Items.GLASS)
             .define('T', Items.REDSTONE_TORCH)
-            .define('C', ModItems.COIL_IRON.get())
+            .define('C', DSTags.itemCoilIron)
             .save(consumer);
 
         Recipe.shaped(ModBlocks.RAILGUN_BLOCK.get())
@@ -136,7 +137,7 @@ public class RecipeGenerator extends RecipeProvider {
             .pattern("CCC")
             .pattern("CIC")
             .pattern("HBH")
-            .define('C', ModItems.COIL_COPPER.get())
+            .define('C', DSTags.itemCoilCopper)
             .define('I', Tags.Items.INGOTS_IRON)
             .define('H', ModItems.HEAT_SHIELDING.get())
             .define('B', ModBlocks.HEAT_PIPE_BLOCK.get())
@@ -148,7 +149,7 @@ public class RecipeGenerator extends RecipeProvider {
             .pattern("HPH")
             .define('H', ModItems.HEAT_SHIELDING.get())
             .define('P', ModBlocks.HEAT_PIPE_BLOCK.get())
-            .define('c', ModItems.COIL_IRON.get())
+            .define('c', DSTags.itemCoilIron)
             .define('B', Items.BUCKET)
             .save(consumer);
 
@@ -169,18 +170,18 @@ public class RecipeGenerator extends RecipeProvider {
         Recipe.shaped(ModItems.LASER_CONTROLLER.get())
             .pattern("SSC")
             .pattern("SCI")
-            .define('S', ModItems.INGOT_SMART_ALLOY.get())
+            .define('S', DSTags.itemIngotSmartAlloy)
             .define('I', Tags.Items.INGOTS_IRON)
-            .define('C', ModItems.COIL_COPPER.get())
+            .define('C', DSTags.itemCoilCopper)
             .save(consumer);
 
         Recipe.shaped(ModItems.LASER_PATTERN.get())
             .pattern("ICI")
             .pattern("CSC")
             .pattern("ICI")
-            .define('S', ModItems.INGOT_SMART_ALLOY.get())
-            .define('I', ModItems.COIL_IRON.get())
-            .define('C', ModItems.COIL_COPPER.get())
+            .define('S', DSTags.itemIngotSmartAlloy)
+            .define('I', DSTags.itemCoilIron)
+            .define('C', DSTags.itemCoilCopper)
             .save(consumer);
 
         Recipe.shapeless(ModItems.INGOT_SMART_ALLOY.get())
@@ -193,7 +194,7 @@ public class RecipeGenerator extends RecipeProvider {
             .pattern("ILI")
             .pattern("IRI")
             .define('G', Tags.Items.GLASS)
-            .define('I', ModItems.COIL_IRON.get())
+            .define('I', DSTags.itemCoilIron)
             .define('L', Items.REDSTONE_LAMP)
             .define('R', Items.REDSTONE)
             .save(consumer);
@@ -204,19 +205,19 @@ public class RecipeGenerator extends RecipeProvider {
             .pattern("ScS")
             .define('I', Tags.Items.INGOTS_IRON)
             .define('E', Tags.Items.ENDER_PEARLS)
-            .define('S', ModItems.INGOT_SMART_ALLOY.get())
+            .define('S', DSTags.itemIngotSmartAlloy)
             .define('C', ModItems.COMPONENT_SMART_ALLOY.get())
-            .define('c', ModItems.COIL_COPPER.get())
+            .define('c', DSTags.itemCoilCopper)
             .save(consumer);
 
         Recipe.shaped(ModBlocks.LASER_CRAFTER_BLOCK.get())
             .pattern("IGI")
             .pattern("GBG")
             .pattern("SCS")
-            .define('I', ModItems.COIL_IRON.get())
+            .define('I', DSTags.itemCoilIron)
             .define('G', Tags.Items.GLASS)
             .define('B', Tags.Items.STORAGE_BLOCKS_IRON)
-            .define('S', ModItems.INGOT_SMART_ALLOY.get())
+            .define('S', DSTags.itemIngotSmartAlloy)
             .define('C', ModBlocks.HEAT_PIPE_BLOCK.get())
             .save(consumer);
 
@@ -224,10 +225,10 @@ public class RecipeGenerator extends RecipeProvider {
             .pattern("SCS")
             .pattern("TET")
             .pattern("HRH")
-            .define('S', ModItems.INGOT_SMART_ALLOY.get())
-            .define('C', ModItems.COIL_COPPER.get())
+            .define('S', DSTags.itemIngotSmartAlloy)
+            .define('C', DSTags.itemCoilCopper)
             .define('T', ModBlocks.HEAT_PIPE_BLOCK.get())
-            .define('E', ModItems.CAPSULE_EMPTY.get())
+            .define('E', DSTags.itemCapsuleEmpty)
             .define('H', ModItems.HEAT_SHIELDING.get())
             .define('R', Tags.Items.STORAGE_BLOCKS_REDSTONE)
             .save(consumer);

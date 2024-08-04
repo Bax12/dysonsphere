@@ -12,10 +12,10 @@
       "tag": "forge:ingots/iron"
     },
     "S": {
-      "item": "dysonsphere:ingot_smart_alloy"
+      "tag": "forge:ingots/smart_alloy"
     },
     "c": {
-      "item": "dysonsphere:coil_copper"
+      "tag": "forge:coils/copper"
     }
   },
   "pattern": [

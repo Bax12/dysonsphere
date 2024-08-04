@@ -3,10 +3,10 @@
   "category": "misc",
   "key": {
     "C": {
-      "item": "dysonsphere:coil_copper"
+      "tag": "forge:coils/copper"
     },
     "E": {
-      "item": "dysonsphere:capsule_empty"
+      "tag": "dysonsphere:space_capsules/empty"
     },
     "H": {
       "item": "dysonsphere:heat_shielding"
@@ -15,7 +15,7 @@
       "tag": "forge:storage_blocks/redstone"
     },
     "S": {
-      "item": "dysonsphere:ingot_smart_alloy"
+      "tag": "forge:ingots/smart_alloy"
     },
     "T": {
       "item": "dysonsphere:heat_pipe_block"

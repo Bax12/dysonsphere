@@ -21,7 +21,17 @@ public class ItemTagGenerator extends ItemTagsProvider {
 
     @Override
     protected void addTags(Provider provider) {
-        // tag(DSTags.itemOrbitCapsule).add(ModItems.CAPSULE_SOLAR.get(), ModItems.CAPSULE_EMPTY.get());
+        tag(DSTags.itemCoil).add(ModItems.COIL_COPPER.get(), ModItems.COIL_IRON.get());
+        tag(DSTags.itemCoilCopper).add(ModItems.COIL_COPPER.get());
+        tag(DSTags.itemCoilIron).add(ModItems.COIL_IRON.get());
+
+        tag(DSTags.itemIngot).add(ModItems.INGOT_SMART_ALLOY.get());
+        tag(DSTags.itemIngotSmartAlloy).add(ModItems.INGOT_SMART_ALLOY.get());
+
+        tag(DSTags.itemCapsule).add(ModItems.CAPSULE_SOLAR.get(), ModItems.CAPSULE_EMPTY.get(), ModItems.CAPSULE_LASER.get());
+        tag(DSTags.itemCapsuleEmpty).add(ModItems.CAPSULE_EMPTY.get());
+        tag(DSTags.itemCapsuleSolar).add(ModItems.CAPSULE_SOLAR.get());
+        tag(DSTags.itemCapsuleLaser).add(ModItems.CAPSULE_LASER.get());
     }
     
     

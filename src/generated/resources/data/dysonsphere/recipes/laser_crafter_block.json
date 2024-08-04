@@ -12,10 +12,10 @@
       "tag": "forge:glass"
     },
     "I": {
-      "item": "dysonsphere:coil_iron"
+      "tag": "forge:coils/iron"
     },
     "S": {
-      "item": "dysonsphere:ingot_smart_alloy"
+      "tag": "forge:ingots/smart_alloy"
     }
   },
   "pattern": [

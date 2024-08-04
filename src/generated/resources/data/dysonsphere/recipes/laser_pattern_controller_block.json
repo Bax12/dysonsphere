@@ -6,7 +6,7 @@
       "tag": "forge:glass"
     },
     "I": {
-      "item": "dysonsphere:coil_iron"
+      "tag": "forge:coils/iron"
     },
     "L": {
       "item": "minecraft:redstone_lamp"

@@ -3,10 +3,10 @@
   "category": "misc",
   "key": {
     "C": {
-      "item": "dysonsphere:coil_copper"
+      "tag": "forge:coils/copper"
     },
     "I": {
-      "item": "dysonsphere:coil_iron"
+      "tag": "forge:coils/iron"
     }
   },
   "pattern": [

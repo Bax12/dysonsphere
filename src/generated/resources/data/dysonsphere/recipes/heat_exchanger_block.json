@@ -12,7 +12,7 @@
       "item": "dysonsphere:heat_pipe_block"
     },
     "c": {
-      "item": "dysonsphere:coil_iron"
+      "tag": "forge:coils/iron"
     }
   },
   "pattern": [

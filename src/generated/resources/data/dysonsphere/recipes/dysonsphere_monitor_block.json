@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "C": {
-      "item": "dysonsphere:coil_iron"
+      "tag": "forge:coils/iron"
     },
     "G": {
       "tag": "forge:glass"
