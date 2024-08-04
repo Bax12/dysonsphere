@@ -1,0 +1,31 @@
+{
+  "parent": "dysonsphere:ds_start",
+  "criteria": {
+    "laser_strike": {
+      "conditions": {},
+      "trigger": "dysonsphere:laser_strike"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "achievement.dysonsphere.laser_strike.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "dysonsphere:capsule_laser"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "achievement.dysonsphere.laser_strike"
+    }
+  },
+  "requirements": [
+    [
+      "laser_strike"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

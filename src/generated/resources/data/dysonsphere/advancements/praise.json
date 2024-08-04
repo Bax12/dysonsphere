@@ -1,0 +1,35 @@
+{
+  "parent": "dysonsphere:laser_strike",
+  "criteria": {
+    "praise": {
+      "conditions": {
+        "name": "praise",
+        "sequence": "wwddssaaww",
+        "size": 10.0
+      },
+      "trigger": "dysonsphere:laser_praise"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "achievement.dysonsphere.praise.desc"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "dysonsphere:target_designator"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "achievement.dysonsphere.praise"
+    }
+  },
+  "requirements": [
+    [
+      "praise"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

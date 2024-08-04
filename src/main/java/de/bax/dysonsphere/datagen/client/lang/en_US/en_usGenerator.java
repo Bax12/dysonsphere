@@ -141,12 +141,24 @@ public class en_usGenerator extends LanguageProvider{
         add("dysonsphere.recipe.laser", "Orbital Laser Strike");
 
         //advancements
-        add("achievement.dysonsphere.start", "The Dyson Sphere Project begins!");
+        add("achievement.dysonsphere.start", "The Project begins!");
         add("achievement.dysonsphere.start.desc", "Start constructing the Dyson Sphere with the Electromagnetic Orbital Launcher");
         add("achievement.dysonsphere.half", "The Dyson Sphere takes Shape");
         add("achievement.dysonsphere.half.desc", "Reach 50% completion of the Dyson Sphere");
         add("achievement.dysonsphere.completed", "The Dyson Sphere is complete!");
         add("achievement.dysonsphere.completed.desc", "Complete the Dyson Sphere");
+        add("achievement.dysonsphere.laser_strike", "Ouranophobia");
+        add("achievement.dysonsphere.laser_strike.desc", "Call down an Orbital Laser Strike. Fear is natural");
+        add("achievement.dysonsphere.praise", "Praise be!");
+        add("achievement.dysonsphere.praise.desc", "Show your devotion with a special Orbital Laser");
+
+        //controls - keys
+        add("key.dysonsphere.orbital_laser", "Dyson Sphere - Orbital Lasers");
+        add("key.dysonsphere.orbital_laser_control", "Orbital Laser Menu Key");
+        add("key.dysonsphere.orbital_laser_seq_down", "Input Sequence: Down");
+        add("key.dysonsphere.orbital_laser_seq_left", "Input Sequence: Left");
+        add("key.dysonsphere.orbital_laser_seq_right", "Input Sequence: Right");
+        add("key.dysonsphere.orbital_laser_seq_up", "Input Sequence: Up");
     }
     
     

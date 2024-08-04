@@ -4,16 +4,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
-import mekanism.api.math.FloatingLong;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -60,6 +61,14 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
 
     public LaserStrikeEntity(Level level){
         this(ModEntities.LASER_STRIKE.get(), level);
+    }
+
+    @Override
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
+        if(this.owner instanceof ServerPlayer player){
+            ModAdvancements.LASER_STRIKE_TRIGGER.trigger(player);
+        }
     }
 
     @Override

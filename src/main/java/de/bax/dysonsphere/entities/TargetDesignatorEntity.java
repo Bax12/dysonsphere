@@ -1,7 +1,9 @@
 package de.bax.dysonsphere.entities;
 
+import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -122,6 +124,9 @@ public class TargetDesignatorEntity extends ThrowableProjectile {
         if(this.getOwner() instanceof LivingEntity) strike.setOwner((LivingEntity) this.getOwner());
         strike.setOrbitalStrikeParameters(orbitalAttackPattern);
         this.level().addFreshEntity(strike);
+        if(this.getOwner() instanceof ServerPlayer player){
+            ModAdvancements.PRAISE_TRIGGER.trigger(player, orbitalAttackPattern.name, orbitalAttackPattern.getCallInSequence(), orbitalAttackPattern.strikeSize);
+        }
     }
 
     @Override
