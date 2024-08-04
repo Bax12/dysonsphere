@@ -31,7 +31,7 @@ public class HeatDisplay extends BaseDisplay{
 
         //meter
         if(heat != null && heat.getHeatStored() > 0){
-            int renderSize = (int) (83 * heat.getHeatStored() / heat.getMaxHeatStored());
+            int renderSize = (int) (83 * Math.min(1, heat.getHeatStored() / heat.getMaxHeatStored()));
             guiGraphics.blit(BaseGui.GUI_INVENTORY_LOC, xPos + 1, yPos + 84 - renderSize, 106, 91 + 83 - renderSize, 19, renderSize);
         }
         //overlay

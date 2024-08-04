@@ -5,14 +5,15 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import de.bax.dysonsphere.compat.mekanism.Mekanism;
+import de.bax.dysonsphere.compat.pneumaticcraft.Pneumaticcraft;
 import net.minecraftforge.fml.ModList;
 
 public class ModCompat {
     
 
     public static enum MODID {
-        MEKANISM("mekanism", () -> new Mekanism())/*,
-        PNEUMATICCRAFT("pneumaticcraft", null),
+        MEKANISM("mekanism", () -> new Mekanism()),
+        PNEUMATICCRAFT("pneumaticcraft", () -> new Pneumaticcraft())/*,
         CURIOS("curios", null)*/;
 
         public String id;

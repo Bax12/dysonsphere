@@ -2,8 +2,11 @@ package de.bax.dysonsphere.compat.mekanism;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.compat.IModCompat;
+import mekanism.api.heat.IHeatHandler;
+import mekanism.api.heat.IMekanismHeatHandler;
 import mekanism.api.lasers.ILaserReceptor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,6 +21,7 @@ public class Mekanism implements IModCompat {
 
 
     public static final Capability<ILaserReceptor> LASER_RECEPTOR = CapabilityManager.get(new CapabilityToken<>(){});
+    public static final Capability<IHeatHandler> HEAT_HANDLER = CapabilityManager.get(new CapabilityToken<>() {});
     
     @Override
     public void init(){
@@ -38,6 +42,10 @@ public class Mekanism implements IModCompat {
             event.addListener(() -> {
                 event.getObject().getCapability(LASER_RECEPTOR).invalidate();
             });
+        } else if(event.getObject() instanceof IMekanismHeatHandler heat){
+
+        } else if(event.getObject() instanceof IHeatTile heat){
+            
         }
     }
     

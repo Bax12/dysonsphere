@@ -30,18 +30,22 @@ public class HeatGeneratorTile extends BaseTile implements IHeatTile {
     public static int energyGenerated = 1;
 
     public HeatHandler heatHandler = new HeatHandler(300, maxHeat){
-        public double getMaxSplitShareAmount() {
-            return maxHeatTransfer;
+        // public double getMaxSplitShareAmount() {
+        //     return maxHeatTransfer;
+        // };
+
+        public double getThermalResistance() {
+            return 0.25d;
         };
 
         public double extractHeat(double maxExtract, boolean simulate) {
             // maxExtract = Math.min(maxExtract, maxHeatTransfer);
-            return super.extractHeat(maxExtract / 4f, simulate);
+            return super.extractHeat(maxExtract, simulate);
         };
 
         public double receiveHeat(double maxReceive, boolean simulate) {
             // maxReceive = Math.min(maxReceive, maxHeatTransfer);
-            return super.receiveHeat(maxReceive / 4f, simulate);
+            return super.receiveHeat(maxReceive, simulate);
         };
     };
     public EnergyStorage energyStorage = new EnergyStorage(energyCapacity);

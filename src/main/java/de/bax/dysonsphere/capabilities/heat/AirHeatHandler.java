@@ -23,5 +23,10 @@ public class AirHeatHandler implements IHeatContainer{
     public double getMaxHeatStored() {
         return 300;
     }
+
+    @Override
+    public double getThermalResistance() {
+        return 0.01;
+    }
     
 }

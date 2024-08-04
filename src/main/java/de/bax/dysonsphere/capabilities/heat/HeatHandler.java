@@ -29,7 +29,7 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
 
     @Override
     public double receiveHeat(double maxReceive, boolean simulate) {
-        maxReceive = Math.min(maxReceive, maxHeat - heat);
+        maxReceive = Math.min(maxReceive, maxHeat - heat) * getThermalResistance();
         if(!simulate){
             heat += maxReceive;
         }
@@ -38,7 +38,7 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
 
     @Override
     public double extractHeat(double maxExtract, boolean simulate) {
-        maxExtract = Math.min(maxExtract, 0 + heat);
+        maxExtract = Math.min(maxExtract, 0 + heat) * getThermalResistance();
         if(!simulate){
             heat -= maxExtract;
         }
@@ -95,8 +95,8 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
         
     }
 
-    public double getMaxSplitShareAmount(){
-        return maxHeat;
+    public double getThermalResistance(){
+        return 1;
     }
 
     public void splitShare(){
