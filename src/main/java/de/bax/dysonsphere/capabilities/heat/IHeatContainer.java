@@ -43,6 +43,6 @@ public interface IHeatContainer {
      * Returns the multiplier of transferable heat. 0.0 - 1.0
      * 0 means no transfer at all; 1 means 100% heat gets moved at once
      */
-    double getThermalResistance();
+    double getThermalConductivity();
 
 }

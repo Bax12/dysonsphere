@@ -42,10 +42,13 @@ public class Mekanism implements IModCompat {
             event.addListener(() -> {
                 event.getObject().getCapability(LASER_RECEPTOR).invalidate();
             });
-        } else if(event.getObject() instanceof IMekanismHeatHandler heat){
+        } /*else if(event.getObject() instanceof IMekanismHeatHandler heat){ //Currently I see no need for this
 
-        } else if(event.getObject() instanceof IHeatTile heat){
-            
+        } */else if(event.getObject() instanceof IHeatTile heat){
+            event.addCapability(new ResourceLocation(DysonSphere.MODID, "ds2mek_heat_handler"), new DS2MekHeatHandler(heat));
+            event.addListener(() -> {
+                event.getObject().getCapability(HEAT_HANDLER).invalidate();
+            });
         }
     }
     

@@ -34,7 +34,7 @@ public class HeatGeneratorTile extends BaseTile implements IHeatTile {
         //     return maxHeatTransfer;
         // };
 
-        public double getThermalResistance() {
+        public double getThermalConductivity() {
             return 0.25d;
         };
 

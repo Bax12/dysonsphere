@@ -45,7 +45,7 @@ public class DS2PNCHeatHandler implements ICapabilityProvider {
 
         @Override
         public double getThermalResistance() {
-            return tile.getHeatContainer().getThermalResistance();
+            return tile.getHeatContainer().getThermalConductivity();
         }
 
         @Override
