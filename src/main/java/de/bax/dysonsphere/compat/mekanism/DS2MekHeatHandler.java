@@ -3,6 +3,7 @@ package de.bax.dysonsphere.compat.mekanism;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import mekanism.api.heat.IHeatHandler;
 import net.minecraft.core.Direction;
@@ -44,7 +45,7 @@ public class DS2MekHeatHandler implements ICapabilityProvider {
 
         @Override
         public double getInverseConduction(int capacitor) {
-            return ((tile.getHeatContainer().getThermalConductivity() * -2) +3) * 1000d;
+            return ((tile.getHeatContainer().getThermalConductivity() * -2) +3) * DSConfig.MEK_HEAT_RESISTANCE.get();
         }
 
         @Override
@@ -54,7 +55,7 @@ public class DS2MekHeatHandler implements ICapabilityProvider {
 
         @Override
         public void handleHeat(int capacitor, double transfer) {
-            transfer *= 0.01d;
+            transfer *= DSConfig.MEK_HEAT_EXCHANGE_RATE.get();
             if(transfer >= 0){
                 tile.getHeatContainer().receiveHeat(transfer, false);
             } else {

@@ -1,23 +1,17 @@
 package de.bax.dysonsphere.items;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
-import java.util.function.Consumer;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.injection.modify.LocalVariableDiscriminator.Context.Local;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.energy.ItemEnergyHandler;
 import de.bax.dysonsphere.capabilities.items.ItemItemStackHandler;
 import de.bax.dysonsphere.containers.LaserControllerInventoryContainer;
 import de.bax.dysonsphere.util.AssetUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -32,7 +26,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
 
 public class LaserControllerItem extends Item {

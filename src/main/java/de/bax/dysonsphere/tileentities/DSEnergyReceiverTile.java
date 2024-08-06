@@ -31,7 +31,7 @@ public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTil
 
     protected int dsPowerDraw;
 
-    public HeatHandler heatHandler = new HeatHandler(300, maxHeat){
+    public HeatHandler heatHandler = new HeatHandler(maxHeat){
         public double getMaxSplitShareAmount() {
             return 500d;
         };

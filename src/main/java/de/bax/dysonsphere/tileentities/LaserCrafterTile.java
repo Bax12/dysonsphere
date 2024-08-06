@@ -32,9 +32,11 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
-    public static final int ENERGY_BLEED_STATIC = 10000;
-    public static final float ENERGY_BLEED_SCALING = 0.05f;
-    public static final double MAX_HEAT = 1700;
+    public static int ENERGY_BLEED_STATIC = 10000;
+    public static double ENERGY_BLEED_SCALING = 0.05d;
+    public static double MAX_HEAT = 1700;
+    public static double ENERGY_INPUT_HEAT_RESISTANCE = 50d;
+    public static double ENERGY_BLEED_TO_HEAT = 50d;
 
 
     public ItemStackHandler input = new ItemStackHandler(1) {
@@ -58,7 +60,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
 
     public InvWrapper inventory = new InvWrapper();    
 
-    public HeatHandler heatHandler = new HeatHandler(300, MAX_HEAT){
+    public HeatHandler heatHandler = new HeatHandler(MAX_HEAT){
         @Override
         public double receiveHeat(double maxReceive, boolean simulate) {
             if(!simulate){
@@ -122,7 +124,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     @Override
     public void receiveLaserEnergy(double energy) {
         if(energy <= 0) return;
-        energy = energy / Math.max(1, (getHeatHandler() - 300d) / 50d);
+        energy = energy / Math.max(1, (getHeatHandler() - HeatHandler.HEAT_AMBIENT) / ENERGY_INPUT_HEAT_RESISTANCE);
         this.energy = this.energy + energy;
         dirty = true;
     }
@@ -187,9 +189,9 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     }
 
     protected void bleedEnergy(){
-        double toBleed = Math.max(ENERGY_BLEED_STATIC, ENERGY_BLEED_SCALING * this.energy);
-        this.energy = Math.max(0, energy - toBleed);
-        this.heatHandler.receiveHeat(50d, false);
+        double toBleed = Math.min(energy, Math.max(ENERGY_BLEED_STATIC, ENERGY_BLEED_SCALING * this.energy));
+        this.heatHandler.receiveHeat(toBleed / ENERGY_BLEED_TO_HEAT, false);
+        this.energy -= toBleed;
         dirty = true;
     }
 
@@ -279,7 +281,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
             return col + offset + (offset << 8);
         } else if (tintIndex == 1){
             int col = 0xFFFF0000;
-            int offset = 255 - (int) Math.min((this.getHeatHandler() - 300) / 5, 255);
+            int offset = 255 - (int) Math.min((this.getHeatHandler() - HeatHandler.HEAT_AMBIENT) / 5, 255);
 
             return col + offset + (offset << 8);
         }

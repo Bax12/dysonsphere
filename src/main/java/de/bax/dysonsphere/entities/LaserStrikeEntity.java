@@ -34,6 +34,8 @@ import net.minecraftforge.network.NetworkHooks;
 public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnData {
 
 
+    public static double ENERGY_MULT = 20_000d;
+
     protected int startAiming = 0;
     protected int startStriking = startAiming + 55;
     protected int startLingering = startStriking + 200;
@@ -144,7 +146,7 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
                     if(tile != null){
                         Optional<ILaserReceiver> optionalReceptor = tile.getCapability(DSCapabilities.LASER_RECEIVER, Direction.UP).resolve();
                         if(optionalReceptor.isPresent()){
-                            optionalReceptor.get().receiveLaserEnergy((dmg * blockDmg * 20_000d));
+                            optionalReceptor.get().receiveLaserEnergy((dmg * blockDmg * ENERGY_MULT));
                             return;
                         }
                     }

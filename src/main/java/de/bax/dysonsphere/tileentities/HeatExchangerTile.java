@@ -45,7 +45,7 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     public static final int slotInput = 0;
     public static final int slotOutput = 1;
 
-    public HeatHandler heatHandler = new HeatHandler(300, maxHeat);
+    public HeatHandler heatHandler = new HeatHandler(maxHeat);
     public FluidTankCustom inputTank = new FluidTankCustom(fluidCapacity){
         @Override
         public boolean isFluidValid(FluidStack stack) {

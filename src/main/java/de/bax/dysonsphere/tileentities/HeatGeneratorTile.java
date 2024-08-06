@@ -29,7 +29,7 @@ public class HeatGeneratorTile extends BaseTile implements IHeatTile {
     public static double minHeatDifference = 25;
     public static int energyGenerated = 1;
 
-    public HeatHandler heatHandler = new HeatHandler(300, maxHeat){
+    public HeatHandler heatHandler = new HeatHandler(maxHeat){
         // public double getMaxSplitShareAmount() {
         //     return maxHeatTransfer;
         // };

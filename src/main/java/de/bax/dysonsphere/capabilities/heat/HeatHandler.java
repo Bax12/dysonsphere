@@ -12,13 +12,22 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag>{
 
+    /**
+     * The default ambient temperature, used to initialize heatHandlers
+     */
+    public static double HEAT_AMBIENT = 300d;
+
     protected double heat;
     protected double maxHeat;
 
     protected LazyOptional<IHeatContainer>[] neighborList = new LazyOptional[6];
 
-    public HeatHandler(double heat){
-        this(heat, 1000000);
+    public HeatHandler(){
+        this(100_000d);
+    }
+
+    public HeatHandler(double maxHeat){
+        this(HEAT_AMBIENT, maxHeat);
     }
 
 

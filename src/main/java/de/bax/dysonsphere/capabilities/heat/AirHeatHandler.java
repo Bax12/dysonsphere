@@ -16,12 +16,12 @@ public class AirHeatHandler implements IHeatContainer{
 
     @Override
     public double getHeatStored() {
-        return 300;
+        return HeatHandler.HEAT_AMBIENT;
     }
 
     @Override
     public double getMaxHeatStored() {
-        return 300;
+        return HeatHandler.HEAT_AMBIENT;
     }
 
     @Override
