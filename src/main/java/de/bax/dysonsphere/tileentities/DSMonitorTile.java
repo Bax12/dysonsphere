@@ -38,13 +38,22 @@ public class DSMonitorTile extends BaseTile {
 
     public void tick(){
         if(!level.isClientSide && ticksElapsed++ % 10 == 0){
-            level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
-                dsParts = new HashMap<>(ds.getDysonSphereParts());
-                dsEnergy = ds.getDysonSphereEnergy();
-                dsCompletionPercentage = ds.getCompletionPercentage();
-                dsUsage = ds.getUtilization();
-                dsEnergyDraw = ds.getEnergyRequested();
-            });
+            if(level.getCapability(DSCapabilities.DYSON_SPHERE).isPresent()){
+                level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
+                    dsParts = new HashMap<>(ds.getDysonSphereParts());
+                    dsEnergy = ds.getDysonSphereEnergy();
+                    dsCompletionPercentage = ds.getCompletionPercentage();
+                    dsUsage = ds.getUtilization();
+                    dsEnergyDraw = ds.getEnergyRequested();
+                });
+            } else {
+                dsParts = new HashMap<>();
+                dsEnergy = -1;
+                dsCompletionPercentage = -1;
+                dsUsage = -1;
+                dsEnergyDraw = -1;
+            }
+            
 
             if(dsCompletionPercentage > 0){
                 for(Player player : level.getNearbyPlayers(TargetingConditions.forNonCombat().ignoreInvisibilityTesting(), null, AABB.ofSize(worldPosition.getCenter(), 5d, 5d, 5d))){
