@@ -10,9 +10,11 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereContainer;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserPlayerContainer;
 import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereProxyContainer;
+import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookPlayerContainer;
 import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.containers.ModContainers;
 import de.bax.dysonsphere.entities.ModEntities;
+import de.bax.dysonsphere.entityRenderer.GrapplingHookRenderer;
 import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
 import de.bax.dysonsphere.entityRenderer.TargetDesignatorRenderer;
 import de.bax.dysonsphere.fluids.ModFluids;
@@ -139,9 +141,12 @@ public class DysonSphere
     public void attachPlayerCaps(AttachCapabilitiesEvent<Entity> event){
         if(event.getObject() instanceof Player){
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "orbitallaser"),  new OrbitalLaserPlayerContainer((Player) event.getObject()));
+            event.addCapability(new ResourceLocation(DysonSphere.MODID, "grapplinghook"),  new GrapplingHookPlayerContainer((Player) event.getObject()));
             event.addListener(() -> {
                 event.getObject().getCapability(DSCapabilities.ORBITAL_LASER).invalidate();
+                event.getObject().getCapability(DSCapabilities.GRAPPLING_HOOK).invalidate();
             });
+            
         }
     }
 
@@ -199,6 +204,7 @@ public class DysonSphere
 
             event.registerEntityRenderer(ModEntities.TARGET_DESIGNATOR.get(), TargetDesignatorRenderer::new);
             event.registerEntityRenderer(ModEntities.LASER_STRIKE.get(), LaserStrikeRenderer::new);
+            event.registerEntityRenderer(ModEntities.GRAPPLING_HOOK.get(), GrapplingHookRenderer::new);
         }
 
         @SubscribeEvent

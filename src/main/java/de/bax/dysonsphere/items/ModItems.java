@@ -30,6 +30,7 @@ public class ModItems {
     public static final RegistryObject<Item> UNIVERSE_WHISPER = registerItem("universe_whisper");
     public static final RegistryObject<Item> INGOT_SMART_ALLOY = registerItem("ingot_smart_alloy");
     public static final RegistryObject<Item> COMPONENT_SMART_ALLOY = registerItem("component_smart_alloy");
+    public static final RegistryObject<Item> GRAPPLING_HOOK = ITEMS.register("grappling_hook", () -> new GrapplingHookItem());
     
 
     public static RegistryObject<Item> registerItem(String name) {
