@@ -2,9 +2,15 @@ package de.bax.dysonsphere.items;
 
 import java.util.List;
 
+import org.joml.Vector3f;
+
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.KeyboardInput;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -29,7 +35,6 @@ public class GrapplingHookItem extends Item {
     protected void spawnHookEntity(ItemStack stack , Level level, LivingEntity entity, float force){
         if(!level.isClientSide){
             GrapplingHookEntity hook = new GrapplingHookEntity(entity, level, force);
-            hook.getId();
             level.addFreshEntity(hook);
         }
     }
@@ -73,30 +78,53 @@ public class GrapplingHookItem extends Item {
         if(pEntity instanceof Player player){
             player.getCapability(DSCapabilities.GRAPPLING_HOOK).ifPresent((hookContainer) -> {
                 if(hookContainer.getDeployedHooks().size() > 0){
-                    Vec3 hookMovement = hookContainer.getMotion(pEntity.getPosition(1));
+                    if(hookContainer.isPulling()){
+                        Vec3 hookMovement = hookContainer.getMotion(pEntity.getPosition(1));
+                        if(player.getDeltaMovement().lengthSqr() < 1f){
+                            hookMovement = hookMovement.scale(0.5f);
+                        }
+                        if(hookMovement.lengthSqr() > 0.01f){
+                            hookMovement = hookMovement.scale(0.1);
+                            // player.setDeltaMovement(player.getDeltaMovement().add(hookMovement));
+                            player.addDeltaMovement(hookMovement);;
+                        }
+                    } else if(hookContainer.isUnwinding()){ //fall into x/z of the hook, fall on y slower then gravity
+                        if(!player.onGround()){
+                            Vec3 hookMovement = hookContainer.getMotion(pEntity.getPosition(1)).normalize();
+                            Vec3 playerMovement = player.getDeltaMovement();
+                            double xyLength = hookMovement.length();
+                            double yMotion = playerMovement.y;
+                            if(playerMovement.y < 0 && hookMovement.y > 0){
+                                player.fallDistance = 1.0F;
+                                yMotion = (playerMovement.y < 0 ? playerMovement.y * 0.5 : playerMovement.y) + (playerMovement.y * Math.min(1, 1 - (hookMovement.y / xyLength)));
+                            }
+                            player.setDeltaMovement(new Vec3(playerMovement.x + (hookMovement.x * (Math.max(hookMovement.y, 0)  / xyLength)/ 3) , yMotion, playerMovement.z + (hookMovement.z * (Math.max(hookMovement.y, 0)  / xyLength) / 3)));
+                        }
+                    } else { //has to be stopped //fall into x/z of the hook, fall by y proportional to the x/z movement
+                        if(!player.onGround()){
+                            Vec3 hookMovement = hookContainer.getMotion(pEntity.getPosition(1)).normalize();
+                            Vec3 playerMovement = player.getDeltaMovement();
+                            double xyLength = hookMovement.length();
+                            double yMotion = playerMovement.y;
+                            if(playerMovement.y < 0 && hookMovement.y > 0){
+                                player.fallDistance = 1.0F;
+                                yMotion = 2 * playerMovement.y * Math.min(1, 1 - (Math.abs(hookMovement.y) / xyLength));
+                                // if(player instanceof LocalPlayer lPlayer){ //would need synchronization -- there is not space/jump input check on the server side
+                                //     if(lPlayer.input.jumping){
+                                //         yMotion += 0.1;
+                                //     }
+                                // }
 
-                    if(player.getDeltaMovement().lengthSqr() < 1f){
-                        hookMovement = hookMovement.scale(0.5f);
-                    }
+                                // if(player.isShiftKeyDown()){ //possible, but one its own more annoying then useful. Overloads controls and males unwind mode useless
+                                //     yMotion -= 0.1;
+                                // }
+                            }
+                            player.setDeltaMovement(new Vec3(playerMovement.x + (hookMovement.x * (Math.max(hookMovement.y, 0) / xyLength)/ 3) , yMotion, playerMovement.z + (hookMovement.z * (Math.max(hookMovement.y, 0) / xyLength) / 3)));
+                        }
 
-                    double distance = hookContainer.getNearestHook(player.getPosition(0)).getPosition(0).distanceToSqr(player.getPosition(0));
-                    if(distance < 20){
-
-                        DysonSphere.LOGGER.info("GrapplingHookItem inventoryTick: Hook near!");
-
-                        hookMovement = hookMovement.scale(distance / 20);
-
-                    }
-
-                    if(hookMovement.lengthSqr() > 0.01f){
-                        player.setNoGravity(true); //prevents jittering in suspension
-                        
-                        // Vec3 newMovement = hookMovement.add(pEntity.getDeltaMovement());
-                        player.setDeltaMovement(hookMovement);
-                        
                     }
                 } else {
-                    pEntity.setNoGravity(false);
+                    // hookContainer.stopWinch();
                 }
                 
             });

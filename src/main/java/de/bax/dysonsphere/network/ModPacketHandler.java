@@ -22,8 +22,11 @@ public class ModPacketHandler {
         INSTANCE.registerMessage(id++, LaserPatternActivatedPackage.class, LaserPatternActivatedPackage::encode, (buf) -> LaserPatternActivatedPackage.decode(buf), LaserPatternActivatedPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(id++, GuiButtonPressedPackage.class, GuiButtonPressedPackage::encode, (buf) -> GuiButtonPressedPackage.decode(buf), GuiButtonPressedPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(id++, TileUpdatePackage.class, TileUpdatePackage::encode, (buf) -> TileUpdatePackage.decode(buf), TileUpdatePackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(id++, GrapplingHookActionPackage.class, GrapplingHookActionPackage::encode, (buf) -> GrapplingHookActionPackage.decode(buf), GrapplingHookActionPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
-        INSTANCE.registerMessage(id++, LaserCooldownSyncPacket.class, LaserCooldownSyncPacket::encode, (buf) -> LaserCooldownSyncPacket.decode(buf), LaserCooldownSyncPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        INSTANCE.registerMessage(id++, LaserCooldownSyncPackage.class, LaserCooldownSyncPackage::encode, (buf) -> LaserCooldownSyncPackage.decode(buf), LaserCooldownSyncPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        INSTANCE.registerMessage(id++, GrapplingHookSyncPackage.class, GrapplingHookSyncPackage::encode, (buf) -> GrapplingHookSyncPackage.decode(buf), GrapplingHookSyncPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        
     }
 
 }

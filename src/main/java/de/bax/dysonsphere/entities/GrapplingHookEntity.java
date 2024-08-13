@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,6 +17,9 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
     protected boolean isDeployed = false;
     protected boolean isRecalling = false;
+
+    protected double distance = 0d;
+    protected double minDistance = getMaxDistance();
 
     public GrapplingHookEntity(EntityType<? extends ThrowableProjectile> type, Level world) {
         super(type, world);
@@ -88,6 +90,12 @@ public class GrapplingHookEntity extends ThrowableProjectile {
             getOwner().getCapability(DSCapabilities.GRAPPLING_HOOK).ifPresent((hookContainer) -> {
                 hookContainer.addHook(this);
             });
+            distance = this.distanceToSqr(getOwner());
+            if(distance < minDistance){
+                minDistance = distance;
+            } else if(distance > getMaxDistance()){
+                this.discard();
+            }
         } else {
             this.discard();
         }
@@ -130,6 +138,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
         pCompound.putBoolean("deployed", isDeployed);
         pCompound.putBoolean("recalling", isRecalling);
+        pCompound.putDouble("minDistance", minDistance);
     }
 
     @Override
@@ -138,6 +147,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
         isDeployed = pCompound.getBoolean("deployed");
         isRecalling = pCompound.getBoolean("recalling");
+        minDistance = pCompound.getDouble("minDistance");
     }
 
 
@@ -163,6 +173,22 @@ public class GrapplingHookEntity extends ThrowableProjectile {
         return 3f;
     };
 
+    public double getMaxDistance(){
+        return 16384d;
+    }
+
+    public double getDistance(){
+        return distance;
+    }
+
+    public double getMinDistance() {
+        return minDistance;
+    }
+
+    public void setMinDistance(double minDistance) {
+        this.minDistance = minDistance;
+    }
+
     public void recall(){
         this.isDeployed = false;
         this.isRecalling = true;
@@ -171,7 +197,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
     @Override
     public boolean shouldRenderAtSqrDistance(double pDistance) {
-        return true; //todo make maxDistance + 1-2 for margin
+        return pDistance <= getMaxDistance();
     }
 
     
