@@ -1,4 +1,4 @@
-package de.bax.dysonsphere.items;
+package de.bax.dysonsphere.items.laser;
 
 import java.util.List;
 

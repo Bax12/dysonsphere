@@ -3,13 +3,10 @@ package de.bax.dysonsphere;
 import java.util.List;
 
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
-import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.entities.LaserStrikeEntity;
 import de.bax.dysonsphere.items.CapsuleLaserItem;
-
-
 import de.bax.dysonsphere.items.CapsuleSolarItem;
-import de.bax.dysonsphere.items.LaserControllerItem;
+import de.bax.dysonsphere.items.laser.LaserControllerItem;
 import de.bax.dysonsphere.tileentities.DSEnergyReceiverTile;
 import de.bax.dysonsphere.tileentities.HeatExchangerTile;
 import de.bax.dysonsphere.tileentities.HeatGeneratorTile;

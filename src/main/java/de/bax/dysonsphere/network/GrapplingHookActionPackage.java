@@ -32,7 +32,7 @@ public class GrapplingHookActionPackage {
         if(ctx.get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)){
             ctx.get().enqueueWork(() -> {
                 Player player = ctx.get().getSender();
-                player.getCapability(DSCapabilities.GRAPPLING_HOOK).ifPresent((hookContainer) -> {
+                player.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
                     switch (action) {
                         case 0:
                             hookContainer.deployHook();

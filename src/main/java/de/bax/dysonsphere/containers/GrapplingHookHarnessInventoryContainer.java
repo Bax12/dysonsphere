@@ -1,6 +1,6 @@
 package de.bax.dysonsphere.containers;
 
-import de.bax.dysonsphere.items.laser.LaserControllerItem;
+import de.bax.dysonsphere.items.grapplingHook.GrapplingHookHarnessItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -9,22 +9,22 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class LaserControllerInventoryContainer extends BaseContainer {
-
+public class GrapplingHookHarnessInventoryContainer extends BaseContainer {
+    
     public final ItemStack containingStack;
     protected int playerInventoryChanges = 0;
 
-    public static LaserControllerInventoryContainer fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data){
-        return new LaserControllerInventoryContainer(windowId, inv, data.readItem());
+    protected static GrapplingHookHarnessInventoryContainer fromNetwork(int windowId, Inventory inv, FriendlyByteBuf buf){
+        return new GrapplingHookHarnessInventoryContainer(windowId, inv, buf.readItem());
     }
 
-    public LaserControllerInventoryContainer(int windowId, Inventory inv, ItemStack stack) {
-        super(ModContainers.LASER_CONTROLLER_INVENTORY_CONTAINER.get(), windowId, inv);
+    public GrapplingHookHarnessInventoryContainer(int windowId, Inventory inv, ItemStack stack){
+        super(ModContainers.GRAPPLING_HOOK_HARNESS_INVENTORY_CONTAINER.get(), windowId, inv);
         this.containingStack = stack;
 
         stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((itemHandler) -> {
             for(int i = 0; i < getInventorySlotCount(); i++){
-                this.addSlot(new SlotItemHandler(itemHandler, i, 50 + i * 20, 30));
+                this.addSlot(new SlotItemHandler(itemHandler, i, 80, 50 - 20 * i));
             }
         });
 
@@ -33,7 +33,7 @@ public class LaserControllerInventoryContainer extends BaseContainer {
 
     @Override
     protected int getInventorySlotCount() {
-        return LaserControllerItem.slots;
+        return GrapplingHookHarnessItem.SLOTS;
     }
 
     @Override
@@ -44,13 +44,13 @@ public class LaserControllerInventoryContainer extends BaseContainer {
     @Override
     protected boolean canQuickMoveToInventory(ItemStack newStack) {
         return containingStack.getCapability(ForgeCapabilities.ITEM_HANDLER).map((inventory) -> {
-            return inventory.isItemValid(0, newStack); //Just using index 0 as the check ignores the slot anyways
+            return inventory.isItemValid(GrapplingHookHarnessItem.SLOT_ENGINE, newStack) || inventory.isItemValid(GrapplingHookHarnessItem.SLOT_ROPE, newStack) || inventory.isItemValid(GrapplingHookHarnessItem.SLOT_HOOK, newStack);
         }).orElse(false);
     }
 
     @Override
     protected boolean quickMoveToInventory(ItemStack newStack) {
-        return !this.moveItemStackTo(newStack, 0, 6, false);
+        return !this.moveItemStackTo(newStack, 0, 3, false);
     }
 
     @Override
@@ -64,7 +64,6 @@ public class LaserControllerInventoryContainer extends BaseContainer {
         playerInventoryChanges = player.getInventory().getTimesChanged();
         return player.getInventory().contains(containingStack);
     }
-    
-    
+
 
 }

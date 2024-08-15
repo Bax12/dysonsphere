@@ -2,6 +2,12 @@ package de.bax.dysonsphere.items;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.fluids.ModFluids;
+import de.bax.dysonsphere.items.grapplingHook.GrapplingHookControllerItem;
+import de.bax.dysonsphere.items.grapplingHook.GrapplingHookElectricEngineItem;
+import de.bax.dysonsphere.items.grapplingHook.GrapplingHookHarnessItem;
+import de.bax.dysonsphere.items.laser.LaserControllerItem;
+import de.bax.dysonsphere.items.laser.LaserPatternItem;
+import de.bax.dysonsphere.items.laser.TargetDesignatorItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -30,7 +36,9 @@ public class ModItems {
     public static final RegistryObject<Item> UNIVERSE_WHISPER = registerItem("universe_whisper");
     public static final RegistryObject<Item> INGOT_SMART_ALLOY = registerItem("ingot_smart_alloy");
     public static final RegistryObject<Item> COMPONENT_SMART_ALLOY = registerItem("component_smart_alloy");
-    public static final RegistryObject<Item> GRAPPLING_HOOK = ITEMS.register("grappling_hook", () -> new GrapplingHookItem());
+    public static final RegistryObject<Item> GRAPPLING_HOOK_HARNESS = ITEMS.register("grappling_hook_harness", () -> new GrapplingHookHarnessItem());
+    public static final RegistryObject<Item> GRAPPLING_HOOK_ELECTRIC_ENGINE = ITEMS.register("grappling_hook_engine_electric", () -> new GrapplingHookElectricEngineItem());
+    public static final RegistryObject<Item> GRAPPLING_HOOK_CONTROLLER = ITEMS.register("grappling_hook_controller", () -> new GrapplingHookControllerItem());
     
 
     public static RegistryObject<Item> registerItem(String name) {

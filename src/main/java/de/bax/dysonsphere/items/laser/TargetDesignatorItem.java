@@ -1,4 +1,4 @@
-package de.bax.dysonsphere.items;
+package de.bax.dysonsphere.items.laser;
 
 import org.antlr.v4.parse.ANTLRParser.localsSpec_return;
 import org.jetbrains.annotations.Nullable;

@@ -1,0 +1,24 @@
+{
+    "parent" : "dysonsphere:item/grappling_hook_harness_empty",
+    "overrides": [
+        {
+            "predicate" : {
+                "dysonsphere:has_engine": 0.5
+            },
+            "model" : "dysonsphere:item/grappling_hook_harness_engine"
+        },
+        {
+            "predicate" : {
+                "dysonsphere:has_hook": 0.5
+            },
+            "model" : "dysonsphere:item/grappling_hook_harness_hook"
+        },
+        {
+            "predicate" : {
+                "dysonsphere:has_engine": 0.5,
+                "dysonsphere:has_hook": 0.5
+            },
+            "model" : "dysonsphere:item/grappling_hook_harness_full"
+        }
+    ]
+}

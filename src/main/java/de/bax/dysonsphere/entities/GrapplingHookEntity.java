@@ -8,6 +8,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -17,9 +18,10 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
     protected boolean isDeployed = false;
     protected boolean isRecalling = false;
-
-    protected double distance = 0d;
-    protected double minDistance = getMaxDistance();
+    protected ItemStack hookItem = ItemStack.EMPTY;
+    protected float gravity = 0f;
+    protected double maxDistance = 64d;
+    protected float winchForce = 3f;
 
     public GrapplingHookEntity(EntityType<? extends ThrowableProjectile> type, Level world) {
         super(type, world);
@@ -51,12 +53,18 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
     @Override
     protected void defineSynchedData() {
-        
     }
 
     @Override
     protected float getGravity() {
-        return 0;
+        return gravity;
+    }
+
+    public void setGrapplingHookParameters(ItemStack hookItem, float gravity, double maxDistance, float winchForce){
+        this.hookItem = hookItem;
+        this.gravity = gravity;
+        this.maxDistance = maxDistance;
+        this.winchForce = winchForce;
     }
 
     @Override
@@ -80,21 +88,18 @@ public class GrapplingHookEntity extends ThrowableProjectile {
         super.tick();
         if((isRecalling || isDeployed) && this.getOwner() != null){
             if(isRecalling){
-                this.setDeltaMovement(this.getOwner().getPosition(0).subtract(this.position()).normalize().scale(getForce()));
+                this.setDeltaMovement(this.getOwner().getPosition(0).subtract(this.position()).normalize().scale(getWinchForce()));
             }
             if(this.getPosition(0).distanceTo(this.getOwner().getPosition(0)) < 1){
                 removeHook();
             }
         }
         if(getOwner() != null){
-            getOwner().getCapability(DSCapabilities.GRAPPLING_HOOK).ifPresent((hookContainer) -> {
+            getOwner().getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
                 hookContainer.addHook(this);
             });
-            distance = this.distanceToSqr(getOwner());
-            if(distance < minDistance){
-                minDistance = distance;
-            } else if(distance > getMaxDistance()){
-                this.discard();
+            if(this.distanceToSqr(getOwner()) > getMaxDistance() * getMaxDistance()){
+                this.recall();
             }
         } else {
             this.discard();
@@ -114,7 +119,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
     public void onRemovedFromWorld() {
         super.onRemovedFromWorld();
         if(getOwner() != null){
-            getOwner().getCapability(DSCapabilities.GRAPPLING_HOOK).ifPresent((hookContainer) -> {
+            getOwner().getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
                 hookContainer.removeHook(this);
             });
         }
@@ -126,7 +131,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         if(getOwner() != null){
-            getOwner().getCapability(DSCapabilities.GRAPPLING_HOOK).ifPresent((hookContainer) -> {
+            getOwner().getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
                 hookContainer.addHook(this);
             });
         }
@@ -138,7 +143,10 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
         pCompound.putBoolean("deployed", isDeployed);
         pCompound.putBoolean("recalling", isRecalling);
-        pCompound.putDouble("minDistance", minDistance);
+        pCompound.put("hookItem", hookItem.save(new CompoundTag()));
+        pCompound.putFloat("gravity", gravity);
+        pCompound.putDouble("maxDistance", maxDistance);
+        pCompound.putFloat("winchForce", winchForce);
     }
 
     @Override
@@ -147,7 +155,10 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
         isDeployed = pCompound.getBoolean("deployed");
         isRecalling = pCompound.getBoolean("recalling");
-        minDistance = pCompound.getDouble("minDistance");
+        hookItem = ItemStack.of(pCompound.getCompound("hookItem"));
+        gravity = pCompound.getFloat("gravity");
+        maxDistance = pCompound.getDouble("maxDistance");
+        winchForce = pCompound.getFloat("winchForce");
     }
 
 
@@ -164,40 +175,28 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
     public Vec3 appliedMotion(Vec3 playerPos){
         if(isDeployed()){           
-            return deployedAt().subtract(playerPos).normalize().scale(getForce());
+            return deployedAt().subtract(playerPos).normalize().scale(getWinchForce());
         }
         return Vec3.ZERO;
     }
 
-    public float getForce(){
-        return 3f;
+    public float getWinchForce(){
+        return winchForce;
     };
 
     public double getMaxDistance(){
-        return 16384d;
-    }
-
-    public double getDistance(){
-        return distance;
-    }
-
-    public double getMinDistance() {
-        return minDistance;
-    }
-
-    public void setMinDistance(double minDistance) {
-        this.minDistance = minDistance;
+        return maxDistance;
     }
 
     public void recall(){
         this.isDeployed = false;
         this.isRecalling = true;
-        this.setDeltaMovement(this.getOwner().getPosition(0).subtract(this.position()).normalize().scale(getForce()));
+        this.setDeltaMovement(this.getOwner().getPosition(0).subtract(this.position()).normalize().scale(getWinchForce()));
     };
 
     @Override
     public boolean shouldRenderAtSqrDistance(double pDistance) {
-        return pDistance <= getMaxDistance();
+        return pDistance <= getMaxDistance() * getMaxDistance();
     }
 
     

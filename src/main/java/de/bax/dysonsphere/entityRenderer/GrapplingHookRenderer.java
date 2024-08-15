@@ -29,6 +29,6 @@ public class GrapplingHookRenderer extends EntityRenderer<GrapplingHookEntity> {
     @Override
     public void render(GrapplingHookEntity pEntity, float pEntityYaw, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
         
-        Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(ModItems.GRAPPLING_HOOK.get()), ItemDisplayContext.NONE, pPackedLight, 1, pPoseStack, pBuffer, null, 0);
+        Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(ModItems.GRAPPLING_HOOK_HARNESS.get()), ItemDisplayContext.NONE, pPackedLight, 1, pPoseStack, pBuffer, null, 0);
     }
 }

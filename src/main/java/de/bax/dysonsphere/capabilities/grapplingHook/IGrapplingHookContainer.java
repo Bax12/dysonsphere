@@ -1,8 +1,7 @@
-package de.bax.dysonsphere.capabilities.grapplingHook;
+ package de.bax.dysonsphere.capabilities.grapplingHook;
 
 import java.util.List;
-
-import org.checkerframework.checker.units.qual.h;
+import java.util.Optional;
 
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
 import net.minecraft.nbt.CompoundTag;
@@ -53,6 +52,17 @@ public interface IGrapplingHookContainer {
         });
     }
 
+    public default Vec3 getCentralVector(){
+        int count = 0;
+        Vec3 vector = Vec3.ZERO;
+        for(var hook : getDeployedHooks()){
+            vector = vector.add(hook.getPosition(0));
+            count++;
+        }
+        vector = vector.scale(1d / count); //Basically vector divide
+        return vector;
+    }
+
     public default void recallAll(){
         getHooks().forEach((hook) -> {
             hook.recall();
@@ -82,5 +92,7 @@ public interface IGrapplingHookContainer {
     public CompoundTag save();
 
     public void load(CompoundTag tag);
+
+    public Optional<IGrapplingHookFrame> getGrapplingHookFrame();
 
 } 

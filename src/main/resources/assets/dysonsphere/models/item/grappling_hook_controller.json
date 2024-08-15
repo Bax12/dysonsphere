@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "dysonsphere:item/grappling_hook_controller"
+  }
+}

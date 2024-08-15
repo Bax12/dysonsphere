@@ -1,5 +1,8 @@
 package de.bax.dysonsphere;
 
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -11,14 +14,19 @@ import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereContainer;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserPlayerContainer;
 import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereProxyContainer;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookPlayerContainer;
+import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookStringRope;
+import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookTripWireHook;
+import de.bax.dysonsphere.capabilities.grapplingHook.IGrapplingHookHook;
 import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.containers.ModContainers;
+import de.bax.dysonsphere.entities.GrapplingHookEntity;
 import de.bax.dysonsphere.entities.ModEntities;
 import de.bax.dysonsphere.entityRenderer.GrapplingHookRenderer;
 import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
 import de.bax.dysonsphere.entityRenderer.TargetDesignatorRenderer;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
+import de.bax.dysonsphere.gui.GrapplingHookHarnessInventoryGui;
 import de.bax.dysonsphere.gui.HeatExchangerGui;
 import de.bax.dysonsphere.gui.HeatGeneratorGui;
 import de.bax.dysonsphere.gui.LaserControllerGui;
@@ -28,6 +36,7 @@ import de.bax.dysonsphere.gui.LaserPatternControllerInventoryGui;
 import de.bax.dysonsphere.gui.ModHuds;
 import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
+import de.bax.dysonsphere.items.grapplingHook.GrapplingHookHarnessItem;
 import de.bax.dysonsphere.keybinds.ModKeyBinds;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.recipes.ModRecipes;
@@ -41,17 +50,28 @@ import de.bax.dysonsphere.tileRenderer.LaserPatternControllerRenderer;
 import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -121,7 +141,7 @@ public class DysonSphere
     }
 
     @SubscribeEvent
-    public void attachCaps(AttachCapabilitiesEvent<Level> event){
+    public void attachLevelCaps(AttachCapabilitiesEvent<Level> event){
         DysonSphere.LOGGER.info("Attaching Level Capability!");
         //the overworld is always loaded, so we put the dysonsphere there.
         //if the overworld is blacklisted we get creative in the DysonSphereContainer
@@ -138,13 +158,29 @@ public class DysonSphere
     }
 
     @SubscribeEvent
+    public void attachItemCaps(AttachCapabilitiesEvent<ItemStack> event){
+        if(event.getObject().is(Items.TRIPWIRE_HOOK)){
+            event.addCapability(new ResourceLocation(DysonSphere.MODID, "grapplinghook_hook"), new GrapplingHookTripWireHook());
+            event.addListener(() -> {
+                event.getObject().getCapability(DSCapabilities.GRAPPLING_HOOK_HOOK).invalidate();
+            });
+        }
+        if(event.getObject().is(Items.STRING)){
+            event.addCapability(new ResourceLocation(DysonSphere.MODID, "grapplinghook_rope"), new GrapplingHookStringRope());
+            event.addListener(() -> {
+                event.getObject().getCapability(DSCapabilities.GRAPPLING_HOOK_ROPE).invalidate();
+            });
+        }
+    }
+
+    @SubscribeEvent
     public void attachPlayerCaps(AttachCapabilitiesEvent<Entity> event){
         if(event.getObject() instanceof Player){
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "orbitallaser"),  new OrbitalLaserPlayerContainer((Player) event.getObject()));
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "grapplinghook"),  new GrapplingHookPlayerContainer((Player) event.getObject()));
             event.addListener(() -> {
                 event.getObject().getCapability(DSCapabilities.ORBITAL_LASER).invalidate();
-                event.getObject().getCapability(DSCapabilities.GRAPPLING_HOOK).invalidate();
+                event.getObject().getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).invalidate();
             });
             
         }
@@ -190,6 +226,12 @@ public class DysonSphere
                 MenuScreens.register(ModContainers.LASER_CONTROLLER_INVENTORY_CONTAINER.get(), LaserControllerInventoryGui::new);
                 MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER_INVENTORY_CONTAINER.get(), LaserPatternControllerInventoryGui::new);
                 MenuScreens.register(ModContainers.LASER_CONTROLLER_CONTAINER.get(), LaserControllerGui::new);
+                MenuScreens.register(ModContainers.GRAPPLING_HOOK_HARNESS_INVENTORY_CONTAINER.get(), GrapplingHookHarnessInventoryGui::new);
+
+
+                // ItemProperties.register(ModItems.GRAPPLING_HOOK_HARNESS.get(), new ResourceLocation(MODID, "has_parts"), GrapplingHookHarnessItem.getItemPropertiesAllParts());
+                ItemProperties.register(ModItems.GRAPPLING_HOOK_HARNESS.get(), new ResourceLocation(MODID, "has_hook"), GrapplingHookHarnessItem.getItemPropertiesHook());
+                ItemProperties.register(ModItems.GRAPPLING_HOOK_HARNESS.get(), new ResourceLocation(MODID, "has_engine"), GrapplingHookHarnessItem.getItemPropertiesEngine());
             });
         }
 

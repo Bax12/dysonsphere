@@ -1,9 +1,8 @@
 package de.bax.dysonsphere.gui;
 
+import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
@@ -18,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Font.DisplayMode;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -72,49 +72,57 @@ public class ModHuds {
 
         if(ModKeyBinds.ORBITAL_LASER_CONTROL_MAPPING.get().isDown()){
             offset = 40;
-            player.getInventory().items.forEach((stack) -> {
-                if(stack.is(ModItems.LASER_CONTROLLER.get())){
-                    stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((container) -> {
-                        boolean shouldReset = true;
-                        for(int i = 0; i <= container.getSlots(); i++){
-                            if(!container.getStackInSlot(i).getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).map((pattern) -> {
-                                String patternString = pattern.getPattern().getCallInSequenceArrows();
-                                String inputSequenceArrows = OrbitalLaserAttackPattern.replaceWithArrows(inputSequence);
-                                Component patternSequenceComponent;
-                                boolean couldReset = true;
-                                if(inputSequenceArrows != "" && patternString.startsWith(inputSequenceArrows)){
-                                    if(patternString.equals(inputSequenceArrows)){
+            NonNullList<ItemStack> itemList = NonNullList.create();
+            itemList.addAll(player.getInventory().items);
+            itemList.addAll(player.getInventory().offhand);//offhand is not a part of all items...
+            List<ItemStack> controllerItems = itemList.stream().filter((stack) -> {return stack.is(ModItems.LASER_CONTROLLER.get());}).toList();  
+            if(controllerItems.size() > 1){
+                font.drawInBatch(Component.literal("To many Orbital Laser Controller!"), 10, offset, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+            } else if (controllerItems.size() == 1){
+                controllerItems.forEach((stack) -> {
+                    if(stack.is(ModItems.LASER_CONTROLLER.get())){
+                        stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((container) -> {
+                            boolean shouldReset = true;
+                            for(int i = 0; i <= container.getSlots(); i++){
+                                if(!container.getStackInSlot(i).getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).map((pattern) -> {
+                                    String patternString = pattern.getPattern().getCallInSequenceArrows();
+                                    String inputSequenceArrows = OrbitalLaserAttackPattern.replaceWithArrows(inputSequence);
+                                    Component patternSequenceComponent;
+                                    boolean couldReset = true;
+                                    if(inputSequenceArrows != "" && patternString.startsWith(inputSequenceArrows)){
+                                        if(patternString.equals(inputSequenceArrows)){
 
-                                        //inform server
-                                        // DysonSphere.LOGGER.info("ModHuds renderOrbitalLaserCooldown sequence success: {}", inputSequence);
-                                        ModPacketHandler.INSTANCE.sendToServer(new LaserPatternActivatedPackage(pattern.getPattern()));
+                                            //inform server
+                                            // DysonSphere.LOGGER.info("ModHuds renderOrbitalLaserCooldown sequence success: {}", inputSequence);
+                                            ModPacketHandler.INSTANCE.sendToServer(new LaserPatternActivatedPackage(pattern.getPattern()));
 
+                                        } else {
+                                            couldReset = false;
+                                        }
+                                        patternString = patternString.substring(inputSequenceArrows.length());
+                                        patternSequenceComponent = Component.literal(inputSequenceArrows).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED).append(Component.literal(patternString).withStyle(ChatFormatting.WHITE));
                                     } else {
-                                        couldReset = false;
+                                        patternSequenceComponent = Component.literal(patternString).withStyle(ChatFormatting.WHITE);
                                     }
-                                    patternString = patternString.substring(inputSequenceArrows.length());
-                                    patternSequenceComponent = Component.literal(inputSequenceArrows).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED).append(Component.literal(patternString).withStyle(ChatFormatting.WHITE));
-                                } else {
-                                    patternSequenceComponent = Component.literal(patternString).withStyle(ChatFormatting.WHITE);
+                                    font.drawInBatch(Component.translatable("tooltip.dysonsphere.orbital_laser_hud_pattern_name", pattern.getPattern().name, patternSequenceComponent), 10, offset, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+                                    // /20 /60 -> ticks to minutes --- /20 % 60 -> ticks to seconds without minutes
+                                    font.drawInBatch(Component.translatable("tooltip.dysonsphere.orbital_laser_hud_pattern_lasers", pattern.getPattern().getLasersRequired(), pattern.getPattern().getRechargeTime() / 20 / 60 , String.format(Locale.ENGLISH, "%02d", (pattern.getPattern().getRechargeTime() / 20) % 60)), 10, offset + 10, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+                                    // font.drawInBatch(Component.literal(" Cooldown " + pattern.getPattern().getRechargeTime()), 10, offset + 20, -1, false, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+                                    offset += 25;
+                                    return couldReset;
+                                }).orElse(true)){
+                                    shouldReset = false;
                                 }
-                                font.drawInBatch(Component.translatable("tooltip.dysonsphere.orbital_laser_hud_pattern_name", pattern.getPattern().name, patternSequenceComponent), 10, offset, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
-                                // /20 /60 -> ticks to minutes --- /20 % 60 -> ticks to seconds without minutes
-                                font.drawInBatch(Component.translatable("tooltip.dysonsphere.orbital_laser_hud_pattern_lasers", pattern.getPattern().getLasersRequired(), pattern.getPattern().getRechargeTime() / 20 / 60 , String.format(Locale.ENGLISH, "%02d", (pattern.getPattern().getRechargeTime() / 20) % 60)), 10, offset + 10, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
-                                // font.drawInBatch(Component.literal(" Cooldown " + pattern.getPattern().getRechargeTime()), 10, offset + 20, -1, false, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
-                                offset += 25;
-                                return couldReset;
-                            }).orElse(true)){
-                                shouldReset = false;
                             }
-                        }
-                        if(shouldReset){
-                            player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
-                                laser.setCurrentInputSequence("");
-                            });
-                        }
-                    });
-                }
-            });            
+                            if(shouldReset){
+                                player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
+                                    laser.setCurrentInputSequence("");
+                                });
+                            }
+                        });
+                    }
+                }); 
+            }           
         }
         
         

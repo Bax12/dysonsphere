@@ -31,7 +31,7 @@ public class GrapplingHookSyncPackage {
     public void handle(Supplier<NetworkEvent.Context> ctx){
         if(ctx.get().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)){
             ctx.get().enqueueWork(() -> {
-                Minecraft.getInstance().player.getCapability(DSCapabilities.GRAPPLING_HOOK).ifPresent((hookContainer) -> {
+                Minecraft.getInstance().player.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
                     hookContainer.load(nbt);
                 });
             });

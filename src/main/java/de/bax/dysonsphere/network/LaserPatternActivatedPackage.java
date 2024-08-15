@@ -3,9 +3,9 @@ package de.bax.dysonsphere.network;
 import java.util.function.Supplier;
 
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
-import de.bax.dysonsphere.items.LaserControllerItem;
 import de.bax.dysonsphere.items.ModItems;
-import de.bax.dysonsphere.items.TargetDesignatorItem;
+import de.bax.dysonsphere.items.laser.LaserControllerItem;
+import de.bax.dysonsphere.items.laser.TargetDesignatorItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;

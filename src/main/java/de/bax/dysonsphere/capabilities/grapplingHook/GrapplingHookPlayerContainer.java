@@ -2,6 +2,7 @@ package de.bax.dysonsphere.capabilities.grapplingHook;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,9 +14,11 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
 import de.bax.dysonsphere.network.GrapplingHookSyncPackage;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -33,7 +36,7 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
 
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap.equals(DSCapabilities.GRAPPLING_HOOK)){
+        if(cap.equals(DSCapabilities.GRAPPLING_HOOK_CONTAINER)){
             return lazyContainer.cast();
         }
         return LazyOptional.empty();
@@ -95,9 +98,15 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
 
         @Override
         public void deployHook() {
-            GrapplingHookEntity hook = new GrapplingHookEntity(containingEntity, containingEntity.level(), 3f);
-            this.addHook(hook);
-            containingEntity.level().addFreshEntity(hook);
+            //no frame, no deploying
+            getGrapplingHookFrame().ifPresent((frame) -> {
+                GrapplingHookEntity hook = new GrapplingHookEntity(containingEntity, containingEntity.level(), 2.5f);
+                this.addHook(hook);     
+                //TODO
+                // hook.setGrapplingHookParameters(frame.getHookIcon(containingEntity.level(), containingEntity).orElse(ItemStack.EMPTY), frame.getGravity(containingEntity.level(), containingEntity).orElse(0f),
+                //     frame.getMaxDistance(containingEntity.level(), containingEntity).orElse(8d), frame.getWinchForce(containingEntity.level(), containingEntity).orElse(1f));    
+                containingEntity.level().addFreshEntity(hook);
+            });
         }
 
         @Override
@@ -167,7 +176,14 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
             state = wireState.values()[tag.getInt("state")];
         }
 
-
+        @Override
+        public Optional<IGrapplingHookFrame> getGrapplingHookFrame() {
+            NonNullList<ItemStack> itemList = NonNullList.create();
+            itemList.addAll(containingEntity.getInventory().armor);
+            itemList.addAll(containingEntity.getInventory().offhand);
+            itemList.addAll(containingEntity.getInventory().items);
+            return itemList.stream().filter((stack) -> {return stack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).isPresent();}).findFirst().flatMap((stack) -> stack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).resolve());
+        }
 
 
 
