@@ -1,4 +1,4 @@
- package de.bax.dysonsphere.capabilities.grapplingHook;
+package de.bax.dysonsphere.capabilities.grapplingHook;
 
 import java.util.List;
 import java.util.Optional;

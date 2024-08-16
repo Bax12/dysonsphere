@@ -8,7 +8,7 @@ import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 @AutoRegisterCapability
 public interface IGrapplingHookRope {
     
-    public double getMaxDistance(Level level, Player player);
+    public float getMaxDistance(Level level, Player player);
 
     public float getDeployForceMultiplier(Level level, Player player);
 

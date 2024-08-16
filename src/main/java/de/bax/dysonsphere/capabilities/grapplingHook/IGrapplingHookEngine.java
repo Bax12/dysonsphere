@@ -17,7 +17,7 @@ public interface IGrapplingHookEngine {
 
     public void onRappelTick(Level level, Player player); //using brake to slowly release rope from the winch
 
-    public boolean canDeploy(Level level, Player player);
+    public boolean canLaunch(Level level, Player player);
 
     public boolean canWinch(Level level, Player player);
 

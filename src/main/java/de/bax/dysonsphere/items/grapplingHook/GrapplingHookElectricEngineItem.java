@@ -83,7 +83,7 @@ public class GrapplingHookElectricEngineItem extends Item {
 
         @Override
         public float getWinchForce(Level level, Player player) {
-            return 2.5f;
+            return 3.2f;
         }
 
         @Override
@@ -102,7 +102,7 @@ public class GrapplingHookElectricEngineItem extends Item {
         }
 
         @Override
-        public boolean canDeploy(Level level, Player player) {
+        public boolean canLaunch(Level level, Player player) {
             return energyReference.getEnergyStored() >= LAUNCH_USAGE;
         }
 

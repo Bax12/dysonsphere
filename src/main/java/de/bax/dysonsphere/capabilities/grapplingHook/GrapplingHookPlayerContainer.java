@@ -10,12 +10,14 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
 import de.bax.dysonsphere.network.GrapplingHookSyncPackage;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -99,14 +101,27 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
         @Override
         public void deployHook() {
             //no frame, no deploying
-            getGrapplingHookFrame().ifPresent((frame) -> {
-                GrapplingHookEntity hook = new GrapplingHookEntity(containingEntity, containingEntity.level(), 2.5f);
-                this.addHook(hook);     
-                //TODO
-                // hook.setGrapplingHookParameters(frame.getHookIcon(containingEntity.level(), containingEntity).orElse(ItemStack.EMPTY), frame.getGravity(containingEntity.level(), containingEntity).orElse(0f),
-                //     frame.getMaxDistance(containingEntity.level(), containingEntity).orElse(8d), frame.getWinchForce(containingEntity.level(), containingEntity).orElse(1f));    
-                containingEntity.level().addFreshEntity(hook);
-            });
+            if(!containingEntity.level().isClientSide()){
+                getGrapplingHookFrame().ifPresent((frame) -> {
+                    if(frame.canLaunch(containingEntity.level(), containingEntity).orElse(false)){
+                        if(frame.getMaxHooks(containingEntity.level(), containingEntity).orElse(1) > this.getHooks().size()){
+                            GrapplingHookEntity hook = new GrapplingHookEntity(containingEntity, containingEntity.level(), frame.getDeployForce(containingEntity.level(), containingEntity).orElse(1f));
+                            this.addHook(hook);     
+                            //TODO
+                            hook.setGrapplingHookParameters(frame.getHookIcon(containingEntity.level(), containingEntity).orElse(ItemStack.EMPTY), frame.getGravity(containingEntity.level(), containingEntity).orElse(0f),
+                                frame.getMaxDistance(containingEntity.level(), containingEntity).orElse(8f), frame.getWinchForce(containingEntity.level(), containingEntity).orElse(1f));   
+                            // DysonSphere.LOGGER.debug("GrapplingHookPlayerContainer: deployHook: hookIcon: {}, gravity: {}, maxDistance: {}, winchForce: {}", frame.getHookIcon(containingEntity.level(), containingEntity).orElse(ItemStack.EMPTY), frame.getGravity(containingEntity.level(), containingEntity).orElse(0f),
+                            //     frame.getMaxDistance(containingEntity.level(), containingEntity).orElse(8f), frame.getWinchForce(containingEntity.level(), containingEntity).orElse(1f));
+                            frame.onHookLaunch(containingEntity.level(), containingEntity, hook);
+                            containingEntity.level().addFreshEntity(hook);
+                        } else {
+                            containingEntity.sendSystemMessage(Component.literal("To many hooks!"));
+                        }
+                    } else {
+                        containingEntity.sendSystemMessage(Component.literal("Cannot launch right now!"));
+                    }
+                });
+            }
         }
 
         @Override

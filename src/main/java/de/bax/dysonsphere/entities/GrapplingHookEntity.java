@@ -2,11 +2,17 @@ package de.bax.dysonsphere.entities;
 
 import javax.annotation.Nonnull;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -14,14 +20,22 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
+
 public class GrapplingHookEntity extends ThrowableProjectile {
 
-    protected boolean isDeployed = false;
-    protected boolean isRecalling = false;
-    protected ItemStack hookItem = ItemStack.EMPTY;
-    protected float gravity = 0f;
-    protected double maxDistance = 64d;
-    protected float winchForce = 3f;
+    // protected boolean isDeployed = false;
+    // protected boolean isRecalling = false;
+    // protected ItemStack hookItem = ItemStack.EMPTY;
+    // protected float gravity = 0f;
+    // protected double maxDistance = 64d;
+    // protected float winchForce = 3f;
+
+    private static final EntityDataAccessor<Boolean> DEPLOYED = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> RECALLING = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<ItemStack> HOOK_ITEM = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<Float> GRAVITY = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> MAX_DISTANCE = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> WINCH_FORCE = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.FLOAT);
 
     public GrapplingHookEntity(EntityType<? extends ThrowableProjectile> type, Level world) {
         super(type, world);
@@ -29,15 +43,23 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
     public GrapplingHookEntity(EntityType<? extends ThrowableProjectile> type, LivingEntity thrower, Level world, float force) {
         super(type, thrower, world);
-    
+
+        this.setNoGravity(true);
         setOwner(thrower);
         if(thrower != null){
             setRot(thrower.getYRot() + 180, -thrower.getXRot());
         }
-        float f = 2.5f;
-        double mx = Mth.sin(getYRot() / 180.0F * (float) Math.PI) * Mth.cos(getXRot() / 180.0F * (float) Math.PI) * f / 2D;
-		double mz = -(Mth.cos(getYRot() / 180.0F * (float) Math.PI) * Mth.cos(getXRot() / 180.0F * (float) Math.PI) * f) / 2D;
-		double my = Mth.sin(getXRot() / 180.0F * (float) Math.PI) * f / 2D;
+        
+        double mx = Mth.sin(getYRot() / 180.0F * (float) Math.PI) * Mth.cos(getXRot() / 180.0F * (float) Math.PI) * force / 2D;
+		double mz = -(Mth.cos(getYRot() / 180.0F * (float) Math.PI) * Mth.cos(getXRot() / 180.0F * (float) Math.PI) * force) / 2D;
+		double my = Mth.sin(getXRot() / 180.0F * (float) Math.PI) * force / 2D;
+
+        if(thrower != null){
+            mx += thrower.getDeltaMovement().x;
+            my += thrower.getDeltaMovement().y;
+            mz += thrower.getDeltaMovement().z;
+        }
+
 		this.push(mx, my, mz);
 
     }
@@ -53,26 +75,34 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
     @Override
     protected void defineSynchedData() {
+        entityData.define(DEPLOYED, false);
+        entityData.define(RECALLING, false);
+        entityData.define(HOOK_ITEM, ItemStack.EMPTY);
+        entityData.define(GRAVITY, 0f);
+        entityData.define(MAX_DISTANCE, 4096f);
+        entityData.define(WINCH_FORCE, 1f);
     }
 
-    @Override
-    protected float getGravity() {
-        return gravity;
-    }
-
-    public void setGrapplingHookParameters(ItemStack hookItem, float gravity, double maxDistance, float winchForce){
-        this.hookItem = hookItem;
-        this.gravity = gravity;
-        this.maxDistance = maxDistance;
-        this.winchForce = winchForce;
+    public void setGrapplingHookParameters(ItemStack hookItem, float gravity, float maxDistance, float winchForce){
+        setHookStack(hookItem);
+        setGravity(gravity);
+        setMaxDistance(maxDistance);
+        setWinchForce(winchForce);
     }
 
     @Override
     protected void onHitBlock(@Nonnull BlockHitResult pResult) {
         super.onHitBlock(pResult);
-        if(isRecalling) return;
-        this.setDeltaMovement(0, 0, 0);
-        this.isDeployed = true;
+        if(isRecalling()) return;
+        if(getOwner() instanceof Player player){
+            player.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
+                hookContainer.getGrapplingHookFrame().ifPresent((hookFrame) -> {
+                    if(hookFrame.canDeployAt(level(), player, this, pResult).orElse(false)){
+                        setDeployed(true);
+                    }
+                });
+            });
+        }
     }
 
     @Override
@@ -86,23 +116,32 @@ public class GrapplingHookEntity extends ThrowableProjectile {
     @Override
     public void tick() {
         super.tick();
-        if((isRecalling || isDeployed) && this.getOwner() != null){
-            if(isRecalling){
+        if((isRecalling() || isDeployed()) && this.getOwner() != null){
+            if(isRecalling()){
                 this.setDeltaMovement(this.getOwner().getPosition(0).subtract(this.position()).normalize().scale(getWinchForce()));
             }
             if(this.getPosition(0).distanceTo(this.getOwner().getPosition(0)) < 1){
                 removeHook();
             }
         }
-        if(getOwner() != null){
-            getOwner().getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
+        if(getOwner() instanceof Player player){
+            player.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
                 hookContainer.addHook(this);
+                DysonSphere.LOGGER.debug("GrapplingHookEntity: tick: ownerDistance: {}, maxDistance: {}", this.distanceToSqr(player), getMaxDistance() * getMaxDistance());
+                if(this.distanceToSqr(player) > getMaxDistance() * getMaxDistance()){
+                    // this.recall();
+                    hookContainer.getGrapplingHookFrame().ifPresent((hookFrame) -> {
+                        hookFrame.onHookOutOfRange(level(), player, this);
+                    });
+                }
             });
-            if(this.distanceToSqr(getOwner()) > getMaxDistance() * getMaxDistance()){
-                this.recall();
-            }
+            
         } else {
             this.discard();
+        }
+        if (this.getGravity() > 0 && !isDeployed()) {
+            Vec3 vec3 = this.getDeltaMovement();
+            this.setDeltaMovement(vec3.x, vec3.y - (double)this.getGravity(), vec3.z);
         }
     }
 
@@ -140,34 +179,81 @@ public class GrapplingHookEntity extends ThrowableProjectile {
     @Override
     protected void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
-
-        pCompound.putBoolean("deployed", isDeployed);
-        pCompound.putBoolean("recalling", isRecalling);
-        pCompound.put("hookItem", hookItem.save(new CompoundTag()));
-        pCompound.putFloat("gravity", gravity);
-        pCompound.putDouble("maxDistance", maxDistance);
-        pCompound.putFloat("winchForce", winchForce);
+        
+        pCompound.putBoolean("deployed", isDeployed());
+        pCompound.putBoolean("recalling", isRecalling());
+        pCompound.put("hookItem", getHookStack().save(new CompoundTag()));
+        pCompound.putFloat("gravity", getGravity());
+        pCompound.putFloat("maxDistance", getMaxDistance());
+        pCompound.putFloat("winchForce", getWinchForce());
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
 
-        isDeployed = pCompound.getBoolean("deployed");
-        isRecalling = pCompound.getBoolean("recalling");
-        hookItem = ItemStack.of(pCompound.getCompound("hookItem"));
-        gravity = pCompound.getFloat("gravity");
-        maxDistance = pCompound.getDouble("maxDistance");
-        winchForce = pCompound.getFloat("winchForce");
+        setDeployed(pCompound.getBoolean("deployed"));
+        setRecalling(pCompound.getBoolean("recalling"));
+        setHookStack(ItemStack.of(pCompound.getCompound("hookItem")));
+        setGravity(pCompound.getFloat("gravity"));
+        setMaxDistance(pCompound.getFloat("maxDistance"));
+        setWinchForce(pCompound.getFloat("winchForce"));
     }
 
+    @Override
+    protected float getGravity() {
+        return entityData.get(GRAVITY);
+    }
+
+    protected void setGravity(float gravity){
+        entityData.set(GRAVITY, gravity);
+    }
+
+    public ItemStack getHookStack(){
+        return entityData.get(HOOK_ITEM);
+    }
+
+    public void setHookStack(ItemStack hookStack){
+        entityData.set(HOOK_ITEM, hookStack);
+    }
 
     public boolean isDeployed(){
-        return this.isDeployed;
+        return entityData.get(DEPLOYED);
     };
 
+    public void setDeployed(boolean deployed){
+        entityData.set(DEPLOYED, deployed);
+        if(deployed){
+            this.setDeltaMovement(0, 0, 0);
+            if(getOwner() instanceof Player player){
+                player.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
+                    hookContainer.getGrapplingHookFrame().ifPresent((hookFrame) -> {
+                        hookFrame.onHookDeploy(level(), player, this);
+                    });
+                });
+            }
+        }
+    }
+
+    public boolean isRecalling(){
+        return entityData.get(RECALLING);
+    };
+
+    public void setRecalling(boolean recalling){
+        entityData.set(RECALLING, recalling);
+        if(recalling){
+            if(getOwner() instanceof Player player){
+                player.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
+                    hookContainer.getGrapplingHookFrame().ifPresent((hookFrame) -> {
+                        hookFrame.onHookRecall(level(), player, this);
+                    });
+                });
+            }
+        }
+    }
+
     public Vec3 deployedAt(){
-        if(isDeployed){
+        if(isDeployed()){
             return this.position();
         }
         return Vec3.ZERO;
@@ -181,16 +267,27 @@ public class GrapplingHookEntity extends ThrowableProjectile {
     }
 
     public float getWinchForce(){
-        return winchForce;
+        return entityData.get(WINCH_FORCE);
     };
 
-    public double getMaxDistance(){
-        return maxDistance;
+    public void setWinchForce(float winchForce){
+        entityData.set(WINCH_FORCE, winchForce);
+    }
+
+    public float getMaxDistance(){
+        return entityData.get(MAX_DISTANCE);
+    }
+
+    public void setMaxDistance(float maxDistance){
+        entityData.set(MAX_DISTANCE, maxDistance);
     }
 
     public void recall(){
-        this.isDeployed = false;
-        this.isRecalling = true;
+        // this.isDeployed = false;
+        // this.isRecalling = true;
+        setDeployed(false);
+        setRecalling(true);
+        
         this.setDeltaMovement(this.getOwner().getPosition(0).subtract(this.position()).normalize().scale(getWinchForce()));
     };
 
@@ -198,6 +295,12 @@ public class GrapplingHookEntity extends ThrowableProjectile {
     public boolean shouldRenderAtSqrDistance(double pDistance) {
         return pDistance <= getMaxDistance() * getMaxDistance();
     }
+
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
+
 
     
     

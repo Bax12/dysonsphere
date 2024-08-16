@@ -23,8 +23,8 @@ public class GrapplingHookStringRope implements IGrapplingHookRope, ICapabilityP
     }
 
     @Override
-    public double getMaxDistance(Level level, Player player) {
-        return 8;
+    public float getMaxDistance(Level level, Player player) {
+        return 16f;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class GrapplingHookStringRope implements IGrapplingHookRope, ICapabilityP
 
     @Override
     public float getWinchForceMultiplier(Level level, Player player) {
-        return 0.6f;
+        return 0.8f;
     }
 
     @Override
