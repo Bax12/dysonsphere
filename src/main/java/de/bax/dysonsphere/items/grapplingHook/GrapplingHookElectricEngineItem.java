@@ -65,6 +65,23 @@ public class GrapplingHookElectricEngineItem extends Item {
         });
     }
 
+    @Override
+    public boolean isBarVisible(ItemStack pStack) {
+        return true;
+    }
+
+    @Override
+    public int getBarColor(ItemStack pStack) {
+        return 0xDD2222;
+    }
+
+    @Override
+    public int getBarWidth(ItemStack pStack) {
+        return pStack.getCapability(ForgeCapabilities.ENERGY).map((energy) -> {
+            return (int) (13f * energy.getEnergyStored() / energy.getMaxEnergyStored());
+        }).orElse(0);
+    }
+
 
     public static class GrapplingHookElectricEngineWrapper implements IGrapplingHookEngine {
 

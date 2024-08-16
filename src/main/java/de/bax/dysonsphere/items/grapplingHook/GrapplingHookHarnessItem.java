@@ -26,8 +26,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -39,7 +41,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 
-public class GrapplingHookHarnessItem extends Item implements ITintableItem {
+public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equipable {
 
     public static final int SLOTS = 3;
     public static final int SLOT_ENGINE = 0;
@@ -182,6 +184,27 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem {
     }
 
     @Override
+    public boolean isBarVisible(ItemStack pStack) {
+        return pStack.getCapability(ForgeCapabilities.ITEM_HANDLER).map((itemHandler) -> {
+            return itemHandler.getStackInSlot(SLOT_ENGINE).isBarVisible();
+        }).orElse(false);
+    }
+
+    @Override
+    public int getBarColor(ItemStack pStack) {
+        return pStack.getCapability(ForgeCapabilities.ITEM_HANDLER).map((itemHandler) -> {
+            return itemHandler.getStackInSlot(SLOT_ENGINE).getBarColor();
+        }).orElse(0);
+    }
+
+    @Override
+    public int getBarWidth(ItemStack pStack) {
+        return pStack.getCapability(ForgeCapabilities.ITEM_HANDLER).map((itemHandler) -> {
+            return itemHandler.getStackInSlot(SLOT_ENGINE).getBarWidth();
+        }).orElse(0);
+    }
+
+    @Override
     public int getTintColor(ItemStack stack, int tintIndex) {
         switch(tintIndex){
             //drum / engine colors
@@ -236,5 +259,9 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem {
                 };
     }
     
+    @Override
+    public EquipmentSlot getEquipmentSlot() {
+        return EquipmentSlot.LEGS;
+    }
 
 }
