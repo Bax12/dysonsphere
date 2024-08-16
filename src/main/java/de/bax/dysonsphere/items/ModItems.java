@@ -5,6 +5,7 @@ import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookControllerItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookElectricEngineItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookHarnessItem;
+import de.bax.dysonsphere.items.grapplingHook.GrapplingHookSteamEngineItem;
 import de.bax.dysonsphere.items.laser.LaserControllerItem;
 import de.bax.dysonsphere.items.laser.LaserPatternItem;
 import de.bax.dysonsphere.items.laser.TargetDesignatorItem;
@@ -39,6 +40,7 @@ public class ModItems {
     public static final RegistryObject<Item> GRAPPLING_HOOK_HARNESS = ITEMS.register("grappling_hook_harness", () -> new GrapplingHookHarnessItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_ELECTRIC_ENGINE = ITEMS.register("grappling_hook_engine_electric", () -> new GrapplingHookElectricEngineItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_CONTROLLER = ITEMS.register("grappling_hook_controller", () -> new GrapplingHookControllerItem());
+    public static final RegistryObject<Item> GRAPPLING_HOOK_STEAM_ENGINE = ITEMS.register("grappling_hook_engine_steam", () -> new GrapplingHookSteamEngineItem());
     
 
     public static RegistryObject<Item> registerItem(String name) {

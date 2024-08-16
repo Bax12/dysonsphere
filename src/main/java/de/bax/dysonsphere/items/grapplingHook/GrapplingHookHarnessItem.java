@@ -16,6 +16,7 @@ import de.bax.dysonsphere.containers.GrapplingHookHarnessInventoryContainer;
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.core.Direction;
@@ -38,6 +39,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -105,6 +109,60 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
                 }
 
                 if(!cap.equals(DSCapabilities.GRAPPLING_HOOK_ENGINE) && !cap.equals(DSCapabilities.GRAPPLING_HOOK_ROPE) && !cap.equals(DSCapabilities.GRAPPLING_HOOK_HOOK)){
+                    if(cap.equals(ForgeCapabilities.FLUID_HANDLER_ITEM)){
+                        //Fluids have a nice getContainer() method, that replaces our harness with the engine...
+                        //So we proxy the call and replace the container with ourself. Could cause a lot of issues but seems to work so far...
+                        return itemHandler.getStackInSlot(SLOT_ENGINE).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).lazyMap((internalHandler) -> {
+                            return new IFluidHandlerItem(){
+                                @NotNull
+                                @Override
+                                public ItemStack getContainer()
+                                {
+                                    //reinsert the item to correctly update the harness as we get a new ItemStack
+                                    itemHandler.extractItem(SLOT_ENGINE, 64, false);
+                                    itemHandler.insertItem(SLOT_ENGINE, internalHandler.getContainer(), false);
+                                    return stack;
+                                }
+
+                                @Override
+                                public int getTanks() {
+                                    return internalHandler.getTanks();
+                                }
+
+                                @Override
+                                public @NotNull FluidStack getFluidInTank(int tank) {
+                                    return internalHandler.getFluidInTank(tank);
+                                }
+
+                                @Override
+                                public int getTankCapacity(int tank) {
+                                    return internalHandler.getTankCapacity(tank);
+                                }
+
+                                @Override
+                                public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+                                    return internalHandler.isFluidValid(tank, stack);
+                                }
+
+                                @Override
+                                public int fill(FluidStack resource, FluidAction action) {
+                                    return internalHandler.fill(resource, action);
+                                }
+
+                                @Override
+                                public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
+                                    return internalHandler.drain(resource, action);
+                                }
+
+                                @Override
+                                public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
+                                    return internalHandler.drain(maxDrain, action);
+                                }
+                            };
+                        }).cast();
+                        
+                    }
+                    //this is how we handle everything not fluid in the engine
                     return itemHandler.getStackInSlot(SLOT_ENGINE).getCapability(cap); //Allow transparent access to engine capabilities. E.g. EnergyStorage for electric engine to allow charging.
                 }
 
@@ -125,7 +183,7 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
             //Add Engine Tooltips, E.g. Energy or Fluid Storage of the engine should be added in their respective items.
             engine.getItem().appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
 
-            if(Minecraft.getInstance().screen.hasShiftDown()){
+            if(Screen.hasShiftDown()){
                 pTooltipComponents.add(Component.literal("Hook: ").append(hook.getDisplayName()));
                 pTooltipComponents.add(Component.literal("Rope: ").append(rope.getDisplayName()));
                 pTooltipComponents.add(Component.literal("Engine: ").append(engine.getDisplayName()));
@@ -133,7 +191,7 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
                 pTooltipComponents.add(Component.literal("<Press Shift for components>").withStyle(ChatFormatting.AQUA));
             }
             
-            if(Minecraft.getInstance().screen.hasControlDown()){
+            if(Screen.hasControlDown()){
                 
                 float[] ropeMultiplier = rope.getCapability(DSCapabilities.GRAPPLING_HOOK_ROPE).map((gRope) -> {
                     pTooltipComponents.add(Component.literal("Max Distance: " + gRope.getMaxDistance(pLevel, player)));
