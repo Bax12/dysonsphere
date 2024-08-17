@@ -27,7 +27,7 @@ public class GrapplingHookTripWireHook implements IGrapplingHookHook, ICapabilit
 
     @Override
     public int getMaxHookCount(Level level, Player player) {
-        return 1;
+        return 2;
     }
 
     @Override

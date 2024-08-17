@@ -13,6 +13,8 @@ import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +31,7 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 public class GrapplingHookSteamEngineItem extends Item {
 
-    public static int CAPACITY = 20000;
+    public static int CAPACITY = 32000;
     public static int LAUNCH_USAGE = 100;
     public static int WINCH_USAGE = 10;
 
@@ -113,15 +115,22 @@ public class GrapplingHookSteamEngineItem extends Item {
         @Override
         public void onHookLaunch(Level level, Player player, GrapplingHookEntity hook) {
             fluidReference.drain(LAUNCH_USAGE, FluidAction.EXECUTE);
+            
         }
 
         @Override
         public void onActiveWinchTick(Level level, Player player) {
             fluidReference.drain(WINCH_USAGE, FluidAction.EXECUTE);
+            if(player.tickCount % 30 == 0){
+                level.playSound(player, player, SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.4f, 1.3f);
+            }
         }
 
         @Override
         public void onRappelTick(Level level, Player player) {
+            if(player.tickCount % 30 == 0){
+                level.playSound(player, player, SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.4f, 1.3f);
+            }
         }
 
         @Override

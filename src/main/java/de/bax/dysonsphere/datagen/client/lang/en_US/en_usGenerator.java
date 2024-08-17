@@ -136,6 +136,7 @@ public class en_usGenerator extends LanguageProvider{
         add("sound.dysonsphere.railgun_shot", "Electromagnetic Orbital Launcher Shot");
         add("sound.dysonsphere.railgun_charge", "Electromagnetic Orbital Launcher Charging");
         add("sound.dysonsphere.ds_energy_receiver_work", "Dyson Sphere Energy Receiver Charging");
+        add("sound.dysonsphere.electric_winch", "Electric Winch Running");
 
         //recipes
         add("dysonsphere.recipe.heat_exchanger", "Heat Exchange");

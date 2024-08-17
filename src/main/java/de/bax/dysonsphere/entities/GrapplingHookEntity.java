@@ -127,7 +127,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
         if(getOwner() instanceof Player player){
             player.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
                 hookContainer.addHook(this);
-                DysonSphere.LOGGER.debug("GrapplingHookEntity: tick: ownerDistance: {}, maxDistance: {}", this.distanceToSqr(player), getMaxDistance() * getMaxDistance());
+                // DysonSphere.LOGGER.debug("GrapplingHookEntity: tick: ownerDistance: {}, maxDistance: {}", this.distanceToSqr(player), getMaxDistance() * getMaxDistance());
                 if(this.distanceToSqr(player) > getMaxDistance() * getMaxDistance()){
                     // this.recall();
                     hookContainer.getGrapplingHookFrame().ifPresent((hookFrame) -> {

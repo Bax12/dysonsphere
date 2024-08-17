@@ -10,10 +10,12 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.energy.ItemEnergyHandler;
 import de.bax.dysonsphere.capabilities.grapplingHook.IGrapplingHookEngine;
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
+import de.bax.dysonsphere.sounds.ModSounds;
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -111,11 +113,18 @@ public class GrapplingHookElectricEngineItem extends Item {
         @Override
         public void onActiveWinchTick(Level level, Player player) {
             energyReference.extractEnergy(WINCH_USAGE, false);
+            if(player.tickCount % 5 == 0){
+                level.playSound(player, player, ModSounds.ELECTRIC_WINCH.get(), SoundSource.PLAYERS, 0.2f, 1.0f);
+            }
+            
         }
 
         @Override
         public void onRappelTick(Level level, Player player) {
             energyReference.receiveEnergy(WINCH_RECUPERATION, false);
+            if(player.tickCount % 5 == 0){
+                level.playSound(player, player, ModSounds.ELECTRIC_WINCH.get(), SoundSource.PLAYERS, 0.3f, 0.5f);
+            }
         }
 
         @Override

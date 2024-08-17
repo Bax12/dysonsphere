@@ -53,6 +53,7 @@
   "key.dysonsphere.orbital_laser_seq_right": "Input Sequence: Right",
   "key.dysonsphere.orbital_laser_seq_up": "Input Sequence: Up",
   "sound.dysonsphere.ds_energy_receiver_work": "Dyson Sphere Energy Receiver Charging",
+  "sound.dysonsphere.electric_winch": "Electric Winch Running",
   "sound.dysonsphere.railgun_charge": "Electromagnetic Orbital Launcher Charging",
   "sound.dysonsphere.railgun_shot": "Electromagnetic Orbital Launcher Shot",
   "tooltip.dysonsphere.coordinates_x": "X",
