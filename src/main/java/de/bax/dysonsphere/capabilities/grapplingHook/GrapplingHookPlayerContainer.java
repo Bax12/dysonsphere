@@ -105,7 +105,7 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
                 getGrapplingHookFrame().ifPresent((frame) -> {
                     if(frame.canLaunch(containingEntity.level(), containingEntity).orElse(false)){
                         if(frame.getMaxHooks(containingEntity.level(), containingEntity).orElse(1) > this.getHooks().size()){
-                            GrapplingHookEntity hook = new GrapplingHookEntity(containingEntity, containingEntity.level(), frame.getDeployForce(containingEntity.level(), containingEntity).orElse(1f));
+                            GrapplingHookEntity hook = new GrapplingHookEntity(containingEntity, containingEntity.level(), frame.getLaunchForce(containingEntity.level(), containingEntity).orElse(1f));
                             this.addHook(hook);     
                             //TODO
                             hook.setGrapplingHookParameters(frame.getHookIcon(containingEntity.level(), containingEntity).orElse(ItemStack.EMPTY), frame.getGravity(containingEntity.level(), containingEntity).orElse(0f),

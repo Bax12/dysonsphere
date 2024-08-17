@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -46,10 +48,12 @@ public class GrapplingHookTripWireHook implements IGrapplingHookHook, ICapabilit
 
     @Override
     public void onHookDeploy(Level level, Player player, GrapplingHookEntity hook) {
+        level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.TRIPWIRE_ATTACH, SoundSource.PLAYERS, 0.5f, 0.8f);
     }
 
     @Override
     public void onHookRecall(Level level, Player player, GrapplingHookEntity hook) {
+        level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.TRIPWIRE_DETACH, SoundSource.PLAYERS, 0.5f, 0.8f);
     }
 
     @Override

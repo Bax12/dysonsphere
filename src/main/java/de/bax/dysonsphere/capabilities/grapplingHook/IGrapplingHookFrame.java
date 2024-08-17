@@ -92,10 +92,10 @@ public interface IGrapplingHookFrame {
     public LazyOptional<IGrapplingHookHook> getHook();
 
 
-    public default LazyOptional<Float> getDeployForce(Level level, Player player){//DONE
+    public default LazyOptional<Float> getLaunchForce(Level level, Player player){//DONE
         return getEngine().lazyMap((engine) -> {
             float deployForce = getRope().lazyMap((rope) -> {
-                return engine.getDeployForce(level, player) * rope.getDeployForceMultiplier(level, player);
+                return engine.getLaunchForce(level, player) * rope.getLaunchForceMultiplier(level, player);
             }).orElse(1f);
             return deployForce;
         });
@@ -198,11 +198,17 @@ public interface IGrapplingHookFrame {
         getEngine().ifPresent((engine) -> {
             engine.onActiveWinchTick(level, player);
         });
+        getRope().ifPresent((rope) -> {
+            rope.onActiveWinchTick(level, player);
+        });
     }
 
     public default void onRappelTick(Level level, Player player){//DONE
         getEngine().ifPresent((engine) -> {
             engine.onRappelTick(level, player);
+        });
+        getRope().ifPresent((rope) -> {
+            rope.onRappelTick(level, player);
         });
     }
 

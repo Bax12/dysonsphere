@@ -7,7 +7,7 @@ import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
 @AutoRegisterCapability
 public interface IGrapplingHookEngine {
-    public float getDeployForce(Level level, Player player);
+    public float getLaunchForce(Level level, Player player);
 
     public float getWinchForce(Level level, Player player);
 

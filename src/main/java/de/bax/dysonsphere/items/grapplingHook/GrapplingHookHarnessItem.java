@@ -196,7 +196,7 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
                 float[] ropeMultiplier = rope.getCapability(DSCapabilities.GRAPPLING_HOOK_ROPE).map((gRope) -> {
                     pTooltipComponents.add(Component.literal("Max Distance: " + gRope.getMaxDistance(pLevel, player)));
                     float gravity = gRope.getHookGravityMultiplier(pLevel, player);
-                    float deploy = gRope.getDeployForceMultiplier(pLevel, player);
+                    float deploy = gRope.getLaunchForceMultiplier(pLevel, player);
                     float winch = gRope.getWinchForceMultiplier(pLevel, player);
 
                     return new float[]{gravity, deploy, winch};
@@ -211,7 +211,7 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
                 });
 
                 engine.getCapability(DSCapabilities.GRAPPLING_HOOK_ENGINE).ifPresent((gEngine) -> {
-                    pTooltipComponents.add(Component.literal("Launch Force: " + gEngine.getDeployForce(pLevel, player) * deployMult));
+                    pTooltipComponents.add(Component.literal("Launch Force: " + gEngine.getLaunchForce(pLevel, player) * deployMult));
                     pTooltipComponents.add(Component.literal("Winch Force: " + gEngine.getWinchForce(pLevel, player) * winchMult));
                 });
             } else {

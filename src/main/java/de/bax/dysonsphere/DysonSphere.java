@@ -1,8 +1,5 @@
 package de.bax.dysonsphere;
 
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -11,15 +8,14 @@ import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereContainer;
-import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserPlayerContainer;
 import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereProxyContainer;
+import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookChainRope;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookPlayerContainer;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookStringRope;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookTripWireHook;
-import de.bax.dysonsphere.capabilities.grapplingHook.IGrapplingHookHook;
+import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserPlayerContainer;
 import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.containers.ModContainers;
-import de.bax.dysonsphere.entities.GrapplingHookEntity;
 import de.bax.dysonsphere.entities.ModEntities;
 import de.bax.dysonsphere.entityRenderer.GrapplingHookRenderer;
 import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
@@ -50,28 +46,20 @@ import de.bax.dysonsphere.tileRenderer.LaserPatternControllerRenderer;
 import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -167,6 +155,12 @@ public class DysonSphere
         }
         if(event.getObject().is(Items.STRING)){
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "grapplinghook_rope"), new GrapplingHookStringRope());
+            event.addListener(() -> {
+                event.getObject().getCapability(DSCapabilities.GRAPPLING_HOOK_ROPE).invalidate();
+            });
+        }
+        if(event.getObject().is(Items.CHAIN)){
+            event.addCapability(new ResourceLocation(DysonSphere.MODID, "grapplinghook_rope"), new GrapplingHookChainRope());
             event.addListener(() -> {
                 event.getObject().getCapability(DSCapabilities.GRAPPLING_HOOK_ROPE).invalidate();
             });

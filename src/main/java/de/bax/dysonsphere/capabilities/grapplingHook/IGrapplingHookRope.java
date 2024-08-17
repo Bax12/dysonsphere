@@ -10,7 +10,7 @@ public interface IGrapplingHookRope {
     
     public float getMaxDistance(Level level, Player player);
 
-    public float getDeployForceMultiplier(Level level, Player player);
+    public float getLaunchForceMultiplier(Level level, Player player);
 
     public float getWinchForceMultiplier(Level level, Player player);
 

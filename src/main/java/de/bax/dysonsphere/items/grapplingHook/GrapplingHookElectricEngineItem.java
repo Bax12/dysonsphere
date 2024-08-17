@@ -29,14 +29,26 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class GrapplingHookElectricEngineItem extends Item {
 
-    public static int CAPACITY = 15000;
-    public static int MAX_TRANSFER = 500;
-    public static int LAUNCH_USAGE = 50;
-    public static int WINCH_USAGE = 5;
-    public static int WINCH_RECUPERATION = 1;
+    protected final int CAPACITY;
+    protected final int MAX_TRANSFER;
+    protected final int LAUNCH_USAGE;
+    protected final int WINCH_USAGE;
+    protected final int WINCH_RECUPERATION;
+    protected final float LAUNCH_FORCE;
+    protected final float WINCH_FORCE;
+    protected final int COLOR;
 
-    public GrapplingHookElectricEngineItem() {
+    public GrapplingHookElectricEngineItem(int capacity, int maxTransfer, int launchUsage, int winchUsage, int winchRecuperation, float launchForce, float winchForce, int color) {
         super(new Item.Properties());
+
+        this.CAPACITY = capacity;
+        this.MAX_TRANSFER = maxTransfer;
+        this.LAUNCH_USAGE = launchUsage;
+        this.WINCH_USAGE = winchUsage;
+        this.WINCH_RECUPERATION = winchRecuperation;
+        this.LAUNCH_FORCE = launchForce;
+        this.WINCH_FORCE = winchForce;
+        this.COLOR = color;
     }
 
     @Override
@@ -85,7 +97,7 @@ public class GrapplingHookElectricEngineItem extends Item {
     }
 
 
-    public static class GrapplingHookElectricEngineWrapper implements IGrapplingHookEngine {
+    public class GrapplingHookElectricEngineWrapper implements IGrapplingHookEngine {
 
         protected ItemStack containingStack;
         protected IEnergyStorage energyReference;
@@ -96,13 +108,13 @@ public class GrapplingHookElectricEngineItem extends Item {
         }
 
         @Override
-        public float getDeployForce(Level level, Player player) {
-            return 2.5f;
+        public float getLaunchForce(Level level, Player player) {
+            return LAUNCH_FORCE;
         }
 
         @Override
         public float getWinchForce(Level level, Player player) {
-            return 3.2f;
+            return WINCH_FORCE;
         }
 
         @Override
@@ -144,7 +156,7 @@ public class GrapplingHookElectricEngineItem extends Item {
 
         @Override
         public int getColor() {
-            return Color.GRAY.getRGB();
+            return COLOR;
         }
 
     }

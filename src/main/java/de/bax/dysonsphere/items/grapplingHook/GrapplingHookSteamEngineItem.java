@@ -103,13 +103,13 @@ public class GrapplingHookSteamEngineItem extends Item {
         }
 
         @Override
-        public float getDeployForce(Level level, Player player) {
-            return 3.0f;
+        public float getLaunchForce(Level level, Player player) {
+            return 2.0f;
         }
 
         @Override
         public float getWinchForce(Level level, Player player) {
-            return 2.2f;
+            return 3.5f;
         }
 
         @Override
