@@ -7,6 +7,7 @@ import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookBlazeHookItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookControllerItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookElectricEngineItem;
+import de.bax.dysonsphere.items.grapplingHook.GrapplingHookEnderRopeItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookHarnessItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookHookItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookManualEngineItem;
@@ -54,6 +55,7 @@ public class ModItems {
     public static final RegistryObject<Item> GRAPPLING_HOOK_ELECTRIC_ENGINE = ITEMS.register("grappling_hook_engine_electric", () -> new GrapplingHookElectricEngineItem(15000, 500, 50, 5, 1, 2.5f, 3.2f, Color.GRAY.getRGB()));//TODO change to config values?
     public static final RegistryObject<Item> GRAPPLING_HOOK_ELECTRIC_ENGINE_2 = ITEMS.register("grappling_hook_engine_electric2", () -> new GrapplingHookElectricEngineItem(1_000_000, 5000, 50, 10, 5, 5.0f, 4.4f, 0x353535));//make these config values as well
     public static final RegistryObject<Item> GRAPPLING_HOOK_MANUAL_ENGINE = ITEMS.register("grappling_hook_engine_manual", () -> new GrapplingHookManualEngineItem());
+    public static final RegistryObject<Item> GRAPPLING_HOOK_ENDER_ROPE = ITEMS.register("grappling_hook_rope_ender", () -> new GrapplingHookEnderRopeItem());
     
 
     public static RegistryObject<Item> registerItem(String name) {

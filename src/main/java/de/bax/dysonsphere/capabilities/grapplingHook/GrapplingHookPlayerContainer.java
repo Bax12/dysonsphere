@@ -113,12 +113,14 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
                             // DysonSphere.LOGGER.debug("GrapplingHookPlayerContainer: deployHook: hookIcon: {}, gravity: {}, maxDistance: {}, winchForce: {}", frame.getHookIcon(containingEntity.level(), containingEntity).orElse(ItemStack.EMPTY), frame.getGravity(containingEntity.level(), containingEntity).orElse(0f),
                             //     frame.getMaxDistance(containingEntity.level(), containingEntity).orElse(8f), frame.getWinchForce(containingEntity.level(), containingEntity).orElse(1f));
                             frame.onHookLaunch(containingEntity.level(), containingEntity, hook);
-                            containingEntity.level().addFreshEntity(hook);
+                            if(!hook.isRemoved()){ //allows the onHookLaunch methods to effectively cancel the hook launch, without spamming server warnings
+                                containingEntity.level().addFreshEntity(hook);
+                            }
                         } else {
-                            containingEntity.sendSystemMessage(Component.literal("To many hooks!"));
+                            containingEntity.displayClientMessage(Component.literal("To many hooks!"), true);
                         }
                     } else {
-                        containingEntity.sendSystemMessage(Component.literal("Cannot launch right now!"));
+                        containingEntity.displayClientMessage(Component.literal("Cannot launch right now!"), true);
                     }
                 });
             }

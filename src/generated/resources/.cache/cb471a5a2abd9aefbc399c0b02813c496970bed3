@@ -1,4 +1,4 @@
-// 1.20.1	2024-08-17T21:45:21.367889267	Item Models: dysonsphere
+// 1.20.1	2024-08-17T23:48:39.420709624	Item Models: dysonsphere
 08df4d89635e2e188dd96816aec2f9bae0ab9a10 assets/dysonsphere/models/item/bucket_steam.json
 0c919b80842cdf42590d975217ce52f08031c9a4 assets/dysonsphere/models/item/coil_copper.json
 b8734755e92b5bfc21c0d87305b6726dc96ac95b assets/dysonsphere/models/item/coil_iron.json
@@ -13,6 +13,7 @@ bd3a011565373f1e4d72a5c6b94a53fc63fa64a9 assets/dysonsphere/models/item/grapplin
 21601ea318d5b9847cf64a97901c66081c0ec07f assets/dysonsphere/models/item/grappling_hook_hook_slime.json
 30f41c23bd6851c663e95e3c8d393f78151cfec8 assets/dysonsphere/models/item/grappling_hook_hook_smart_alloy.json
 66d80e55830b41dd7b43b2301606a095af73e2cd assets/dysonsphere/models/item/grappling_hook_hook_wood.json
+b79bbfba8c5ced20eaa6729ebf5e549d0285d7c7 assets/dysonsphere/models/item/grappling_hook_rope_ender.json
 89f88c50cc016f5be4a36035017df578bffc917f assets/dysonsphere/models/item/heat_exchanger_block.json
 fdcdd959d2223cc4a0a4711533250dda916ce0c2 assets/dysonsphere/models/item/heat_generator_block.json
 8e20d93bfb381a78f88a129e03b41119317e0cd8 assets/dysonsphere/models/item/heat_pipe_block.json
