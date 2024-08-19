@@ -117,10 +117,10 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
                                 containingEntity.level().addFreshEntity(hook);
                             }
                         } else {
-                            containingEntity.displayClientMessage(Component.literal("To many hooks!"), true);
+                            containingEntity.displayClientMessage(Component.translatable("tooltip.dysonsphere.grappling_hook_to_many_hooks"), true);
                         }
                     } else {
-                        containingEntity.displayClientMessage(Component.literal("Cannot launch right now!"), true);
+                        containingEntity.displayClientMessage(Component.translatable("tooltip.dysonsphere.grappling_hook_unavailable"), true);
                     }
                 });
             }

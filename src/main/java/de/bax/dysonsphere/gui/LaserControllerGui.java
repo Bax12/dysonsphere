@@ -103,7 +103,7 @@ public class LaserControllerGui extends BaseGui<LaserControllerContainer> {
             
         } else {
             launchButton.active = false;
-            launchButton.setTooltip(Tooltip.create(Component.literal("No owner!")));
+            launchButton.setTooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.laser_controller_no_owner")));
         }
 
     }

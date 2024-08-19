@@ -16,6 +16,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -231,6 +232,92 @@ public class RecipeGenerator extends RecipeProvider {
             .define('E', DSTags.itemCapsuleEmpty)
             .define('H', ModItems.HEAT_SHIELDING.get())
             .define('R', Tags.Items.STORAGE_BLOCKS_REDSTONE)
+            .save(consumer);
+
+        Recipe.shaped(ModItems.CONSTRUCT_ENDER.get())
+            .pattern("ECE")
+            .pattern("CEC")
+            .pattern("ECE")
+            .define('E', Tags.Items.ENDER_PEARLS)
+            .define('C', ModItems.COMPONENT_SMART_ALLOY.get())
+            .save(consumer);
+
+        Recipe.shaped(ModItems.GRAPPLING_HOOK_HARNESS.get())
+            .pattern("B B")
+            .pattern("S S")
+            .pattern("III")
+            .define('B', ItemTags.BUTTONS)
+            .define('S', Tags.Items.RODS)
+            .define('I', Tags.Items.INGOTS)
+            .save(consumer);
+
+        Recipe.shaped(ModItems.GRAPPLING_HOOK_CONTROLLER.get())
+            .pattern("  B")
+            .pattern(" S ")
+            .pattern("S  ")
+            .define('B', ItemTags.BUTTONS)
+            .define('S', Tags.Items.RODS_WOODEN)
+            .save(consumer);
+
+        Recipe.shaped(ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY.get())
+            .pattern("III")
+            .pattern("I I")
+            .pattern("  I")
+            .define('I', DSTags.itemIngotSmartAlloy)
+            .save(consumer);
+            
+        Recipe.shaped(ModItems.GRAPPLING_HOOK_HOOK_BLAZE.get())
+            .pattern("III")
+            .pattern("I I")
+            .pattern("  I")
+            .define('I', Tags.Items.RODS_BLAZE)
+            .save(consumer);
+
+        Recipe.shaped(ModItems.GRAPPLING_HOOK_HOOK_WOOD.get())
+            .pattern("III")
+            .pattern("I I")
+            .pattern("  I")
+            .define('I', ItemTags.PLANKS)
+            .save(consumer);
+
+        Recipe.shapeless(ModItems.GRAPPLING_HOOK_HOOK_SLIME.get())
+            .requires(ModItems.GRAPPLING_HOOK_HOOK_WOOD.get())
+            .requires(Ingredient.of(Tags.Items.SLIMEBALLS), 3)
+            .save(consumer);
+
+        Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_STEAM.get())
+            .pattern("PCC")
+            .pattern("CPC")
+            .pattern("SSS")
+            .define('P', Items.PISTON)
+            .define('C', Tags.Items.INGOTS_COPPER)
+            .define('S', Tags.Items.STONE)
+            .save(consumer);
+
+        Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get())
+            .pattern("III")
+            .pattern("CCC")
+            .pattern("IRI")
+            .define('I', Tags.Items.INGOTS_IRON)
+            .define('C', DSTags.itemCoilCopper)
+            .define('R', Tags.Items.DUSTS_REDSTONE)
+            .save(consumer);
+
+        Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2.get())
+            .pattern("AAS")
+            .pattern("ASA")
+            .pattern("CCC")
+            .define('A', DSTags.itemIngotSmartAlloy)
+            .define('S', ModItems.COMPONENT_SMART_ALLOY.get())
+            .define('C', DSTags.itemCoilCopper)
+            .save(consumer);
+
+        Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_MANUAL.get())
+            .pattern("WWS")
+            .pattern("SSW")
+            .pattern(" W ")
+            .define('W', ItemTags.PLANKS)
+            .define('S', Tags.Items.RODS_WOODEN)
             .save(consumer);
     }
     

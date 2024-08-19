@@ -45,6 +45,18 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.UNIVERSE_WHISPER, "Whisper of the Universe");
         addItem(ModItems.INGOT_SMART_ALLOY, "Smart Alloy Ingot");
         addItem(ModItems.COMPONENT_SMART_ALLOY, "Smart Alloy Component");
+        addItem(ModItems.CONSTRUCT_ENDER, "Stabilized Ender Construct");
+        addItem(ModItems.GRAPPLING_HOOK_HARNESS, "Grappling Hook Frame");
+        addItem(ModItems.GRAPPLING_HOOK_CONTROLLER, "Grappling Hook Controller");
+        addItem(ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY, "Smart Alloy Hook");
+        addItem(ModItems.GRAPPLING_HOOK_HOOK_BLAZE, "Blazing Hook");
+        addItem(ModItems.GRAPPLING_HOOK_HOOK_WOOD, "Wooden Hook");
+        addItem(ModItems.GRAPPLING_HOOK_HOOK_SLIME, "Sticky Hook");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_STEAM, "Portable Steam Engine");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC, "Simple Electric Engine");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2, "Smart Alloy Electric Engine");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_MANUAL, "Hand Crank Engine");
+        addItem(ModItems.GRAPPLING_HOOK_ROPE_ENDER, "Ender Rope");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");
@@ -109,16 +121,20 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.laser_controller_launching", "Launching...");
         add("tooltip.dysonsphere.laser_controller_claim", "Claim");
         add("tooltip.dysonsphere.laser_controller_owner", "Owner: %s");
+        add("tooltip.dysonsphere.laser_controller_no_owner", "No owner, needs to be claimed!");
         add("tooltip.dysonsphere.laser_controller_lasers", "Lasers Available: %s");
         add("tooltip.dysonsphere.laser_controller_cooldown", "On Cooldown");
         add("tooltip.dysonsphere.laser_controller_lasers_missing", "Not enough Lasers!");
+        add("tooltip.dysonsphere.laser_controller_to_many", "To many Orbital Laser Controller!");
         add("tooltip.dysonsphere.laser_crafter_energy_needed", "Required Energy: %sRF");
         
         
-
         add("tooltip.dysonsphere.coordinates_x","X");
         add("tooltip.dysonsphere.coordinates_y","Y");
         add("tooltip.dysonsphere.coordinates_z","Z");
+
+        add("tooltip.dysonsphere.spoiler_components", "<Press Shift for components>");
+        add("tooltip.dysonsphere.spoiler_stats", "<Press Control for stats>");
         
 
         add("tooltip.dysonsphere.orbital_laser_hud_lasers_available", "Lasers Available: %s");
@@ -128,6 +144,17 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.orbital_laser_hud_pattern_lasers", "Lasers: %sx %s:%s");
         add("tooltip.dysonsphere.ds_monitor_offline1","Unreachable - Offline - Critical!");
         add("tooltip.dysonsphere.ds_monitor_offline2","Maybe move closer to the sun? By a dimension or two");
+
+        add("tooltip.dysonsphere.grappling_hook_to_many_hooks", "Cannot launch more hooks!");
+        add("tooltip.dysonsphere.grappling_hook_unavailable", "Failed to launch a Grappling Hook! Check your gear");
+        add("tooltip.dysonsphere.grappling_hook_hook", "Hook: %s");
+        add("tooltip.dysonsphere.grappling_hook_rope", "Rope: %s");
+        add("tooltip.dysonsphere.grappling_hook_engine", "Engine: %s");
+        add("tooltip.dysonsphere.grappling_hook_max_distance", "Max Distance: %s");
+        add("tooltip.dysonsphere.grappling_hook_max_hooks", "Hook Count: %s");
+        add("tooltip.dysonsphere.grappling_hook_gravity", "Hook Gravity: %s");
+        add("tooltip.dysonsphere.grappling_hook_launch_force", "Launch Force: %s");
+        add("tooltip.dysonsphere.grappling_hook_winch_force", "Winch Force: %s");
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "forge:rods/blaze"
+    }
+  },
+  "pattern": [
+    "III",
+    "I I",
+    "  I"
+  ],
+  "result": {
+    "item": "dysonsphere:grappling_hook_hook_blaze"
+  },
+  "show_notification": true
+}

@@ -184,17 +184,17 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
             engine.getItem().appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
 
             if(Screen.hasShiftDown()){
-                pTooltipComponents.add(Component.literal("Hook: ").append(hook.getDisplayName()));
-                pTooltipComponents.add(Component.literal("Rope: ").append(rope.getDisplayName()));
-                pTooltipComponents.add(Component.literal("Engine: ").append(engine.getDisplayName()));
+                pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.grappling_hook_hook", hook.getDisplayName()));
+                pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.grappling_hook_rope", rope.getDisplayName()));
+                pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.grappling_hook_engine", engine.getDisplayName()));
             } else {
-                pTooltipComponents.add(Component.literal("<Press Shift for components>").withStyle(ChatFormatting.AQUA));
+                pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.spoiler_components").withStyle(ChatFormatting.AQUA));
             }
             
             if(Screen.hasControlDown()){
                 
                 float[] ropeMultiplier = rope.getCapability(DSCapabilities.GRAPPLING_HOOK_ROPE).map((gRope) -> {
-                    pTooltipComponents.add(Component.literal("Max Distance: " + gRope.getMaxDistance(pLevel, player)));
+                    pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.grappling_hook_max_distance", gRope.getMaxDistance(pLevel, player)));
                     float gravity = gRope.getHookGravityMultiplier(pLevel, player);
                     float deploy = gRope.getLaunchForceMultiplier(pLevel, player);
                     float winch = gRope.getWinchForceMultiplier(pLevel, player);
@@ -206,16 +206,16 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
                 float winchMult = ropeMultiplier[2];
                 
                 hook.getCapability(DSCapabilities.GRAPPLING_HOOK_HOOK).ifPresent((gHook) -> {
-                    pTooltipComponents.add(Component.literal("Max Hooks: " + gHook.getMaxHookCount(pLevel, player)));
-                    pTooltipComponents.add(Component.literal("Hook Gravity: " + AssetUtil.FLOAT_FORMAT.format(gHook.getGravity(pLevel, player) * gravityMult)));
+                    pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.grappling_hook_max_hooks", gHook.getMaxHookCount(pLevel, player)));
+                    pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.grappling_hook_gravity", AssetUtil.FLOAT_FORMAT.format(gHook.getGravity(pLevel, player) * gravityMult)));
                 });
 
                 engine.getCapability(DSCapabilities.GRAPPLING_HOOK_ENGINE).ifPresent((gEngine) -> {
-                    pTooltipComponents.add(Component.literal("Launch Force: " + gEngine.getLaunchForce(pLevel, player) * deployMult));
-                    pTooltipComponents.add(Component.literal("Winch Force: " + gEngine.getWinchForce(pLevel, player) * winchMult));
+                    pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.grappling_hook_launch_force", gEngine.getLaunchForce(pLevel, player) * deployMult));
+                    pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.grappling_hook_winch_force", gEngine.getWinchForce(pLevel, player) * winchMult));
                 });
             } else {
-                pTooltipComponents.add(Component.literal("<Press Control for stats>").withStyle(ChatFormatting.AQUA));
+                pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.spoiler_stats").withStyle(ChatFormatting.AQUA));
             }
         });
     }

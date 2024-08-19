@@ -1,0 +1,10 @@
+{
+  "type": "dysonsphere:laser_crafting",
+  "input": {
+    "item": "dysonsphere:construct_ender"
+  },
+  "inputEnergy": 600000,
+  "output": {
+    "item": "dysonsphere:grappling_hook_rope_ender"
+  }
+}

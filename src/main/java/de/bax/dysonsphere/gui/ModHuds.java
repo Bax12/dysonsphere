@@ -77,7 +77,7 @@ public class ModHuds {
             itemList.addAll(player.getInventory().offhand);//offhand is not a part of all items...
             List<ItemStack> controllerItems = itemList.stream().filter((stack) -> {return stack.is(ModItems.LASER_CONTROLLER.get());}).toList();  
             if(controllerItems.size() > 1){
-                font.drawInBatch(Component.literal("To many Orbital Laser Controller!"), 10, offset, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+                font.drawInBatch(Component.translatable("tooltip.dysonsphere.laser_controller_to_many"), 10, offset, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
             } else if (controllerItems.size() == 1){
                 controllerItems.forEach((stack) -> {
                     if(stack.is(ModItems.LASER_CONTROLLER.get())){

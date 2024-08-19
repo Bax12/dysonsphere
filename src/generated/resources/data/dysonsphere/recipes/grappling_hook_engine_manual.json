@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": {
+      "tag": "forge:rods/wooden"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "WWS",
+    "SSW",
+    " W "
+  ],
+  "result": {
+    "item": "dysonsphere:grappling_hook_engine_manual"
+  },
+  "show_notification": true
+}

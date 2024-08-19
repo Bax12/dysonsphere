@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "forge:ingots/smart_alloy"
+    }
+  },
+  "pattern": [
+    "III",
+    "I I",
+    "  I"
+  ],
+  "result": {
+    "item": "dysonsphere:grappling_hook_hook_smart_alloy"
+  },
+  "show_notification": true
+}

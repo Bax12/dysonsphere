@@ -2,6 +2,8 @@ package de.bax.dysonsphere.items.grapplingHook;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +36,8 @@ public class GrapplingHookSteamEngineItem extends Item {
     public static int CAPACITY = 32000;
     public static int LAUNCH_USAGE = 100;
     public static int WINCH_USAGE = 10;
+    public static float LAUNCH_FORCE = 2.0f;
+    public static float WINCH_FORCE = 3.5f;
 
     public GrapplingHookSteamEngineItem() {
         super(new Item.Properties());
@@ -69,24 +73,26 @@ public class GrapplingHookSteamEngineItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @javax.annotation.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(@Nonnull ItemStack pStack, @javax.annotation.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         pStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(fluid -> {
-            pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.fluid_display", fluid.getFluidInTank(0).getDisplayName(), AssetUtil.FLOAT_FORMAT.format(Math.round(fluid.getFluidInTank(0).getAmount())), AssetUtil.FLOAT_FORMAT.format(Math.round(fluid.getTankCapacity(0)))));
+            pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.fluid_display", new FluidStack(ModFluids.STEAM.get(), 5).getDisplayName(), AssetUtil.FLOAT_FORMAT.format(Math.round(fluid.getFluidInTank(0).getAmount())), AssetUtil.FLOAT_FORMAT.format(Math.round(fluid.getTankCapacity(0)))));
         });
     }
 
     @Override
-    public boolean isBarVisible(ItemStack pStack) {
-        return true;
+    public boolean isBarVisible(@Nonnull ItemStack pStack) {
+        return pStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((fluid) -> {
+            return !fluid.getFluidInTank(0).isEmpty();
+        }).orElse(false);
     }
 
     @Override
-    public int getBarColor(ItemStack pStack) {
+    public int getBarColor(@Nonnull ItemStack pStack) {
         return 0xBCBCBC;
     }
 
     @Override
-    public int getBarWidth(ItemStack pStack) {
+    public int getBarWidth(@Nonnull ItemStack pStack) {
         return pStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((fluid) -> {
             return (int) (13f * fluid.getFluidInTank(0).getAmount() / fluid.getTankCapacity(0));
         }).orElse(0);
@@ -104,12 +110,12 @@ public class GrapplingHookSteamEngineItem extends Item {
 
         @Override
         public float getLaunchForce(Level level, Player player) {
-            return 2.0f;
+            return LAUNCH_FORCE;
         }
 
         @Override
         public float getWinchForce(Level level, Player player) {
-            return 3.5f;
+            return WINCH_FORCE;
         }
 
         @Override

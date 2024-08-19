@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "tag": "forge:ingots/smart_alloy"
+    },
+    "C": {
+      "tag": "forge:coils/copper"
+    },
+    "S": {
+      "item": "dysonsphere:component_smart_alloy"
+    }
+  },
+  "pattern": [
+    "AAS",
+    "ASA",
+    "CCC"
+  ],
+  "result": {
+    "item": "dysonsphere:grappling_hook_engine_electric2"
+  },
+  "show_notification": true
+}
