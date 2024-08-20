@@ -22,6 +22,7 @@ public class GrapplingHookManualEngineItem extends Item {
     public static float WINCH_FORCE = 2.4f;
     public static float LAUNCH_USAGE = 0.1f;
     public static float WINCH_USAGE = 0.2f;
+    public static float RAPPEL_USAGE = 0.05f;
 
     
     public GrapplingHookManualEngineItem(){
@@ -71,6 +72,7 @@ public class GrapplingHookManualEngineItem extends Item {
 
         @Override
         public void onRappelTick(Level level, Player player) {
+            player.getFoodData().addExhaustion(RAPPEL_USAGE);
         }
 
         @Override

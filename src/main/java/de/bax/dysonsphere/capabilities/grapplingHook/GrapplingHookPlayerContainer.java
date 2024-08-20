@@ -102,9 +102,9 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
         public void deployHook() {
             //no frame, no deploying
             if(!containingEntity.level().isClientSide()){
-                getGrapplingHookFrame().ifPresent((frame) -> {
+                getGrapplingHookFrame().ifPresentOrElse((frame) -> {
                     if(frame.canLaunch(containingEntity.level(), containingEntity).orElse(false)){
-                        if(frame.getMaxHooks(containingEntity.level(), containingEntity).orElse(1) > this.getHooks().size()){
+                        if(frame.getMaxHooks(containingEntity.level(), containingEntity).orElse(0) > this.getHooks().size()){
                             GrapplingHookEntity hook = new GrapplingHookEntity(containingEntity, containingEntity.level(), frame.getLaunchForce(containingEntity.level(), containingEntity).orElse(1f));
                             this.addHook(hook);     
                             //TODO
@@ -122,6 +122,8 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
                     } else {
                         containingEntity.displayClientMessage(Component.translatable("tooltip.dysonsphere.grappling_hook_unavailable"), true);
                     }
+                }, () -> {
+                    containingEntity.displayClientMessage(Component.translatable("tooltip.dysonsphere.grappling_hook_unavailable"), true);
                 });
             }
         }
@@ -199,7 +201,11 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
             itemList.addAll(containingEntity.getInventory().armor);
             itemList.addAll(containingEntity.getInventory().offhand);
             itemList.addAll(containingEntity.getInventory().items);
-            return itemList.stream().filter((stack) -> {return stack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).isPresent();}).findFirst().flatMap((stack) -> stack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).resolve());
+            List<ItemStack> items = itemList.stream().filter((stack) -> {return stack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).isPresent();}).toList();
+            if(items.size() != 1){//we want errors on non and with multiple
+                return Optional.empty();
+            }
+            return items.get(0).getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).resolve();
         }
 
 

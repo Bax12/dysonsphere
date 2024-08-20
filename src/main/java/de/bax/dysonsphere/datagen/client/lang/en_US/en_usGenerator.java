@@ -57,6 +57,7 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2, "Smart Alloy Electric Engine");
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_MANUAL, "Hand Crank Engine");
         addItem(ModItems.GRAPPLING_HOOK_ROPE_ENDER, "Ender Rope");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE, "Pneumatic Engine");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");
@@ -70,6 +71,7 @@ public class en_usGenerator extends LanguageProvider{
         add("container.dysonsphere.laser_pattern_controller","Laser Pattern Controller Terminal");
         add("container.dysonsphere.laser_controller_inventory", "Active Laser Patterns");
         add("container.dysonsphere.laser_controller_block", "Laser Control Station");
+        add("container.dysonsphere.grappling_hook_harness_inventory", "Grappling Hook Frame");
 
         //tooltips
         add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
@@ -134,7 +136,7 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.coordinates_z","Z");
 
         add("tooltip.dysonsphere.spoiler_components", "<Press Shift for components>");
-        add("tooltip.dysonsphere.spoiler_stats", "<Press Control for stats>");
+        add("tooltip.dysonsphere.spoiler_stats", "<Press Control for Grappling Hook stats>");
         
 
         add("tooltip.dysonsphere.orbital_laser_hud_lasers_available", "Lasers Available: %s");
@@ -155,6 +157,11 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.grappling_hook_gravity", "Hook Gravity: %s");
         add("tooltip.dysonsphere.grappling_hook_launch_force", "Launch Force: %s");
         add("tooltip.dysonsphere.grappling_hook_winch_force", "Winch Force: %s");
+        add("tooltip.dysonsphere.grappling_hook_gravity_mult", "Hook Gravity Multiplier: %s");
+        add("tooltip.dysonsphere.grappling_hook_launch_mult", "Launch Force Multiplier: %s");
+        add("tooltip.dysonsphere.grappling_hook_winch_mult", "Winch Force Multiplier: %s");
+
+        add("dysonsphere.tooltip.pneumaticcraft.pressure", "Pressure: %s/%s bar");
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");

@@ -98,6 +98,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
             player.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
                 hookContainer.getGrapplingHookFrame().ifPresent((hookFrame) -> {
                     if(hookFrame.canDeployAt(level(), player, this, pResult).orElse(false)){
+                        setPos(pResult.getLocation());
                         setDeployed(true);
                     }
                 });

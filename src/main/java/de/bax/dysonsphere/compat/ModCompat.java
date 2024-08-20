@@ -39,4 +39,9 @@ public class ModCompat {
         }
     }
 
+
+    public static boolean isLoaded(MODID mod){
+        return ModList.get().isLoaded(mod.id);
+    }
+
 }
