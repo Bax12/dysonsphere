@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
+import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.tags.DSTags;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -21,6 +22,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.crafting.ConditionalRecipe;
+import net.minecraftforge.common.crafting.conditions.AndCondition;
+import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
+import net.minecraftforge.common.crafting.conditions.OrCondition;
 
 public class RecipeGenerator extends RecipeProvider {
 
@@ -37,14 +42,17 @@ public class RecipeGenerator extends RecipeProvider {
 
         Recipe.shaped(ModItems.CAPSULE_EMPTY.get())
             .pattern("HHH")
-            .pattern("I I")
-            .pattern("IBI")
+            .pattern("S S")
+            .pattern("ISI")
             .define('H', ModItems.HEAT_SHIELDING.get())
             .define('I', Tags.Items.INGOTS_IRON)
-            .define('B', Items.BUCKET)
+            .define('S', DSTags.itemIngotSmartAlloy)
             .save(consumer);
         
-        Recipe.shaped(ModItems.CAPSULE_SOLAR.get())
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.LUMIUM_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.CAPSULE_SOLAR.get())
             .pattern("SSS")
             .pattern("CEC")
             .pattern("GHG")
@@ -53,40 +61,120 @@ public class RecipeGenerator extends RecipeProvider {
             .define('E', DSTags.itemCapsuleEmpty)
             .define('G', Tags.Items.INGOTS_GOLD)
             .define('H', ModItems.HEAT_SHIELDING.get())
-            .save(consumer);
+            .save(con);
+        })
+        .addCondition(RecipeConditions.LUMIUM_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.CAPSULE_SOLAR.get())
+            .pattern("SSS")
+            .pattern("CEC")
+            .pattern("LHL")
+            .define('S', ModItems.SOLAR_FOIL.get())
+            .define('C', DSTags.itemCoilCopper)
+            .define('E', DSTags.itemCapsuleEmpty)
+            .define('L', DSTags.itemIngotLumium)
+            .define('H', ModItems.HEAT_SHIELDING.get())
+            .save(con);
+        })
+        .build(consumer, ModItems.CAPSULE_SOLAR.getId());
 
-        Recipe.shaped(ModItems.COIL_COPPER.get(), 4)
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.WIRE_COPPER_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.COIL_COPPER.get(), 4)
             .pattern("CSC")
             .pattern("CSC")
             .pattern("CSC")
             .define('C', Tags.Items.INGOTS_COPPER)
             .define('S', Items.STICK)
-            .save(consumer);
+            .save(con);
+        })
+        .addCondition(RecipeConditions.WIRE_COPPER_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.COIL_COPPER.get())
+            .pattern(" C ")
+            .pattern("CSC")
+            .pattern(" C ")
+            .define('C', DSTags.itemWireCopper)
+            .define('S', Items.STICK)
+            .save(con);
+        })
+        .build(consumer, ModItems.COIL_COPPER.getId());
 
-        Recipe.shaped(ModItems.COIL_IRON.get(), 4)
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.WIRE_IRON_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.COIL_IRON.get(), 4)
             .pattern("ISI")
             .pattern("ISI")
             .pattern("ISI")
             .define('I', Tags.Items.INGOTS_IRON)
             .define('S', Items.STICK)
-            .save(consumer);
+            .save(con);
+        })
+        .addCondition(RecipeConditions.WIRE_IRON_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.COIL_IRON.get())
+            .pattern(" I ")
+            .pattern("ISI")
+            .pattern(" I ")
+            .define('I', DSTags.itemWireIron)
+            .define('S', Items.STICK)
+            .save(con);
+        })
+        .build(consumer, ModItems.COIL_IRON.getId());
 
-        Recipe.shaped(ModItems.HEAT_SHIELDING.get())
+
+
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.TUNGSTEN_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.HEAT_SHIELDING.get())
             .pattern("BBB")
             .pattern("BCB")
             .pattern("BBB")
             .define('B', Tags.Items.INGOTS_BRICK)
             .define('C', Tags.Items.STORAGE_BLOCKS_COAL)
-            .save(consumer);
+            .save(con);
+        })
+        .addCondition(RecipeConditions.TUNGSTEN_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.HEAT_SHIELDING.get())
+            .pattern("BTB")
+            .pattern("TCT")
+            .pattern("BTB")
+            .define('B', Tags.Items.INGOTS_BRICK)
+            .define('C', Tags.Items.STORAGE_BLOCKS_COAL)
+            .define('T', DSTags.itemIngotTungsten)
+            .save(con);
+        })
+        .build(consumer, ModItems.HEAT_SHIELDING.getId());
 
-        Recipe.shaped(ModItems.RAILGUN.get())
-            .pattern("CIC")
-            .pattern("CIC")
-            .pattern("HCH")
-            .define('C', DSTags.itemCoilCopper)
-            .define('I', Tags.Items.INGOTS_IRON)
-            .define('H', ModItems.HEAT_SHIELDING.get())
-            .save(consumer);
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.RAILGUN.get())
+                .pattern("CIC")
+                .pattern("CIC")
+                .pattern("HCH")
+                .define('C', DSTags.itemCoilCopper)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('H', ModItems.HEAT_SHIELDING.get())
+                .save(con);
+        })
+        .addCondition(RecipeConditions.CIRCUIT_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.RAILGUN.get())
+                .pattern("CIC")
+                .pattern("CIC")
+                .pattern("HPH")
+                .define('C', DSTags.itemCoilCopper)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('H', ModItems.HEAT_SHIELDING.get())
+                .define('P', DSTags.itemCircuit)
+                .save(con);
+        })
+        .build(consumer, ModItems.RAILGUN.getId());
 
         Recipe.shaped(ModItems.SOLAR_FOIL.get())
             .pattern("GGG")
@@ -114,7 +202,10 @@ public class RecipeGenerator extends RecipeProvider {
             .define('C', Tags.Items.STORAGE_BLOCKS_COPPER)
             .save(consumer);
 
-        Recipe.shaped(ModBlocks.DS_MONITOR_BLOCK.get())
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModBlocks.DS_MONITOR_BLOCK.get())
             .pattern(" IG")
             .pattern("TIG")
             .pattern("ICI")
@@ -122,7 +213,23 @@ public class RecipeGenerator extends RecipeProvider {
             .define('G', Tags.Items.GLASS)
             .define('T', Items.REDSTONE_TORCH)
             .define('C', DSTags.itemCoilIron)
-            .save(consumer);
+            .save(con);
+        })
+        .addCondition(RecipeConditions.CIRCUIT_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModBlocks.DS_MONITOR_BLOCK.get())
+            .pattern(" IG")
+            .pattern("TIG")
+            .pattern("ICI")
+            .define('I', Tags.Items.INGOTS_IRON)
+            .define('G', Tags.Items.GLASS)
+            .define('T', Items.REDSTONE_TORCH)
+            .define('C', DSTags.itemCircuit)
+            .save(con);
+        })
+        .build(consumer, ModBlocks.DS_MONITOR_BLOCK.getId());
+
+        
 
         Recipe.shaped(ModBlocks.RAILGUN_BLOCK.get())
             .pattern(" R ")
@@ -167,30 +274,79 @@ public class RecipeGenerator extends RecipeProvider {
             .requires(Items.POTATO, 8)
             .requires(ModItems.STEAM_BUCKET.get())
             .save(consumer, new ResourceLocation(DysonSphere.MODID, "baked_potato"));
-
-        Recipe.shaped(ModItems.LASER_CONTROLLER.get())
+            
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.LASER_CONTROLLER.get())
             .pattern("SSC")
             .pattern("SCI")
             .define('S', DSTags.itemIngotSmartAlloy)
             .define('I', Tags.Items.INGOTS_IRON)
             .define('C', DSTags.itemCoilCopper)
-            .save(consumer);
+            .save(con);
+        })
+        .addCondition(RecipeConditions.CIRCUIT_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.LASER_CONTROLLER.get())
+            .pattern("SSC")
+            .pattern("SCP")
+            .define('S', DSTags.itemIngotSmartAlloy)
+            .define('P', DSTags.itemCircuit)
+            .define('C', DSTags.itemCoilCopper)
+            .save(con);
+        })
+        .build(consumer, ModItems.LASER_CONTROLLER.getId());
+        
 
-        Recipe.shaped(ModItems.LASER_PATTERN.get())
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.LASER_PATTERN.get())
             .pattern("ICI")
             .pattern("CSC")
             .pattern("ICI")
             .define('S', DSTags.itemIngotSmartAlloy)
             .define('I', DSTags.itemCoilIron)
             .define('C', DSTags.itemCoilCopper)
-            .save(consumer);
-
-        Recipe.shapeless(ModItems.INGOT_SMART_ALLOY.get())
+            .save(con);
+        })
+        .addCondition(RecipeConditions.CIRCUIT_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.LASER_PATTERN.get())
+            .pattern("ICI")
+            .pattern("CPC")
+            .pattern("ICI")
+            .define('P', DSTags.itemCircuit)
+            .define('I', DSTags.itemCoilIron)
+            .define('C', DSTags.itemCoilCopper)
+            .save(con);
+        })
+        .build(consumer, ModItems.LASER_PATTERN.getId());
+        
+        ConditionalRecipe.builder()
+        .addCondition(new OrCondition(RecipeConditions.NICKEL_TAG_EMPTY, RecipeConditions.TITANIUM_TAG_EMPTY))
+        .addRecipe((con) -> {
+            Recipe.shapeless(ModItems.INGOT_SMART_ALLOY.get())
             .requires(Items.POLISHED_DIORITE, 2)
             .requires(Ingredient.of(Tags.Items.INGOTS_GOLD), 2)
-            .save(consumer);
+            .save(con);
+        })
+        .addCondition(new AndCondition(RecipeConditions.NICKEL_EXISTS, RecipeConditions.TITANIUM_EXISTS))
+        .addRecipe((con) -> {
+            Recipe.shapeless(ModItems.INGOT_SMART_ALLOY.get())
+            .requires(DSTags.itemIngotNickel)
+            .requires(DSTags.itemIngotTitanium)
+            .save(con);
+        })
+        .build(consumer, ModItems.INGOT_SMART_ALLOY.getId());
 
-        Recipe.shaped(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK.get())
+        
+
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK.get())
             .pattern("GGG")
             .pattern("ILI")
             .pattern("IRI")
@@ -198,14 +354,28 @@ public class RecipeGenerator extends RecipeProvider {
             .define('I', DSTags.itemCoilIron)
             .define('L', Items.REDSTONE_LAMP)
             .define('R', Items.REDSTONE)
-            .save(consumer);
+            .save(con);
+        })
+        .addCondition(RecipeConditions.CIRCUIT_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK.get())
+            .pattern("GGG")
+            .pattern("ILI")
+            .pattern("IPI")
+            .define('G', Tags.Items.GLASS)
+            .define('I', DSTags.itemCoilIron)
+            .define('L', Items.REDSTONE_LAMP)
+            .define('P', DSTags.itemCircuit)
+            .save(con);
+        })
+        .build(consumer, ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK.getId());
 
         Recipe.shaped(ModBlocks.LASER_CONTROLLER_BLOCK.get())
             .pattern("IEI")
             .pattern("SCS")
             .pattern("ScS")
             .define('I', Tags.Items.INGOTS_IRON)
-            .define('E', Tags.Items.ENDER_PEARLS)
+            .define('E', ModItems.CONSTRUCT_ENDER.get())
             .define('S', DSTags.itemIngotSmartAlloy)
             .define('C', ModItems.COMPONENT_SMART_ALLOY.get())
             .define('c', DSTags.itemCoilCopper)
@@ -222,17 +392,35 @@ public class RecipeGenerator extends RecipeProvider {
             .define('C', ModBlocks.HEAT_PIPE_BLOCK.get())
             .save(consumer);
 
-        Recipe.shaped(ModItems.CAPSULE_LASER.get())
-            .pattern("SCS")
-            .pattern("TET")
-            .pattern("HRH")
-            .define('S', DSTags.itemIngotSmartAlloy)
-            .define('C', DSTags.itemCoilCopper)
-            .define('T', ModBlocks.HEAT_PIPE_BLOCK.get())
-            .define('E', DSTags.itemCapsuleEmpty)
-            .define('H', ModItems.HEAT_SHIELDING.get())
-            .define('R', Tags.Items.STORAGE_BLOCKS_REDSTONE)
-            .save(consumer);
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.SIGNALUM_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.CAPSULE_LASER.get())
+                .pattern("SCS")
+                .pattern("TET")
+                .pattern("HRH")
+                .define('S', DSTags.itemIngotSmartAlloy)
+                .define('C', DSTags.itemCoilCopper)
+                .define('T', ModBlocks.HEAT_PIPE_BLOCK.get())
+                .define('E', DSTags.itemCapsuleEmpty)
+                .define('H', ModItems.HEAT_SHIELDING.get())
+                .define('R', Tags.Items.STORAGE_BLOCKS_REDSTONE)
+                .save(con);
+        })
+        .addCondition(RecipeConditions.SIGNALUM_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.CAPSULE_LASER.get())
+                .pattern("SCS")
+                .pattern("sEs")
+                .pattern("TsT")
+                .define('S', DSTags.itemIngotSmartAlloy)
+                .define('C', DSTags.itemCoilCopper)
+                .define('T', ModBlocks.HEAT_PIPE_BLOCK.get())
+                .define('E', DSTags.itemCapsuleEmpty)
+                .define('s', DSTags.itemIngotSignalum)
+                .save(con);
+        })
+        .build(consumer, ModItems.CAPSULE_LASER.getId());
 
         Recipe.shaped(ModItems.CONSTRUCT_ENDER.get())
             .pattern("ECE")
@@ -244,11 +432,12 @@ public class RecipeGenerator extends RecipeProvider {
 
         Recipe.shaped(ModItems.GRAPPLING_HOOK_HARNESS.get())
             .pattern("B B")
-            .pattern("S S")
+            .pattern("SLS")
             .pattern("III")
             .define('B', ItemTags.BUTTONS)
             .define('S', Tags.Items.RODS)
             .define('I', Tags.Items.INGOTS)
+            .define('L', Tags.Items.LEATHER)
             .save(consumer);
 
         Recipe.shaped(ModItems.GRAPPLING_HOOK_CONTROLLER.get())
@@ -294,23 +483,56 @@ public class RecipeGenerator extends RecipeProvider {
             .define('S', Tags.Items.STONE)
             .save(consumer);
 
-        Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get())
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get())
             .pattern("III")
             .pattern("CCC")
             .pattern("IRI")
             .define('I', Tags.Items.INGOTS_IRON)
             .define('C', DSTags.itemCoilCopper)
             .define('R', Tags.Items.DUSTS_REDSTONE)
-            .save(consumer);
+            .save(con);
+            })
+        .addCondition(RecipeConditions.CIRCUIT_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get())
+            .pattern("III")
+            .pattern("CCC")
+            .pattern("IPI")
+            .define('I', Tags.Items.INGOTS_IRON)
+            .define('C', DSTags.itemCoilCopper)
+            .define('P', DSTags.itemCircuit)
+            .save(con);
+            })
+        .build(consumer, ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.getId());
 
-        Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2.get())
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2.get())
             .pattern("AAS")
             .pattern("ASA")
             .pattern("CCC")
             .define('A', DSTags.itemIngotSmartAlloy)
             .define('S', ModItems.COMPONENT_SMART_ALLOY.get())
             .define('C', DSTags.itemCoilCopper)
-            .save(consumer);
+            .save(con);
+        })
+        .addCondition(RecipeConditions.CIRCUIT_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2.get())
+            .pattern("AAS")
+            .pattern("ASA")
+            .pattern("PCP")
+            .define('A', DSTags.itemIngotSmartAlloy)
+            .define('S', ModItems.COMPONENT_SMART_ALLOY.get())
+            .define('C', DSTags.itemCoilCopper)
+            .define('P', DSTags.itemCircuit)
+            .save(con);
+        })
+        .build(consumer, ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2.getId());
 
         Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_MANUAL.get())
             .pattern("WWS")
@@ -319,6 +541,22 @@ public class RecipeGenerator extends RecipeProvider {
             .define('W', ItemTags.PLANKS)
             .define('S', Tags.Items.RODS_WOODEN)
             .save(consumer);
+
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.PNEUMATICCRAFT_LOADED)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.get())
+            .pattern("TCC")
+            .pattern("CRC")
+            .pattern(" C ")
+            .define('T', me.desht.pneumaticcraft.common.core.ModItems.AIR_CANISTER.get())
+            .define('C', DSTags.itemIngotCompressedIron)
+            .define('R', me.desht.pneumaticcraft.common.core.ModItems.TURBINE_ROTOR.get())
+            .save(con);
+        })
+        .build(consumer, ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.getId());
+
+        
     }
     
 

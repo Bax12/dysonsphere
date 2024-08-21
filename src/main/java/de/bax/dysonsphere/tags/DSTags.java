@@ -17,12 +17,24 @@ public class DSTags {
     public static final TagKey<Item> itemCoilIron = TagKey.create(Registries.ITEM, forgeLoc("coils/iron"));
 
     public static final TagKey<Item> itemIngot = TagKey.create(Registries.ITEM, forgeLoc("ingots"));
-    public static final TagKey<Item> itemIngotSmartAlloy = TagKey.create(Registries.ITEM, forgeLoc("ingots/smart_alloy"));
+    public static final TagKey<Item> itemIngotSmartAlloy = TagKey.create(Registries.ITEM, forgeLoc("ingots/nitinol"));
+
+    public static final TagKey<Item> itemIngotNickel = TagKey.create(Registries.ITEM, forgeLoc("ingots/nickel"));
+    public static final TagKey<Item> itemIngotTitanium = TagKey.create(Registries.ITEM, forgeLoc("ingots/titanium"));
+    public static final TagKey<Item> itemIngotTungsten = TagKey.create(Registries.ITEM, forgeLoc("ingots/tungsten"));
+    public static final TagKey<Item> itemIngotCompressedIron = TagKey.create(Registries.ITEM, forgeLoc("ingots/compressed_iron"));
+    public static final TagKey<Item> itemIngotSignalum = TagKey.create(Registries.ITEM, forgeLoc("ingots/signalum"));
+    public static final TagKey<Item> itemIngotLumium = TagKey.create(Registries.ITEM, forgeLoc("ingots/lumium"));
+
+    public static final TagKey<Item> itemCircuit = TagKey.create(Registries.ITEM, forgeLoc("circuits"));
+    public static final TagKey<Item> itemWireCopper = TagKey.create(Registries.ITEM, forgeLoc("wires/copper"));
+    public static final TagKey<Item> itemWireIron = TagKey.create(Registries.ITEM, forgeLoc("wires/iron"));
 
     public static final TagKey<Item> itemCapsule = TagKey.create(Registries.ITEM, modLoc("space_capsules"));
     public static final TagKey<Item> itemCapsuleEmpty = TagKey.create(Registries.ITEM, modLoc("space_capsules/empty"));
     public static final TagKey<Item> itemCapsuleSolar = TagKey.create(Registries.ITEM, modLoc("space_capsules/solar"));
     public static final TagKey<Item> itemCapsuleLaser = TagKey.create(Registries.ITEM, modLoc("space_capsules/laser"));
+    
 
 
     private static ResourceLocation forgeLoc(String name){

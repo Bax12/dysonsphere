@@ -19,6 +19,7 @@
   "block.dysonsphere.laser_pattern_controller_block": "Laser Pattern Controller Terminal",
   "block.dysonsphere.railgun_block": "Electromagnetic Orbital Launcher",
   "container.dysonsphere.ds_energy_receiver": "Dyson Sphere Energy Receiver",
+  "container.dysonsphere.grappling_hook_harness_inventory": "Grappling Hook Frame",
   "container.dysonsphere.heat_exchanger": "Thermal Exchanger",
   "container.dysonsphere.heat_generator": "Thermoelectric Generator",
   "container.dysonsphere.laser_controller_block": "Laser Control Station",

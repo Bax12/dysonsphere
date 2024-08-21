@@ -169,8 +169,9 @@ dependencies {
     compileOnly(fg.deobf("mekanism:Mekanism:1.20.1-10.4.8.43:api"))
     runtimeOnly(fg.deobf("mekanism:Mekanism:1.20.1-10.4.8.43"))
 
-    compileOnly(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1:api"))
-    runtimeOnly(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1"))
+    // compileOnly(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1:api"))
+    // runtimeOnly(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1"))
+    implementation(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1"))
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

@@ -1,24 +1,72 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "C": {
-      "tag": "forge:coils/copper"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:circuits"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "tag": "forge:coils/copper"
+          },
+          "I": {
+            "tag": "forge:coils/iron"
+          },
+          "S": {
+            "tag": "forge:ingots/nitinol"
+          }
+        },
+        "pattern": [
+          "ICI",
+          "CSC",
+          "ICI"
+        ],
+        "result": {
+          "item": "dysonsphere:laser_pattern"
+        },
+        "show_notification": true
+      }
     },
-    "I": {
-      "tag": "forge:coils/iron"
-    },
-    "S": {
-      "tag": "forge:ingots/smart_alloy"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:circuits"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "tag": "forge:coils/copper"
+          },
+          "I": {
+            "tag": "forge:coils/iron"
+          },
+          "P": {
+            "tag": "forge:circuits"
+          }
+        },
+        "pattern": [
+          "ICI",
+          "CPC",
+          "ICI"
+        ],
+        "result": {
+          "item": "dysonsphere:laser_pattern"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "ICI",
-    "CSC",
-    "ICI"
-  ],
-  "result": {
-    "item": "dysonsphere:laser_pattern"
-  },
-  "show_notification": true
+  ]
 }

@@ -8,13 +8,16 @@
     "I": {
       "tag": "forge:ingots"
     },
+    "L": {
+      "tag": "forge:leather"
+    },
     "S": {
       "tag": "forge:rods"
     }
   },
   "pattern": [
     "B B",
-    "S S",
+    "SLS",
     "III"
   ],
   "result": {

@@ -1,27 +1,78 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "G": {
-      "tag": "forge:glass"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:circuits"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "G": {
+            "tag": "forge:glass"
+          },
+          "I": {
+            "tag": "forge:coils/iron"
+          },
+          "L": {
+            "item": "minecraft:redstone_lamp"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          }
+        },
+        "pattern": [
+          "GGG",
+          "ILI",
+          "IRI"
+        ],
+        "result": {
+          "item": "dysonsphere:laser_pattern_controller_block"
+        },
+        "show_notification": true
+      }
     },
-    "I": {
-      "tag": "forge:coils/iron"
-    },
-    "L": {
-      "item": "minecraft:redstone_lamp"
-    },
-    "R": {
-      "item": "minecraft:redstone"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:circuits"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "G": {
+            "tag": "forge:glass"
+          },
+          "I": {
+            "tag": "forge:coils/iron"
+          },
+          "L": {
+            "item": "minecraft:redstone_lamp"
+          },
+          "P": {
+            "tag": "forge:circuits"
+          }
+        },
+        "pattern": [
+          "GGG",
+          "ILI",
+          "IPI"
+        ],
+        "result": {
+          "item": "dysonsphere:laser_pattern_controller_block"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "GGG",
-    "ILI",
-    "IRI"
-  ],
-  "result": {
-    "item": "dysonsphere:laser_pattern_controller_block"
-  },
-  "show_notification": true
+  ]
 }

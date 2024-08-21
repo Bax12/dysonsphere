@@ -1,21 +1,81 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "minecraft:polished_diorite"
+      "conditions": [
+        {
+          "type": "forge:or",
+          "values": [
+            {
+              "type": "forge:tag_empty",
+              "tag": "forge:ingots/nickel"
+            },
+            {
+              "type": "forge:tag_empty",
+              "tag": "forge:ingots/titanium"
+            }
+          ]
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "minecraft:polished_diorite"
+          },
+          {
+            "item": "minecraft:polished_diorite"
+          },
+          {
+            "tag": "forge:ingots/gold"
+          },
+          {
+            "tag": "forge:ingots/gold"
+          }
+        ],
+        "result": {
+          "item": "dysonsphere:ingot_smart_alloy"
+        }
+      }
     },
     {
-      "item": "minecraft:polished_diorite"
-    },
-    {
-      "tag": "forge:ingots/gold"
-    },
-    {
-      "tag": "forge:ingots/gold"
+      "conditions": [
+        {
+          "type": "forge:and",
+          "values": [
+            {
+              "type": "forge:not",
+              "value": {
+                "type": "forge:tag_empty",
+                "tag": "forge:ingots/nickel"
+              }
+            },
+            {
+              "type": "forge:not",
+              "value": {
+                "type": "forge:tag_empty",
+                "tag": "forge:ingots/titanium"
+              }
+            }
+          ]
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "tag": "forge:ingots/nickel"
+          },
+          {
+            "tag": "forge:ingots/titanium"
+          }
+        ],
+        "result": {
+          "item": "dysonsphere:ingot_smart_alloy"
+        }
+      }
     }
-  ],
-  "result": {
-    "item": "dysonsphere:ingot_smart_alloy"
-  }
+  ]
 }
