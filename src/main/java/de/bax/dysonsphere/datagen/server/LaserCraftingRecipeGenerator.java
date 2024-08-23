@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.recipes.ModRecipes;
+import de.bax.dysonsphere.tags.DSTags;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -31,7 +32,7 @@ public class LaserCraftingRecipeGenerator {
         // random orbital: 2 000 000
         RecipeBuilder.of(Items.EMERALD).input(Ingredient.of(Tags.Items.GEMS_DIAMOND)).energyRequired(10_000_000).save(pWriter);
         RecipeBuilder.of(ModItems.UNIVERSE_WHISPER).input(Ingredient.of(Items.ECHO_SHARD)).energyRequired(2_000_000).save(pWriter);
-        RecipeBuilder.of(ModItems.COMPONENT_SMART_ALLOY).input(Ingredient.of(ModItems.INGOT_SMART_ALLOY.get())).energyRequired(500_000).save(pWriter);
+        RecipeBuilder.of(ModItems.COMPONENT_SMART_ALLOY).input(Ingredient.of(DSTags.itemIngotSmartAlloy)).energyRequired(500_000).save(pWriter);
         RecipeBuilder.of(Items.BUDDING_AMETHYST).input(Ingredient.of(Items.AMETHYST_BLOCK)).energyRequired(5_000_000).save(pWriter);
         RecipeBuilder.of(ModItems.GRAPPLING_HOOK_ROPE_ENDER).input(Ingredient.of(ModItems.CONSTRUCT_ENDER.get())).energyRequired(600_000).save(pWriter);
     }

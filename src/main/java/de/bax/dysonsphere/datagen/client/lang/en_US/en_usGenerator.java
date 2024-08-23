@@ -58,6 +58,7 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_MANUAL, "Hand Crank Engine");
         addItem(ModItems.GRAPPLING_HOOK_ROPE_ENDER, "Ender Rope");
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE, "Pneumatic Engine");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL, "Mechanical Engine");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");
@@ -160,6 +161,8 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.grappling_hook_gravity_mult", "Hook Gravity Multiplier: %s");
         add("tooltip.dysonsphere.grappling_hook_launch_mult", "Launch Force Multiplier: %s");
         add("tooltip.dysonsphere.grappling_hook_winch_mult", "Winch Force Multiplier: %s");
+
+        add("tooltip.dysonsphere.grappling_hook_engine_mechanical.desc", "Allows for limited free movement");
 
         add("dysonsphere.tooltip.pneumaticcraft.pressure", "Pressure: %s/%s bar");
 

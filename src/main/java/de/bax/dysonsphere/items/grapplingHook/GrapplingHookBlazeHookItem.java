@@ -3,7 +3,6 @@ package de.bax.dysonsphere.items.grapplingHook;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.grapplingHook.IGrapplingHookHook;
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
@@ -52,7 +51,7 @@ public class GrapplingHookBlazeHookItem extends Item {
                                 BlockState blockstate1 = BaseFireBlock.getState(level, blockPos1);
                                 level.setBlock(blockPos1, blockstate1, 11);
                                 level.gameEvent(player, GameEvent.BLOCK_PLACE,  hitResult.getBlockPos());
-                                level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.BLAZE_HURT, SoundSource.PLAYERS, 0.5f, 0.8f);
+                                level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.BLAZE_HURT, SoundSource.PLAYERS, 0.5f, 0.8f);
                                 hook.recall();
                                 return false;
                             }
@@ -72,12 +71,12 @@ public class GrapplingHookBlazeHookItem extends Item {
 
                         @Override
                         public void onHookDeploy(Level level, Player player, GrapplingHookEntity hook) {
-                            level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.PLAYERS, 0.5f, 0.8f);
+                            level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.PLAYERS, 0.5f, 0.8f);
                         }
 
                         @Override
                         public void onHookRecall(Level level, Player player, GrapplingHookEntity hook) {
-                            level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.PLAYERS, 0.5f, 0.8f);
+                            level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.PLAYERS, 0.5f, 0.8f);
                         }
 
                         @Override

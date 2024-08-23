@@ -2,11 +2,9 @@ package de.bax.dysonsphere.entities;
 
 import javax.annotation.Nonnull;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
@@ -119,9 +117,9 @@ public class GrapplingHookEntity extends ThrowableProjectile {
         super.tick();
         if((isRecalling() || isDeployed()) && this.getOwner() != null){
             if(isRecalling()){
-                this.setDeltaMovement(this.getOwner().getPosition(0).subtract(this.position()).normalize().scale(getWinchForce()));
+                this.setDeltaMovement(this.getOwner().position().subtract(this.position()).normalize().scale(getWinchForce()));
             }
-            if(this.getPosition(0).distanceTo(this.getOwner().getPosition(0)) < 1){
+            if(this.position().distanceTo(this.getOwner().position()) < 1){
                 removeHook();
             }
         }
@@ -138,7 +136,9 @@ public class GrapplingHookEntity extends ThrowableProjectile {
             });
             
         } else {
-            this.discard();
+            if(getOwner() == null && tickCount > 200){ //a ten second cleanup window, should prevent over-zealous hook removal and trash hooks
+                this.discard();
+            }
         }
         if (this.getGravity() > 0 && !isDeployed()) {
             Vec3 vec3 = this.getDeltaMovement();
@@ -289,7 +289,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
         setDeployed(false);
         setRecalling(true);
         
-        this.setDeltaMovement(this.getOwner().getPosition(0).subtract(this.position()).normalize().scale(getWinchForce()));
+        this.setDeltaMovement(this.getOwner().position().subtract(this.position()).normalize().scale(getWinchForce()));
     };
 
     @Override

@@ -543,6 +543,34 @@ public class RecipeGenerator extends RecipeProvider {
             .save(consumer);
 
         ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.GEAR_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL.get())
+            .pattern(" RI")
+            .pattern("CER")
+            .pattern("CC ")
+            .define('I', Tags.Items.INGOTS_IRON)
+            .define('S', ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get())
+            .define('C', DSTags.itemCoilCopper)
+            .define('R', Tags.Items.DUSTS_REDSTONE)
+            .save(con);
+        })
+        .addCondition(RecipeConditions.GEAR_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL.get())
+            .pattern("CRI")
+            .pattern("GER")
+            .pattern("CGC")
+            .define('I', Tags.Items.INGOTS_IRON)
+            .define('S', ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get())
+            .define('C', DSTags.itemCoilCopper)
+            .define('R', Tags.Items.DUSTS_REDSTONE)
+            .define('G', DSTags.itemGear)
+            .save(con);
+        })
+        .build(consumer, ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL.getId());
+
+        ConditionalRecipe.builder()
         .addCondition(RecipeConditions.PNEUMATICCRAFT_LOADED)
         .addRecipe((con) -> {
             Recipe.shaped(ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.get())

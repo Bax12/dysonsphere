@@ -1,7 +1,7 @@
 {
   "type": "dysonsphere:laser_crafting",
   "input": {
-    "item": "dysonsphere:ingot_smart_alloy"
+    "tag": "forge:ingots/nitinol"
   },
   "inputEnergy": 500000,
   "output": {

@@ -49,7 +49,7 @@ public class GrapplingHookWoodHookItem extends Item {
                             BlockState state = level.getBlockState(hitResult.getBlockPos());
                             if(!TierSortingRegistry.isCorrectTierForDrops(Tiers.WOOD, state) || state.isBurning(level, hitResult.getBlockPos()) || level.getBlockState(hitResult.getBlockPos().relative(hitResult.getDirection())).getFluidState().is(Fluids.LAVA)){
                                 hook.recall();
-                                level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.WOOD_BREAK, SoundSource.PLAYERS, 0.7f, 0.8f);
+                                level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.WOOD_BREAK, SoundSource.PLAYERS, 0.7f, 0.8f);
                                 return false;
                             }
                             return true;
@@ -66,12 +66,12 @@ public class GrapplingHookWoodHookItem extends Item {
 
                         @Override
                         public void onHookDeploy(Level level, Player player, GrapplingHookEntity hook) {
-                            level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.WOODEN_TRAPDOOR_CLOSE, SoundSource.PLAYERS, 0.5f, 1.2f);
+                            level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.WOODEN_TRAPDOOR_CLOSE, SoundSource.PLAYERS, 0.5f, 1.2f);
                         }
 
                         @Override
                         public void onHookRecall(Level level, Player player, GrapplingHookEntity hook) {
-                            level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.WOODEN_TRAPDOOR_OPEN, SoundSource.PLAYERS, 0.5f, 1.2f);
+                            level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.WOODEN_TRAPDOOR_OPEN, SoundSource.PLAYERS, 0.5f, 1.2f);
                         }
 
                         @Override

@@ -46,7 +46,7 @@ public class GrapplingHookSlimeHookItem extends Item {
                             
                             if(!blockState.canStickTo(Blocks.SLIME_BLOCK.defaultBlockState()) || !level.getBlockState(hitResult.getBlockPos().relative(hitResult.getDirection())).getFluidState().isEmpty()){
                                 hook.recall();
-                                level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.PLAYERS, 0.5f, 0.8f);
+                                level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.PLAYERS, 0.5f, 0.8f);
                                 return false;
                             }
                             return true;
@@ -64,12 +64,12 @@ public class GrapplingHookSlimeHookItem extends Item {
 
                         @Override
                         public void onHookDeploy(Level level, Player player, GrapplingHookEntity hook) {
-                            level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.SLIME_SQUISH, SoundSource.PLAYERS, 0.5f, 0.8f);
+                            level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.SLIME_SQUISH, SoundSource.PLAYERS, 0.5f, 0.8f);
                         }
 
                         @Override
                         public void onHookRecall(Level level, Player player, GrapplingHookEntity hook) {
-                            level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS, 0.5f, 0.8f);
+                            level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.SLIME_BLOCK_PLACE, SoundSource.PLAYERS, 0.5f, 0.8f);
                         }
 
                         @Override

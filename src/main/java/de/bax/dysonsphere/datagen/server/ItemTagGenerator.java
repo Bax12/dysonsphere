@@ -10,6 +10,7 @@ import de.bax.dysonsphere.tags.DSTags;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -32,6 +33,11 @@ public class ItemTagGenerator extends ItemTagsProvider {
         tag(DSTags.itemCapsuleEmpty).add(ModItems.CAPSULE_EMPTY.get());
         tag(DSTags.itemCapsuleSolar).add(ModItems.CAPSULE_SOLAR.get());
         tag(DSTags.itemCapsuleLaser).add(ModItems.CAPSULE_LASER.get());
+
+        tag(DSTags.itemGrapplingHookComponent).add(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get(), ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2.get(), ModItems.GRAPPLING_HOOK_ENGINE_MANUAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.get(), ModItems.GRAPPLING_HOOK_ENGINE_STEAM.get(), ModItems.GRAPPLING_HOOK_HOOK_BLAZE.get(), ModItems.GRAPPLING_HOOK_HOOK_SLIME.get(), ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY.get(), ModItems.GRAPPLING_HOOK_HOOK_WOOD.get(), ModItems.GRAPPLING_HOOK_ROPE_ENDER.get(), Items.CHAIN, Items.STRING, Items.TRIPWIRE_HOOK);
+        tag(DSTags.itemGrapplingHookHook).add(ModItems.GRAPPLING_HOOK_HOOK_BLAZE.get(), ModItems.GRAPPLING_HOOK_HOOK_SLIME.get(), ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY.get(), ModItems.GRAPPLING_HOOK_HOOK_WOOD.get(), Items.TRIPWIRE_HOOK);
+        tag(DSTags.itemGrapplingHookRope).add(ModItems.GRAPPLING_HOOK_ROPE_ENDER.get(), Items.STRING, Items.CHAIN);
+        tag(DSTags.itemGrapplingHookEngine).add(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get(), ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2.get(), ModItems.GRAPPLING_HOOK_ENGINE_MANUAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.get(), ModItems.GRAPPLING_HOOK_ENGINE_STEAM.get());
     }
     
     

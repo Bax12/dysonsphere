@@ -48,12 +48,12 @@ public class GrapplingHookTripWireHook implements IGrapplingHookHook, ICapabilit
 
     @Override
     public void onHookDeploy(Level level, Player player, GrapplingHookEntity hook) {
-        level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.TRIPWIRE_ATTACH, SoundSource.PLAYERS, 0.5f, 0.8f);
+        level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.TRIPWIRE_ATTACH, SoundSource.PLAYERS, 0.5f, 0.8f);
     }
 
     @Override
     public void onHookRecall(Level level, Player player, GrapplingHookEntity hook) {
-        level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.TRIPWIRE_DETACH, SoundSource.PLAYERS, 0.5f, 0.8f);
+        level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.TRIPWIRE_DETACH, SoundSource.PLAYERS, 0.5f, 0.8f);
     }
 
     @Override

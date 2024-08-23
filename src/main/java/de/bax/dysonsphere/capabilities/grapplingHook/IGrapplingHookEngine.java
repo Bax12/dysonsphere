@@ -23,5 +23,9 @@ public interface IGrapplingHookEngine {
 
     public boolean canRappel(Level level, Player player);
 
+    public default boolean isFreeMoving(){
+        return false;
+    }
+
     public int getColor();
 }

@@ -38,12 +38,12 @@ public class GrapplingHookHooks {
 
             @Override
             public void onHookDeploy(Level level, Player player, GrapplingHookEntity hook) {
-                level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.PLAYERS, 0.5f, 1.2f);
+                level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.PLAYERS, 0.5f, 1.2f);
             }
 
             @Override
             public void onHookRecall(Level level, Player player, GrapplingHookEntity hook) {
-                level.playSound(player, hook.getPosition(0).x, hook.getPosition(0).y, hook.getPosition(0).z, SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.PLAYERS, 0.5f, 1.2f);
+                level.playSound(player, hook.position().x, hook.position().y, hook.position().z, SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.PLAYERS, 0.5f, 1.2f);
             }
 
             @Override

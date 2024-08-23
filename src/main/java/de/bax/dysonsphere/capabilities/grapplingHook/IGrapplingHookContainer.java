@@ -19,7 +19,7 @@ public interface IGrapplingHookContainer {
         double minDistanceSqr = Double.MAX_VALUE;
         GrapplingHookEntity nearestHook = null;
         for (GrapplingHookEntity hook : getDeployedHooks()){
-            double distanceSqr = hook.getPosition(0).distanceToSqr(position);
+            double distanceSqr = hook.position().distanceToSqr(position);
             if(distanceSqr < minDistanceSqr){
                 minDistanceSqr = distanceSqr;
                 nearestHook = hook;
@@ -56,7 +56,7 @@ public interface IGrapplingHookContainer {
         int count = 0;
         Vec3 vector = Vec3.ZERO;
         for(var hook : getDeployedHooks()){
-            vector = vector.add(hook.getPosition(0));
+            vector = vector.add(hook.position());
             count++;
         }
         vector = vector.scale(1d / count); //Basically vector divide

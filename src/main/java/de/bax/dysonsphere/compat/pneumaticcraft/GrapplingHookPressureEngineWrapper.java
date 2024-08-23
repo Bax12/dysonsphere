@@ -108,7 +108,7 @@ public class GrapplingHookPressureEngineWrapper implements ICapabilityProvider, 
 
     @Override
     public float getWinchForce(Level level, Player player) {
-        return WINCH_FORCE + (float) Math.min(1, Math.max(0, player.getPosition(0).y / level.getMaxBuildHeight()));
+        return WINCH_FORCE + (float) Math.min(1, Math.max(0, player.position().y / level.getMaxBuildHeight()));
     }
 
     @Override

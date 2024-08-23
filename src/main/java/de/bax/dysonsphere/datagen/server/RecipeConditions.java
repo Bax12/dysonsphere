@@ -17,6 +17,7 @@ public class RecipeConditions {
     public static final ICondition LUMIUM_TAG_EMPTY = new TagEmptyCondition("forge", "ingots/lumium");
 
     public static final ICondition CIRCUIT_TAG_EMPTY = new TagEmptyCondition("forge", "circuits");
+    public static final ICondition GEAR_TAG_EMPTY = new TagEmptyCondition("forge", "gears");
 
     public static final ICondition WIRE_COPPER_TAG_EMPTY = new TagEmptyCondition("forge", "wires/copper");
     public static final ICondition WIRE_IRON_TAG_EMPTY = new TagEmptyCondition("forge", "wires/iron");
@@ -28,6 +29,7 @@ public class RecipeConditions {
     public static final ICondition LUMIUM_EXISTS = new NotCondition(LUMIUM_TAG_EMPTY);
 
     public static final ICondition CIRCUIT_EXISTS = new NotCondition(CIRCUIT_TAG_EMPTY);
+    public static final ICondition GEAR_EXISTS = new NotCondition(GEAR_TAG_EMPTY);
 
     public static final ICondition WIRE_COPPER_EXISTS = new NotCondition(WIRE_COPPER_TAG_EMPTY);
     public static final ICondition WIRE_IRON_EXISTS = new NotCondition(WIRE_IRON_TAG_EMPTY);
