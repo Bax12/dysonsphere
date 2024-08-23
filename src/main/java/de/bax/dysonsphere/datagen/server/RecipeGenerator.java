@@ -550,7 +550,7 @@ public class RecipeGenerator extends RecipeProvider {
             .pattern("CER")
             .pattern("CC ")
             .define('I', Tags.Items.INGOTS_IRON)
-            .define('S', ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get())
+            .define('E', ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get())
             .define('C', DSTags.itemCoilCopper)
             .define('R', Tags.Items.DUSTS_REDSTONE)
             .save(con);
@@ -562,7 +562,7 @@ public class RecipeGenerator extends RecipeProvider {
             .pattern("GER")
             .pattern("CGC")
             .define('I', Tags.Items.INGOTS_IRON)
-            .define('S', ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get())
+            .define('E', ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get())
             .define('C', DSTags.itemCoilCopper)
             .define('R', Tags.Items.DUSTS_REDSTONE)
             .define('G', DSTags.itemGear)

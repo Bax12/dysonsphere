@@ -1,0 +1,18 @@
+{
+  "values": [
+    "dysonsphere:grappling_hook_engine_electric",
+    "dysonsphere:grappling_hook_engine_electric2",
+    "dysonsphere:grappling_hook_engine_manual",
+    "dysonsphere:grappling_hook_engine_mechanical",
+    "dysonsphere:grappling_hook_engine_pressure",
+    "dysonsphere:grappling_hook_engine_steam",
+    "dysonsphere:grappling_hook_hook_blaze",
+    "dysonsphere:grappling_hook_hook_slime",
+    "dysonsphere:grappling_hook_hook_smart_alloy",
+    "dysonsphere:grappling_hook_hook_wood",
+    "dysonsphere:grappling_hook_rope_ender",
+    "minecraft:chain",
+    "minecraft:string",
+    "minecraft:tripwire_hook"
+  ]
+}

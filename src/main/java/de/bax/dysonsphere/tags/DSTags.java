@@ -38,7 +38,7 @@ public class DSTags {
 
     public static final TagKey<Item> itemGrapplingHookComponent = TagKey.create(Registries.ITEM, modLoc("grappling_hook_components"));
     public static final TagKey<Item> itemGrapplingHookHook = TagKey.create(Registries.ITEM, modLoc("grappling_hook_components/hook"));
-    public static final TagKey<Item> itemGrapplingHookRope = TagKey.create(Registries.ITEM, modLoc("grappling_hook_components/rope)"));
+    public static final TagKey<Item> itemGrapplingHookRope = TagKey.create(Registries.ITEM, modLoc("grappling_hook_components/rope"));
     public static final TagKey<Item> itemGrapplingHookEngine = TagKey.create(Registries.ITEM, modLoc("grappling_hook_components/engine"));
     
 
