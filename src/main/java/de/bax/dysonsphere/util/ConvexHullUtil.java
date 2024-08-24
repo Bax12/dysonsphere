@@ -89,7 +89,7 @@ public class ConvexHullUtil {
                 }
             }
     
-            return new Point2D.Double(closestPoint.getX() - p.getX(), closestPoint.getY() - p.getY());
+            return closestPoint != null ? new Point2D.Double(closestPoint.getX() - p.getX(), closestPoint.getY() - p.getY()) : p;
         }
     
         // Helper function to compute the closest point on a line segment to a point

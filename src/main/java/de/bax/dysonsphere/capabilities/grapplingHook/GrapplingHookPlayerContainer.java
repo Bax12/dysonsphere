@@ -201,7 +201,7 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
             itemList.addAll(containingEntity.getInventory().offhand);
             itemList.addAll(containingEntity.getInventory().items);
             List<ItemStack> items = itemList.stream().filter((stack) -> {return stack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).isPresent();}).toList();
-            if(items.size() != 1){//we want errors on non and with multiple
+            if(items.size() != 1 || items.get(0).isEmpty()){//we want errors on non and with multiple //no idea how an empty item stack can have the capability, but it happens
                 return Optional.empty();
             }
             return items.get(0).getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).resolve();

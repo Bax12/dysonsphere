@@ -1,17 +1,38 @@
 package de.bax.dysonsphere.items.grapplingHook;
 
+import javax.annotation.Nonnull;
+
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.ForgeMod;
 
 public class GrapplingHookControllerItem extends Item {
+
+    private final Multimap<Attribute, AttributeModifier> defaultModifiers;
     
     public GrapplingHookControllerItem(){
         super(new Item.Properties());
+
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(ForgeMod.BLOCK_REACH.get(), new AttributeModifier("block_reach", -1, AttributeModifier.Operation.MULTIPLY_TOTAL));
+        builder.put(ForgeMod.ENTITY_REACH.get(), new AttributeModifier("entity_reach", -1, AttributeModifier.Operation.MULTIPLY_TOTAL));
+        defaultModifiers = builder.build();
     }
 
     @Override
@@ -20,7 +41,7 @@ public class GrapplingHookControllerItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level pLevel, @Nonnull Player pPlayer, @Nonnull InteractionHand pUsedHand) {
         ItemStack itemStack = pPlayer.getItemInHand(pUsedHand);
 
         if(pPlayer.isShiftKeyDown()){
@@ -30,11 +51,46 @@ public class GrapplingHookControllerItem extends Item {
         } else {
             // spawnHookEntity(itemStack, level, player, 2.5f);
             pPlayer.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
-                hookContainer.deployHook();
+                hookContainer.recallSingleHook();
             });
         }
-
-        return InteractionResultHolder.success(itemStack);
+        return InteractionResultHolder.consume(itemStack);
     }
+
+    @Override
+    public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
+        entity.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
+            hookContainer.deployHook();
+        });
+        return false;
+    }
+
+    @Override
+    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
+        return true;
+    }
+
+    @Override
+    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
+        return true;
+    }
+
+    @Override
+    public boolean canAttackBlock(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer) {
+        return false;
+    }
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot pEquipmentSlot) {
+        return pEquipmentSlot == EquipmentSlot.MAINHAND ? this.defaultModifiers : super.getDefaultAttributeModifiers(pEquipmentSlot);
+    }
+
+
+
+    
+
+    
+
+    
 
 }

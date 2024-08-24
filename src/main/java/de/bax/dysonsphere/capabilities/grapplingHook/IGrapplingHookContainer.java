@@ -31,7 +31,7 @@ public interface IGrapplingHookContainer {
     public default GrapplingHookEntity getNearestHookToLook(Vec3 position, Vec3 look) {
         float minAngle = 2;
         GrapplingHookEntity nearestHook = null;
-        for (GrapplingHookEntity hook : getHooks()){
+        for (GrapplingHookEntity hook : getDeployedHooks()){
             float angle =  Math.abs(hook.appliedMotion(position).toVector3f().angle(look.toVector3f()));
             if(angle < minAngle){
                 minAngle = angle;

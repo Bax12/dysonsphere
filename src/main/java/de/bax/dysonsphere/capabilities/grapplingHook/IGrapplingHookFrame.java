@@ -9,11 +9,10 @@ import de.bax.dysonsphere.entities.GrapplingHookEntity;
 import de.bax.dysonsphere.util.ConvexHullUtil;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -36,119 +35,144 @@ public interface IGrapplingHookFrame {
                 if(hookCount > 0){ 
                     List<Double> yList = hookContainer.getDeployedHooks().stream().map((a) -> {return a.position().y;}).sorted().toList();
                     if(player.position().y + 0.05 < yList.get(yList.size()-1)){
-                        player.getAbilities().flying = true;
-                        
-                        
-                        switch(hookCount){
-                            case 1:
-                                // if(player.isFree(0, -0.5, 0)){
-                                if(!player.onGround()){
-                                // if(player.position().y != player.blockPosition().getY()){
-                                    // player.addDeltaMovement(hookContainer.getMotion(player.position()).normalize().multiply(0.05, 0, 0.05));
-                                    Vec3 hookMovement = hookContainer.getMotion(player.position()).normalize();
-                                    Vec3 playerMovement = player.getDeltaMovement();
-                                    double xyLength = hookMovement.length();
-                                    double yMotion = playerMovement.y;
-                                    // if(playerMovement.y < 0 && hookMovement.y > 0){
-                                    //     player.fallDistance = 1.0F;
-                                    //     yMotion = 2 * playerMovement.y * Math.min(1, 1 - (Math.abs(hookMovement.y) / xyLength));
-                                    // }
-                                    this.onActiveWinchTick(player.level(), player);
-                                    player.setDeltaMovement(new Vec3(playerMovement.x + (hookMovement.x * (Math.max(hookMovement.y, 0) / xyLength)/ 3) , yMotion, playerMovement.z + (hookMovement.z * (Math.max(hookMovement.y, 0) / xyLength) / 3)));
-                                } else {
-                                    player.getAbilities().flying = false;
-                                }
-                            break;
-                            case 2:
-                                if(!player.onGround()){
+                        if(canWinch(player.level(), player).orElse(false)){
+                            player.getAbilities().flying = true;
+                            float winchForce = this.getWinchForce(player.level(), player).orElse(0f);
+                            
+                            switch(hookCount){
+                                case 1:
+                                    if(!player.onGround()){
+                                        this.onActiveWinchTick(player.level(), player);
+                                        Vec3 hookMovement = hookContainer.getMotion(player.position()).normalize();
+                                        
+                                        double xyLength = hookMovement.length();
+                                        
+                                        Vec3 addedMovement = new Vec3((hookMovement.x * (xyLength / Math.max(hookMovement.y, 0) )/ 3) , 0, (hookMovement.z * (xyLength / Math.max(hookMovement.y, 0)) / 3));
 
-                                    Point2D hook1 = new Point2D.Double(hookContainer.getDeployedHooks().get(0).position().x, hookContainer.getDeployedHooks().get(0).position().z);
-                                    Point2D hook2 = new Point2D.Double(hookContainer.getDeployedHooks().get(1).position().x, hookContainer.getDeployedHooks().get(1).position().z);
-                                    Point2D playerPos = new Point2D.Double(player.position().x, player.position().z);
-
-                                    Point2D toLine = ConvexHullUtil.shortestVectorToHull(List.of(hook1, hook2), playerPos);
-                                    this.onActiveWinchTick(player.level(), player);
-                                    if(toLine.distanceSq(0, 0) > 0.1){
-                                        // player.addDeltaMovement(hookContainer.getMotion(player.position()).normalize().multiply(0.25, 0, 0.25));
-                                        // Vec3 movement = hookContainer.getNearestDeployedHook(player.position()).position().add(hookContainer.getCentralVector()).multiply(distance, 0, distance);
-
-                                        player.addDeltaMovement(new Vec3(toLine.getX(), 0, toLine.getY()).scale(0.1));
+                                        if(addedMovement.lengthSqr() < yList.get(yList.size()-1) - player.position().y){
+                                            player.addDeltaMovement(addedMovement);    
+                                        } else {
+                                            player.getAbilities().flying = false;
+                                        }
+                                    } else {
+                                        player.getAbilities().flying = false;
                                     }
-                                } else {
-                                    player.getAbilities().flying = false;
-                                }
-                            break;
-                            default:
-                                // Polygon hookShaperDelimiter = new Polygon();
-                                // GrapplingHookEntity hook1 = null, hook2 = null;
-                                // double minDist1 = Integer.MAX_VALUE, minDist2 = Integer.MAX_VALUE;
-                                // hookContainer.getDeployedHooks().stream().sorted(new Comparator<GrapplingHookEntity>() {
-                                //     @Override
-                                //     public int compare(GrapplingHookEntity arg0, GrapplingHookEntity arg1) {
-                                //         return (int) arg0.position().subtract(player.position()).toVector3f().angle(arg1.position().subtract(player.position()).toVector3f());
-                                //     }
-                                // }).forEach((hook) -> {
-                                //     var hookVec = player.position().subtract(hook.position()).multiply(10, 0, 10);
+                                break;
+                                case 2:
+                                    if(!player.onGround()){
 
-                                //     hookShaperDelimiter.addPoint((int) hookVec.x, (int) hookVec.z);
-                                // });
-                                    
-                                    // if(hookVec.lengthSqr() < minDist2){
-                                    //     if(hookVec.lengthSqr() <= minDist1){
-                                    //         minDist2 = minDist1;
-                                    //         hook2 = hook1;
+                                        Point2D hook1 = new Point2D.Double(hookContainer.getDeployedHooks().get(0).position().x, hookContainer.getDeployedHooks().get(0).position().z);
+                                        Point2D hook2 = new Point2D.Double(hookContainer.getDeployedHooks().get(1).position().x, hookContainer.getDeployedHooks().get(1).position().z);
+                                        Point2D playerPos = new Point2D.Double(player.position().x, player.position().z);
 
-                                    //         minDist1 = hookVec.lengthSqr();
-                                    //         hook1 = hook;
-                                    //     } else {
-                                    //         minDist2 = hookVec.lengthSqr();
-                                    //         hook2 = hook;
+                                        Point2D toLine = ConvexHullUtil.shortestVectorToHull(List.of(hook1, hook2), playerPos);
+                                        this.onActiveWinchTick(player.level(), player);
+                                        if(toLine.distanceSq(0, 0) > 0.1){
+                                            // player.addDeltaMovement(hookContainer.getMotion(player.position()).normalize().multiply(0.25, 0, 0.25));
+                                            // Vec3 movement = hookContainer.getNearestDeployedHook(player.position()).position().add(hookContainer.getCentralVector()).multiply(distance, 0, distance);
+                                            if(toLine.distanceSq(0, 0) <  yList.get(yList.size()-1) - player.position().y){
+                                                player.addDeltaMovement(new Vec3(toLine.getX(), 0, toLine.getY()).scale(0.1));
+                                            } else {
+                                                player.getAbilities().flying = false;
+                                            }
+                                        }
+                                    } else {
+                                        player.getAbilities().flying = false;
+                                    }
+                                break;
+                                default:
+                                    // Polygon hookShaperDelimiter = new Polygon();
+                                    // GrapplingHookEntity hook1 = null, hook2 = null;
+                                    // double minDist1 = Integer.MAX_VALUE, minDist2 = Integer.MAX_VALUE;
+                                    // hookContainer.getDeployedHooks().stream().sorted(new Comparator<GrapplingHookEntity>() {
+                                    //     @Override
+                                    //     public int compare(GrapplingHookEntity arg0, GrapplingHookEntity arg1) {
+                                    //         return (int) arg0.position().subtract(player.position()).toVector3f().angle(arg1.position().subtract(player.position()).toVector3f());
                                     //     }
+                                    // }).forEach((hook) -> {
+                                    //     var hookVec = player.position().subtract(hook.position()).multiply(10, 0, 10);
+
+                                    //     hookShaperDelimiter.addPoint((int) hookVec.x, (int) hookVec.z);
+                                    // });
+                                        
+                                        // if(hookVec.lengthSqr() < minDist2){
+                                        //     if(hookVec.lengthSqr() <= minDist1){
+                                        //         minDist2 = minDist1;
+                                        //         hook2 = hook1;
+
+                                        //         minDist1 = hookVec.lengthSqr();
+                                        //         hook1 = hook;
+                                        //     } else {
+                                        //         minDist2 = hookVec.lengthSqr();
+                                        //         hook2 = hook;
+                                        //     }
+                                        // }
+                                        // }
+
+                                    // if(!hookShaperDelimiter.getBounds().contains(0, 0) || !hookShaperDelimiter.contains(0, 0)){
+
+                                        //get two closest hooks, calculate perpendicular vector, normalize and apply as movement
+                                        // Vec3 movement = hook1.appliedMotion(player.position()).add(hook2.appliedMotion(player.position())).multiply(0.1, 0, 0.1);
+
+                                        // double k = (((hook2.position().y - hook1.position().y) * (player.position().x - hook1.position().x)) - ((hook2.position().x - hook1.position().x) * (player.position().y- hook1.position().y))) / (((hook2.position().y - hook1.position().y) * (hook2.position().y - hook1.position().y)) + ((hook2.position().x - hook1.position().x) * (hook2.position().x - hook1.position().x)));
+                                        // Vec3 movement = new Vec3(player.position().x - (k * (hook2.position().y -hook1.position().y)), 0, player.position().y + (k * (hook2.position().x - hook1.position().x)));
+
+                                        // Vec3 movement = hookContainer.getNearestDeployedHook(player.position()).position().add(hookContainer.getCentralVector()).multiply(0.5, 0, 0.5);
+
+
+                                        // player.setDeltaMovement(movement.subtract(player.position()).normalize().multiply(0.75, 0, 0.75).add(0, player.getDeltaMovement().y, 0));
+                                        // player.addDeltaMovement(hookContainer.getMotion(player.position()).normalize().multiply(0.25, 0, 0.25));
+                                        // var foo = new java.awt.geom.Line2D.Double();
+                                        
+                                        
+                                        
                                     // }
+                                    
+
+                                    // double dist = this.getMaxDistance(player.level(), player).orElse(0f) - hookContainer.getCentralVector().distanceTo(player.position());
+                                    // if(dist < 1 && dist > 0){
+                                    //     player.addDeltaMovement(hookContainer.getMotion(player.position()).normalize().scale(1 - dist));
                                     // }
 
-                                // if(!hookShaperDelimiter.getBounds().contains(0, 0) || !hookShaperDelimiter.contains(0, 0)){
+                                    this.onActiveWinchTick(player.level(), player);
+                                    List<Point2D> points = new ArrayList<>();
+                                    for(var hook :hookContainer.getDeployedHooks()){
+                                        points.add(new Point2D.Double(hook.position().x, hook.position().z));
+                                    }
+                                    List<Point2D> hull = ConvexHullUtil.computeConvexHull(points);
+                                    Point2D.Double horizontalPlayerPos = new Point2D.Double(player.position().x, player.position().z);
+                                    if(!ConvexHullUtil.isInsideConvexPolygon(hull, horizontalPlayerPos)){
 
-                                    //get two closest hooks, calculate perpendicular vector, normalize and apply as movement
-                                    // Vec3 movement = hook1.appliedMotion(player.position()).add(hook2.appliedMotion(player.position())).multiply(0.1, 0, 0.1);
-
-                                    // double k = (((hook2.position().y - hook1.position().y) * (player.position().x - hook1.position().x)) - ((hook2.position().x - hook1.position().x) * (player.position().y- hook1.position().y))) / (((hook2.position().y - hook1.position().y) * (hook2.position().y - hook1.position().y)) + ((hook2.position().x - hook1.position().x) * (hook2.position().x - hook1.position().x)));
-                                    // Vec3 movement = new Vec3(player.position().x - (k * (hook2.position().y -hook1.position().y)), 0, player.position().y + (k * (hook2.position().x - hook1.position().x)));
-
-                                    // Vec3 movement = hookContainer.getNearestDeployedHook(player.position()).position().add(hookContainer.getCentralVector()).multiply(0.5, 0, 0.5);
-
-
-                                    // player.setDeltaMovement(movement.subtract(player.position()).normalize().multiply(0.75, 0, 0.75).add(0, player.getDeltaMovement().y, 0));
-                                    // player.addDeltaMovement(hookContainer.getMotion(player.position()).normalize().multiply(0.25, 0, 0.25));
-                                    // var foo = new java.awt.geom.Line2D.Double();
-                                    
-                                    
-                                    
-                                // }
-                                
-
-                                // double dist = this.getMaxDistance(player.level(), player).orElse(0f) - hookContainer.getCentralVector().distanceTo(player.position());
-                                // if(dist < 1 && dist > 0){
-                                //     player.addDeltaMovement(hookContainer.getMotion(player.position()).normalize().scale(1 - dist));
-                                // }
-
-                                this.onActiveWinchTick(player.level(), player);
-                                List<Point2D> points = new ArrayList<>();
-                                for(var hook :hookContainer.getDeployedHooks()){
-                                    points.add(new Point2D.Double(hook.position().x, hook.position().z));
+                                        Point2D toHull = ConvexHullUtil.shortestVectorToHull(hull, horizontalPlayerPos);
+                                        // Vec3 movement = hookContainer.getNearestDeployedHook(player.position()).position().add(hookContainer.getCentralVector()).multiply(0.5, 0, 0.5);
+                                        // player.setDeltaMovement(movement.subtract(player.position()).normalize().multiply(0.75, 0, 0.75).add(0, player.getDeltaMovement().y, 0));
+                                        if(toHull.distanceSq(0, 0) <  yList.get(yList.size()-1) - player.position().y){
+                                            player.addDeltaMovement(new Vec3(toHull.getX(), 0, toHull.getY()));
+                                        } else {
+                                            player.getAbilities().flying = false;
+                                        }
+                                    }
+                                break;
+                            }
+                        } else {
+                            player.getAbilities().flying = false;
+                            if(!player.onGround()){
+                                Vec3 hookMovement = hookContainer.getMotion(player.position()).normalize();
+                                Vec3 playerMovement = player.getDeltaMovement();
+                                double xyLength = hookMovement.length();
+                                double yMotion = playerMovement.y;
+                                if(playerMovement.y < 0 && hookMovement.y > 0){
+                                    player.fallDistance = 1.0F;
+                                    var hook = hookContainer.getNearestDeployedHook(player.position());
+                                    if(hook.getMaxDistance() * hook.getMaxDistance() <= hook.distanceToSqr(player) + 5f){ //stop falling once reaching the end of the rope plus a little wiggle room
+                                        yMotion = 0d;
+                                    } else {
+                                        yMotion = playerMovement.y * 0.5 + (playerMovement.y * Math.min(1, 1 - (hookMovement.y / xyLength)));
+                                    }
                                 }
-                                List<Point2D> hull = ConvexHullUtil.computeConvexHull(points);
-                                Point2D.Double horizontalPlayerPos = new Point2D.Double(player.position().x, player.position().z);
-                                if(!ConvexHullUtil.isInsideConvexPolygon(hull, horizontalPlayerPos)){
-
-                                    Point2D toHull = ConvexHullUtil.shortestVectorToHull(hull, horizontalPlayerPos);
-                                    // Vec3 movement = hookContainer.getNearestDeployedHook(player.position()).position().add(hookContainer.getCentralVector()).multiply(0.5, 0, 0.5);
-                                    // player.setDeltaMovement(movement.subtract(player.position()).normalize().multiply(0.75, 0, 0.75).add(0, player.getDeltaMovement().y, 0));
-                                    player.addDeltaMovement(new Vec3(toHull.getX(), 0, toHull.getY()));
-                                }
-                            break;
+                                player.setDeltaMovement(new Vec3(playerMovement.x + (hookMovement.x * (Math.max(hookMovement.y, 0)  / xyLength)/ 3) , yMotion, playerMovement.z + (hookMovement.z * (Math.max(hookMovement.y, 0)  / xyLength) / 3)));
+                            }
                         }
-                        
                     } else {
                         player.getAbilities().flying = false;
                     }       

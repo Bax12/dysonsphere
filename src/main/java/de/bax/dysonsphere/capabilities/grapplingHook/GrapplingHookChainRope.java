@@ -70,7 +70,7 @@ public class GrapplingHookChainRope implements IGrapplingHookRope, ICapabilityPr
 
     @Override
     public int getColor() {
-        return 0x878989;
+        return 0x575959;
     }
     
 }

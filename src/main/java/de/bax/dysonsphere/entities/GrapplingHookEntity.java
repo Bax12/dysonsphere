@@ -38,6 +38,9 @@ public class GrapplingHookEntity extends ThrowableProjectile {
     private static final EntityDataAccessor<Float> MAX_DISTANCE = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> WINCH_FORCE = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.FLOAT);
 
+    public static final int maxRecallTicks = 40;
+    protected int recallingTicks;
+
     public GrapplingHookEntity(EntityType<? extends ThrowableProjectile> type, Level world) {
         super(type, world);
     }
@@ -123,6 +126,9 @@ public class GrapplingHookEntity extends ThrowableProjectile {
         if((isRecalling() || isDeployed()) && this.getOwner() != null){
             if(isRecalling()){
                 this.setDeltaMovement(this.getOwner().position().subtract(this.position()).normalize().scale(getWinchForce()));
+                if(++recallingTicks > maxRecallTicks){
+                    removeHook();
+                } 
             }
             if(this.position().distanceTo(this.getOwner().position()) < 1){
                 removeHook();
