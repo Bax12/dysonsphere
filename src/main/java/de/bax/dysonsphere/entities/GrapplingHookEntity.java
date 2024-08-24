@@ -2,6 +2,8 @@ package de.bax.dysonsphere.entities;
 
 import javax.annotation.Nonnull;
 
+import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
+
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -31,6 +33,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
     private static final EntityDataAccessor<Boolean> DEPLOYED = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> RECALLING = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<ItemStack> HOOK_ITEM = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<Integer> ROPE_COLOR = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> GRAVITY = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> MAX_DISTANCE = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> WINCH_FORCE = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.FLOAT);
@@ -76,13 +79,15 @@ public class GrapplingHookEntity extends ThrowableProjectile {
         entityData.define(DEPLOYED, false);
         entityData.define(RECALLING, false);
         entityData.define(HOOK_ITEM, ItemStack.EMPTY);
+        entityData.define(ROPE_COLOR, 0x0);
         entityData.define(GRAVITY, 0f);
         entityData.define(MAX_DISTANCE, 4096f);
         entityData.define(WINCH_FORCE, 1f);
     }
 
-    public void setGrapplingHookParameters(ItemStack hookItem, float gravity, float maxDistance, float winchForce){
+    public void setGrapplingHookParameters(ItemStack hookItem, int color, float gravity, float maxDistance, float winchForce){
         setHookStack(hookItem);
+        setRopeColor(color);
         setGravity(gravity);
         setMaxDistance(maxDistance);
         setWinchForce(winchForce);
@@ -184,6 +189,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
         pCompound.putBoolean("deployed", isDeployed());
         pCompound.putBoolean("recalling", isRecalling());
         pCompound.put("hookItem", getHookStack().save(new CompoundTag()));
+        pCompound.putInt("ropeColor", getRopeColor());
         pCompound.putFloat("gravity", getGravity());
         pCompound.putFloat("maxDistance", getMaxDistance());
         pCompound.putFloat("winchForce", getWinchForce());
@@ -196,6 +202,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
         setDeployed(pCompound.getBoolean("deployed"));
         setRecalling(pCompound.getBoolean("recalling"));
         setHookStack(ItemStack.of(pCompound.getCompound("hookItem")));
+        setRopeColor(pCompound.getInt("ropeColor"));
         setGravity(pCompound.getFloat("gravity"));
         setMaxDistance(pCompound.getFloat("maxDistance"));
         setWinchForce(pCompound.getFloat("winchForce"));
@@ -216,6 +223,14 @@ public class GrapplingHookEntity extends ThrowableProjectile {
 
     public void setHookStack(ItemStack hookStack){
         entityData.set(HOOK_ITEM, hookStack);
+    }
+
+    public int getRopeColor(){
+        return entityData.get(ROPE_COLOR);
+    }
+
+    public void setRopeColor(int color){
+        entityData.set(ROPE_COLOR, color);
     }
 
     public boolean isDeployed(){

@@ -107,8 +107,7 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
                         if(frame.getMaxHooks(containingEntity.level(), containingEntity).orElse(0) > this.getHooks().size()){
                             GrapplingHookEntity hook = new GrapplingHookEntity(containingEntity, containingEntity.level(), frame.getLaunchForce(containingEntity.level(), containingEntity).orElse(1f));
                             this.addHook(hook);     
-                            //TODO
-                            hook.setGrapplingHookParameters(frame.getHookIcon(containingEntity.level(), containingEntity).orElse(ItemStack.EMPTY), frame.getGravity(containingEntity.level(), containingEntity).orElse(0f),
+                            hook.setGrapplingHookParameters(frame.getHookIcon(containingEntity.level(), containingEntity).orElse(ItemStack.EMPTY), frame.getRope().lazyMap((rope) -> {return rope.getColor();}).orElse(0x0), frame.getGravity(containingEntity.level(), containingEntity).orElse(0f),
                                 frame.getMaxDistance(containingEntity.level(), containingEntity).orElse(8f), frame.getWinchForce(containingEntity.level(), containingEntity).orElse(1f));   
                             // DysonSphere.LOGGER.debug("GrapplingHookPlayerContainer: deployHook: hookIcon: {}, gravity: {}, maxDistance: {}, winchForce: {}", frame.getHookIcon(containingEntity.level(), containingEntity).orElse(ItemStack.EMPTY), frame.getGravity(containingEntity.level(), containingEntity).orElse(0f),
                             //     frame.getMaxDistance(containingEntity.level(), containingEntity).orElse(8f), frame.getWinchForce(containingEntity.level(), containingEntity).orElse(1f));
