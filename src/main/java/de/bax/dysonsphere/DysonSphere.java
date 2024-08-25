@@ -1,8 +1,9 @@
 package de.bax.dysonsphere;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 
 import de.bax.dysonsphere.advancements.ModAdvancements;
@@ -18,6 +19,7 @@ import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserPlayerContainer;
 import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.containers.ModContainers;
 import de.bax.dysonsphere.entities.ModEntities;
+import de.bax.dysonsphere.entityRenderer.GrapplingHookHarnessRenderLayer;
 import de.bax.dysonsphere.entityRenderer.GrapplingHookRenderer;
 import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
 import de.bax.dysonsphere.entityRenderer.TargetDesignatorRenderer;
@@ -48,14 +50,14 @@ import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -63,9 +65,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -260,6 +262,27 @@ public class DysonSphere
         @SubscribeEvent
         public static void registerKeyBindings(RegisterKeyMappingsEvent event){
             ModKeyBinds.registerKeyBindings(event);
+        }
+
+        @SubscribeEvent
+        public static void registerReloadListener(RegisterClientReloadListenersEvent event){
+            event.registerReloadListener((ResourceManagerReloadListener) resourceManager -> registerGrapplingHookLayer());
+        }
+
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        private static void registerGrapplingHookLayer(){
+            EntityRenderDispatcher renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
+            Map<String, EntityRenderer<? extends Player>> skinMap = renderManager.getSkinMap();
+            for (EntityRenderer<? extends Player> renderer : skinMap.values()) {
+                if (renderer instanceof LivingEntityRenderer livingEntityRenderer) {
+                    livingEntityRenderer.addLayer(new GrapplingHookHarnessRenderLayer(livingEntityRenderer));
+                }
+            }
+            renderManager.renderers.forEach((e, r) -> {
+                if (r instanceof LivingEntityRenderer livingEntityRenderer) {
+                    livingEntityRenderer.addLayer(new GrapplingHookHarnessRenderLayer(livingEntityRenderer));
+                }
+            });
         }
 
     }
