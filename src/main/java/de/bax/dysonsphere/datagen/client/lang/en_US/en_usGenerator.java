@@ -199,6 +199,12 @@ public class en_usGenerator extends LanguageProvider{
         add("key.dysonsphere.orbital_laser_seq_left", "Input Sequence: Left");
         add("key.dysonsphere.orbital_laser_seq_right", "Input Sequence: Right");
         add("key.dysonsphere.orbital_laser_seq_up", "Input Sequence: Up");
+
+        add("key.dysonsphere.grappling_hook", "Dyson Sphere - Grappling Hook");
+        add("key.dysonsphere.grappling_hook_deploy", "Launch Grappling Hook");
+        add("key.dysonsphere.grappling_hook_recall", "Recall Grappling Hook(s)");
+        add("key.dysonsphere.grappling_hook_pull", "Toggle Winch: Pulling");
+        add("key.dysonsphere.grappling_hook_unwind", "Toggle Winch: Unwinding");
     }
     
     
