@@ -57,8 +57,16 @@ public class GrapplingHookControllerItem extends Item {
         return InteractionResultHolder.consume(itemStack);
     }
 
+    //triggers a lot more then we need it to. The reduced interaction range is to completely prevent block and entity interactions.
+    //therefore removing a lot of variables and making the behavior easier to understand
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
+        //TODO: find a way to prevent triggering on dropping item from gui, this doesnt work
+        // if(entity instanceof Player player){
+        //     if(player.inventoryMenu.active){
+        //         return true;
+        //     }
+        // }
         entity.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
             hookContainer.deployHook();
         });
