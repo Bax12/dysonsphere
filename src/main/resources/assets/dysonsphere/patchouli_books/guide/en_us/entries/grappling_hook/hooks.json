@@ -1,0 +1,36 @@
+{
+    "name": "Grappling Hook: Hooks",
+    "icon": "dysonsphere:grappling_hook_hook_slime",
+    "category": "dysonsphere:grappling_hook",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Different $(item)Hooks$() that can be used in a $(thin)Grappling Hook$().$(br)Hooks have multiple stats:$(li)Maximum Hooks: How many hooks can be deployed at the same time.$(li)Hook Gravity: How fast the Hook will fall.$()"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "minecraft:tripwire_hook",
+            "text": "$(o)not made for purpose, but fit for it$()$(br)Maximum Hooks: 2$(br)Hook Gravity: 0.04"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_hook_wood",
+            "text": "$(o)simplicity maximized$()$(br)Can only attach to blocks that wooden tools can mine!$(br)Rather unusable in the nether.$(br)Maximum Hooks: 1$(br)Hook Gravity: 0.05"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_hook_slime",
+            "text": "$(o)quite sticky$()$(br)Can only attach to blocks that slime can stick to!$(br)Maximum Hooks: 2$(br)Hook Gravity: 0.05"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_hook_blaze",
+            "text": "$(o)Excels in the nether!$()$(br)Does not work in water and will set inflammable blocks on fire instead of attaching!$(br)Base Maximum Hooks: 2$(br)Base Hook Gravity: 0.01"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_hook_smart_alloy",
+            "text": "$(o)made for purpose and fit for it$()$(br)Maximum Hooks: 3$(br)Hook Gravity: 0.02"
+        }
+    ]
+}

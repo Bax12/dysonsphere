@@ -25,6 +25,10 @@
         {
             "type": "patchouli:crafting",
             "recipe": "dysonsphere:ingot_smart_alloy"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:construct_ender"
         }
     ]
 }

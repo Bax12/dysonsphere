@@ -1,0 +1,45 @@
+{
+    "name": "Grappling Hook: Engines",
+    "icon": "dysonsphere:grappling_hook_engine_electric2",
+    "category": "dysonsphere:grappling_hook",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Different $(item)Engines$() that can be used in a $(thing)Grappling Hook$().$(br)Engines have unique requirements and common stats:$(li)Launch Force: The initial speed of the launched hook.$(li)Winch Force: The acceleration and maximum force in Pulling Mode.$()"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_engine_manual",
+            "text": "$(o)Good old manual labor$()$(br)Uses no external energy. Quite exhausting$(br)Launch Force: 2.0$(br)Winch Force: 2.4"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_engine_steam",
+            "text": "$(o)Full steam ahead!$()$(br)Uses steam$(br)Launch Force: 2.0$(br)Winch Force: 3.5"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_engine_electric",
+            "text": "$(o)Can anyone else hear the coil hum?$()$(br)Uses RF, recharges while rappeling$(br)Launch Force: 2.5$(br)Winch Force: 3.2"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_engine_electric2",
+            "text": "$(o)Victim of the Doppler Effect$()$(br)Uses RF. A clear upgrade over the simple one$(br)Launch Force: 5.0$(br)Winch Force: 4.4"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_engine_pressure",
+            "text": "$(o)pneumatic greatness$()$(br)The stats improve based on the internal and atmospherical pressure (aka y-Level)$(br)Base Launch Force: 2.5$(br)Base Winch Force: 3.8"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Mechanical Engine$() allows for free flight-like 3D movement in between deployed hooks and gravity. Best results are obtained with 3+ Hooks deployed rather far apart and above where you want to move. Outside the operational area defined by the hooks you will fall like a rock."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_engine_mechanical",
+            "text": "$(o)Freedom at what cost?$()$(br)Launch Force: 2.8$(br)Winch Force: 3.0"
+        }
+    ]
+}

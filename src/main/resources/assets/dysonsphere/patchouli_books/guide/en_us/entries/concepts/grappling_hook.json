@@ -1,0 +1,30 @@
+{
+    "name": "About Grappling Hooks",
+    "icon": "dysonsphere:grappling_hook_hook_smart_alloy",
+    "category": "dysonsphere:concepts",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Tired of collecting dirt pillars or scooping up water? With the $(thing)Grappling Hook$() you can climb trees and mountains or descent into ravines cleanly and in style!$(br)The $(thing)Grappling Hook$() can be controlled with the Keybinds and the designated Controller. It consists of a $(item)Grappling Hook Harness$() filled with individual components. When using the $(thing)Grappling Hook$() be aware of inertia"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Most $(thing)Grappling Hooks$() different between three modi operandi:$(li)Pulling$(li)Stopped$(li)Unwinding$(br)Pulling will $(o)accelerate$() you based on the winch force towards the deployed hooks. If you have multiple hooks deployed you will end up somewhere between them. In Stopped Mode you will fall into balance based on gravity. When already below the grappling hook you will truly stop. Unwinding mode behaves just like stopped mode, with the difference that you will slowly sink lower, up to the length of your rope. Don't wiggle to much at the very end of the rope."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "The components come with different stats and modifiers that determine the overall stats of the $(item)Grappling Hook$(). Additionally, most components have some unique behavior about them."
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:grappling_hook/harness",
+                "dysonsphere:grappling_hook/grappling_hook_controller",
+                "dysonsphere:grappling_hook/hooks",
+                "dysonsphere:grappling_hook/ropes",
+                "dysonsphere:grappling_hook/engines"
+            ],
+            "text": "Components and Tools for $(thing)Grappling Hooks$()"
+        }
+    ]
+}

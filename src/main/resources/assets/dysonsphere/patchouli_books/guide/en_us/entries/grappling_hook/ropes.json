@@ -1,0 +1,26 @@
+{
+    "name": "Grappling Hook: Ropes",
+    "icon": "dysonsphere:grappling_hook_rope_ender",
+    "category": "dysonsphere:grappling_hook",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Different $(item)Ropes$() that can be used in a $(thing)Grappling Hook$().$(br)Ropes have multiple stats:$(li)Maximum Distance: How far away a hook can be in blocks$(li)Hook Gravity Multiplier: How much the rope affects the hook gravity.$(li)Launch Force Multiplier: How much the rope affects the launch force.$(li)Winch Force Multiplier: How much the rope affects the possible winch force$()"
+        },
+        {
+            "type": "patchouli:spotlight",
+            "item": "minecraft:string",
+            "text": "$(o)basic, simple, light and rather flimsy$()$(br)Max Distance: 16$(br)Hook Gravity Multiplier: 1.0x$(br)Launch Force Multiplier: 1.0x$(br)Winch Force Multiplier: 0.8x"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "minecraft:chain",
+            "text": "$(o)sturdy and heavy$()$(br)Max Distance: 32$(br)Hook Gravity Multiplier: 1.2x$(br)Launch Force Multiplier: 0.6x$(br)Winch Force Multiplier: 1.2x"
+        },
+        {
+            "type": "dysonsphere:laser_recipe",
+            "recipe": "dysonsphere:laser_crafting/grappling_hook_rope_ender",
+            "text": "The $(item)Ender Rope$() can extend very far and attaches instantaneously to the targeted block. If no block is targeted launching the hook will fail. Inertia still applies.$(br)Max Distance: 256$(br)Hook Gravity Multiplier: 0.2x$(br)Launch Force Multiplier: 0.1x$(br)Winch Force Multiplier: 1.0x"
+        }
+    ]
+}

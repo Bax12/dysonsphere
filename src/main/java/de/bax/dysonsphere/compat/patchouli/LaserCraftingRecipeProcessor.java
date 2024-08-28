@@ -13,6 +13,7 @@ public class LaserCraftingRecipeProcessor implements IComponentProcessor {
 
     private LaserCraftingRecipe recipe;
     private LaserCraftingRecipe recipe2;
+    private String text;
 
     @Override
     public void setup(Level level, IVariableProvider variables) {
@@ -22,6 +23,9 @@ public class LaserCraftingRecipeProcessor implements IComponentProcessor {
         if(variables.has("recipe2")){
             String recipeId2 = variables.get("recipe2").asString();
             recipe2 = (LaserCraftingRecipe) level.getRecipeManager().byKey(new ResourceLocation(recipeId2)).orElseThrow(IllegalArgumentException::new);
+        }
+        if(variables.has("text")){
+            text = variables.get("text").asString();
         }
     }
 
@@ -49,6 +53,10 @@ public class LaserCraftingRecipeProcessor implements IComponentProcessor {
             }
             if(key.equals("energy2")){
                 return IVariable.wrap(AssetUtil.FLOAT_FORMAT.format(recipe2.inputEnergy()));
+            }
+        } else {
+            if(key.equals("text")){
+                return IVariable.wrap(text);
             }
         }
 

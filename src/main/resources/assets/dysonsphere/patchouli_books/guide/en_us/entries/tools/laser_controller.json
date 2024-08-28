@@ -5,7 +5,7 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "The $(item)Orbital Uplink Bracelet$() is used to controll $(thing)Orbital Lasers$().$(br)It needs to be charged with $(thing)RF$() and to be configured with $(item)Orbital Laser Patterns$(). The Patterns need to be configured in a $(item)Laser Pattern Controller Terminal$() before they can be used."
+            "text": "The $(item)Orbital Uplink Bracelet$() is used to control $(thing)Orbital Lasers$().$(br)It needs to be charged with $(thing)RF$() and to be configured with $(item)Orbital Laser Patterns$(). The Patterns need to be configured in a $(item)Laser Pattern Controller Terminal$() before they can be used."
         },
         {
             "type": "patchouli:crafting",
@@ -14,7 +14,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "The Orbital Uplink comes with multiple controlls. The main control key opens the pattern selection. Within the pattern selection the other four directional keys can be used to input a pattern. When the inputted pattern matches a call in sequence of one of the equipped $(item)Orbital Laser Patterns$() a $(item)Target Designator$() will be placed in the users hand."
+            "text": "The Orbital Uplink comes with multiple controls. The main control key opens the pattern selection. Within the pattern selection the other four directional keys can be used to input a pattern. When the inputted pattern matches a call in sequence of one of the equipped $(item)Orbital Laser Patterns$() a $(item)Target Designator$() will be placed in the users hand."
         },
         {
             "type": "patchouli:relations",

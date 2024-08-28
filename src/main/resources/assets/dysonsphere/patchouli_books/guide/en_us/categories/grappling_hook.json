@@ -1,0 +1,5 @@
+{
+    "name": "Modular Grappling Hook",
+    "description": "Details and components used for a $(thing)Grappling Hook$()",
+    "icon": "dysonsphere:grappling_hook_hook_smart_alloy"
+}

@@ -84,6 +84,13 @@
             "width": 16,
             "height": 12,
             "guard": "#hasRecipe2"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "#text",
+            "x": -1,
+            "y": 60,
+            "guard": "#hasRecipe2->inv"
         }
     ],
     "processor": "de.bax.dysonsphere.compat.patchouli.LaserCraftingRecipeProcessor"
