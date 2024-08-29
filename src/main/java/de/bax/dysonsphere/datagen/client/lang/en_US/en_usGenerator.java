@@ -166,6 +166,12 @@ public class en_usGenerator extends LanguageProvider{
 
         add("dysonsphere.tooltip.pneumaticcraft.pressure", "Pressure: %s/%s bar");
 
+        add("tooltip.dysonsphere.grappling_hook_status", "GrapplingHook Status: %s");
+        add("tooltip.dysonsphere.grappling_hook_status_pull", "Pulling");
+        add("tooltip.dysonsphere.grappling_hook_status_stop", "Stopped");
+        add("tooltip.dysonsphere.grappling_hook_status_unwind", "Unwinding");
+        add("tooltip.dysonsphere.grappling_hook_deployed", "GrapplingHooks Deployed: %s/%s");
+
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");
 

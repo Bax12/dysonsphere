@@ -184,8 +184,8 @@ public class ModHuds {
                 ps.pushPose();
                 ps.translate(10, screenHeight - (ModCompat.isLoaded(ModCompat.MODID.MEKANISM) ? 60 : 20), 0);
                 ps.scale(0.8f, 0.8f, 0.8f);
-                font.drawInBatch(Component.literal("GrapplingHook Status: " + (hookContainer.isPulling() ? "pulling" : hookContainer.isUnwinding() ? "unwinding" : "stopped")), 0, 0, -1, true, ps.last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
-                font.drawInBatch(Component.literal("GrapplingHooks Deployed: " + hookContainer.getDeployedHooks().size() + "/" + frame.getMaxHooks(player.level(), player).orElse(0)), 0, 10, -1, true, ps.last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+                font.drawInBatch(Component.translatable("tooltip.dysonsphere.grappling_hook_status", Component.translatable(hookContainer.isPulling() ? "tooltip.dysonsphere.grappling_hook_status_pull" : hookContainer.isUnwinding() ? "tooltip.dysonsphere.grappling_hook_status_unwind" : "tooltip.dysonsphere.grappling_hook_status_stop")), 0, 0, -1, true, ps.last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+                font.drawInBatch(Component.translatable("tooltip.dysonsphere.grappling_hook_deployed", hookContainer.getDeployedHooks().size(), frame.getMaxHooks(player.level(), player).orElse(0)), 0, 10, -1, true, ps.last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
                 ps.popPose();
             });
         });
