@@ -25,6 +25,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
 public class GrapplingHookBlazeHookItem extends Item {
+
+    public static int countNormal = 2;
+    public static float gravityNormal = 0.01f;
+    public static int countNether = 4;
+    public static float gravityNether = 0f;
     
     public GrapplingHookBlazeHookItem(){
         super(new Item.Properties());
@@ -40,7 +45,7 @@ public class GrapplingHookBlazeHookItem extends Item {
 
                         @Override
                         public int getMaxHookCount(Level level, Player player) {
-                            return level.dimension().equals(Level.NETHER) ? 4 : 2;
+                            return level.dimension().equals(Level.NETHER) ? countNether : countNormal;
                         }
 
                         @Override
@@ -61,7 +66,7 @@ public class GrapplingHookBlazeHookItem extends Item {
 
                         @Override
                         public float getGravity(Level level, Player player) {
-                            return level.dimension().equals(Level.NETHER) ? 0f : 0.01f;
+                            return level.dimension().equals(Level.NETHER) ? gravityNether : gravityNormal;
                         }
 
                         @Override

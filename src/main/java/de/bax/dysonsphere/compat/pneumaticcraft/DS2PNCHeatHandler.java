@@ -5,11 +5,9 @@ import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
-import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import me.desht.pneumaticcraft.api.heat.IHeatExchangerAdapter;
 import me.desht.pneumaticcraft.api.heat.IHeatExchangerLogic;
-import mekanism.api.heat.IHeatCapacitor;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -59,7 +57,7 @@ public class DS2PNCHeatHandler implements ICapabilityProvider {
 
         @Override
         public void addHeat(double amount) {
-            amount *= DSConfig.PNC_HEAT_EXCHAGE_RATE.get();
+            amount *= DSConfig.PNC_HEAT_EXCHANGE_RATE.get();
             if(amount >= 0){
                 tile.getHeatContainer().receiveHeat(amount, false);
             } else {

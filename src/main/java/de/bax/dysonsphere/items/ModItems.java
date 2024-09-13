@@ -2,6 +2,7 @@ package de.bax.dysonsphere.items;
 
 import java.awt.Color;
 
+import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookBlazeHookItem;
@@ -50,14 +51,14 @@ public class ModItems {
     public static final RegistryObject<Item> CONSTRUCT_ENDER = registerItem("construct_ender");
     public static final RegistryObject<Item> GRAPPLING_HOOK_HARNESS = ITEMS.register("grappling_hook_harness", () -> new GrapplingHookHarnessItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_CONTROLLER = ITEMS.register("grappling_hook_controller", () -> new GrapplingHookControllerItem());
-    public static final RegistryObject<Item> GRAPPLING_HOOK_HOOK_SMART_ALLOY = ITEMS.register("grappling_hook_hook_smart_alloy", () -> new GrapplingHookHookItem(3, 0.02f, 0x383738));
+    public static final RegistryObject<Item> GRAPPLING_HOOK_HOOK_SMART_ALLOY = ITEMS.register("grappling_hook_hook_smart_alloy", () -> new GrapplingHookHookItem(0));
     public static final RegistryObject<Item> GRAPPLING_HOOK_HOOK_BLAZE = ITEMS.register("grappling_hook_hook_blaze", () -> new GrapplingHookBlazeHookItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_HOOK_WOOD = ITEMS.register("grappling_hook_hook_wood", () -> new GrapplingHookWoodHookItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_HOOK_SLIME = ITEMS.register("grappling_hook_hook_slime", () -> new GrapplingHookSlimeHookItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_STEAM = ITEMS.register("grappling_hook_engine_steam", () -> new GrapplingHookSteamEngineItem());
-    public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_ELECTRIC = ITEMS.register("grappling_hook_engine_electric", () -> new GrapplingHookElectricEngineItem(15000, 500, 50, 5, 1, 2.5f, 3.2f, Color.GRAY.getRGB()));//TODO change to config values?
-    public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_ELECTRIC_2 = ITEMS.register("grappling_hook_engine_electric2", () -> new GrapplingHookElectricEngineItem(1_000_000, 5000, 50, 10, 5, 5.0f, 4.4f, 0x353535));//make these config values as well
-    public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_MECHANICAL = ITEMS.register("grappling_hook_engine_mechanical", () -> new GrapplingHookMechanicalEngineItem(20_000, 5000, 75, 1, 5, 2.8f, 3.0f, 0x949da4));//make these config values as well
+    public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_ELECTRIC = ITEMS.register("grappling_hook_engine_electric", () -> new GrapplingHookElectricEngineItem(0));
+    public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_ELECTRIC_2 = ITEMS.register("grappling_hook_engine_electric2", () -> new GrapplingHookElectricEngineItem(1));
+    public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_MECHANICAL = ITEMS.register("grappling_hook_engine_mechanical", () -> new GrapplingHookMechanicalEngineItem(2));
     public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_MANUAL = ITEMS.register("grappling_hook_engine_manual", () -> new GrapplingHookManualEngineItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_ROPE_ENDER = ITEMS.register("grappling_hook_rope_ender", () -> new GrapplingHookEnderRopeItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_PRESSURE = ITEMS.register("grappling_hook_engine_pressure", () -> new GrapplingHookPressureEngine());

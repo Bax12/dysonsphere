@@ -18,6 +18,9 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class GrapplingHookTripWireHook implements IGrapplingHookHook, ICapabilityProvider {
 
+    public static int count = 2;
+    public static float gravity = 0.04f;
+
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @org.jetbrains.annotations.Nullable Direction side) {
         if (cap.equals(DSCapabilities.GRAPPLING_HOOK_HOOK)) {
@@ -29,7 +32,7 @@ public class GrapplingHookTripWireHook implements IGrapplingHookHook, ICapabilit
 
     @Override
     public int getMaxHookCount(Level level, Player player) {
-        return 2;
+        return count;
     }
 
     @Override
@@ -39,7 +42,7 @@ public class GrapplingHookTripWireHook implements IGrapplingHookHook, ICapabilit
 
     @Override
     public float getGravity(Level level, Player player) {
-        return 0.04f;
+        return gravity;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package de.bax.dysonsphere.items.grapplingHook;
 
+import java.util.function.Supplier;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,15 +17,27 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class GrapplingHookHookItem extends Item{
 
-    protected final int count;
-    protected final float gravity;
-    protected final int color;
+    public enum TYPE{
+        SMART_ALLOY(3, 0.02f, 0x383738);
 
-    public GrapplingHookHookItem(int count, float gravity, int color){
+        public int count;
+        public float gravity;
+        public int color;
+
+        TYPE(int count, float gravity, int color){
+            this.count = count;
+            this.gravity = gravity;
+            this.color = color;
+        }
+    }
+
+    protected final TYPE type;
+
+    public GrapplingHookHookItem(int type){
         super(new Item.Properties());
-        this.count = count;
-        this.gravity = gravity;
-        this.color = color;
+
+        this.type = TYPE.values()[type];
+        
     }
 
     @Override
@@ -33,7 +47,7 @@ public class GrapplingHookHookItem extends Item{
             @Override
             public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
                 if(cap.equals(DSCapabilities.GRAPPLING_HOOK_HOOK)){
-                    return LazyOptional.of(() -> GrapplingHookHooks.makeSimpleHook(stack, count, gravity, color)).cast();
+                    return LazyOptional.of(() -> GrapplingHookHooks.makeSimpleHook(stack, type.count, type.gravity, type.color)).cast();
                 }
                 return LazyOptional.empty();
             }

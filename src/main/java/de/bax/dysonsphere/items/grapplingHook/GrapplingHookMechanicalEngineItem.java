@@ -1,6 +1,7 @@
 package de.bax.dysonsphere.items.grapplingHook;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,8 +23,8 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class GrapplingHookMechanicalEngineItem extends GrapplingHookElectricEngineItem {
     
-    public GrapplingHookMechanicalEngineItem(int capacity, int maxTransfer, int launchUsage, int winchUsage, int winchRecuperation, float launchForce, float winchForce, int color){
-        super(capacity, maxTransfer, launchUsage, winchUsage, winchRecuperation, launchForce, winchForce, color);
+    public GrapplingHookMechanicalEngineItem(int type){
+        super(type);
     }
 
     @Override
@@ -37,10 +38,10 @@ public class GrapplingHookMechanicalEngineItem extends GrapplingHookElectricEngi
             @Override
             public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
                 if(cap.equals(ForgeCapabilities.ENERGY)){
-                    return LazyOptional.of(() -> new ItemEnergyHandler(stack, CAPACITY, MAX_TRANSFER)).cast();
+                    return LazyOptional.of(() -> new ItemEnergyHandler(stack, type.CAPACITY, type.MAX_TRANSFER)).cast();
                 }
                 if(cap.equals(DSCapabilities.GRAPPLING_HOOK_ENGINE)){
-                    return LazyOptional.of(() -> new GrapplingHookMechanicalEngineWrapper(stack, new ItemEnergyHandler(stack, CAPACITY, MAX_TRANSFER))).cast();
+                    return LazyOptional.of(() -> new GrapplingHookMechanicalEngineWrapper(stack, new ItemEnergyHandler(stack, type.CAPACITY, type.MAX_TRANSFER))).cast();
                 }
                 return LazyOptional.empty();
             }

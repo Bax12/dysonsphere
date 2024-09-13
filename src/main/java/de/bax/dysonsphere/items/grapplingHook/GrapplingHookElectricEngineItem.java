@@ -3,6 +3,8 @@ package de.bax.dysonsphere.items.grapplingHook;
 import java.awt.Color;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,26 +31,40 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class GrapplingHookElectricEngineItem extends Item {
 
-    protected final int CAPACITY;
-    protected final int MAX_TRANSFER;
-    protected final int LAUNCH_USAGE;
-    protected final int WINCH_USAGE;
-    protected final int WINCH_RECUPERATION;
-    protected final float LAUNCH_FORCE;
-    protected final float WINCH_FORCE;
-    protected final int COLOR;
+    public enum TYPE{
+        E1(15000, 500, 50, 5, 1, 2.5f, 3.2f, Color.GRAY.getRGB()),
+        E2(1_000_000, 5000, 50, 10, 5, 5f, 4.4f, 0x353535),
+        MECHANICAL(20000, 5000, 75, 10, 5, 2.8f, 3f, 0x949da4);
 
-    public GrapplingHookElectricEngineItem(int capacity, int maxTransfer, int launchUsage, int winchUsage, int winchRecuperation, float launchForce, float winchForce, int color) {
+        public int CAPACITY;
+        public int MAX_TRANSFER;
+        public int LAUNCH_USAGE;
+        public int WINCH_USAGE;
+        public int WINCH_RECUPERATION;
+        public float LAUNCH_FORCE;
+        public float WINCH_FORCE;
+        public int COLOR;
+
+        TYPE(int capacity, int maxTransfer, int launchUsage, int winchUsage, int winchRecuperation, float launchForce, float winchForce, int color){
+            this.CAPACITY = capacity;
+            this.MAX_TRANSFER = maxTransfer;
+            this.LAUNCH_USAGE = launchUsage;
+            this.WINCH_USAGE = winchUsage;
+            this.WINCH_RECUPERATION = winchRecuperation;
+            this.LAUNCH_FORCE = launchForce;
+            this.WINCH_FORCE = winchForce;
+            this.COLOR = color;
+        }
+
+
+    }
+
+    protected final TYPE type;
+
+    public GrapplingHookElectricEngineItem(int type) {
         super(new Item.Properties());
 
-        this.CAPACITY = capacity;
-        this.MAX_TRANSFER = maxTransfer;
-        this.LAUNCH_USAGE = launchUsage;
-        this.WINCH_USAGE = winchUsage;
-        this.WINCH_RECUPERATION = winchRecuperation;
-        this.LAUNCH_FORCE = launchForce;
-        this.WINCH_FORCE = winchForce;
-        this.COLOR = color;
+        this.type = TYPE.values()[type];
     }
 
     @Override
@@ -62,10 +78,10 @@ public class GrapplingHookElectricEngineItem extends Item {
             @Override
             public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
                 if(cap.equals(ForgeCapabilities.ENERGY)){
-                    return LazyOptional.of(() -> new ItemEnergyHandler(stack, CAPACITY, MAX_TRANSFER)).cast();
+                    return LazyOptional.of(() -> new ItemEnergyHandler(stack, type.CAPACITY, type.MAX_TRANSFER)).cast();
                 }
                 if(cap.equals(DSCapabilities.GRAPPLING_HOOK_ENGINE)){
-                    return LazyOptional.of(() -> new GrapplingHookElectricEngineWrapper(stack, new ItemEnergyHandler(stack, CAPACITY, MAX_TRANSFER))).cast();
+                    return LazyOptional.of(() -> new GrapplingHookElectricEngineWrapper(stack, new ItemEnergyHandler(stack, type.CAPACITY, type.MAX_TRANSFER))).cast();
                 }
                 return LazyOptional.empty();
             }
@@ -73,24 +89,24 @@ public class GrapplingHookElectricEngineItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @javax.annotation.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(@Nonnull ItemStack pStack, @javax.annotation.Nullable Level pLevel, @Nonnull List<Component> pTooltipComponents, @Nonnull TooltipFlag pIsAdvanced) {
         pStack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
             pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.energy_display", AssetUtil.FLOAT_FORMAT.format(energy.getEnergyStored()), AssetUtil.FLOAT_FORMAT.format(energy.getMaxEnergyStored())));
         });
     }
 
     @Override
-    public boolean isBarVisible(ItemStack pStack) {
+    public boolean isBarVisible(@Nonnull ItemStack pStack) {
         return true;
     }
 
     @Override
-    public int getBarColor(ItemStack pStack) {
+    public int getBarColor(@Nonnull ItemStack pStack) {
         return 0xDD2222;
     }
 
     @Override
-    public int getBarWidth(ItemStack pStack) {
+    public int getBarWidth(@Nonnull ItemStack pStack) {
         return pStack.getCapability(ForgeCapabilities.ENERGY).map((energy) -> {
             return (int) (13f * energy.getEnergyStored() / energy.getMaxEnergyStored());
         }).orElse(0);
@@ -109,22 +125,22 @@ public class GrapplingHookElectricEngineItem extends Item {
 
         @Override
         public float getLaunchForce(Level level, Player player) {
-            return LAUNCH_FORCE;
+            return type.LAUNCH_FORCE;
         }
 
         @Override
         public float getWinchForce(Level level, Player player) {
-            return WINCH_FORCE;
+            return type.WINCH_FORCE;
         }
 
         @Override
         public void onHookLaunch(Level level, Player player, GrapplingHookEntity hook) {
-            energyReference.extractEnergy(LAUNCH_USAGE, false);
+            energyReference.extractEnergy(type.LAUNCH_USAGE, false);
         }
 
         @Override
         public void onActiveWinchTick(Level level, Player player) {
-            energyReference.extractEnergy(WINCH_USAGE, false);
+            energyReference.extractEnergy(type.WINCH_USAGE, false);
             if(player.tickCount % 5 == 0){
                 level.playSound(player, player, ModSounds.ELECTRIC_WINCH.get(), SoundSource.PLAYERS, 0.2f, 1.0f);
             }
@@ -133,7 +149,7 @@ public class GrapplingHookElectricEngineItem extends Item {
 
         @Override
         public void onRappelTick(Level level, Player player) {
-            energyReference.receiveEnergy(WINCH_RECUPERATION, false);
+            energyReference.receiveEnergy(type.WINCH_RECUPERATION, false);
             if(player.tickCount % 5 == 0){
                 level.playSound(player, player, ModSounds.ELECTRIC_WINCH.get(), SoundSource.PLAYERS, 0.3f, 0.5f);
             }
@@ -141,12 +157,12 @@ public class GrapplingHookElectricEngineItem extends Item {
 
         @Override
         public boolean canLaunch(Level level, Player player) {
-            return energyReference.getEnergyStored() >= LAUNCH_USAGE;
+            return energyReference.getEnergyStored() >= type.LAUNCH_USAGE;
         }
 
         @Override
         public boolean canWinch(Level level, Player player) {
-            return energyReference.getEnergyStored() >= WINCH_USAGE;
+            return energyReference.getEnergyStored() >= type.WINCH_USAGE;
         }
 
         @Override
@@ -156,7 +172,7 @@ public class GrapplingHookElectricEngineItem extends Item {
 
         @Override
         public int getColor() {
-            return COLOR;
+            return type.COLOR;
         }
 
     }

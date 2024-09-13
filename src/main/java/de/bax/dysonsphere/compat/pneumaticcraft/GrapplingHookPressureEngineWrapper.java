@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.grapplingHook.IGrapplingHookEngine;
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
@@ -23,13 +24,13 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class GrapplingHookPressureEngineWrapper implements ICapabilityProvider, IAirHandlerItem, IGrapplingHookEngine {
 
-    public static int CAPACITY = 4000;
-    public static float MAX_PRESSURE = 10;
+    public static int CAPACITY = DSConfig.PNC_GRAPPLING_HOOK_ENGINE_CAP.get();
+    public static float MAX_PRESSURE = DSConfig.PNC_GRAPPLING_HOOK_ENGINE_MAX_PRESSURE.get().floatValue();
 
-    public static int LAUNCH_USAGE = 60;
-    public static int WINCH_USAGE = 15;
-    public static float LAUNCH_FORCE = 2.5f;
-    public static float WINCH_FORCE = 3.8f;
+    public static int LAUNCH_USAGE = DSConfig.PNC_GRAPPLING_HOOK_ENGINE_LAUNCH_USAGE.get();
+    public static int WINCH_USAGE = DSConfig.PNC_GRAPPLING_HOOK_ENGINE_WINCH_USAGE.get();
+    public static float LAUNCH_FORCE = DSConfig.PNC_GRAPPLING_HOOK_ENGINE_LAUNCH_FORCE.get().floatValue();
+    public static float WINCH_FORCE = DSConfig.PNC_GRAPPLING_HOOK_ENGINE_WINCH_FORCE.get().floatValue();
 
     protected final ItemStack containingStack;
     

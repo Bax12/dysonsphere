@@ -73,7 +73,7 @@ public class GrapplingHookSteamEngineItem extends Item {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack pStack, @javax.annotation.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(@Nonnull ItemStack pStack, @javax.annotation.Nullable Level pLevel, @Nonnull List<Component> pTooltipComponents, @Nonnull TooltipFlag pIsAdvanced) {
         pStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(fluid -> {
             pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.fluid_display", new FluidStack(ModFluids.STEAM.get(), 5).getDisplayName(), AssetUtil.FLOAT_FORMAT.format(Math.round(fluid.getFluidInTank(0).getAmount())), AssetUtil.FLOAT_FORMAT.format(Math.round(fluid.getTankCapacity(0)))));
         });

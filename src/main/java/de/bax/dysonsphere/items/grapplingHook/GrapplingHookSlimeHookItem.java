@@ -22,6 +22,9 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
 public class GrapplingHookSlimeHookItem extends Item {
+
+    public static int count = 2;
+    public static float gravity = 0.05f;
     
     public GrapplingHookSlimeHookItem(){
         super(new Item.Properties());
@@ -37,7 +40,7 @@ public class GrapplingHookSlimeHookItem extends Item {
 
                         @Override
                         public int getMaxHookCount(Level level, Player player) {
-                            return 2;
+                            return count;
                         }
 
                         @Override
@@ -54,7 +57,7 @@ public class GrapplingHookSlimeHookItem extends Item {
 
                         @Override
                         public float getGravity(Level level, Player player) {
-                            return 0.05f;
+                            return gravity;
                         }
 
                         @Override

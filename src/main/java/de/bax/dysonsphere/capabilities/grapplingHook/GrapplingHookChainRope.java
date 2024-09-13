@@ -16,6 +16,11 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class GrapplingHookChainRope implements IGrapplingHookRope, ICapabilityProvider {
 
+    public static float MAX_DISTANCE = 32f;
+    public static float LAUNCH_FORCE = 0.6f;
+    public static float WINCH_FORCE = 1.2f;
+    public static float GRAVITY = 1.2f;
+
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if(cap.equals(DSCapabilities.GRAPPLING_HOOK_ROPE)){
