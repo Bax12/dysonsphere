@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
@@ -33,7 +34,7 @@ public class ModHuds {
 
 
     public static final IGuiOverlay ORBITAL_LASER_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        if(Minecraft.getInstance().player.getInventory().hasAnyMatching((stack) -> {
+        if(DSConfig.GUI_ORBITAL_LASER_ENABLED_VALUE && Minecraft.getInstance().player.getInventory().hasAnyMatching((stack) -> {
             return stack.is(ModItems.LASER_CONTROLLER.get()) || stack.is(ModItems.TARGET_DESIGNATOR.get());
         })){
             renderOrbitalLaserHUD(gui, guiGraphics, partialTick, screenWidth, screenHeight);
@@ -41,7 +42,7 @@ public class ModHuds {
     };
 
     public static final IGuiOverlay LASER_CRAFTER_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        if(Minecraft.getInstance().hitResult instanceof BlockHitResult hit){
+        if(DSConfig.GUI_ORBITAL_LASER_ENABLED_VALUE &&Minecraft.getInstance().hitResult instanceof BlockHitResult hit){
             if(Minecraft.getInstance().level.getBlockEntity(hit.getBlockPos()) instanceof LaserCrafterTile tile){
                 renderLaserCrafterHud(tile, gui, guiGraphics, partialTick, screenWidth, screenHeight);
             }
@@ -49,7 +50,7 @@ public class ModHuds {
     };
 
     public static final IGuiOverlay HEAT_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        if(Minecraft.getInstance().hitResult instanceof BlockHitResult hit){
+        if(DSConfig.GUI_HEAT_OVERLAY_ENABLED_VALUE && Minecraft.getInstance().hitResult instanceof BlockHitResult hit){
             if(Minecraft.getInstance().level.getBlockEntity(hit.getBlockPos()) instanceof IHeatTile tile){
                 renderHeatHud(tile, gui, guiGraphics, partialTick, screenWidth, screenHeight);
             }
@@ -57,7 +58,9 @@ public class ModHuds {
     };
 
     public static final IGuiOverlay GRAPPLING_HOOK_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        renderGrapplingHookHUD(gui, guiGraphics, partialTick, screenWidth, screenHeight);
+        if(DSConfig.GUI_GRAPPLING_HOOK_ENABLED_VALUE){
+            renderGrapplingHookHUD(gui, guiGraphics, partialTick, screenWidth, screenHeight);
+        }
     };
 
     protected static int offset = 0;

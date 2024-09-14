@@ -26,14 +26,19 @@ import de.bax.dysonsphere.tileentities.LaserControllerTile;
 import de.bax.dysonsphere.tileentities.LaserCrafterTile;
 import de.bax.dysonsphere.tileentities.LaserPatternControllerTile;
 import de.bax.dysonsphere.tileentities.RailgunTile;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 
 @Mod.EventBusSubscriber(modid = DysonSphere.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DSConfig {
+
+        //####COMMON####
 
         //Dysonsphere
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> DYSON_SPHERE_DIM_BLACKLIST;
@@ -169,13 +174,28 @@ public class DSConfig {
         public static ForgeConfigSpec.DoubleValue PNC_GRAPPLING_HOOK_ENGINE_WINCH_FORCE;
                         
 
-        private static ForgeConfigSpec SPEC;
+        //####CLIENT####
+
+        public static ForgeConfigSpec.BooleanValue GUI_GRAPPLING_HOOK_ENABLED;
+        public static ForgeConfigSpec.BooleanValue GUI_HEAT_OVERLAY_ENABLED;
+        public static ForgeConfigSpec.BooleanValue GUI_ORBITAL_LASER_ENABLED;
+
+
+        private static ForgeConfigSpec SPEC_COMMON;
+        private static ForgeConfigSpec SPEC_CLIENT;
 
         public static ForgeConfigSpec getCommonConfigSpec(){
-                if(SPEC == null){
-                        SPEC = generateCommonConfig();
+                if(SPEC_COMMON == null){
+                        SPEC_COMMON = generateCommonConfig();
                 }
-                return SPEC;
+                return SPEC_COMMON;
+        }
+
+        public static ForgeConfigSpec getClientConfigSpec(){
+                if(SPEC_CLIENT == null){
+                        SPEC_CLIENT = generateClientConfig();
+                }
+                return SPEC_CLIENT;
         }
 
         protected static ForgeConfigSpec generateCommonConfig(){
@@ -617,130 +637,161 @@ public class DSConfig {
                 return builder.build();
         }
 
+        protected static ForgeConfigSpec generateClientConfig(){
+                ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+
+                builder.push("guis");
+                GUI_GRAPPLING_HOOK_ENABLED = builder
+                        .comment("Wether the Grappling Hook Gui is visible when wearing a Grappling Hook Harness. Default: true")
+                        .define("guiGrapplingHookEnabled", true);
+                GUI_HEAT_OVERLAY_ENABLED = builder
+                        .comment("Wether the Heat Overly Gui is visible when looking at a heated tile entity. Default: true")
+                        .define("guiHeatOverlayEnabled", true);
+                GUI_ORBITAL_LASER_ENABLED = builder
+                        .comment("Wether the Orbital Laser Gui is visible when wearing a Orbital Laser Controller. Note the Controller is unusable without. Default: true")
+                        .define("guiOrbitalLaserEnabled", true);
+
+                return builder.build();
+        }
 
         public static List<String> DYSON_SPHERE_DIM_BLACKLIST_VALUE;
         public static boolean DYSON_SPHERE_IS_WHITELIST_VALUE;
+
+        public static boolean GUI_GRAPPLING_HOOK_ENABLED_VALUE;
+        public static boolean GUI_HEAT_OVERLAY_ENABLED_VALUE;
+        public static boolean GUI_ORBITAL_LASER_ENABLED_VALUE;
 
 
         @SubscribeEvent
         static void onLoad(final ModConfigEvent event) {
 
                 
+                if(event.getConfig().getType().equals(Type.COMMON)){
+                        DYSON_SPHERE_DIM_BLACKLIST_VALUE = ((List<String>) DYSON_SPHERE_DIM_BLACKLIST.get());
+                        DYSON_SPHERE_IS_WHITELIST_VALUE = DYSON_SPHERE_IS_WHITELIST.get();
+                        
+                        HeatHandler.HEAT_AMBIENT = GENERAL_HEAT_AMBIENT.get();
+
+                        LaserStrikeEntity.ENERGY_MULT = GENERAL_LASER_ENERGY_MULT.get();
+
+                        DSEnergyReceiverTile.maxHeat = DS_ENERGY_RECEIVER_MAX_HEAT.get();
+
+                        HeatExchangerTile.maxHeat = HEAT_EXCHANGER_MAX_HEAT.get();
+                        HeatExchangerTile.fluidCapacity = HEAT_EXCHANGER_FLUID_CAPACITY.get();
+
+                        HeatGeneratorTile.maxHeat = HEAT_GENERATOR_MAX_HEAT.get();
+                        HeatGeneratorTile.energyCapacity = HEAT_GENERATOR_ENERGY_CAPACITY.get();
+                        HeatGeneratorTile.minHeatDifference = HEAT_GENERATOR_MIN_HEAT_DIF.get();
+                        HeatGeneratorTile.energyGenerated = HEAT_GENERATOR_ENERGY_GENERATED.get();
+
+                        HeatPipeTile.maxHeat = HEAT_PIPE_MAX_HEAT.get();
+
+                        RailgunTile.launchEnergy = RAILGUN_LAUNCH_ENERGY.get();
+                        RailgunTile.energyCapacity = RAILGUN_ENERGY_CAPACITY.get();
+
+                        LaserControllerTile.energyUsage = LASER_CONTROLLER_TILE_ENERGY_USAGE.get();
+                        LaserControllerTile.energyCapacity = LASER_CONTROLLER_TILE_ENERGY_CAPACITY.get();
+                        LaserControllerTile.cooldownTime = LASER_CONTROLLER_TILE_ENERGY_COOLDOWN.get();
+                        LaserControllerTile.workTime = LASER_CONTROLLER_TILE_ENERGY_WORKTIME.get();
+
+                        LaserCrafterTile.ENERGY_BLEED_STATIC = LASER_CRAFTER_ENERGY_BLEED_STATIC.get();
+                        LaserCrafterTile.ENERGY_BLEED_SCALING = LASER_CRAFTER_ENERGY_BLEED_SCALING.get();
+                        LaserCrafterTile.MAX_HEAT = LASER_CRAFTER_MAX_HEAT.get();
+                        LaserCrafterTile.ENERGY_INPUT_HEAT_RESISTANCE = LASER_CRAFTER_INPUT_HEAT_RESISTANCE.get();
+                        LaserCrafterTile.ENERGY_BLEED_TO_HEAT = LASER_CRAFTER_ENERGY_BLEED_TO_HEAT.get();
+
+                        LaserPatternControllerTile.energyCapacity = LASER_PATTERN_CONTROLLER_CAPACITY.get();
+                        LaserPatternControllerTile.encodeEnergyUsage = LASER_PATTERN_CONTROLLER_USE.get();
+
+                        LaserControllerItem.capacity = LASER_CONTROLLER_ITEM_CAPACITY.get();
+                        LaserControllerItem.maxInput = LASER_CONTROLLER_ITEM_CHARGE_RATE.get();
+                        LaserControllerItem.usage = LASER_CONTROLLER_ITEM_USAGE.get();
+
+                        GrapplingHookHookItem.TYPE.SMART_ALLOY.count = GRAPPLING_HOOK_HOOK_SMART_ALLOY_COUNT.get();
+                        GrapplingHookHookItem.TYPE.SMART_ALLOY.gravity = GRAPPLING_HOOK_HOOK_SMART_ALLOY_GRAVITY.get().floatValue();
+
+                        GrapplingHookBlazeHookItem.countNormal = GRAPPLING_HOOK_HOOK_BLAZE_COUNT_NORMAL.get();
+                        GrapplingHookBlazeHookItem.gravityNormal = GRAPPLING_HOOK_HOOK_BLAZE_GRAVITY_NORMAL.get().floatValue();
+                        GrapplingHookBlazeHookItem.countNether = GRAPPLING_HOOK_HOOK_BLAZE_COUNT_NETHER.get();
+                        GrapplingHookBlazeHookItem.gravityNether = GRAPPLING_HOOK_HOOK_BLAZE_GRAVITY_NETHER.get().floatValue();
+
+                        GrapplingHookWoodHookItem.count = GRAPPLING_HOOK_HOOK_WOOD_COUNT.get();
+                        GrapplingHookWoodHookItem.gravity = GRAPPLING_HOOK_HOOK_WOOD_GRAVITY.get().floatValue();
+
+                        GrapplingHookSlimeHookItem.count = GRAPPLING_HOOK_HOOK_SLIME_COUNT.get();
+                        GrapplingHookSlimeHookItem.gravity = GRAPPLING_HOOK_HOOK_SLIME_GRAVITY.get().floatValue();
+
+                        GrapplingHookTripWireHook.count = GRAPPLING_HOOK_HOOK_TRIPWIRE_COUNT.get();
+                        GrapplingHookTripWireHook.gravity = GRAPPLING_HOOK_HOOK_TRIPWIRE_GRAVITY.get().floatValue();
+
+                        GrapplingHookSteamEngineItem.CAPACITY = GRAPPLING_HOOK_ENGINE_STEAM_CAPACITY.get();
+                        GrapplingHookSteamEngineItem.LAUNCH_USAGE = GRAPPLING_HOOK_ENGINE_STEAM_LAUNCH_USAGE.get();
+                        GrapplingHookSteamEngineItem.WINCH_USAGE = GRAPPLING_HOOK_ENGINE_STEAM_WINCH_USAGE.get();
+                        GrapplingHookSteamEngineItem.LAUNCH_FORCE = GRAPPLING_HOOK_ENGINE_STEAM_LAUNCH_FORCE.get().floatValue();
+                        GrapplingHookSteamEngineItem.WINCH_FORCE = GRAPPLING_HOOK_ENGINE_STEAM_WINCH_FORCE.get().floatValue();
+
+                        GrapplingHookElectricEngineItem.TYPE.E1.CAPACITY = GRAPPLING_HOOK_ENGINE_ELECTRIC1_CAPACITY.get();
+                        GrapplingHookElectricEngineItem.TYPE.E1.MAX_TRANSFER = GRAPPLING_HOOK_ENGINE_ELECTRIC1_TRANSFER.get();
+                        GrapplingHookElectricEngineItem.TYPE.E1.LAUNCH_USAGE = GRAPPLING_HOOK_ENGINE_ELECTRIC1_LAUNCH_USAGE.get();
+                        GrapplingHookElectricEngineItem.TYPE.E1.WINCH_USAGE = GRAPPLING_HOOK_ENGINE_ELECTRIC1_WINCH_USAGE.get();
+                        GrapplingHookElectricEngineItem.TYPE.E1.WINCH_RECUPERATION = GRAPPLING_HOOK_ENGINE_ELECTRIC1_WINCH_RECUPERATION.get();
+                        GrapplingHookElectricEngineItem.TYPE.E1.LAUNCH_FORCE = GRAPPLING_HOOK_ENGINE_ELECTRIC1_LAUNCH_FORCE.get().floatValue();
+                        GrapplingHookElectricEngineItem.TYPE.E1.WINCH_FORCE = GRAPPLING_HOOK_ENGINE_ELECTRIC1_WINCH_FORCE.get().floatValue();
+
+                        GrapplingHookElectricEngineItem.TYPE.E2.CAPACITY = GRAPPLING_HOOK_ENGINE_ELECTRIC2_CAPACITY.get();
+                        GrapplingHookElectricEngineItem.TYPE.E2.MAX_TRANSFER = GRAPPLING_HOOK_ENGINE_ELECTRIC2_TRANSFER.get();
+                        GrapplingHookElectricEngineItem.TYPE.E2.LAUNCH_USAGE = GRAPPLING_HOOK_ENGINE_ELECTRIC2_LAUNCH_USAGE.get();
+                        GrapplingHookElectricEngineItem.TYPE.E2.WINCH_USAGE = GRAPPLING_HOOK_ENGINE_ELECTRIC2_WINCH_USAGE.get();
+                        GrapplingHookElectricEngineItem.TYPE.E2.WINCH_RECUPERATION = GRAPPLING_HOOK_ENGINE_ELECTRIC2_WINCH_RECUPERATION.get();
+                        GrapplingHookElectricEngineItem.TYPE.E2.LAUNCH_FORCE = GRAPPLING_HOOK_ENGINE_ELECTRIC2_LAUNCH_FORCE.get().floatValue();
+                        GrapplingHookElectricEngineItem.TYPE.E2.WINCH_FORCE = GRAPPLING_HOOK_ENGINE_ELECTRIC2_WINCH_FORCE.get().floatValue();
+
+                        GrapplingHookElectricEngineItem.TYPE.MECHANICAL.CAPACITY = GRAPPLING_HOOK_ENGINE_MECHANICAL_CAPACITY.get();
+                        GrapplingHookElectricEngineItem.TYPE.MECHANICAL.MAX_TRANSFER = GRAPPLING_HOOK_ENGINE_MECHANICAL_TRANSFER.get();
+                        GrapplingHookElectricEngineItem.TYPE.MECHANICAL.LAUNCH_USAGE = GRAPPLING_HOOK_ENGINE_MECHANICAL_LAUNCH_USAGE.get();
+                        GrapplingHookElectricEngineItem.TYPE.MECHANICAL.WINCH_USAGE = GRAPPLING_HOOK_ENGINE_MECHANICAL_WINCH_USAGE.get();
+                        GrapplingHookElectricEngineItem.TYPE.MECHANICAL.WINCH_RECUPERATION = GRAPPLING_HOOK_ENGINE_MECHANICAL_WINCH_RECUPERATION.get();
+                        GrapplingHookElectricEngineItem.TYPE.MECHANICAL.LAUNCH_FORCE = GRAPPLING_HOOK_ENGINE_MECHANICAL_LAUNCH_FORCE.get().floatValue();
+                        GrapplingHookElectricEngineItem.TYPE.MECHANICAL.WINCH_FORCE = GRAPPLING_HOOK_ENGINE_MECHANICAL_WINCH_FORCE.get().floatValue();
+
+                        GrapplingHookManualEngineItem.LAUNCH_USAGE = GRAPPLING_HOOK_ENGINE_MANUAL_LAUNCH_USAGE.get().floatValue();
+                        GrapplingHookManualEngineItem.WINCH_USAGE = GRAPPLING_HOOK_ENGINE_MANUAL_WINCH_USAGE.get().floatValue();
+                        GrapplingHookManualEngineItem.RAPPEL_USAGE = GRAPPLING_HOOK_ENGINE_MANUAL_RAPPEL_USAGE.get().floatValue();
+                        GrapplingHookManualEngineItem.LAUNCH_FORCE = GRAPPLING_HOOK_ENGINE_MANUAL_LAUNCH_FORCE.get().floatValue();
+                        GrapplingHookManualEngineItem.WINCH_FORCE = GRAPPLING_HOOK_ENGINE_MANUAL_WINCH_FORCE.get().floatValue();
+
+                        GrapplingHookEnderRopeItem.MAX_DISTANCE = GRAPPLING_HOOK_ROPE_ENDER_MAX_DISTANCE.get().floatValue();
+                        GrapplingHookEnderRopeItem.LAUNCH_FORCE = GRAPPLING_HOOK_ROPE_ENDER_LAUNCH_FORCE.get().floatValue();
+                        GrapplingHookEnderRopeItem.WINCH_FORCE = GRAPPLING_HOOK_ROPE_ENDER_WINCH_FORCE.get().floatValue();
+                        GrapplingHookEnderRopeItem.GRAVITY = GRAPPLING_HOOK_ROPE_ENDER_GRAVITY.get().floatValue();
+
+                        GrapplingHookStringRope.MAX_DISTANCE = GRAPPLING_HOOK_ROPE_STRING_MAX_DISTANCE.get().floatValue();
+                        GrapplingHookStringRope.LAUNCH_FORCE = GRAPPLING_HOOK_ROPE_STRING_LAUNCH_FORCE.get().floatValue();
+                        GrapplingHookStringRope.WINCH_FORCE = GRAPPLING_HOOK_ROPE_STRING_WINCH_FORCE.get().floatValue();
+                        GrapplingHookStringRope.GRAVITY = GRAPPLING_HOOK_ROPE_STRING_GRAVITY.get().floatValue();
+
+                        GrapplingHookChainRope.LAUNCH_FORCE = GRAPPLING_HOOK_ROPE_CHAIN_LAUNCH_FORCE.get().floatValue();
+                        GrapplingHookChainRope.MAX_DISTANCE = GRAPPLING_HOOK_ROPE_CHAIN_MAX_DISTANCE.get().floatValue();
+                        GrapplingHookChainRope.WINCH_FORCE = GRAPPLING_HOOK_ROPE_CHAIN_WINCH_FORCE.get().floatValue();
+                        GrapplingHookChainRope.GRAVITY = GRAPPLING_HOOK_ROPE_CHAIN_GRAVITY.get().floatValue();
+
+                        CapsuleSolarItem.energyProvided = SOLAR_CAPSULE_ENERGY_PROVIDED.get();
+                        CapsuleSolarItem.completionProgress = SOLAR_CAPSULE_COMPLETION.get().floatValue();
+                        
+                        CapsuleLaserItem.energyProvided = -LASER_CAPSULE_ENERGY_CONSUMED.get();
+                        CapsuleLaserItem.completionProgress = LASER_CAPSULE_COMPLETION.get().floatValue();
+
+                        DysonSphere.LOGGER.info("Common Config loaded!");
+                }
+
+                if(event.getConfig().getType().equals(Type.CLIENT)){
+                        GUI_GRAPPLING_HOOK_ENABLED_VALUE = GUI_GRAPPLING_HOOK_ENABLED.get();
+                        GUI_HEAT_OVERLAY_ENABLED_VALUE = GUI_HEAT_OVERLAY_ENABLED.get();
+                        GUI_ORBITAL_LASER_ENABLED_VALUE = GUI_ORBITAL_LASER_ENABLED.get();
+                        DysonSphere.LOGGER.info("Client Config loaded!");
+                }
                 
-                DYSON_SPHERE_DIM_BLACKLIST_VALUE = ((List<String>) DYSON_SPHERE_DIM_BLACKLIST.get());
-                DYSON_SPHERE_IS_WHITELIST_VALUE = DYSON_SPHERE_IS_WHITELIST.get();
-                
-                HeatHandler.HEAT_AMBIENT = GENERAL_HEAT_AMBIENT.get();
-
-                LaserStrikeEntity.ENERGY_MULT = GENERAL_LASER_ENERGY_MULT.get();
-
-                DSEnergyReceiverTile.maxHeat = DS_ENERGY_RECEIVER_MAX_HEAT.get();
-
-                HeatExchangerTile.maxHeat = HEAT_EXCHANGER_MAX_HEAT.get();
-                HeatExchangerTile.fluidCapacity = HEAT_EXCHANGER_FLUID_CAPACITY.get();
-
-                HeatGeneratorTile.maxHeat = HEAT_GENERATOR_MAX_HEAT.get();
-                HeatGeneratorTile.energyCapacity = HEAT_GENERATOR_ENERGY_CAPACITY.get();
-                HeatGeneratorTile.minHeatDifference = HEAT_GENERATOR_MIN_HEAT_DIF.get();
-                HeatGeneratorTile.energyGenerated = HEAT_GENERATOR_ENERGY_GENERATED.get();
-
-                HeatPipeTile.maxHeat = HEAT_PIPE_MAX_HEAT.get();
-
-                RailgunTile.launchEnergy = RAILGUN_LAUNCH_ENERGY.get();
-                RailgunTile.energyCapacity = RAILGUN_ENERGY_CAPACITY.get();
-
-                LaserControllerTile.energyUsage = LASER_CONTROLLER_TILE_ENERGY_USAGE.get();
-                LaserControllerTile.energyCapacity = LASER_CONTROLLER_TILE_ENERGY_CAPACITY.get();
-                LaserControllerTile.cooldownTime = LASER_CONTROLLER_TILE_ENERGY_COOLDOWN.get();
-                LaserControllerTile.workTime = LASER_CONTROLLER_TILE_ENERGY_WORKTIME.get();
-
-                LaserCrafterTile.ENERGY_BLEED_STATIC = LASER_CRAFTER_ENERGY_BLEED_STATIC.get();
-                LaserCrafterTile.ENERGY_BLEED_SCALING = LASER_CRAFTER_ENERGY_BLEED_SCALING.get();
-                LaserCrafterTile.MAX_HEAT = LASER_CRAFTER_MAX_HEAT.get();
-                LaserCrafterTile.ENERGY_INPUT_HEAT_RESISTANCE = LASER_CRAFTER_INPUT_HEAT_RESISTANCE.get();
-                LaserCrafterTile.ENERGY_BLEED_TO_HEAT = LASER_CRAFTER_ENERGY_BLEED_TO_HEAT.get();
-
-                LaserPatternControllerTile.energyCapacity = LASER_PATTERN_CONTROLLER_CAPACITY.get();
-                LaserPatternControllerTile.encodeEnergyUsage = LASER_PATTERN_CONTROLLER_USE.get();
-
-                LaserControllerItem.capacity = LASER_CONTROLLER_ITEM_CAPACITY.get();
-                LaserControllerItem.maxInput = LASER_CONTROLLER_ITEM_CHARGE_RATE.get();
-                LaserControllerItem.usage = LASER_CONTROLLER_ITEM_USAGE.get();
-
-                GrapplingHookHookItem.TYPE.SMART_ALLOY.count = GRAPPLING_HOOK_HOOK_SMART_ALLOY_COUNT.get();
-                GrapplingHookHookItem.TYPE.SMART_ALLOY.gravity = GRAPPLING_HOOK_HOOK_SMART_ALLOY_GRAVITY.get().floatValue();
-
-                GrapplingHookBlazeHookItem.countNormal = GRAPPLING_HOOK_HOOK_BLAZE_COUNT_NORMAL.get();
-                GrapplingHookBlazeHookItem.gravityNormal = GRAPPLING_HOOK_HOOK_BLAZE_GRAVITY_NORMAL.get().floatValue();
-                GrapplingHookBlazeHookItem.countNether = GRAPPLING_HOOK_HOOK_BLAZE_COUNT_NETHER.get();
-                GrapplingHookBlazeHookItem.gravityNether = GRAPPLING_HOOK_HOOK_BLAZE_GRAVITY_NETHER.get().floatValue();
-
-                GrapplingHookWoodHookItem.count = GRAPPLING_HOOK_HOOK_WOOD_COUNT.get();
-                GrapplingHookWoodHookItem.gravity = GRAPPLING_HOOK_HOOK_WOOD_GRAVITY.get().floatValue();
-
-                GrapplingHookSlimeHookItem.count = GRAPPLING_HOOK_HOOK_SLIME_COUNT.get();
-                GrapplingHookSlimeHookItem.gravity = GRAPPLING_HOOK_HOOK_SLIME_GRAVITY.get().floatValue();
-
-                GrapplingHookTripWireHook.count = GRAPPLING_HOOK_HOOK_TRIPWIRE_COUNT.get();
-                GrapplingHookTripWireHook.gravity = GRAPPLING_HOOK_HOOK_TRIPWIRE_GRAVITY.get().floatValue();
-
-                GrapplingHookSteamEngineItem.CAPACITY = GRAPPLING_HOOK_ENGINE_STEAM_CAPACITY.get();
-                GrapplingHookSteamEngineItem.LAUNCH_USAGE = GRAPPLING_HOOK_ENGINE_STEAM_LAUNCH_USAGE.get();
-                GrapplingHookSteamEngineItem.WINCH_USAGE = GRAPPLING_HOOK_ENGINE_STEAM_WINCH_USAGE.get();
-                GrapplingHookSteamEngineItem.LAUNCH_FORCE = GRAPPLING_HOOK_ENGINE_STEAM_LAUNCH_FORCE.get().floatValue();
-                GrapplingHookSteamEngineItem.WINCH_FORCE = GRAPPLING_HOOK_ENGINE_STEAM_WINCH_FORCE.get().floatValue();
-
-                GrapplingHookElectricEngineItem.TYPE.E1.CAPACITY = GRAPPLING_HOOK_ENGINE_ELECTRIC1_CAPACITY.get();
-                GrapplingHookElectricEngineItem.TYPE.E1.MAX_TRANSFER = GRAPPLING_HOOK_ENGINE_ELECTRIC1_TRANSFER.get();
-                GrapplingHookElectricEngineItem.TYPE.E1.LAUNCH_USAGE = GRAPPLING_HOOK_ENGINE_ELECTRIC1_LAUNCH_USAGE.get();
-                GrapplingHookElectricEngineItem.TYPE.E1.WINCH_USAGE = GRAPPLING_HOOK_ENGINE_ELECTRIC1_WINCH_USAGE.get();
-                GrapplingHookElectricEngineItem.TYPE.E1.WINCH_RECUPERATION = GRAPPLING_HOOK_ENGINE_ELECTRIC1_WINCH_RECUPERATION.get();
-                GrapplingHookElectricEngineItem.TYPE.E1.LAUNCH_FORCE = GRAPPLING_HOOK_ENGINE_ELECTRIC1_LAUNCH_FORCE.get().floatValue();
-                GrapplingHookElectricEngineItem.TYPE.E1.WINCH_FORCE = GRAPPLING_HOOK_ENGINE_ELECTRIC1_WINCH_FORCE.get().floatValue();
-
-                GrapplingHookElectricEngineItem.TYPE.E2.CAPACITY = GRAPPLING_HOOK_ENGINE_ELECTRIC2_CAPACITY.get();
-                GrapplingHookElectricEngineItem.TYPE.E2.MAX_TRANSFER = GRAPPLING_HOOK_ENGINE_ELECTRIC2_TRANSFER.get();
-                GrapplingHookElectricEngineItem.TYPE.E2.LAUNCH_USAGE = GRAPPLING_HOOK_ENGINE_ELECTRIC2_LAUNCH_USAGE.get();
-                GrapplingHookElectricEngineItem.TYPE.E2.WINCH_USAGE = GRAPPLING_HOOK_ENGINE_ELECTRIC2_WINCH_USAGE.get();
-                GrapplingHookElectricEngineItem.TYPE.E2.WINCH_RECUPERATION = GRAPPLING_HOOK_ENGINE_ELECTRIC2_WINCH_RECUPERATION.get();
-                GrapplingHookElectricEngineItem.TYPE.E2.LAUNCH_FORCE = GRAPPLING_HOOK_ENGINE_ELECTRIC2_LAUNCH_FORCE.get().floatValue();
-                GrapplingHookElectricEngineItem.TYPE.E2.WINCH_FORCE = GRAPPLING_HOOK_ENGINE_ELECTRIC2_WINCH_FORCE.get().floatValue();
-
-                GrapplingHookElectricEngineItem.TYPE.MECHANICAL.CAPACITY = GRAPPLING_HOOK_ENGINE_MECHANICAL_CAPACITY.get();
-                GrapplingHookElectricEngineItem.TYPE.MECHANICAL.MAX_TRANSFER = GRAPPLING_HOOK_ENGINE_MECHANICAL_TRANSFER.get();
-                GrapplingHookElectricEngineItem.TYPE.MECHANICAL.LAUNCH_USAGE = GRAPPLING_HOOK_ENGINE_MECHANICAL_LAUNCH_USAGE.get();
-                GrapplingHookElectricEngineItem.TYPE.MECHANICAL.WINCH_USAGE = GRAPPLING_HOOK_ENGINE_MECHANICAL_WINCH_USAGE.get();
-                GrapplingHookElectricEngineItem.TYPE.MECHANICAL.WINCH_RECUPERATION = GRAPPLING_HOOK_ENGINE_MECHANICAL_WINCH_RECUPERATION.get();
-                GrapplingHookElectricEngineItem.TYPE.MECHANICAL.LAUNCH_FORCE = GRAPPLING_HOOK_ENGINE_MECHANICAL_LAUNCH_FORCE.get().floatValue();
-                GrapplingHookElectricEngineItem.TYPE.MECHANICAL.WINCH_FORCE = GRAPPLING_HOOK_ENGINE_MECHANICAL_WINCH_FORCE.get().floatValue();
-
-                GrapplingHookManualEngineItem.LAUNCH_USAGE = GRAPPLING_HOOK_ENGINE_MANUAL_LAUNCH_USAGE.get().floatValue();
-                GrapplingHookManualEngineItem.WINCH_USAGE = GRAPPLING_HOOK_ENGINE_MANUAL_WINCH_USAGE.get().floatValue();
-                GrapplingHookManualEngineItem.RAPPEL_USAGE = GRAPPLING_HOOK_ENGINE_MANUAL_RAPPEL_USAGE.get().floatValue();
-                GrapplingHookManualEngineItem.LAUNCH_FORCE = GRAPPLING_HOOK_ENGINE_MANUAL_LAUNCH_FORCE.get().floatValue();
-                GrapplingHookManualEngineItem.WINCH_FORCE = GRAPPLING_HOOK_ENGINE_MANUAL_WINCH_FORCE.get().floatValue();
-
-                GrapplingHookEnderRopeItem.MAX_DISTANCE = GRAPPLING_HOOK_ROPE_ENDER_MAX_DISTANCE.get().floatValue();
-                GrapplingHookEnderRopeItem.LAUNCH_FORCE = GRAPPLING_HOOK_ROPE_ENDER_LAUNCH_FORCE.get().floatValue();
-                GrapplingHookEnderRopeItem.WINCH_FORCE = GRAPPLING_HOOK_ROPE_ENDER_WINCH_FORCE.get().floatValue();
-                GrapplingHookEnderRopeItem.GRAVITY = GRAPPLING_HOOK_ROPE_ENDER_GRAVITY.get().floatValue();
-
-                GrapplingHookStringRope.MAX_DISTANCE = GRAPPLING_HOOK_ROPE_STRING_MAX_DISTANCE.get().floatValue();
-                GrapplingHookStringRope.LAUNCH_FORCE = GRAPPLING_HOOK_ROPE_STRING_LAUNCH_FORCE.get().floatValue();
-                GrapplingHookStringRope.WINCH_FORCE = GRAPPLING_HOOK_ROPE_STRING_WINCH_FORCE.get().floatValue();
-                GrapplingHookStringRope.GRAVITY = GRAPPLING_HOOK_ROPE_STRING_GRAVITY.get().floatValue();
-
-                GrapplingHookChainRope.LAUNCH_FORCE = GRAPPLING_HOOK_ROPE_CHAIN_LAUNCH_FORCE.get().floatValue();
-                GrapplingHookChainRope.MAX_DISTANCE = GRAPPLING_HOOK_ROPE_CHAIN_MAX_DISTANCE.get().floatValue();
-                GrapplingHookChainRope.WINCH_FORCE = GRAPPLING_HOOK_ROPE_CHAIN_WINCH_FORCE.get().floatValue();
-                GrapplingHookChainRope.GRAVITY = GRAPPLING_HOOK_ROPE_CHAIN_GRAVITY.get().floatValue();
-
-                CapsuleSolarItem.energyProvided = SOLAR_CAPSULE_ENERGY_PROVIDED.get();
-                CapsuleSolarItem.completionProgress = SOLAR_CAPSULE_COMPLETION.get().floatValue();
-                
-                CapsuleLaserItem.energyProvided = -LASER_CAPSULE_ENERGY_CONSUMED.get();
-                CapsuleLaserItem.completionProgress = LASER_CAPSULE_COMPLETION.get().floatValue();
-
-                DysonSphere.LOGGER.info("Config loaded!");
         }
+
+
 }

@@ -124,6 +124,7 @@ public class DysonSphere
         // modEventBus.addListener(this::addCreative);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, DSConfig.getClientConfigSpec());
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DSConfig.getCommonConfigSpec());
         ModPacketHandler.init();
     }
