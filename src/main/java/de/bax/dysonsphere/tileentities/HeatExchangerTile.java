@@ -3,6 +3,8 @@ package de.bax.dysonsphere.tileentities;
 import java.util.Arrays;
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -160,13 +162,13 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@Nonnull CompoundTag tag) {
         super.load(tag);
         heatHandler.deserializeNBT(tag.getCompound("Heat"));
         inputTank.readFromNBT(tag.getCompound("inputTank"));
         outputTank.readFromNBT(tag.getCompound("outputTank"));
         inventory.deserializeNBT(tag.getCompound("inventory"));
-        if(level.isClientSide){ 
+        if(level != null && level.isClientSide){ 
             updateNeighbors(); //don't want to sync it, onNeighbor change is server-only and handleUpdateTag isn't triggered
         }
     }
