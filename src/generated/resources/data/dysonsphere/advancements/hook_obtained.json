@@ -1,32 +1,38 @@
 {
   "parent": "dysonsphere:root",
   "criteria": {
-    "completion": {
+    "obtainHarness": {
       "conditions": {
-        "progress": 1.0E-6
+        "items": [
+          {
+            "items": [
+              "dysonsphere:grappling_hook_harness"
+            ]
+          }
+        ]
       },
-      "trigger": "dysonsphere:ds_progress"
+      "trigger": "minecraft:inventory_changed"
     }
   },
   "display": {
     "announce_to_chat": true,
     "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
     "description": {
-      "translate": "achievement.dysonsphere.start.desc"
+      "translate": "achievement.dysonsphere.get_hook_harness.desc"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "dysonsphere:coil_iron"
+      "item": "dysonsphere:grappling_hook_harness"
     },
     "show_toast": true,
     "title": {
-      "translate": "achievement.dysonsphere.start"
+      "translate": "achievement.dysonsphere.get_hook_harness"
     }
   },
   "requirements": [
     [
-      "completion"
+      "obtainHarness"
     ]
   ],
   "sends_telemetry_event": true

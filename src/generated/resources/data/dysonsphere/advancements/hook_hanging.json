@@ -1,32 +1,30 @@
 {
-  "parent": "dysonsphere:root",
+  "parent": "dysonsphere:hook_obtained",
   "criteria": {
-    "completion": {
-      "conditions": {
-        "progress": 1.0E-6
-      },
-      "trigger": "dysonsphere:ds_progress"
+    "hookHanging": {
+      "conditions": {},
+      "trigger": "dysonsphere:hook_hanging"
     }
   },
   "display": {
     "announce_to_chat": true,
     "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
     "description": {
-      "translate": "achievement.dysonsphere.start.desc"
+      "translate": "achievement.dysonsphere.hook_hanging.desc"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "dysonsphere:coil_iron"
+      "item": "dysonsphere:grappling_hook_hook_wood"
     },
     "show_toast": true,
     "title": {
-      "translate": "achievement.dysonsphere.start"
+      "translate": "achievement.dysonsphere.hook_hanging"
     }
   },
   "requirements": [
     [
-      "completion"
+      "hookHanging"
     ]
   ],
   "sends_telemetry_event": true

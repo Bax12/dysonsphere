@@ -1,0 +1,30 @@
+{
+  "criteria": {
+    "root": {
+      "conditions": {},
+      "trigger": "dysonsphere:automatic"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "achievement.dysonsphere.root.desc"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "dysonsphere:component_smart_alloy"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "achievement.dysonsphere.root"
+    }
+  },
+  "requirements": [
+    [
+      "root"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

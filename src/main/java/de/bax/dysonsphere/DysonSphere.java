@@ -193,8 +193,8 @@ public class DysonSphere
     @SubscribeEvent
     public void syncPlayerCaps(EntityJoinLevelEvent event){
         if(event.getLevel().isClientSide) return;
-        if(event.getEntity() instanceof ServerPlayer){
-            ServerPlayer player = (ServerPlayer) event.getEntity();
+        if(event.getEntity() instanceof ServerPlayer player){
+            ModAdvancements.AUTOMATIC.trigger(player);
             player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
                 laser.putLasersOnCooldown(0, 0, 0);//call with zero laser to trigger sync
                 laser.getLasersAvailable(0);

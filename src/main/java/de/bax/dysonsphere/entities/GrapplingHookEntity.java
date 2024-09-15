@@ -4,11 +4,13 @@ import javax.annotation.Nonnull;
 
 import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
 
+import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -142,6 +144,9 @@ public class GrapplingHookEntity extends ThrowableProjectile {
                     // this.recall();
                     hookContainer.getGrapplingHookFrame().ifPresent((hookFrame) -> {
                         hookFrame.onHookOutOfRange(level(), player, this);
+                        if(player instanceof ServerPlayer serverPlayer){
+                            ModAdvancements.HOOK_DETACH_TRIGGER.trigger(serverPlayer);
+                        }
                     });
                 }
             });

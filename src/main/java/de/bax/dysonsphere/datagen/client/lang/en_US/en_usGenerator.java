@@ -187,7 +187,9 @@ public class en_usGenerator extends LanguageProvider{
         add("dysonsphere.recipe.laser", "Orbital Laser Strike");
 
         //advancements
-        add("achievement.dysonsphere.start", "The Project begins!");
+        add("achievement.dysonsphere.root", "The Project begins!");
+        add("achievement.dysonsphere.root.desc", "Remember");
+        add("achievement.dysonsphere.start", "The first step of many!");
         add("achievement.dysonsphere.start.desc", "Start constructing the Dyson Sphere with the Electromagnetic Orbital Launcher");
         add("achievement.dysonsphere.half", "The Dyson Sphere takes Shape");
         add("achievement.dysonsphere.half.desc", "Reach 50% completion of the Dyson Sphere");
@@ -197,6 +199,14 @@ public class en_usGenerator extends LanguageProvider{
         add("achievement.dysonsphere.laser_strike.desc", "Call down an Orbital Laser Strike. Fear is natural");
         add("achievement.dysonsphere.praise", "Praise be!");
         add("achievement.dysonsphere.praise.desc", "Show your devotion with a special Orbital Laser");
+        add("achievement.dysonsphere.get_hook_harness", "Gear up!");
+        add("achievement.dysonsphere.get_hook_harness.desc", "Get yourself a Grappling Hook Harness. And maybe fill it.");
+        add("achievement.dysonsphere.hook_detach", "EPAH!");
+        add("achievement.dysonsphere.hook_detach.desc", "Experience the consequences of overextending a rope");
+        add("achievement.dysonsphere.hook_speed_50", "Mass and Momentum");
+        add("achievement.dysonsphere.hook_speed_50.desc", "Experience an Acceleration of over 50 blocks per second from a grappling hook.");
+        add("achievement.dysonsphere.hook_hanging", "Just hanging around");
+        add("achievement.dysonsphere.hook_hanging.desc", "Hang idle in your grappling hook");
 
         //controls - keys
         add("key.dysonsphere.orbital_laser", "Dyson Sphere - Orbital Lasers");

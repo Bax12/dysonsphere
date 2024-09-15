@@ -4,15 +4,16 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
 import de.bax.dysonsphere.util.ConvexHullUtil;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -188,9 +189,14 @@ public interface IGrapplingHookFrame {
                                 hookMovement = hookMovement.scale(0.5f);
                             }
                             if(hookMovement.lengthSqr() > 0.01f){
+                                if(player instanceof ServerPlayer serverPlayer){
+                                    ModAdvancements.HOOK_SPEED_TRIGGER.trigger(serverPlayer, (float) hookMovement.lengthSqr());
+                                }
+                                
                                 hookMovement = hookMovement.scale(0.1);
                                 // player.setDeltaMovement(player.getDeltaMovement().add(hookMovement));
-                                player.addDeltaMovement(hookMovement);;
+                                player.addDeltaMovement(hookMovement);
+                                
                                 this.onActiveWinchTick(player.level(), player);
                             }
                         } else {
@@ -238,7 +244,11 @@ public interface IGrapplingHookFrame {
                                 //     yMotion -= 0.1;
                                 // }
                             }
-                            player.setDeltaMovement(new Vec3(playerMovement.x + (hookMovement.x * (Math.max(hookMovement.y, 0) / xyLength)/ 3) , yMotion, playerMovement.z + (hookMovement.z * (Math.max(hookMovement.y, 0) / xyLength) / 3)));
+                            Vec3 movement = new Vec3(playerMovement.x + (hookMovement.x * (Math.max(hookMovement.y, 0) / xyLength)/ 3) , yMotion, playerMovement.z + (hookMovement.z * (Math.max(hookMovement.y, 0) / xyLength) / 3));
+                            if(player instanceof ServerPlayer serverPlayer && movement.lengthSqr() < 0.1f){
+                                ModAdvancements.HOOK_HANGING_TRIGGER.trigger(serverPlayer);
+                            }
+                            player.setDeltaMovement(movement);
                         }
 
                     }
