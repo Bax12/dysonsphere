@@ -1,21 +1,69 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "B": {
-      "tag": "forge:ingots/brick"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:ingots/tungsten"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "tag": "forge:ingots/brick"
+          },
+          "C": {
+            "tag": "forge:storage_blocks/coal"
+          }
+        },
+        "pattern": [
+          "BBB",
+          "BCB",
+          "BBB"
+        ],
+        "result": {
+          "item": "dysonsphere:heat_shielding"
+        },
+        "show_notification": true
+      }
     },
-    "C": {
-      "tag": "forge:storage_blocks/coal"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:ingots/tungsten"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "tag": "forge:ingots/brick"
+          },
+          "C": {
+            "tag": "forge:storage_blocks/coal"
+          },
+          "T": {
+            "tag": "forge:ingots/tungsten"
+          }
+        },
+        "pattern": [
+          "BTB",
+          "TCT",
+          "BTB"
+        ],
+        "result": {
+          "item": "dysonsphere:heat_shielding"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "BBB",
-    "BCB",
-    "BBB"
-  ],
-  "result": {
-    "item": "dysonsphere:heat_shielding"
-  },
-  "show_notification": true
+  ]
 }

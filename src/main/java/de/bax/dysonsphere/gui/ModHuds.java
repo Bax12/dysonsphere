@@ -1,12 +1,15 @@
 package de.bax.dysonsphere.gui;
 
+import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
-import de.bax.dysonsphere.DysonSphere;
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
+import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.keybinds.ModKeyBinds;
 import de.bax.dysonsphere.network.LaserPatternActivatedPackage;
@@ -18,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Font.DisplayMode;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +34,7 @@ public class ModHuds {
 
 
     public static final IGuiOverlay ORBITAL_LASER_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        if(Minecraft.getInstance().player.getInventory().hasAnyMatching((stack) -> {
+        if(DSConfig.GUI_ORBITAL_LASER_ENABLED_VALUE && Minecraft.getInstance().player.getInventory().hasAnyMatching((stack) -> {
             return stack.is(ModItems.LASER_CONTROLLER.get()) || stack.is(ModItems.TARGET_DESIGNATOR.get());
         })){
             renderOrbitalLaserHUD(gui, guiGraphics, partialTick, screenWidth, screenHeight);
@@ -38,7 +42,7 @@ public class ModHuds {
     };
 
     public static final IGuiOverlay LASER_CRAFTER_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        if(Minecraft.getInstance().hitResult instanceof BlockHitResult hit){
+        if(DSConfig.GUI_ORBITAL_LASER_ENABLED_VALUE &&Minecraft.getInstance().hitResult instanceof BlockHitResult hit){
             if(Minecraft.getInstance().level.getBlockEntity(hit.getBlockPos()) instanceof LaserCrafterTile tile){
                 renderLaserCrafterHud(tile, gui, guiGraphics, partialTick, screenWidth, screenHeight);
             }
@@ -46,10 +50,16 @@ public class ModHuds {
     };
 
     public static final IGuiOverlay HEAT_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        if(Minecraft.getInstance().hitResult instanceof BlockHitResult hit){
+        if(DSConfig.GUI_HEAT_OVERLAY_ENABLED_VALUE && Minecraft.getInstance().hitResult instanceof BlockHitResult hit){
             if(Minecraft.getInstance().level.getBlockEntity(hit.getBlockPos()) instanceof IHeatTile tile){
                 renderHeatHud(tile, gui, guiGraphics, partialTick, screenWidth, screenHeight);
             }
+        }
+    };
+
+    public static final IGuiOverlay GRAPPLING_HOOK_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
+        if(DSConfig.GUI_GRAPPLING_HOOK_ENABLED_VALUE){
+            renderGrapplingHookHUD(gui, guiGraphics, partialTick, screenWidth, screenHeight);
         }
     };
 
@@ -72,49 +82,57 @@ public class ModHuds {
 
         if(ModKeyBinds.ORBITAL_LASER_CONTROL_MAPPING.get().isDown()){
             offset = 40;
-            player.getInventory().items.forEach((stack) -> {
-                if(stack.is(ModItems.LASER_CONTROLLER.get())){
-                    stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((container) -> {
-                        boolean shouldReset = true;
-                        for(int i = 0; i <= container.getSlots(); i++){
-                            if(!container.getStackInSlot(i).getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).map((pattern) -> {
-                                String patternString = pattern.getPattern().getCallInSequenceArrows();
-                                String inputSequenceArrows = OrbitalLaserAttackPattern.replaceWithArrows(inputSequence);
-                                Component patternSequenceComponent;
-                                boolean couldReset = true;
-                                if(inputSequenceArrows != "" && patternString.startsWith(inputSequenceArrows)){
-                                    if(patternString.equals(inputSequenceArrows)){
+            NonNullList<ItemStack> itemList = NonNullList.create();
+            itemList.addAll(player.getInventory().items);
+            itemList.addAll(player.getInventory().offhand);//offhand is not a part of all items...
+            List<ItemStack> controllerItems = itemList.stream().filter((stack) -> {return stack.is(ModItems.LASER_CONTROLLER.get());}).toList();  
+            if(controllerItems.size() > 1){
+                font.drawInBatch(Component.translatable("tooltip.dysonsphere.laser_controller_to_many"), 10, offset, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+            } else if (controllerItems.size() == 1){
+                controllerItems.forEach((stack) -> {
+                    if(stack.is(ModItems.LASER_CONTROLLER.get())){
+                        stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((container) -> {
+                            boolean shouldReset = true;
+                            for(int i = 0; i <= container.getSlots(); i++){
+                                if(!container.getStackInSlot(i).getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).map((pattern) -> {
+                                    String patternString = pattern.getPattern().getCallInSequenceArrows();
+                                    String inputSequenceArrows = OrbitalLaserAttackPattern.replaceWithArrows(inputSequence);
+                                    Component patternSequenceComponent;
+                                    boolean couldReset = true;
+                                    if(inputSequenceArrows != "" && patternString.startsWith(inputSequenceArrows)){
+                                        if(patternString.equals(inputSequenceArrows)){
 
-                                        //inform server
-                                        // DysonSphere.LOGGER.info("ModHuds renderOrbitalLaserCooldown sequence success: {}", inputSequence);
-                                        ModPacketHandler.INSTANCE.sendToServer(new LaserPatternActivatedPackage(pattern.getPattern()));
+                                            //inform server
+                                            // DysonSphere.LOGGER.info("ModHuds renderOrbitalLaserCooldown sequence success: {}", inputSequence);
+                                            ModPacketHandler.INSTANCE.sendToServer(new LaserPatternActivatedPackage(pattern.getPattern()));
 
+                                        } else {
+                                            couldReset = false;
+                                        }
+                                        patternString = patternString.substring(inputSequenceArrows.length());
+                                        patternSequenceComponent = Component.literal(inputSequenceArrows).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED).append(Component.literal(patternString).withStyle(ChatFormatting.WHITE));
                                     } else {
-                                        couldReset = false;
+                                        patternSequenceComponent = Component.literal(patternString).withStyle(ChatFormatting.WHITE);
                                     }
-                                    patternString = patternString.substring(inputSequenceArrows.length());
-                                    patternSequenceComponent = Component.literal(inputSequenceArrows).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED).append(Component.literal(patternString).withStyle(ChatFormatting.WHITE));
-                                } else {
-                                    patternSequenceComponent = Component.literal(patternString).withStyle(ChatFormatting.WHITE);
+                                    font.drawInBatch(Component.translatable("tooltip.dysonsphere.orbital_laser_hud_pattern_name", pattern.getPattern().name, patternSequenceComponent), 10, offset, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+                                    // /20 /60 -> ticks to minutes --- /20 % 60 -> ticks to seconds without minutes
+                                    font.drawInBatch(Component.translatable("tooltip.dysonsphere.orbital_laser_hud_pattern_lasers", pattern.getPattern().getLasersRequired(), pattern.getPattern().getRechargeTime() / 20 / 60 , String.format(Locale.ENGLISH, "%02d", (pattern.getPattern().getRechargeTime() / 20) % 60)), 10, offset + 10, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+                                    // font.drawInBatch(Component.literal(" Cooldown " + pattern.getPattern().getRechargeTime()), 10, offset + 20, -1, false, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+                                    offset += 25;
+                                    return couldReset;
+                                }).orElse(true)){
+                                    shouldReset = false;
                                 }
-                                font.drawInBatch(Component.translatable("tooltip.dysonsphere.orbital_laser_hud_pattern_name", pattern.getPattern().name, patternSequenceComponent), 10, offset, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
-                                // /20 /60 -> ticks to minutes --- /20 % 60 -> ticks to seconds without minutes
-                                font.drawInBatch(Component.translatable("tooltip.dysonsphere.orbital_laser_hud_pattern_lasers", pattern.getPattern().getLasersRequired(), pattern.getPattern().getRechargeTime() / 20 / 60 , String.format(Locale.ENGLISH, "%02d", (pattern.getPattern().getRechargeTime() / 20) % 60)), 10, offset + 10, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
-                                // font.drawInBatch(Component.literal(" Cooldown " + pattern.getPattern().getRechargeTime()), 10, offset + 20, -1, false, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
-                                offset += 25;
-                                return couldReset;
-                            }).orElse(true)){
-                                shouldReset = false;
                             }
-                        }
-                        if(shouldReset){
-                            player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
-                                laser.setCurrentInputSequence("");
-                            });
-                        }
-                    });
-                }
-            });            
+                            if(shouldReset){
+                                player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
+                                    laser.setCurrentInputSequence("");
+                                });
+                            }
+                        });
+                    }
+                }); 
+            }           
         }
         
         
@@ -157,5 +175,24 @@ public class ModHuds {
         Component msg = Component.translatable("tooltip.dysonsphere.heat_pipe", AssetUtil.FLOAT_FORMAT.format(tile.getHeat()));
         font.drawInBatch(msg, screenWidth * 0.5f - (font.width(msg)/2), screenHeight * 0.6f + 10, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
     }
+
+    public static void renderGrapplingHookHUD(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight){
+        if(Minecraft.getInstance().screen != null) return;
+        Font font = Minecraft.getInstance().font;
+        var player = Minecraft.getInstance().player;
+
+        player.getCapability(DSCapabilities.GRAPPLING_HOOK_CONTAINER).ifPresent((hookContainer) -> {
+            hookContainer.getGrapplingHookFrame().ifPresent((frame) -> {
+                PoseStack ps = guiGraphics.pose();
+                ps.pushPose();
+                ps.translate(10, screenHeight - (ModCompat.isLoaded(ModCompat.MODID.MEKANISM) ? 60 : 20), 0);
+                ps.scale(0.8f, 0.8f, 0.8f);
+                font.drawInBatch(Component.translatable("tooltip.dysonsphere.grappling_hook_status", Component.translatable(hookContainer.isPulling() ? "tooltip.dysonsphere.grappling_hook_status_pull" : hookContainer.isUnwinding() ? "tooltip.dysonsphere.grappling_hook_status_unwind" : "tooltip.dysonsphere.grappling_hook_status_stop")), 0, 0, -1, true, ps.last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+                font.drawInBatch(Component.translatable("tooltip.dysonsphere.grappling_hook_deployed", hookContainer.getDeployedHooks().size(), frame.getMaxHooks(player.level(), player).orElse(0)), 0, 10, -1, true, ps.last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+                ps.popPose();
+            });
+        });
+    }
+    
     
 }

@@ -1,22 +1,67 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "I": {
-      "tag": "forge:ingots/iron"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:wires/iron"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "S": {
+            "item": "minecraft:stick"
+          }
+        },
+        "pattern": [
+          "ISI",
+          "ISI",
+          "ISI"
+        ],
+        "result": {
+          "count": 4,
+          "item": "dysonsphere:coil_iron"
+        },
+        "show_notification": true
+      }
     },
-    "S": {
-      "item": "minecraft:stick"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:wires/iron"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "I": {
+            "tag": "forge:wires/iron"
+          },
+          "S": {
+            "item": "minecraft:stick"
+          }
+        },
+        "pattern": [
+          " I ",
+          "ISI",
+          " I "
+        ],
+        "result": {
+          "item": "dysonsphere:coil_iron"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "ISI",
-    "ISI",
-    "ISI"
-  ],
-  "result": {
-    "count": 4,
-    "item": "dysonsphere:coil_iron"
-  },
-  "show_notification": true
+  ]
 }

@@ -6,13 +6,13 @@
       "item": "dysonsphere:component_smart_alloy"
     },
     "E": {
-      "tag": "forge:ender_pearls"
+      "item": "dysonsphere:construct_ender"
     },
     "I": {
       "tag": "forge:ingots/iron"
     },
     "S": {
-      "tag": "forge:ingots/smart_alloy"
+      "tag": "forge:ingots/nitinol"
     },
     "c": {
       "tag": "forge:coils/copper"

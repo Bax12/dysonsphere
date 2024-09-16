@@ -3,9 +3,10 @@ package de.bax.dysonsphere.network;
 import java.util.function.Supplier;
 
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
-import de.bax.dysonsphere.items.LaserControllerItem;
 import de.bax.dysonsphere.items.ModItems;
-import de.bax.dysonsphere.items.TargetDesignatorItem;
+import de.bax.dysonsphere.items.laser.LaserControllerItem;
+import de.bax.dysonsphere.items.laser.TargetDesignatorItem;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -37,7 +38,10 @@ public class LaserPatternActivatedPackage {
         if(ctx.get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)){
             ctx.get().enqueueWork(() -> {
                 ServerPlayer player = ctx.get().getSender();
-                for(ItemStack stack : player.getInventory().items) {
+                NonNullList<ItemStack> itemList = NonNullList.create();
+                itemList.addAll(player.getInventory().items);
+                itemList.addAll(player.getInventory().offhand);//offhand is not a part of all items...
+                for(ItemStack stack : itemList) {
                     if(stack.is(ModItems.LASER_CONTROLLER.get())){
                         stack.getCapability(ForgeCapabilities.ENERGY).ifPresent((energy) -> {
                             

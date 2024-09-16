@@ -1,0 +1,25 @@
+{
+    "name": "Grappling Hook Harness",
+    "icon": "dysonsphere:grappling_hook_harness",
+    "category": "dysonsphere:grappling_hook",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Grappling Hook Harness$() is the central part of a $(thing)Grappling Hook$(). $(br) Within the Harness the vital components $(thing)hook$(), $(thing)rope$() und $(thing)engine$() need to be present to work. $(br)The $(item)Harness$() can be worn in the Leg Slot, as Curio or simply carried in the inventory. Only one $(item)harness$() can be used/carried at once!"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_harness",
+            "text": "$(o)Likely to cause motion sickness$()"
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:grappling_hook/grappling_hook_controller",
+                "dysonsphere:grappling_hook/engines",
+                "dysonsphere:grappling_hook/ropes",
+                "dysonsphere:grappling_hook/hooks"
+            ]
+        }
+    ]
+}

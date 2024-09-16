@@ -1,0 +1,23 @@
+{
+    "name": "Grappling Hook Controller",
+    "icon": "dysonsphere:grappling_hook_controller",
+    "category": "dysonsphere:grappling_hook",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Grappling Hook Controller$() can be used to control a $(thing)Grappling Hook$(). $(br)Left-Click will launch a hook.$(br)Right-Click will recall a deployed hook.$(br)Shift+Right-Click will recall all hooks."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:grappling_hook_controller",
+            "text": "$(o)Does not prevent motion sickness$()"
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:grappling_hook/harness",
+                "dysonsphere:concepts/grappling_hook"
+            ]
+        }
+    ]
+}

@@ -1,27 +1,78 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "C": {
-      "tag": "forge:coils/iron"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:circuits"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "tag": "forge:coils/iron"
+          },
+          "G": {
+            "tag": "forge:glass"
+          },
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "T": {
+            "item": "minecraft:redstone_torch"
+          }
+        },
+        "pattern": [
+          " IG",
+          "TIG",
+          "ICI"
+        ],
+        "result": {
+          "item": "dysonsphere:dysonsphere_monitor_block"
+        },
+        "show_notification": true
+      }
     },
-    "G": {
-      "tag": "forge:glass"
-    },
-    "I": {
-      "tag": "forge:ingots/iron"
-    },
-    "T": {
-      "item": "minecraft:redstone_torch"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:circuits"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "tag": "forge:circuits"
+          },
+          "G": {
+            "tag": "forge:glass"
+          },
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "T": {
+            "item": "minecraft:redstone_torch"
+          }
+        },
+        "pattern": [
+          " IG",
+          "TIG",
+          "ICI"
+        ],
+        "result": {
+          "item": "dysonsphere:dysonsphere_monitor_block"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    " IG",
-    "TIG",
-    "ICI"
-  ],
-  "result": {
-    "item": "dysonsphere:dysonsphere_monitor_block"
-  },
-  "show_notification": true
+  ]
 }

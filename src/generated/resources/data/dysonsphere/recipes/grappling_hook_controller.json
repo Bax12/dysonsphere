@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "minecraft:buttons"
+    },
+    "S": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "pattern": [
+    "  B",
+    " S ",
+    "S  "
+  ],
+  "result": {
+    "item": "dysonsphere:grappling_hook_controller"
+  },
+  "show_notification": true
+}

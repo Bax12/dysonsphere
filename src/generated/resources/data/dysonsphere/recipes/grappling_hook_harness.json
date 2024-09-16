@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "minecraft:buttons"
+    },
+    "I": {
+      "tag": "forge:ingots"
+    },
+    "L": {
+      "tag": "forge:leather"
+    },
+    "S": {
+      "tag": "forge:rods"
+    }
+  },
+  "pattern": [
+    "B B",
+    "SLS",
+    "III"
+  ],
+  "result": {
+    "item": "dysonsphere:grappling_hook_harness"
+  },
+  "show_notification": true
+}

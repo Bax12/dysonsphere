@@ -1,0 +1,39 @@
+{
+  "parent": "dysonsphere:root",
+  "criteria": {
+    "obtainHarness": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "dysonsphere:grappling_hook_harness"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "achievement.dysonsphere.get_hook_harness.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "dysonsphere:grappling_hook_harness"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "achievement.dysonsphere.get_hook_harness"
+    }
+  },
+  "requirements": [
+    [
+      "obtainHarness"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

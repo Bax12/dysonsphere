@@ -68,7 +68,7 @@ public class LaserControllerTile extends BaseTile implements IButtonPressHandler
     protected boolean dirty = false;
     protected boolean working;
 
-    protected OrbitalLaserAttackPattern pattern;
+    protected OrbitalLaserAttackPattern pattern = OrbitalLaserAttackPattern.EMPTY;
 
     public LaserControllerTile(BlockPos pos, BlockState state) {
         super(ModTiles.LASER_CONTROLLER.get(), pos, state);
@@ -191,7 +191,7 @@ public class LaserControllerTile extends BaseTile implements IButtonPressHandler
     }
 
     public boolean hasPattern(){
-        return !pattern.isEmpty();
+        return pattern != null && !pattern.isEmpty();
     }
 
     public boolean canWorkOn(){
@@ -216,7 +216,6 @@ public class LaserControllerTile extends BaseTile implements IButtonPressHandler
 
     protected void launch(){
         if(canWorkOn()){
-            DysonSphere.LOGGER.info("LaserControllerTile launch owner: {}", getOwner());
             getOwner().getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
                 var designator = new TargetDesignatorEntity(getOwner(), level, targetX + 0.5f, targetY + 0.5f, targetZ + 0.5f);
                 inventory.getStackInSlot(0).getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((patternContainer) -> {

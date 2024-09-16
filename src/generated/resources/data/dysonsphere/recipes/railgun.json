@@ -1,24 +1,75 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "C": {
-      "tag": "forge:coils/copper"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:circuits"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "tag": "forge:coils/copper"
+          },
+          "H": {
+            "item": "dysonsphere:heat_shielding"
+          },
+          "I": {
+            "tag": "forge:ingots/iron"
+          }
+        },
+        "pattern": [
+          "CIC",
+          "CIC",
+          "HCH"
+        ],
+        "result": {
+          "item": "dysonsphere:railgun"
+        },
+        "show_notification": true
+      }
     },
-    "H": {
-      "item": "dysonsphere:heat_shielding"
-    },
-    "I": {
-      "tag": "forge:ingots/iron"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:circuits"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "tag": "forge:coils/copper"
+          },
+          "H": {
+            "item": "dysonsphere:heat_shielding"
+          },
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "P": {
+            "tag": "forge:circuits"
+          }
+        },
+        "pattern": [
+          "CIC",
+          "CIC",
+          "HPH"
+        ],
+        "result": {
+          "item": "dysonsphere:railgun"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "CIC",
-    "CIC",
-    "HCH"
-  ],
-  "result": {
-    "item": "dysonsphere:railgun"
-  },
-  "show_notification": true
+  ]
 }

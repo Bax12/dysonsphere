@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "dysonsphere:grappling_hook_hook_wood"
+    },
+    {
+      "tag": "forge:slimeballs"
+    },
+    {
+      "tag": "forge:slimeballs"
+    },
+    {
+      "tag": "forge:slimeballs"
+    }
+  ],
+  "result": {
+    "item": "dysonsphere:grappling_hook_hook_slime"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "parent": "dysonsphere:hook_obtained",
+  "criteria": {
+    "hookHanging": {
+      "conditions": {},
+      "trigger": "dysonsphere:hook_hanging"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "achievement.dysonsphere.hook_hanging.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "dysonsphere:grappling_hook_hook_wood"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "achievement.dysonsphere.hook_hanging"
+    }
+  },
+  "requirements": [
+    [
+      "hookHanging"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

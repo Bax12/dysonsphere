@@ -281,7 +281,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
             return col + offset + (offset << 8);
         } else if (tintIndex == 1){
             int col = 0xFFFF0000;
-            int offset = 255 - (int) Math.min((this.getHeatHandler() - HeatHandler.HEAT_AMBIENT) / 5, 255);
+            int offset = 255 - (int) Math.min(Math.max(this.getHeatHandler() - HeatHandler.HEAT_AMBIENT, 0) / 5, 255);
 
             return col + offset + (offset << 8);
         }

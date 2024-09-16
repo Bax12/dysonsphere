@@ -1,0 +1,33 @@
+{
+  "parent": "dysonsphere:hook_obtained",
+  "criteria": {
+    "hookSpeed50": {
+      "conditions": {
+        "speed": 50.0
+      },
+      "trigger": "dysonsphere:hook_speed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "achievement.dysonsphere.hook_speed_50.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "dysonsphere:grappling_hook_engine_electric2"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "achievement.dysonsphere.hook_speed_50"
+    }
+  },
+  "requirements": [
+    [
+      "hookSpeed50"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

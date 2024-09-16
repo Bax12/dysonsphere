@@ -9,6 +9,16 @@
     ],
     "subtitle": "sound.dysonsphere.ds_energy_receiver_work"
   },
+  "electric_winch": {
+    "sounds": [
+      {
+        "name": "dysonsphere:electric_winch",
+        "pitch": 0.25,
+        "volume": 0.4
+      }
+    ],
+    "subtitle": "sound.dysonsphere.electric_winch"
+  },
   "railgun_charge": {
     "sounds": [
       {

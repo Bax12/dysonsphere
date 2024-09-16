@@ -10,7 +10,7 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.items.ModItems;
-import de.bax.dysonsphere.network.LaserCooldownSyncPacket;
+import de.bax.dysonsphere.network.LaserCooldownSyncPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -84,7 +84,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
             laserCooldowns.put(gameTick + cooldownDuration, laserCount);
             //trigger client sync, only Serverside has ServerPlayer
             if(containingEntity instanceof ServerPlayer serverPlayer){
-                ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),new LaserCooldownSyncPacket(laserCooldowns, gameTick, dsLaserCount));
+                ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),new LaserCooldownSyncPackage(laserCooldowns, gameTick, dsLaserCount));
             }
         }
 
@@ -172,7 +172,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
             if(count != dsLaserCount){
                 dsLaserCount = count;
                 if(containingEntity instanceof ServerPlayer serverPlayer){
-                    ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),new LaserCooldownSyncPacket(laserCooldowns, containingEntity.tickCount, dsLaserCount));
+                    ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),new LaserCooldownSyncPackage(laserCooldowns, containingEntity.tickCount, dsLaserCount));
                 }
             }
         }

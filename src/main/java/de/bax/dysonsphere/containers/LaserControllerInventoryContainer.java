@@ -1,6 +1,6 @@
 package de.bax.dysonsphere.containers;
 
-import de.bax.dysonsphere.items.LaserControllerItem;
+import de.bax.dysonsphere.items.laser.LaserControllerItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

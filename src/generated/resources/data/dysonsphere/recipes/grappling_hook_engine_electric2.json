@@ -1,0 +1,75 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:circuits"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "tag": "forge:ingots/nitinol"
+          },
+          "C": {
+            "tag": "forge:coils/copper"
+          },
+          "S": {
+            "item": "dysonsphere:component_smart_alloy"
+          }
+        },
+        "pattern": [
+          "AAS",
+          "ASA",
+          "CCC"
+        ],
+        "result": {
+          "item": "dysonsphere:grappling_hook_engine_electric2"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:circuits"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "tag": "forge:ingots/nitinol"
+          },
+          "C": {
+            "tag": "forge:coils/copper"
+          },
+          "P": {
+            "tag": "forge:circuits"
+          },
+          "S": {
+            "item": "dysonsphere:component_smart_alloy"
+          }
+        },
+        "pattern": [
+          "AAS",
+          "ASA",
+          "PCP"
+        ],
+        "result": {
+          "item": "dysonsphere:grappling_hook_engine_electric2"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

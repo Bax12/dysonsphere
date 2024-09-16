@@ -1,4 +1,5 @@
 {
+  "parent": "dysonsphere:root",
   "criteria": {
     "completion": {
       "conditions": {

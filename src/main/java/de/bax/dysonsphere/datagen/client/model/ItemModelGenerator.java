@@ -9,11 +9,9 @@ import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.items.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ItemModelGenerator extends ItemModelProvider{
@@ -30,7 +28,9 @@ public class ItemModelGenerator extends ItemModelProvider{
             ModItems.CAPSULE_LASER,
             ModItems.RAILGUN,
             ModItems.TARGET_DESIGNATOR,
-            ModItems.LASER_CONTROLLER
+            ModItems.LASER_CONTROLLER,
+            ModItems.GRAPPLING_HOOK_HARNESS,
+            ModItems.GRAPPLING_HOOK_CONTROLLER
         );
 
         Set<Item> complexBlocks = ImmutableSet.of(

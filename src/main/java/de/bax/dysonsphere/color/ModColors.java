@@ -2,7 +2,10 @@ package de.bax.dysonsphere.color;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
+import de.bax.dysonsphere.items.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,6 +32,15 @@ public class ModColors {
         }
     }
 
+    @SubscribeEvent
+    public static void registerItemColors(RegisterColorHandlersEvent.Item event){
+        for(RegistryObject<Item> item : ModItems.ITEMS.getEntries()){
+            if(item.get() instanceof ITintableItem tintable){
+                event.register(tintable::getTintColor, item.get());
+            }
+        }
+    }
+
     public static interface ITintableBlock {
         int getTintColor(BlockState state, BlockAndTintGetter level, BlockPos pos, int tintIndex);
     }
@@ -45,5 +57,9 @@ public class ModColors {
 
     public static interface ITintableTile {
         int getTintColor(int tintIndex);
+    }
+
+    public static interface ITintableItem {
+        int getTintColor(ItemStack stack, int tintIndex);
     }
 }

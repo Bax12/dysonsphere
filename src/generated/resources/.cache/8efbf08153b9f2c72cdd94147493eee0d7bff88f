@@ -1,4 +1,8 @@
-// 1.20.1	2024-08-04T14:27:48.040084265	Tags for minecraft:item mod id dysonsphere
+// 1.20.1	2024-08-24T00:39:23.402323965	Tags for minecraft:item mod id dysonsphere
+0e4690193a3cd59e0c1c76821c64f1d528404201 data/dysonsphere/tags/items/grappling_hook_components.json
+9418f62851e3132a49484291369c43ef4cba7e39 data/dysonsphere/tags/items/grappling_hook_components/engine.json
+f1e1fa2f9b038364d5242b74e5370226d4af7e7b data/dysonsphere/tags/items/grappling_hook_components/hook.json
+754444d6d40db941baaf005f24b515f236290286 data/dysonsphere/tags/items/grappling_hook_components/rope.json
 5f090296cbe5e131fe4c4cee834f7a8fa429d36c data/dysonsphere/tags/items/space_capsules.json
 85b86ff151ee0b2cc6fb657fd836aa7b7ea7fde9 data/dysonsphere/tags/items/space_capsules/empty.json
 209893c7d03837f4ebc3cfd6e8d0792ea57655cb data/dysonsphere/tags/items/space_capsules/laser.json
@@ -7,4 +11,4 @@ d7735d0dde6a34f9eefe54f4ad8516003b33fc95 data/forge/tags/items/coils.json
 b855986449f7e11619f1d69f0728a97ba9f3c430 data/forge/tags/items/coils/copper.json
 0cc633e55123683f9f81215c3b761f6f2078647c data/forge/tags/items/coils/iron.json
 7ba1390baf206d8505f35a2b7099f640984f7069 data/forge/tags/items/ingots.json
-7ba1390baf206d8505f35a2b7099f640984f7069 data/forge/tags/items/ingots/smart_alloy.json
+7ba1390baf206d8505f35a2b7099f640984f7069 data/forge/tags/items/ingots/nitinol.json

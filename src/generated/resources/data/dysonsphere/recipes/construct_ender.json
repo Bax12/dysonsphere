@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "dysonsphere:component_smart_alloy"
+    },
+    "E": {
+      "tag": "forge:ender_pearls"
+    }
+  },
+  "pattern": [
+    "ECE",
+    "CEC",
+    "ECE"
+  ],
+  "result": {
+    "item": "dysonsphere:construct_ender"
+  },
+  "show_notification": true
+}

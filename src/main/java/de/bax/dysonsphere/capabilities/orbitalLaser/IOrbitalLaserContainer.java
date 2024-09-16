@@ -1,7 +1,5 @@
 package de.bax.dysonsphere.capabilities.orbitalLaser;
 
-import java.util.List;
-
 import net.minecraft.nbt.CompoundTag;
 
 public interface IOrbitalLaserContainer  {

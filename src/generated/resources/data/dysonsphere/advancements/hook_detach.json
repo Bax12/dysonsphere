@@ -1,0 +1,31 @@
+{
+  "parent": "dysonsphere:hook_obtained",
+  "criteria": {
+    "detach": {
+      "conditions": {},
+      "trigger": "dysonsphere:hook_detach"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "achievement.dysonsphere.hook_detach.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:string"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "achievement.dysonsphere.hook_detach"
+    }
+  },
+  "requirements": [
+    [
+      "detach"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

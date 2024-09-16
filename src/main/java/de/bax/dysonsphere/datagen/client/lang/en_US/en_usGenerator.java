@@ -45,6 +45,20 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.UNIVERSE_WHISPER, "Whisper of the Universe");
         addItem(ModItems.INGOT_SMART_ALLOY, "Smart Alloy Ingot");
         addItem(ModItems.COMPONENT_SMART_ALLOY, "Smart Alloy Component");
+        addItem(ModItems.CONSTRUCT_ENDER, "Stabilized Ender Construct");
+        addItem(ModItems.GRAPPLING_HOOK_HARNESS, "Grappling Hook Frame");
+        addItem(ModItems.GRAPPLING_HOOK_CONTROLLER, "Grappling Hook Controller");
+        addItem(ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY, "Smart Alloy Hook");
+        addItem(ModItems.GRAPPLING_HOOK_HOOK_BLAZE, "Blazing Hook");
+        addItem(ModItems.GRAPPLING_HOOK_HOOK_WOOD, "Wooden Hook");
+        addItem(ModItems.GRAPPLING_HOOK_HOOK_SLIME, "Sticky Hook");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_STEAM, "Portable Steam Engine");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC, "Simple Electric Engine");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2, "Smart Alloy Electric Engine");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_MANUAL, "Hand Crank Engine");
+        addItem(ModItems.GRAPPLING_HOOK_ROPE_ENDER, "Ender Rope");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE, "Pneumatic Engine");
+        addItem(ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL, "Mechanical Engine");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");
@@ -58,6 +72,7 @@ public class en_usGenerator extends LanguageProvider{
         add("container.dysonsphere.laser_pattern_controller","Laser Pattern Controller Terminal");
         add("container.dysonsphere.laser_controller_inventory", "Active Laser Patterns");
         add("container.dysonsphere.laser_controller_block", "Laser Control Station");
+        add("container.dysonsphere.grappling_hook_harness_inventory", "Grappling Hook Frame");
 
         //tooltips
         add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
@@ -109,16 +124,20 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.laser_controller_launching", "Launching...");
         add("tooltip.dysonsphere.laser_controller_claim", "Claim");
         add("tooltip.dysonsphere.laser_controller_owner", "Owner: %s");
+        add("tooltip.dysonsphere.laser_controller_no_owner", "No owner, needs to be claimed!");
         add("tooltip.dysonsphere.laser_controller_lasers", "Lasers Available: %s");
         add("tooltip.dysonsphere.laser_controller_cooldown", "On Cooldown");
         add("tooltip.dysonsphere.laser_controller_lasers_missing", "Not enough Lasers!");
+        add("tooltip.dysonsphere.laser_controller_to_many", "To many Orbital Laser Controller!");
         add("tooltip.dysonsphere.laser_crafter_energy_needed", "Required Energy: %sRF");
         
         
-
         add("tooltip.dysonsphere.coordinates_x","X");
         add("tooltip.dysonsphere.coordinates_y","Y");
         add("tooltip.dysonsphere.coordinates_z","Z");
+
+        add("tooltip.dysonsphere.spoiler_components", "<Press Shift for components>");
+        add("tooltip.dysonsphere.spoiler_stats", "<Press Control for Grappling Hook stats>");
         
 
         add("tooltip.dysonsphere.orbital_laser_hud_lasers_available", "Lasers Available: %s");
@@ -129,6 +148,30 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.ds_monitor_offline1","Unreachable - Offline - Critical!");
         add("tooltip.dysonsphere.ds_monitor_offline2","Maybe move closer to the sun? By a dimension or two");
 
+        add("tooltip.dysonsphere.grappling_hook_to_many_hooks", "Cannot launch more hooks!");
+        add("tooltip.dysonsphere.grappling_hook_unavailable", "Failed to launch a Grappling Hook! Check your gear");
+        add("tooltip.dysonsphere.grappling_hook_hook", "Hook: %s");
+        add("tooltip.dysonsphere.grappling_hook_rope", "Rope: %s");
+        add("tooltip.dysonsphere.grappling_hook_engine", "Engine: %s");
+        add("tooltip.dysonsphere.grappling_hook_max_distance", "Max Distance: %s");
+        add("tooltip.dysonsphere.grappling_hook_max_hooks", "Hook Count: %s");
+        add("tooltip.dysonsphere.grappling_hook_gravity", "Hook Gravity: %s");
+        add("tooltip.dysonsphere.grappling_hook_launch_force", "Launch Force: %s");
+        add("tooltip.dysonsphere.grappling_hook_winch_force", "Winch Force: %s");
+        add("tooltip.dysonsphere.grappling_hook_gravity_mult", "Hook Gravity Multiplier: %s");
+        add("tooltip.dysonsphere.grappling_hook_launch_mult", "Launch Force Multiplier: %s");
+        add("tooltip.dysonsphere.grappling_hook_winch_mult", "Winch Force Multiplier: %s");
+
+        add("tooltip.dysonsphere.grappling_hook_engine_mechanical.desc", "Allows for limited free movement");
+
+        add("dysonsphere.tooltip.pneumaticcraft.pressure", "Pressure: %s/%s bar");
+
+        add("tooltip.dysonsphere.grappling_hook_status", "GrapplingHook Status: %s");
+        add("tooltip.dysonsphere.grappling_hook_status_pull", "Pulling");
+        add("tooltip.dysonsphere.grappling_hook_status_stop", "Stopped");
+        add("tooltip.dysonsphere.grappling_hook_status_unwind", "Unwinding");
+        add("tooltip.dysonsphere.grappling_hook_deployed", "GrapplingHooks Deployed: %s/%s");
+
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");
 
@@ -136,6 +179,7 @@ public class en_usGenerator extends LanguageProvider{
         add("sound.dysonsphere.railgun_shot", "Electromagnetic Orbital Launcher Shot");
         add("sound.dysonsphere.railgun_charge", "Electromagnetic Orbital Launcher Charging");
         add("sound.dysonsphere.ds_energy_receiver_work", "Dyson Sphere Energy Receiver Charging");
+        add("sound.dysonsphere.electric_winch", "Electric Winch Running");
 
         //recipes
         add("dysonsphere.recipe.heat_exchanger", "Heat Exchange");
@@ -143,7 +187,9 @@ public class en_usGenerator extends LanguageProvider{
         add("dysonsphere.recipe.laser", "Orbital Laser Strike");
 
         //advancements
-        add("achievement.dysonsphere.start", "The Project begins!");
+        add("achievement.dysonsphere.root", "Dyson Sphere Project");
+        add("achievement.dysonsphere.root.desc", "The Project begins!");
+        add("achievement.dysonsphere.start", "The first step of many!");
         add("achievement.dysonsphere.start.desc", "Start constructing the Dyson Sphere with the Electromagnetic Orbital Launcher");
         add("achievement.dysonsphere.half", "The Dyson Sphere takes Shape");
         add("achievement.dysonsphere.half.desc", "Reach 50% completion of the Dyson Sphere");
@@ -153,6 +199,14 @@ public class en_usGenerator extends LanguageProvider{
         add("achievement.dysonsphere.laser_strike.desc", "Call down an Orbital Laser Strike. Fear is natural");
         add("achievement.dysonsphere.praise", "Praise be!");
         add("achievement.dysonsphere.praise.desc", "Show your devotion with a special Orbital Laser");
+        add("achievement.dysonsphere.get_hook_harness", "Gear up!");
+        add("achievement.dysonsphere.get_hook_harness.desc", "Get yourself a Grappling Hook Harness. And maybe fill it.");
+        add("achievement.dysonsphere.hook_detach", "EPAH!");
+        add("achievement.dysonsphere.hook_detach.desc", "Experience the consequences of overextending a rope");
+        add("achievement.dysonsphere.hook_speed_50", "Mass and Momentum");
+        add("achievement.dysonsphere.hook_speed_50.desc", "Experience an Acceleration of over 50 blocks per second from a grappling hook.");
+        add("achievement.dysonsphere.hook_hanging", "Just hanging around");
+        add("achievement.dysonsphere.hook_hanging.desc", "Hang idle in your grappling hook");
 
         //controls - keys
         add("key.dysonsphere.orbital_laser", "Dyson Sphere - Orbital Lasers");
@@ -161,6 +215,12 @@ public class en_usGenerator extends LanguageProvider{
         add("key.dysonsphere.orbital_laser_seq_left", "Input Sequence: Left");
         add("key.dysonsphere.orbital_laser_seq_right", "Input Sequence: Right");
         add("key.dysonsphere.orbital_laser_seq_up", "Input Sequence: Up");
+
+        add("key.dysonsphere.grappling_hook", "Dyson Sphere - Grappling Hook");
+        add("key.dysonsphere.grappling_hook_deploy", "Launch Grappling Hook");
+        add("key.dysonsphere.grappling_hook_recall", "Recall Grappling Hook(s)");
+        add("key.dysonsphere.grappling_hook_pull", "Toggle Winch: Pulling");
+        add("key.dysonsphere.grappling_hook_unwind", "Toggle Winch: Unwinding");
     }
     
     
