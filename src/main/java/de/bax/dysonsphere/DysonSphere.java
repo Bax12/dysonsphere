@@ -140,16 +140,17 @@ public class DysonSphere
 
     @SubscribeEvent
     public void attachLevelCaps(AttachCapabilitiesEvent<Level> event){
-        DysonSphere.LOGGER.info("Attaching Level Capability!");
         //the overworld is always loaded, so we put the dysonsphere there.
         //if the overworld is blacklisted we get creative in the DysonSphereContainer
         ResourceKey<Level> dimension = event.getObject().dimension();
         if(dimension.equals(Level.OVERWORLD)){ 
+            DysonSphere.LOGGER.info("Attaching Level Capability to {}", dimension.location());
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "dysonsphere"), new DysonSphereContainer());
             event.addListener(() -> {
                 event.getObject().getCapability(DSCapabilities.DYSON_SPHERE).invalidate();
             });
         } else if(!(DSConfig.DYSON_SPHERE_DIM_BLACKLIST_VALUE.contains(dimension.location().toString()) ^ DSConfig.DYSON_SPHERE_IS_WHITELIST_VALUE)) {
+            DysonSphere.LOGGER.info("Attaching Level Capability to {}", dimension.location());
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "dysonsphere_proxy"), new DysonSphereProxyContainer(event.getObject()));
         }
         

@@ -216,7 +216,6 @@ public class LaserControllerTile extends BaseTile implements IButtonPressHandler
 
     protected void launch(){
         if(canWorkOn()){
-            DysonSphere.LOGGER.info("LaserControllerTile launch owner: {}", getOwner());
             getOwner().getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
                 var designator = new TargetDesignatorEntity(getOwner(), level, targetX + 0.5f, targetY + 0.5f, targetZ + 0.5f);
                 inventory.getStackInSlot(0).getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((patternContainer) -> {

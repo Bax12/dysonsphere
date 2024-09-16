@@ -51,7 +51,7 @@ public class GrapplingHookActionPackage {
                             break;
                     }
                 });
-                DysonSphere.LOGGER.info("GrapplingHookActionPackage: Action: {}", action);
+                // DysonSphere.LOGGER.debug("GrapplingHookActionPackage: Action: {}", action);
             });
         }
     }

@@ -187,8 +187,8 @@ public class en_usGenerator extends LanguageProvider{
         add("dysonsphere.recipe.laser", "Orbital Laser Strike");
 
         //advancements
-        add("achievement.dysonsphere.root", "The Project begins!");
-        add("achievement.dysonsphere.root.desc", "Remember");
+        add("achievement.dysonsphere.root", "Dyson Sphere Project");
+        add("achievement.dysonsphere.root.desc", "The Project begins!");
         add("achievement.dysonsphere.start", "The first step of many!");
         add("achievement.dysonsphere.start.desc", "Start constructing the Dyson Sphere with the Electromagnetic Orbital Launcher");
         add("achievement.dysonsphere.half", "The Dyson Sphere takes Shape");
