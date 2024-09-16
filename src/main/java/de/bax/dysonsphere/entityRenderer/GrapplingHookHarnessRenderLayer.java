@@ -24,6 +24,7 @@ public class GrapplingHookHarnessRenderLayer<T extends LivingEntity, M extends E
     @Override
     public void render(@Nonnull PoseStack pPoseStack, @Nonnull MultiBufferSource pBuffer, int pPackedLight, @Nonnull T pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         if(getParentModel() instanceof HumanoidModel hModel){
+            pPoseStack.pushPose();
             hModel.body.translateAndRotate(pPoseStack);
             pPoseStack.translate(0f, 0.4f, 0.08f);
             pPoseStack.scale(-0.6f, -0.6f, 0.6f);
@@ -32,7 +33,7 @@ public class GrapplingHookHarnessRenderLayer<T extends LivingEntity, M extends E
                     Minecraft.getInstance().getItemRenderer().renderStatic(armor, ItemDisplayContext.NONE, pPackedLight, OverlayTexture.NO_OVERLAY, pPoseStack, pBuffer, pLivingEntity.level(), 0);
                 }
             });
-            
+            pPoseStack.popPose();
         }
     }
     
