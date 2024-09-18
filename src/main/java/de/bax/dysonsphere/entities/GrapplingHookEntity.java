@@ -2,8 +2,6 @@ package de.bax.dysonsphere.entities;
 
 import javax.annotation.Nonnull;
 
-import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
-
 import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.nbt.CompoundTag;
@@ -143,10 +141,10 @@ public class GrapplingHookEntity extends ThrowableProjectile {
                 if(this.distanceToSqr(player) > getMaxDistance() * getMaxDistance()){
                     // this.recall();
                     hookContainer.getGrapplingHookFrame().ifPresent((hookFrame) -> {
-                        hookFrame.onHookOutOfRange(level(), player, this);
-                        if(player instanceof ServerPlayer serverPlayer){
+                        if(player instanceof ServerPlayer serverPlayer && this.isDeployed()){
                             ModAdvancements.HOOK_DETACH_TRIGGER.trigger(serverPlayer);
                         }
+                        hookFrame.onHookOutOfRange(level(), player, this);
                     });
                 }
             });
@@ -194,7 +192,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag pCompound) {
+    protected void addAdditionalSaveData(@Nonnull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         
         pCompound.putBoolean("deployed", isDeployed());
@@ -207,7 +205,7 @@ public class GrapplingHookEntity extends ThrowableProjectile {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag pCompound) {
+    protected void readAdditionalSaveData(@Nonnull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
 
         setDeployed(pCompound.getBoolean("deployed"));

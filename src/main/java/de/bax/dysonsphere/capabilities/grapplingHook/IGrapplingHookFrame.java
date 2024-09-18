@@ -38,7 +38,6 @@ public interface IGrapplingHookFrame {
                     if(player.position().y + 0.05 < yList.get(yList.size()-1)){
                         if(canWinch(player.level(), player).orElse(false)){
                             player.getAbilities().flying = true;
-                            float winchForce = this.getWinchForce(player.level(), player).orElse(0f);
                             
                             switch(hookCount){
                                 case 1:
@@ -245,7 +244,7 @@ public interface IGrapplingHookFrame {
                                 // }
                             }
                             Vec3 movement = new Vec3(playerMovement.x + (hookMovement.x * (Math.max(hookMovement.y, 0) / xyLength)/ 3) , yMotion, playerMovement.z + (hookMovement.z * (Math.max(hookMovement.y, 0) / xyLength) / 3));
-                            if(player instanceof ServerPlayer serverPlayer && movement.lengthSqr() < 0.1f){
+                            if(player instanceof ServerPlayer serverPlayer && movement.length() < 0.01f && hookMovement.y > 0 && !serverPlayer.level().getBlockState(serverPlayer.getOnPos()).entityCanStandOn(serverPlayer.level(), serverPlayer.getOnPos(), player)){
                                 ModAdvancements.HOOK_HANGING_TRIGGER.trigger(serverPlayer);
                             }
                             player.setDeltaMovement(movement);

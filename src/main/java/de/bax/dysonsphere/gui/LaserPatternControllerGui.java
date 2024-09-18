@@ -11,8 +11,10 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.orbitalLaser.IOrbitalLaserContainer;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
 import de.bax.dysonsphere.containers.LaserPatternControllerContainer;
+import de.bax.dysonsphere.gui.components.CallInSeqBox;
 import de.bax.dysonsphere.gui.components.EnergyDisplay;
 import de.bax.dysonsphere.gui.components.NumberInput;
+import de.bax.dysonsphere.keybinds.ModKeyBinds;
 import de.bax.dysonsphere.tileentities.LaserPatternControllerTile;
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.Minecraft;
@@ -32,7 +34,7 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
 
     public static final ResourceLocation RES_LOC = AssetUtil.getGuiLocation("gui_laser_pattern_controller");
 
-    protected EditBox patternTextbox;
+    protected CallInSeqBox patternTextbox;
     protected EditBox nameTextbox;
     protected NumberInput countInput;
     protected NumberInput sizeInput;
@@ -79,7 +81,7 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
         // return laser.getActivePatterns().get(0);
         // });
 
-        patternTextbox = new EditBox(font, getGuiLeft() + 36, getGuiTop() + 24, 70, 16,
+        patternTextbox = new CallInSeqBox(font, getGuiLeft() + 36, getGuiTop() + 24, 70, 16,
                 Component.translatable("tooltip.dysonsphere.laser_pattern_call_in"));
         patternTextbox.setFilter((s) -> {
             return s.matches(OrbitalLaserAttackPattern.validCallInChars);
@@ -285,7 +287,17 @@ public class LaserPatternControllerGui extends BaseGui<LaserPatternControllerCon
 			return true;
 		}
         if(patternTextbox.canConsumeInput()){
-            patternTextbox.keyPressed(pKeyCode, pScanCode, pModifiers);
+            if(ModKeyBinds.ORBITAL_LASER_SEQUENCE_DOWN_MAPPING.get().matches(pKeyCode, pScanCode)){
+                patternTextbox.insertText("s");
+            } else if(ModKeyBinds.ORBITAL_LASER_SEQUENCE_UP_MAPPING.get().matches(pKeyCode, pScanCode)){
+                patternTextbox.insertText("w");
+            } else if(ModKeyBinds.ORBITAL_LASER_SEQUENCE_LEFT_MAPPING.get().matches(pKeyCode, pScanCode)){
+                patternTextbox.insertText("a");
+            } else if(ModKeyBinds.ORBITAL_LASER_SEQUENCE_RIGHT_MAPPING.get().matches(pKeyCode, pScanCode)){
+                patternTextbox.insertText("d");
+            } else {
+                patternTextbox.keyPressed(pKeyCode, pScanCode, pModifiers);
+            }
             return true;
         }
         if(nameTextbox.canConsumeInput()){
