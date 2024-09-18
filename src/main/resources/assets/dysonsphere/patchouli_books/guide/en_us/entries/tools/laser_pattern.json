@@ -13,7 +13,7 @@
         },
         {
             "type": "patchouli:text",
-            "text": "The patterns have a few attributes that can be configured.$(br)$(li)Name: Display Attribute only$(li)Call-In Sequence: The pattern that needs to be inputted to call down the lasers. Minimum length depends on the pattern complexity$(li)Count: the amount of individual laser beams to call down.$(li)Size: The diameter (in blocks) of the laser beam(s)"
+            "text": "The patterns have a few attributes that can be configured.$(br)$(li)Name: Display Attribute only$(li)Call-In Sequence: The pattern that needs to be inputted to call down the lasers. Minimum length depends on the pattern complexity. Consists of directions inputted via the respective keybinds or wasd.$(li)Count: the amount of individual laser beams to call down.$(li)Size: The diameter (in blocks) of the laser beam(s)"
         },
         {
             "type":"patchouli:text",
