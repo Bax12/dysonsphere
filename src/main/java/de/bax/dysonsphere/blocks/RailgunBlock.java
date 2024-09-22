@@ -2,6 +2,7 @@ package de.bax.dysonsphere.blocks;
 
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import de.bax.dysonsphere.containers.RailgunContainer;
@@ -121,6 +122,11 @@ public class RailgunBlock extends Block implements EntityBlock {
             }
             
         }
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(@Nonnull BlockState pState, @Nonnull BlockGetter pLevel, @Nonnull BlockPos pPos) {
+        return false;
     }
 
     

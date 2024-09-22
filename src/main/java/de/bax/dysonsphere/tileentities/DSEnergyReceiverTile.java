@@ -2,6 +2,8 @@ package de.bax.dysonsphere.tileentities;
 
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
@@ -30,17 +32,14 @@ public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTil
     public static double maxHeat = 1700;
 
     protected int dsPowerDraw;
+    protected boolean canReceive = false;
 
-    public HeatHandler heatHandler = new HeatHandler(maxHeat){
-        public double getMaxSplitShareAmount() {
-            return 500d;
-        };
-    };
+    public HeatHandler heatHandler = new HeatHandler(maxHeat);
     public IDSEnergyReceiver dsReceiver = new IDSEnergyReceiver() {
 
         @Override
         public boolean canReceive() {
-            return getLevel().canSeeSky(getBlockPos());
+            return getLevel() != null && getLevel().canSeeSky(getBlockPos().above()); //we check above as our own block blocks the sky access from our own pos.
         }
 
         @Override
@@ -88,13 +87,13 @@ public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTil
     }
 
     public void tick(){
-        // DysonSphere.LOGGER.info("DSEnergyReceiverTile CurrentHeat: {}", heatHandler.getHeatStored());
         if(!level.isClientSide){
             Optional<IDysonSphereContainer> dysonsphere = level.getCapability(DSCapabilities.DYSON_SPHERE).map((ds) -> {return ds;});
             if(dysonsphere.isPresent()){
-                int recieve = dsReceiver.getCurrentReceive(dysonsphere.get());
-                if(recieve > 0){
-                    heatHandler.receiveHeat(recieve / 10f, false);
+                canReceive = dsReceiver.canReceive();
+                int receive = dsReceiver.getCurrentReceive(dysonsphere.get());
+                if(receive > 0){
+                    heatHandler.receiveHeat(receive / 10f, false);
                     if(ticksElapsed % 100 == 0){
                         level.playSound(null, worldPosition, ModSounds.DS_ENERGY_RECEIVER_WORK.get(), SoundSource.BLOCKS, 0.2f, 0.8f);
                     }
@@ -121,20 +120,21 @@ public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTil
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@Nonnull CompoundTag tag) {
         super.load(tag);
         if(tag.contains("Heat")) {
             heatHandler.deserializeNBT(tag.getCompound("Heat"));
         }
         dsPowerDraw = tag.getInt("Target");
+        canReceive = tag.getBoolean("canReceive");
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(@Nonnull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("Heat", heatHandler.serializeNBT());
         tag.putInt("Target", this.dsPowerDraw);
-
+        tag.putBoolean("canReceive", canReceive);
     }
 
     public int getDsPowerDraw() {
@@ -147,6 +147,10 @@ public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTil
 
     public void onNeighborChange() {
         updateNeighbors();
+    }
+
+    public boolean canReceive(){
+        return canReceive;
     }
     
     protected void updateNeighbors(){

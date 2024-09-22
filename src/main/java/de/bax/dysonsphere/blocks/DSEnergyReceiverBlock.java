@@ -2,6 +2,7 @@ package de.bax.dysonsphere.blocks;
 
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import de.bax.dysonsphere.containers.DSEnergyReceiverContainer;
@@ -78,6 +79,11 @@ public class DSEnergyReceiverBlock extends Block implements EntityBlock{
             return InteractionResult.CONSUME;
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(@Nonnull BlockState pState, @Nonnull BlockGetter pLevel, @Nonnull BlockPos pPos) {
+        return false;
     }
 
 }
