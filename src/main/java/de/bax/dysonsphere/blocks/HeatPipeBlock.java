@@ -48,15 +48,15 @@ public class HeatPipeBlock extends Block implements EntityBlock {
         }
     }
 
-    @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        BlockEntity tile = level.getBlockEntity(pos);
-        if(tile != null && tile.getType().equals(ModTiles.HEAT_PIPE.get())){
-            player.displayClientMessage(Component.translatable("tooltip.dysonsphere.heat_pipe", AssetUtil.FLOAT_FORMAT.format(((HeatPipeTile) tile).heatHandler.getHeatStored())), true);
-        }
+    // @Override
+    // public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    //     BlockEntity tile = level.getBlockEntity(pos);
+    //     if(tile != null && tile.getType().equals(ModTiles.HEAT_PIPE.get())){
+    //         player.displayClientMessage(Component.translatable("tooltip.dysonsphere.heat_current", AssetUtil.FLOAT_FORMAT.format(((HeatPipeTile) tile).heatHandler.getHeatStored())), true);
+    //     }
         
-        return InteractionResult.SUCCESS;
-    }
+    //     return InteractionResult.SUCCESS;
+    // }
     
 
 }

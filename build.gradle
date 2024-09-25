@@ -144,6 +144,13 @@ repositories {
             includeGroup "me.desht.pneumaticcraft"
         }
     }
+    
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
@@ -172,6 +179,8 @@ dependencies {
     // compileOnly(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1:api"))
     // runtimeOnly(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1"))
     implementation(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1"))
+
+    implementation(fg.deobf("curse.maven:jade-324717:5672013"))
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

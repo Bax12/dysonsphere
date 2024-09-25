@@ -1,8 +1,6 @@
 package de.bax.dysonsphere.gui.components;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.gui.BaseGui;

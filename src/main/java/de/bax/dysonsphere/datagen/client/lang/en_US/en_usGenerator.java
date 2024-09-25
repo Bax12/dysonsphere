@@ -77,6 +77,7 @@ public class en_usGenerator extends LanguageProvider{
         //tooltips
         add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
         add("tooltip.dysonsphere.heat_display","%s°K / %s°K");
+        add("tooltip.dysonsphere.heat_current", "Current Heat: %s°K");
         add("tooltip.dysonsphere.fluid_display","%s %s mB / %s mB");
         add("tooltip.dysonsphere.number_input.plus_button","+ %s");
         add("tooltip.dysonsphere.number_input.minus_button","- %s");
@@ -90,7 +91,6 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.heat_generator_axis", "Axis: %s");
         add("tooltip.dysonsphere.heat_generator_diff", "Diff: %s°K");
         add("tooltip.dysonsphere.heat_generator_production", "%s RF/t");
-        add("tooltip.dysonsphere.heat_pipe", "Current Heat: %s°K");
         add("tooltip.dysonsphere.heat_exchanger_producing", "Producing: %s mB/t");
         add("tooltip.dysonsphere.heat_exchanger_min_heat", "Minimum Heat: %s°K");
         add("tooltip.dysonsphere.heat_exchanger_heat_bonus", "Output +%s%% per additional %s°K");
@@ -172,6 +172,8 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.grappling_hook_status_unwind", "Unwinding");
         add("tooltip.dysonsphere.grappling_hook_deployed", "GrapplingHooks Deployed: %s/%s");
 
+        add("tooltip.dysonsphere.laser_controller_target", "Aiming at: X: %s Y: %s Z: %s");
+
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");
 
@@ -221,6 +223,13 @@ public class en_usGenerator extends LanguageProvider{
         add("key.dysonsphere.grappling_hook_recall", "Recall Grappling Hook(s)");
         add("key.dysonsphere.grappling_hook_pull", "Toggle Winch: Pulling");
         add("key.dysonsphere.grappling_hook_unwind", "Toggle Winch: Unwinding");
+
+
+        //jade aka waila
+        add("config.jade.plugin_dysonsphere.heat", "heat");
+        add("config.jade.plugin_dysonsphere.ds_energy_receiver", "ds_receiver_target_rate");
+        add("config.jade.plugin_dysonsphere.heat_generator", "heat_generator");
+        add("config.jade.plugin_dysonsphere.laser_controller", "laser_controller");
     }
     
     

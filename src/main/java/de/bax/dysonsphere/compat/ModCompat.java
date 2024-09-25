@@ -13,7 +13,8 @@ public class ModCompat {
 
     public static enum MODID {
         MEKANISM("mekanism", () -> new Mekanism()),
-        PNEUMATICCRAFT("pneumaticcraft", () -> new Pneumaticcraft())/*,
+        PNEUMATICCRAFT("pneumaticcraft", () -> new Pneumaticcraft()),
+        JADE("jade", () -> new IModCompat(){})/*,
         CURIOS("curios", null)*/;
 
         public String id;
