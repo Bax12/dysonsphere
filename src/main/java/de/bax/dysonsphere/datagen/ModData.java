@@ -10,9 +10,9 @@ import de.bax.dysonsphere.datagen.client.sound.SoundDefinitionGenerator;
 import de.bax.dysonsphere.datagen.server.AdvancementGenerator;
 import de.bax.dysonsphere.datagen.server.BlockLootGenerator;
 import de.bax.dysonsphere.datagen.server.BlockTagGenerator;
+import de.bax.dysonsphere.datagen.server.CurioGenerator;
 import de.bax.dysonsphere.datagen.server.FluidTagGenerator;
 import de.bax.dysonsphere.datagen.server.ItemTagGenerator;
-import de.bax.dysonsphere.datagen.server.LaserCraftingRecipeGenerator;
 import de.bax.dysonsphere.datagen.server.RecipeGenerator;
 import net.minecraftforge.common.data.ForgeAdvancementProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -43,6 +43,8 @@ public class ModData {
         generator.addProvider(event.includeServer(), new ItemTagGenerator(output, provider, blockGenerator.contentsGetter(), helper));
         generator.addProvider(event.includeServer(), new RecipeGenerator(output));
         generator.addProvider(event.includeServer(), new ForgeAdvancementProvider(output, provider, helper, List.of(new AdvancementGenerator())));
+
+        generator.addProvider(event.includeServer(), new CurioGenerator(output, helper, provider));
     }
 
 }

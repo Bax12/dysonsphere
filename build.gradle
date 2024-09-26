@@ -151,6 +151,11 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+
+    maven {
+        name = "Illusive Soulworks maven"
+        url = "https://maven.theillusivec4.top/"
+    }
 }
 
 dependencies {
@@ -181,6 +186,9 @@ dependencies {
     implementation(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1"))
 
     implementation(fg.deobf("curse.maven:jade-324717:5672013"))
+
+    compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:5.10.0+1.20.1:api"))
+    runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:5.10.0+1.20.1"))
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

@@ -1,12 +1,13 @@
 package de.bax.dysonsphere.network;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.items.laser.LaserControllerItem;
 import de.bax.dysonsphere.items.laser.TargetDesignatorItem;
-import net.minecraft.core.NonNullList;
+import de.bax.dysonsphere.util.InventoryUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -38,20 +39,16 @@ public class LaserPatternActivatedPackage {
         if(ctx.get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)){
             ctx.get().enqueueWork(() -> {
                 ServerPlayer player = ctx.get().getSender();
-                NonNullList<ItemStack> itemList = NonNullList.create();
-                itemList.addAll(player.getInventory().items);
-                itemList.addAll(player.getInventory().offhand);//offhand is not a part of all items...
-                for(ItemStack stack : itemList) {
-                    if(stack.is(ModItems.LASER_CONTROLLER.get())){
-                        stack.getCapability(ForgeCapabilities.ENERGY).ifPresent((energy) -> {
-                            
-                            if(energy.extractEnergy(LaserControllerItem.usage, true) == LaserControllerItem.usage){
-                                energy.extractEnergy(LaserControllerItem.usage, false);
-                                createTargetDesignator(player, pattern);
-                            }
-                        });
-                        break;
-                    }
+                List<ItemStack> itemList = InventoryUtil.getAllInExtendedPlayerInventory(player, (stack) -> stack.is(ModItems.LASER_CONTROLLER.get()));
+                for(ItemStack stack : itemList) { //should only ever be one, except client sends garbage. We can risk that.
+                    stack.getCapability(ForgeCapabilities.ENERGY).ifPresent((energy) -> {
+                        
+                        if(energy.extractEnergy(LaserControllerItem.usage, true) == LaserControllerItem.usage){
+                            energy.extractEnergy(LaserControllerItem.usage, false);
+                            createTargetDesignator(player, pattern);
+                        }
+                    });
+                    break;
                 }
                 
             });

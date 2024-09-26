@@ -16,6 +16,7 @@ import de.bax.dysonsphere.network.LaserPatternActivatedPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.tileentities.LaserCrafterTile;
 import de.bax.dysonsphere.util.AssetUtil;
+import de.bax.dysonsphere.util.InventoryUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -34,7 +35,7 @@ public class ModHuds {
 
 
     public static final IGuiOverlay ORBITAL_LASER_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        if(DSConfig.GUI_ORBITAL_LASER_ENABLED_VALUE && Minecraft.getInstance().player.getInventory().hasAnyMatching((stack) -> {
+        if(DSConfig.GUI_ORBITAL_LASER_ENABLED_VALUE && InventoryUtil.isInExtendedPlayerInventory(Minecraft.getInstance().player, (stack) -> {
             return stack.is(ModItems.LASER_CONTROLLER.get()) || stack.is(ModItems.TARGET_DESIGNATOR.get());
         })){
             renderOrbitalLaserHUD(gui, guiGraphics, partialTick, screenWidth, screenHeight);
@@ -82,10 +83,11 @@ public class ModHuds {
 
         if(ModKeyBinds.ORBITAL_LASER_CONTROL_MAPPING.get().isDown()){
             offset = 40;
-            NonNullList<ItemStack> itemList = NonNullList.create();
-            itemList.addAll(player.getInventory().items);
-            itemList.addAll(player.getInventory().offhand);//offhand is not a part of all items...
-            List<ItemStack> controllerItems = itemList.stream().filter((stack) -> {return stack.is(ModItems.LASER_CONTROLLER.get());}).toList();  
+            // NonNullList<ItemStack> itemList = NonNullList.create();
+            // itemList.addAll(player.getInventory().items);
+            // itemList.addAll(player.getInventory().offhand);//offhand is not a part of all items...
+            // List<ItemStack> controllerItems = itemList.stream().filter((stack) -> {return stack.is(ModItems.LASER_CONTROLLER.get());}).toList();  
+            List<ItemStack> controllerItems = InventoryUtil.getAllInExtendedPlayerInventory(player, (stack) -> stack.is(ModItems.LASER_CONTROLLER.get()));
             if(controllerItems.size() > 1){
                 font.drawInBatch(Component.translatable("tooltip.dysonsphere.laser_controller_to_many"), 10, offset, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
             } else if (controllerItems.size() == 1){

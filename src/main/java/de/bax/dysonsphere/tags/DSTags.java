@@ -42,6 +42,11 @@ public class DSTags {
     public static final TagKey<Item> itemGrapplingHookEngine = TagKey.create(Registries.ITEM, modLoc("grappling_hook_components/engine"));
     
 
+    public static final TagKey<Item> curioBack = TagKey.create(Registries.ITEM, curioLoc("back"));
+    public static final TagKey<Item> curioBelt = TagKey.create(Registries.ITEM, curioLoc("belt"));
+    public static final TagKey<Item> curioHands = TagKey.create(Registries.ITEM, curioLoc("hands"));
+    public static final TagKey<Item> curioBracelet = TagKey.create(Registries.ITEM, curioLoc("bracelet"));
+
 
     private static ResourceLocation forgeLoc(String name){
         return new ResourceLocation("forge", name);
@@ -49,6 +54,10 @@ public class DSTags {
 
     private static ResourceLocation modLoc(String name){
         return new ResourceLocation(DysonSphere.MODID, name);
+    }
+
+    private static ResourceLocation curioLoc(String name){
+        return new ResourceLocation("curios", name);
     }
 
 }
