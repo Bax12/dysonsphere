@@ -43,7 +43,7 @@ public class ModHuds {
     };
 
     public static final IGuiOverlay LASER_CRAFTER_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        if(DSConfig.GUI_ORBITAL_LASER_ENABLED_VALUE &&Minecraft.getInstance().hitResult instanceof BlockHitResult hit){
+        if(Minecraft.getInstance().hitResult instanceof BlockHitResult hit){
             if(Minecraft.getInstance().level.getBlockEntity(hit.getBlockPos()) instanceof LaserCrafterTile tile){
                 renderLaserCrafterHud(tile, gui, guiGraphics, partialTick, screenWidth, screenHeight);
             }
