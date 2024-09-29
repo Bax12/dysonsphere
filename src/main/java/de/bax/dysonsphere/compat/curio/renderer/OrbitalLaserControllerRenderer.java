@@ -31,7 +31,7 @@ public class OrbitalLaserControllerRenderer implements ICurioRenderer {
             hModel.translateToHand(HumanoidArm.LEFT, matrixStack);
         }
 
-        matrixStack.translate(0.07f, 0.64f, -0.125f);
+        matrixStack.translate(0.065f, 0.64f, -0.125f);
         matrixStack.mulPose(Axis.ZN.rotationDegrees(180f));
         matrixStack.mulPose(Axis.XN.rotationDegrees(90f));
         
