@@ -1,4 +1,8 @@
-// 1.20.1	2024-08-24T00:39:23.402323965	Tags for minecraft:item mod id dysonsphere
+// 1.20.1	2024-09-26T22:25:26.3046454	Tags for minecraft:item mod id dysonsphere
+be6bfd5075f01d29330dd4cb8e5c05688de517bd data/curios/tags/items/back.json
+be6bfd5075f01d29330dd4cb8e5c05688de517bd data/curios/tags/items/belt.json
+4942b962d24a4b203fa76fb05e54743b46c67ae5 data/curios/tags/items/bracelet.json
+4942b962d24a4b203fa76fb05e54743b46c67ae5 data/curios/tags/items/hands.json
 0e4690193a3cd59e0c1c76821c64f1d528404201 data/dysonsphere/tags/items/grappling_hook_components.json
 9418f62851e3132a49484291369c43ef4cba7e39 data/dysonsphere/tags/items/grappling_hook_components/engine.json
 f1e1fa2f9b038364d5242b74e5370226d4af7e7b data/dysonsphere/tags/items/grappling_hook_components/hook.json

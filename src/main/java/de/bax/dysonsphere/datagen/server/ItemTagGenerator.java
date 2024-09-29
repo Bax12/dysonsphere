@@ -38,6 +38,11 @@ public class ItemTagGenerator extends ItemTagsProvider {
         tag(DSTags.itemGrapplingHookHook).add(ModItems.GRAPPLING_HOOK_HOOK_BLAZE.get(), ModItems.GRAPPLING_HOOK_HOOK_SLIME.get(), ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY.get(), ModItems.GRAPPLING_HOOK_HOOK_WOOD.get(), Items.TRIPWIRE_HOOK);
         tag(DSTags.itemGrapplingHookRope).add(ModItems.GRAPPLING_HOOK_ROPE_ENDER.get(), Items.STRING, Items.CHAIN);
         tag(DSTags.itemGrapplingHookEngine).add(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get(), ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2.get(), ModItems.GRAPPLING_HOOK_ENGINE_MANUAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.get(), ModItems.GRAPPLING_HOOK_ENGINE_STEAM.get());
+
+        tag(DSTags.curioBack).add(ModItems.GRAPPLING_HOOK_HARNESS.get());
+        tag(DSTags.curioBelt).add(ModItems.GRAPPLING_HOOK_HARNESS.get());
+        tag(DSTags.curioHands).add(ModItems.LASER_CONTROLLER.get());
+        tag(DSTags.curioBracelet).add(ModItems.LASER_CONTROLLER.get());
     }
     
     

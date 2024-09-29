@@ -263,7 +263,7 @@ public class DSConfig {
 
                 builder.pop().push("railgun");
                 RAILGUN_LAUNCH_ENERGY = builder
-                        .comment("The energy required for the railgun to launch a single item. 0-2147483647. Default 90000")
+                        .comment("The base energy required for the railgun to launch a single item from earth. (Changes based on gravity and sun distance with ad astra) 0-2147483647. Default 90000")
                         .defineInRange("railgunLaunchEnergy", 90000, 0, Integer.MAX_VALUE);
                 RAILGUN_ENERGY_CAPACITY = builder
                         .comment("The energy capacity of the railgun. Must be bigger then the launchEnergy for the railgun to work. 1-2147483647. Default 150000")
@@ -686,7 +686,7 @@ public class DSConfig {
 
                         HeatPipeTile.maxHeat = HEAT_PIPE_MAX_HEAT.get();
 
-                        RailgunTile.launchEnergy = RAILGUN_LAUNCH_ENERGY.get();
+                        RailgunTile.baseLaunchEnergy = RAILGUN_LAUNCH_ENERGY.get();
                         RailgunTile.energyCapacity = RAILGUN_ENERGY_CAPACITY.get();
 
                         LaserControllerTile.energyUsage = LASER_CONTROLLER_TILE_ENERGY_USAGE.get();

@@ -1,10 +1,13 @@
 package de.bax.dysonsphere.tileentities;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.compat.ModCompat;
+import de.bax.dysonsphere.compat.ad_astra.AdAstra;
 import de.bax.dysonsphere.sounds.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,7 +26,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class RailgunTile extends BaseTile {
 
-    public static int launchEnergy = 90000;
+    public static int baseLaunchEnergy = 90000;
     public static int energyCapacity = 150000;
 
     public EnergyStorage energyStorage = new EnergyStorage(energyCapacity);
@@ -45,6 +48,8 @@ public class RailgunTile extends BaseTile {
 
     protected int ticksElapsed = 0;
     protected int lastEnergy = 0;
+
+    protected float launchMult = 1f;
 
     public RailgunTile(BlockPos pos, BlockState state) {
         super(ModTiles.RAILGUN.get(), pos, state);
@@ -75,12 +80,12 @@ public class RailgunTile extends BaseTile {
             // DysonSphere.LOGGER.info("Railgun I: {}", inventory.getStackInSlot(0));
 
             ItemStack invStack = inventory.getStackInSlot(0);
-            if(energyStorage.getEnergyStored() >= launchEnergy && !invStack.isEmpty() && level.canSeeSky(worldPosition)){
+            if(energyStorage.getEnergyStored() >= getLaunchEnergy() && !invStack.isEmpty() && level.canSeeSky(worldPosition)){
                 level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
                     if(ds.addDysonSpherePart(invStack.copyWithCount(1), false)){
                         invStack.shrink(1);
                         inventory.setStackInSlot(0, invStack);
-                        energyStorage.extractEnergy(launchEnergy, false);
+                        energyStorage.extractEnergy(getLaunchEnergy(), false);
                         level.playSound(null, worldPosition, ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS);
                     }
                 });
@@ -90,14 +95,30 @@ public class RailgunTile extends BaseTile {
                 lastEnergy = energyStorage.getEnergyStored();
                 
                 sendSyncPackageToNearbyPlayers();
-            }   
+            } 
+            if(ticksElapsed % 200 == 20 && ModCompat.isLoaded(ModCompat.MODID.AD_ASTRA)){ //recheck the launch multiplier every 10 seconds. Gravity should not change so frequently, right?
+                float last = launchMult;
+                launchMult = AdAstra.getOrbitalLaunchMult(level, worldPosition);
+                if(last != launchMult){
+                    this.setChanged();
+                    lastEnergy = energyStorage.getEnergyStored();
+                    sendSyncPackageToNearbyPlayers();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if(!level.isClientSide && ModCompat.isLoaded(ModCompat.MODID.AD_ASTRA)){
+            launchMult = AdAstra.getOrbitalLaunchMult(level, worldPosition);
         }
     }
 
 
-
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@Nonnull CompoundTag tag) {
         super.load(tag);
         if(tag.contains("Energy")){
             energyStorage.deserializeNBT(tag.get("Energy"));
@@ -105,13 +126,17 @@ public class RailgunTile extends BaseTile {
         if(tag.contains("Inventory")) {
             inventory.deserializeNBT(tag.getCompound("Inventory"));
         }
+        if(tag.contains("launchMult")) {
+            launchMult = tag.getFloat("launchMult");
+        }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(@Nonnull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("Energy", energyStorage.serializeNBT());
         tag.put("Inventory", inventory.serializeNBT());
+        tag.putFloat("launchMult", launchMult);
     }
 
     public void dropContent() {
@@ -123,6 +148,10 @@ public class RailgunTile extends BaseTile {
         }
     }
 
+
+    public int getLaunchEnergy() {
+        return (int) (baseLaunchEnergy * launchMult);
+    }
     
 
 }

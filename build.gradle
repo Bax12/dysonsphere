@@ -6,7 +6,7 @@ plugins {
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-version = '0.3-1'
+version = '0.4'
 group = 'bax.dysonsphere'
 
 base {
@@ -144,6 +144,24 @@ repositories {
             includeGroup "me.desht.pneumaticcraft"
         }
     }
+    
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+
+    maven {
+        name = "Illusive Soulworks maven"
+        url = "https://maven.theillusivec4.top/"
+    }
+
+    
+    maven {
+        url = "https://maven.teamresourceful.com/repository/maven-public/"
+    }
+    
 }
 
 dependencies {
@@ -172,6 +190,16 @@ dependencies {
     // compileOnly(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1:api"))
     // runtimeOnly(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1"))
     implementation(fg.deobf("me.desht.pneumaticcraft:pneumaticcraft-repressurized:6.0.9+mc1.20.1"))
+
+    implementation(fg.deobf("curse.maven:jade-324717:5672013"))
+
+    compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:5.10.0+1.20.1:api"))
+    runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:5.10.0+1.20.1"))
+
+    implementation fg.deobf("earth.terrarium.botarium:botarium-forge-1.20.1:2.3.4")
+    implementation fg.deobf("earth.terrarium.adastra:ad_astra-forge-1.20.1:1.15.18")
+    implementation fg.deobf("com.teamresourceful.resourcefullib:resourcefullib-forge-1.20.1:2.1.29")
+    implementation fg.deobf("com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-1.20.1:2.1.2")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

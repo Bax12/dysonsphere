@@ -14,6 +14,7 @@ import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
 import de.bax.dysonsphere.network.GrapplingHookSyncPackage;
+import de.bax.dysonsphere.util.InventoryUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -59,6 +60,7 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
 
         protected Set<GrapplingHookEntity> hooks = new LinkedHashSet<GrapplingHookEntity>();
         protected wireState state = wireState.STOP;
+        protected boolean shouldIgnoreGravityChange = false;
 
         public static enum wireState {
             STOP,
@@ -196,18 +198,27 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
 
         @Override
         public Optional<IGrapplingHookFrame> getGrapplingHookFrame() {
-            NonNullList<ItemStack> itemList = NonNullList.create();
-            itemList.addAll(containingEntity.getInventory().armor);
-            itemList.addAll(containingEntity.getInventory().offhand);
-            itemList.addAll(containingEntity.getInventory().items);
-            List<ItemStack> items = itemList.stream().filter((stack) -> {return stack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).isPresent();}).toList();
+            // NonNullList<ItemStack> itemList = NonNullList.create();
+            // itemList.addAll(containingEntity.getInventory().armor);
+            // itemList.addAll(containingEntity.getInventory().offhand);
+            // itemList.addAll(containingEntity.getInventory().items);
+            // List<ItemStack> items = itemList.stream().filter((stack) -> {return stack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).isPresent();}).toList();
+            List<ItemStack> items = InventoryUtil.getAllInExtendedPlayerInventory(containingEntity, (stack) -> stack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).isPresent());
             if(items.size() != 1 || items.get(0).isEmpty()){//we want errors on non and with multiple //no idea how an empty item stack can have the capability, but it happens
                 return Optional.empty();
             }
             return items.get(0).getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).resolve();
         }
 
+        @Override
+        public boolean shouldIgnoreGravityChange() {
+            return shouldIgnoreGravityChange;
+        }
 
+        @Override
+        public void setIgnoreGravityChange(boolean ignore) {
+            shouldIgnoreGravityChange = ignore;
+        }
 
     }
 

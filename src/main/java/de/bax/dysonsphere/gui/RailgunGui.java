@@ -35,12 +35,12 @@ public class RailgunGui extends BaseGui<RailgunContainer> {
             @Override
             protected void addTooltip(List<Component> tooltip) {
                 super.addTooltip(tooltip);
-                tooltip.add(Component.translatable("tooltip.dysonsphere.railgun_launch_energy", AssetUtil.FLOAT_FORMAT.format(tile.launchEnergy)));
+                tooltip.add(Component.translatable("tooltip.dysonsphere.railgun_launch_energy", AssetUtil.FLOAT_FORMAT.format(tile.getLaunchEnergy())));
             }
             @Override
             public void draw(GuiGraphics guiGraphics) {
                 super.draw(guiGraphics);
-                guiGraphics.hLine(this.xPos + 1, this.xPos + 19, yPos + 85 - (85 * tile.launchEnergy / energy.getMaxEnergyStored()), 0xFF2e6dff);
+                guiGraphics.hLine(this.xPos + 1, this.xPos + 19, yPos + 85 - (85 * tile.getLaunchEnergy() / energy.getMaxEnergyStored()), 0xFF2e6dff);
             }
         };
     }
@@ -53,7 +53,7 @@ public class RailgunGui extends BaseGui<RailgunContainer> {
         guiGraphics.blit(RES_LOC, this.leftPos, this.topPos, 0, 0, 176, 93);
 
         if(this.tile.energyStorage.getEnergyStored() > 0){
-            int i = (int) Math.min((39f * tile.energyStorage.getEnergyStored() / tile.launchEnergy), 39);
+            int i = (int) Math.min((39f * tile.energyStorage.getEnergyStored() / tile.getLaunchEnergy()), 39);
             guiGraphics.blit(RES_LOC, this.leftPos + 78, this.topPos + 60 - i, 176, 39 - i, 20, 39);
         }
 

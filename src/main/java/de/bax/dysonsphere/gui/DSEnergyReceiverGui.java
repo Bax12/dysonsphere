@@ -3,10 +3,13 @@ package de.bax.dysonsphere.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.containers.DSEnergyReceiverContainer;
 import de.bax.dysonsphere.gui.components.HeatDisplay;
@@ -60,13 +63,13 @@ public class DSEnergyReceiverGui extends BaseGui<DSEnergyReceiverContainer> {
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float f, int x, int y) {
+    protected void renderBg(@Nonnull GuiGraphics guiGraphics, float f, int x, int y) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         guiGraphics.blit(GUI_INVENTORY_LOC, this.leftPos, this.topPos + 93, 0, 0, 176, 86);//resourcename, onscreenX, onscreenY, pngStartX, pngStartY, pngEndX, pngEndY
         guiGraphics.blit(RES_LOC, this.leftPos, this.topPos, 0, 0, 176, 93);
 
-        if(!tile.dsReceiver.canReceive() || !tile.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).isPresent()){
+        if(!tile.canReceive()){
             guiGraphics.blit(RES_LOC, this.leftPos + 71, this.topPos + 28, 176, 0, 34, 34);
         }
 
@@ -78,7 +81,7 @@ public class DSEnergyReceiverGui extends BaseGui<DSEnergyReceiverContainer> {
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         heat.drawOverlay(guiGraphics, mouseX, mouseY);
-        if(mouseX >= this.leftPos + 73 && mouseY >= this.topPos + 29 && mouseX < this.leftPos + 73 + 34 && mouseY < this.topPos + 29 + 34 && (!tile.dsReceiver.canReceive() || !tile.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).isPresent())){
+        if(mouseX >= this.leftPos + 73 && mouseY >= this.topPos + 29 && mouseX < this.leftPos + 73 + 34 && mouseY < this.topPos + 29 + 34 && (!tile.canReceive())){
             List<Component> tooltip = new ArrayList<>();
             tooltip.add(Component.translatable("tooltip.dysonsphere.ds_energy_receiver_nosky"));
             Minecraft mc = Minecraft.getInstance();

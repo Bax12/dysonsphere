@@ -95,4 +95,8 @@ public interface IGrapplingHookContainer {
 
     public Optional<IGrapplingHookFrame> getGrapplingHookFrame();
 
+    public boolean shouldIgnoreGravityChange();
+
+    public void setIgnoreGravityChange(boolean ignore);
+
 } 

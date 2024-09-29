@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import de.bax.dysonsphere.compat.ad_astra.AdAstra;
+import de.bax.dysonsphere.compat.curio.Curios;
 import de.bax.dysonsphere.compat.mekanism.Mekanism;
 import de.bax.dysonsphere.compat.pneumaticcraft.Pneumaticcraft;
 import net.minecraftforge.fml.ModList;
@@ -13,8 +15,10 @@ public class ModCompat {
 
     public static enum MODID {
         MEKANISM("mekanism", () -> new Mekanism()),
-        PNEUMATICCRAFT("pneumaticcraft", () -> new Pneumaticcraft())/*,
-        CURIOS("curios", null)*/;
+        PNEUMATICCRAFT("pneumaticcraft", () -> new Pneumaticcraft()),
+        JADE("jade", () -> new IModCompat(){}),
+        CURIOS("curios", () -> new Curios()),
+        AD_ASTRA("ad_astra", () -> new AdAstra());
 
         public String id;
         public Supplier<IModCompat> compat;

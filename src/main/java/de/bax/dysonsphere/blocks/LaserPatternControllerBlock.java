@@ -2,6 +2,7 @@ package de.bax.dysonsphere.blocks;
 
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
@@ -147,6 +148,11 @@ public class LaserPatternControllerBlock extends HorizontalDirectionalBlock impl
             tile.dropContent();
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(@Nonnull BlockState pState, @Nonnull BlockGetter pLevel, @Nonnull BlockPos pPos) {
+        return false;
     }
 
 }
