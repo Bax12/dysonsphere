@@ -111,11 +111,13 @@ public class RailgunBlock extends Block implements EntityBlock {
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if(level.isClientSide){
             BlockEntity tile = level.getBlockEntity(pos);
-            if(tile != null && tile.getType().equals(ModTiles.RAILGUN.get())){
-                int energy = ((RailgunTile) tile).energyStorage.getEnergyStored();
-                int energyCap = ((RailgunTile) tile).energyStorage.getMaxEnergyStored();
-                int i = energy == energyCap ? 0 : (int) (50f * energy / RailgunTile.launchEnergy);
-                level.playLocalSound(pos.getX() + 0.5f, pos.getY() + 1.5f, pos.getZ() + 0.5f, ModSounds.RAILGUN_CHARGE.get(), SoundSource.BLOCKS, 0.3f * i / 50f, 0.9f, false);
+            if(tile instanceof RailgunTile railgunTile){
+                int energy = railgunTile.energyStorage.getEnergyStored();
+                int energyCap = railgunTile.energyStorage.getMaxEnergyStored();
+                int i = energy == energyCap ? 0 : (int) (50f * energy / railgunTile.getLaunchEnergy());
+                if(i != 0){
+                    level.playLocalSound(pos.getX() + 0.5f, pos.getY() + 1.5f, pos.getZ() + 0.5f, ModSounds.RAILGUN_CHARGE.get(), SoundSource.BLOCKS, 0.3f * i / 50f, 0.9f, false);
+                } 
                 for (; i > 0; i--){
                     level.addParticle(ParticleTypes.MYCELIUM, (double)pos.getX() + random.nextDouble() * 3 - 1d, (double)pos.getY() + random.nextDouble() * 2, (double)pos.getZ() + random.nextDouble() * 3 - 1d, 0d, 5.5d, 0d);
                 }
