@@ -60,6 +60,7 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
 
         protected Set<GrapplingHookEntity> hooks = new LinkedHashSet<GrapplingHookEntity>();
         protected wireState state = wireState.STOP;
+        protected boolean shouldIgnoreGravityChange = false;
 
         public static enum wireState {
             STOP,
@@ -209,7 +210,15 @@ public class GrapplingHookPlayerContainer implements ICapabilitySerializable<Com
             return items.get(0).getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).resolve();
         }
 
+        @Override
+        public boolean shouldIgnoreGravityChange() {
+            return shouldIgnoreGravityChange;
+        }
 
+        @Override
+        public void setIgnoreGravityChange(boolean ignore) {
+            shouldIgnoreGravityChange = ignore;
+        }
 
     }
 

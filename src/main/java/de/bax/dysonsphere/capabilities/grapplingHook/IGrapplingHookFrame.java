@@ -4,8 +4,11 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.compat.ModCompat;
+import de.bax.dysonsphere.compat.ad_astra.AdAstra;
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
 import de.bax.dysonsphere.util.ConvexHullUtil;
 import net.minecraft.server.level.ServerPlayer;
@@ -180,6 +183,7 @@ public interface IGrapplingHookFrame {
                         player.getAbilities().flying = false;
                 }
             } else {
+                hookContainer.setIgnoreGravityChange(false);
                 if(hookContainer.getDeployedHooks().size() > 0){
                     if(hookContainer.isPulling()){
                         if(this.canWinch(player.level(), player).orElse(false)){
@@ -206,7 +210,11 @@ public interface IGrapplingHookFrame {
                             if(!player.onGround()){
                                 Vec3 hookMovement = hookContainer.getMotion(player.position()).normalize();
                                 Vec3 playerMovement = player.getDeltaMovement();
-                                double xyLength = hookMovement.length();
+                                // double xyLength = hookMovement.length(); //should always be 1 after normalizing... so completely useless
+                                float gravity = 1f;
+                                if(ModCompat.isLoaded(ModCompat.MODID.AD_ASTRA)){
+                                    gravity = AdAstra.getGravity(player);
+                                }
                                 double yMotion = playerMovement.y;
                                 if(playerMovement.y < 0 && hookMovement.y > 0){
                                     player.fallDistance = 1.0F;
@@ -214,11 +222,13 @@ public interface IGrapplingHookFrame {
                                     if(hook.getMaxDistance() * hook.getMaxDistance() <= hook.distanceToSqr(player) + 5f){ //stop falling once reaching the end of the rope plus a little wiggle room
                                         yMotion = 0d;
                                     } else {
-                                        yMotion = playerMovement.y * 0.5 + (playerMovement.y * Math.min(1, 1 - (hookMovement.y / xyLength)));
+                                        yMotion = -0.05f * Math.min(1, gravity) + ( playerMovement.y * Math.min(1, 2 * (1 - (Math.abs(hookMovement.y))))); //fall based on gravity, but never faster
                                         this.onRappelTick(player.level(), player);
                                     }
                                 }
-                                player.setDeltaMovement(new Vec3(playerMovement.x + (hookMovement.x * (Math.max(hookMovement.y, 0)  / xyLength)/ 3) , yMotion, playerMovement.z + (hookMovement.z * (Math.max(hookMovement.y, 0)  / xyLength) / 3)));
+                                
+                                player.setDeltaMovement((playerMovement.x + (hookMovement.x * Math.max(hookMovement.y, 0) / 3)) * gravity , yMotion, (playerMovement.z + (hookMovement.z * Math.max(hookMovement.y, 0) / 3)) * gravity);
+                                hookContainer.setIgnoreGravityChange(true); //prevent ad astra reduced gravity from pushing us upwards
                             }
                         } else {
                             hookContainer.stopWinch();
@@ -228,26 +238,32 @@ public interface IGrapplingHookFrame {
                         if(!player.onGround()){
                             Vec3 hookMovement = hookContainer.getMotion(player.position()).normalize();
                             Vec3 playerMovement = player.getDeltaMovement();
-                            double xyLength = hookMovement.length();
+                            // double xyLength = hookMovement.length(); //should always be 1 after normalizing... so completely useless
                             double yMotion = playerMovement.y;
+                            float gravity = 1f;
+                            if(ModCompat.isLoaded(ModCompat.MODID.AD_ASTRA)){
+                                gravity = AdAstra.getGravity(player);
+                            }
                             if(playerMovement.y < 0 && hookMovement.y > 0){
                                 player.fallDistance = 1.0F;
-                                yMotion = 2 * playerMovement.y * Math.min(1, 1 - (Math.abs(hookMovement.y) / xyLength));
+                                yMotion = playerMovement.y * Math.min(1, 2 * (1 - (Math.abs(hookMovement.y)))) * gravity;
                                 // if(player instanceof LocalPlayer lPlayer){ //would need synchronization -- there is not space/jump input check on the server side
                                 //     if(lPlayer.input.jumping){
                                 //         yMotion += 0.1;
                                 //     }
                                 // }
 
-                                // if(player.isShiftKeyDown()){ //possible, but one its own more annoying then useful. Overloads controls and makes unwind mode useless
+                                // if(player.isShiftKeyDown()){ //possible, but on its own more annoying then useful. Overloads controls and makes unwind mode useless
                                 //     yMotion -= 0.1;
                                 // }
                             }
-                            Vec3 movement = new Vec3(playerMovement.x + (hookMovement.x * (Math.max(hookMovement.y, 0) / xyLength)/ 3) , yMotion, playerMovement.z + (hookMovement.z * (Math.max(hookMovement.y, 0) / xyLength) / 3));
+                            // DysonSphere.LOGGER.debug("IGrapplingHookFrame: gravity: {}", gravity);
+                            Vec3 movement = new Vec3((playerMovement.x + (hookMovement.x * Math.max(hookMovement.y, 0) / 3)) * gravity , yMotion, (playerMovement.z + (hookMovement.z * Math.max(hookMovement.y, 0) / 3)) * gravity);
                             if(player instanceof ServerPlayer serverPlayer && movement.length() < 0.01f && hookMovement.y > 0 && !serverPlayer.level().getBlockState(serverPlayer.getOnPos()).entityCanStandOn(serverPlayer.level(), serverPlayer.getOnPos(), player)){
                                 ModAdvancements.HOOK_HANGING_TRIGGER.trigger(serverPlayer);
                             }
                             player.setDeltaMovement(movement);
+                            hookContainer.setIgnoreGravityChange(true);
                         }
 
                     }
