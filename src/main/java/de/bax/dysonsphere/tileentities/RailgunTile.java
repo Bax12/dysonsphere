@@ -80,7 +80,7 @@ public class RailgunTile extends BaseTile {
             // DysonSphere.LOGGER.info("Railgun I: {}", inventory.getStackInSlot(0));
 
             ItemStack invStack = inventory.getStackInSlot(0);
-            if(energyStorage.getEnergyStored() >= getLaunchEnergy() && !invStack.isEmpty() && level.canSeeSky(worldPosition)){
+            if(energyStorage.getEnergyStored() >= getLaunchEnergy() && !invStack.isEmpty() && level.canSeeSky(worldPosition.above())){
                 level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
                     if(ds.addDysonSpherePart(invStack.copyWithCount(1), false)){
                         invStack.shrink(1);
