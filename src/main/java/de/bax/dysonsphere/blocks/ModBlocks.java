@@ -3,6 +3,7 @@ package de.bax.dysonsphere.blocks;
 import com.google.common.base.Supplier;
 
 import de.bax.dysonsphere.DysonSphere;
+import de.bax.dysonsphere.items.ColorBlockItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -34,11 +35,21 @@ public class ModBlocks {
     public static final RegistryObject<Block> LASER_CONTROLLER_BLOCK = registerBlock("laser_controller_block", () -> new LaserControllerBlock());
     public static final RegistryObject<Block> LASER_CRAFTER_BLOCK = registerBlock("laser_crafter_block", () -> new LaserCrafterBlock());
 
+    public static final RegistryObject<Block> INPUT_HATCH_SERIAL = registerBlockWithColorItem("input_hatch_serial", () -> new InputHatchBlock(InputHatchBlock.TYPE.SERIAL));
+    public static final RegistryObject<Block> INPUT_HATCH_PARALLEL = registerBlockWithColorItem("input_hatch_parallel", () -> new InputHatchBlock(InputHatchBlock.TYPE.PARALLEL));
+    public static final RegistryObject<Block> INPUT_HATCH_SERIAL_HEAT = registerBlockWithColorItem("input_hatch_serial_heat", () -> new InputHatchBlock(InputHatchBlock.TYPE.SERIAL_HEAT));
+    public static final RegistryObject<Block> INPUT_HATCH_PARALLEL_HEAT = registerBlockWithColorItem("input_hatch_parallel_heat", () -> new InputHatchBlock(InputHatchBlock.TYPE.PARALLEL_HEAT));
     
 
     public static RegistryObject<Block> registerBlock(String name, Supplier<? extends Block> sup) {
         RegistryObject<Block> block = BLOCKS.register(name, sup);
         ITEM_BLOCKS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+        return block;
+    }
+
+    public static RegistryObject<Block> registerBlockWithColorItem(String name, Supplier<? extends Block> sup){
+        RegistryObject<Block> block = BLOCKS.register(name, sup);
+        ITEM_BLOCKS.register(name, () -> new ColorBlockItem(block.get(), new Item.Properties()));
         return block;
     }
 

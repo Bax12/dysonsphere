@@ -39,6 +39,11 @@ public class ModColors {
                 event.register(tintable::getTintColor, item.get());
             }
         }
+        for(RegistryObject<Item> item : ModBlocks.ITEM_BLOCKS.getEntries()){
+            if(item.get() instanceof ITintableItem tintable){
+                event.register(tintable::getTintColor, item.get());
+            }
+        }
     }
 
     public static interface ITintableBlock {

@@ -1,0 +1,48 @@
+{
+  "variants": {
+    "attached=false,facing=down": {
+      "model": "dysonsphere:block/input_hatch_parallel"
+    },
+    "attached=false,facing=east": {
+      "model": "dysonsphere:block/input_hatch_parallel"
+    },
+    "attached=false,facing=north": {
+      "model": "dysonsphere:block/input_hatch_parallel"
+    },
+    "attached=false,facing=south": {
+      "model": "dysonsphere:block/input_hatch_parallel"
+    },
+    "attached=false,facing=up": {
+      "model": "dysonsphere:block/input_hatch_parallel"
+    },
+    "attached=false,facing=west": {
+      "model": "dysonsphere:block/input_hatch_parallel"
+    },
+    "attached=true,facing=down": {
+      "model": "dysonsphere:block/input_hatch_parallel_facing",
+      "x": 180
+    },
+    "attached=true,facing=east": {
+      "model": "dysonsphere:block/input_hatch_parallel_facing",
+      "x": 90,
+      "y": 270
+    },
+    "attached=true,facing=north": {
+      "model": "dysonsphere:block/input_hatch_parallel_facing",
+      "x": 90,
+      "y": 180
+    },
+    "attached=true,facing=south": {
+      "model": "dysonsphere:block/input_hatch_parallel_facing",
+      "x": 90
+    },
+    "attached=true,facing=up": {
+      "model": "dysonsphere:block/input_hatch_parallel_facing"
+    },
+    "attached=true,facing=west": {
+      "model": "dysonsphere:block/input_hatch_parallel_facing",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

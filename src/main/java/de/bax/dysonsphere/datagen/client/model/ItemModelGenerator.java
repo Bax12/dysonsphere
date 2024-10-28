@@ -34,12 +34,17 @@ public class ItemModelGenerator extends ItemModelProvider{
         );
 
         Set<Item> complexBlocks = ImmutableSet.of(
-            ModBlocks.RAILGUN_BLOCK.get().asItem()
+            ModBlocks.RAILGUN_BLOCK.get().asItem(),
+            ModBlocks.INPUT_HATCH_SERIAL_HEAT.get().asItem(),
+            ModBlocks.INPUT_HATCH_PARALLEL_HEAT.get().asItem()
         );
 
         
         ModItems.ITEMS.getEntries().stream().filter(i -> !complexItems.contains(i)).forEach(this::simpleItem);
         ModBlocks.ITEM_BLOCKS.getEntries().stream().filter(i -> !complexBlocks.contains(i.get())).forEach(this::simpleBlock);
+
+        getBuilder(ModBlocks.INPUT_HATCH_SERIAL_HEAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + ModBlocks.INPUT_HATCH_SERIAL.getId().getPath())));
+        getBuilder(ModBlocks.INPUT_HATCH_PARALLEL_HEAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + ModBlocks.INPUT_HATCH_PARALLEL.getId().getPath())));
     }
     
 

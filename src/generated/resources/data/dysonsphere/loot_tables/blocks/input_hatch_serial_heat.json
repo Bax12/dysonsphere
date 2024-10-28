@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "dysonsphere:input_hatch_serial_heat"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "dysonsphere:blocks/input_hatch_serial_heat"
+}
