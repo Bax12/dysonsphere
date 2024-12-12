@@ -1,0 +1,13 @@
+{
+    "required": true,
+    "package": "de.bax.dysonsphere.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "mixins": [
+        
+    ],
+    "client" : [
+        "MixinWorldRenderer",
+        "MixinLightTexture"
+    ],
+    "minVersion": 0.8
+}
