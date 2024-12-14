@@ -26,7 +26,7 @@ public class ModPacketHandler {
 
         INSTANCE.registerMessage(id++, LaserCooldownSyncPackage.class, LaserCooldownSyncPackage::encode, (buf) -> LaserCooldownSyncPackage.decode(buf), LaserCooldownSyncPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         INSTANCE.registerMessage(id++, GrapplingHookSyncPackage.class, GrapplingHookSyncPackage::encode, (buf) -> GrapplingHookSyncPackage.decode(buf), GrapplingHookSyncPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-        
+        INSTANCE.registerMessage(id++, DSLightSyncPackage.class, DSLightSyncPackage::encode, (buf) -> DSLightSyncPackage.decode(buf), DSLightSyncPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
 }

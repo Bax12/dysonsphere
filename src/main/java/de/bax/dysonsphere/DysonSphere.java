@@ -37,6 +37,7 @@ import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookHarnessItem;
 import de.bax.dysonsphere.keybinds.ModKeyBinds;
+import de.bax.dysonsphere.network.DSLightSyncPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.recipes.ModRecipes;
 import de.bax.dysonsphere.sounds.ModSounds;
@@ -80,6 +81,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.network.PacketDistributor;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(DysonSphere.MODID)
@@ -200,7 +202,10 @@ public class DysonSphere
                 laser.putLasersOnCooldown(0, 0, 0);//call with zero laser to trigger sync
                 laser.getLasersAvailable(0);
             });
-            
+            event.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
+                //Sync the current light to the clients on join. Completion is 0.0 - 100.0 while light is 0.0 - 1.0
+                ModPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new DSLightSyncPackage(ds.getCompletionPercentage() / 100f));
+            });
         }
         
     }

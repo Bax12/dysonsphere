@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class SkyLightUtil {
     
-    public static float darkenBy = 0.9f; //0 = normal sky; 1 = total eclipse
+    public static float darkenBy = 0.0f; //0 = normal sky; 1 = total eclipse //synced with ds completion
 
     public static final ResourceLocation sun_eclipse = new ResourceLocation(DysonSphere.MODID, "textures/environment/sun_eclipse.png");
     public static final ResourceLocation sun_90 = new ResourceLocation(DysonSphere.MODID, "textures/environment/sun_90.png");

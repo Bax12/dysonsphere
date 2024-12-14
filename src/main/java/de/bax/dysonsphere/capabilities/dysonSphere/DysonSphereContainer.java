@@ -14,8 +14,11 @@ import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dsPart.IDSPart;
+import de.bax.dysonsphere.network.DSLightSyncPackage;
+import de.bax.dysonsphere.network.ModPacketHandler;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag> {
@@ -124,6 +128,8 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                             receiver.handleDysonSphereChange(this);
                         });
                     });
+                    //update client light level
+                    ModPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new DSLightSyncPackage(completion));
                 }
                 
                 return true;
