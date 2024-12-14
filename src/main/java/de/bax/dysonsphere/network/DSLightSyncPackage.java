@@ -25,10 +25,8 @@ public class DSLightSyncPackage {
 
     public void handle(Supplier<NetworkEvent.Context> ctx){
         if(ctx.get().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)){
-            // ctx.get().enqueueWork(() -> {
-                
-            // });
             SkyLightUtil.darkenBy = this.darkenBy;
+            ctx.get().setPacketHandled(true);
         }
     }
 
