@@ -1,5 +1,6 @@
 package de.bax.dysonsphere.blocks;
 
+import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
@@ -8,6 +9,8 @@ import javax.annotation.Nullable;
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import de.bax.dysonsphere.color.ModColors.ITintableTileBlock;
+import de.bax.dysonsphere.tileentities.InputHatchTile;
+import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -20,6 +23,8 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -49,6 +54,8 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
     public static final VoxelShape Shape_W = Stream.of(Block.box(0,1,1,15,15,15), Block.box(0.025000000000000355,0,14,2,2,16), Block.box(14,14,14,16,16,16), Block.box(14,0,14,16,2,16), Block.box(0.025000000000000355,14,14,2,16,16), Block.box(14,0,0,16,2,2), Block.box(0.025000000000000355,14,0,2,16,2), Block.box(0.025000000000000355,0,0,2,2,2), Block.box(14,14,0,16,16,2), Block.box(15,15,2,16,16,14), Block.box(15,0,2,16,1,14), Block.box(2,0,15,14,1,16), Block.box(2,15,15,14,16,16), Block.box(2,15,0,14,16,1), Block.box(2,0,0,14,1,1), Block.box(15,2,15,16,14,16), Block.box(15,2,0,16,14,1)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public static final VoxelShape Shape_D = Stream.of(Block.box(1,0,1,15,15,15), Block.box(0,0.025,14,2,2,16), Block.box(0,14,0,2,16,2), Block.box(0,14,14,2,16,16), Block.box(0,0.025,0,2,2,2), Block.box(14,14,14,16,16,16), Block.box(14,0.025,0,16,2,2), Block.box(14,0.025,14,16,2,16), Block.box(14,14,0,16,16,2), Block.box(2,15,0,14,16,1), Block.box(2,15,15,14,16,16), Block.box(0,2,15,1,14,16), Block.box(0,2,0,1,14,1), Block.box(15,2,0,16,14,1), Block.box(15,2,15,16,14,16), Block.box(0,15,2,1,16,14), Block.box(15,15,2,16,16,14)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+    protected static Set<BlockEntityType<?>> VALID_ENTITY_TYPES;
 
     public enum TYPE {
         SERIAL(true, false),
@@ -81,15 +88,16 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
     @Override
     @Nullable
     public BlockEntity newBlockEntity(@Nonnull BlockPos pPos, @Nonnull BlockState pState) {
+        DysonSphere.LOGGER.info("InputHatchBlock: newBlockEntity: type: {}, state: {}", type, pState.getBlock().getName());
         switch (type) {
             case SERIAL:
+                return new InputHatchTile.Serial(pPos, pState);
             case SERIAL_HEAT:
-                // return new foo(isHeatConduction);
-                break;
+                return new InputHatchTile.SerialHeat(pPos, pState);
             case PARALLEL:
+                return new InputHatchTile.Parallel(pPos, pState);
             case PARALLEL_HEAT:
-                // return new foo(isHeatConduction);
-                break;
+                return new InputHatchTile.ParallelHeat(pPos, pState);
         }
         return null;
     }
@@ -110,12 +118,17 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
 
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        
+        if(!level.isClientSide() && level.getBlockEntity(pos) instanceof InputHatchTile tile){
+            tile.onNeighborChange();
+        }
     }
 
     @Override
     public void onRemove(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull BlockState pNewState, boolean pMovedByPiston) {
-        
+        if(!pLevel.isClientSide && pLevel.getBlockEntity(pPos) instanceof InputHatchTile tile){
+            tile.dropContent();
+        }
+        super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
     }
 
     @Override
@@ -125,7 +138,21 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
 
     @Override
     public int getAnalogOutputSignal(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos) {
+        if(!pLevel.isClientSide() && pLevel.getBlockEntity(pPos) instanceof InputHatchTile tile){
+            return tile.getSignalStrength();
+        }
         return 0;
+    }
+
+    @Override
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@Nonnull Level pLevel, @Nonnull BlockState pState, @Nonnull BlockEntityType<T> pBlockEntityType) {        
+        if(VALID_ENTITY_TYPES == null){
+            VALID_ENTITY_TYPES = Set.of(ModTiles.INPUT_HATCH_PARALLEL.get(), ModTiles.INPUT_HATCH_SERIAL.get(), ModTiles.INPUT_HATCH_PARALLEL_HEAT.get(), ModTiles.INPUT_HATCH_SERIAL_HEAT.get());
+        }
+        return VALID_ENTITY_TYPES.contains(pBlockEntityType) ? (teLevel, pos, teState, tile) -> {
+            ((InputHatchTile)tile).tick();
+        } : null;
     }
 
     @Override

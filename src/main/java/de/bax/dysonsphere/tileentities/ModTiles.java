@@ -25,6 +25,9 @@ public class ModTiles {
     public static final RegistryObject<BlockEntityType<LaserControllerTile>> LASER_CONTROLLER = TILES.register("laser_controller", () -> new BlockEntityType<LaserControllerTile>(LaserControllerTile::new, Set.of(ModBlocks.LASER_CONTROLLER_BLOCK.get()), null));
     public static final RegistryObject<BlockEntityType<LaserCrafterTile>> LASER_CRAFTER = TILES.register("laser_crafter", () -> new BlockEntityType<LaserCrafterTile>(LaserCrafterTile::new, Set.of(ModBlocks.LASER_CRAFTER_BLOCK.get()), null));
 
-    public static final RegistryObject<BlockEntityType<InputHatchTile.Serial>> INPUT_HATCH_SERIAL = TILES.register("input_hatch_serial", () -> new BlockEntityType<InputHatchTile.Serial>(InputHatchTile.Serial::new, Set.of(ModBlocks.INPUT_HATCH_SERIAL.get()), null));
-    public static final RegistryObject<BlockEntityType<InputHatchTile.Parallel>> INPUT_HATCH_PARALLEL = TILES.register("input_hatch_parallel", () -> new BlockEntityType<InputHatchTile.Parallel>(InputHatchTile.Parallel::new, Set.of(ModBlocks.INPUT_HATCH_PARALLEL.get()), null));
+    public static final RegistryObject<BlockEntityType<InputHatchTile.Serial>> INPUT_HATCH_SERIAL = TILES.register("input_hatch_serial", () -> new BlockEntityType<InputHatchTile.Serial>((pos, state) -> new InputHatchTile.Serial(pos, state), Set.of(ModBlocks.INPUT_HATCH_SERIAL.get()), null));
+    public static final RegistryObject<BlockEntityType<InputHatchTile.Parallel>> INPUT_HATCH_PARALLEL = TILES.register("input_hatch_parallel", () -> new BlockEntityType<InputHatchTile.Parallel>((pos, state) -> new InputHatchTile.Parallel(pos, state), Set.of(ModBlocks.INPUT_HATCH_PARALLEL.get()), null));
+    public static final RegistryObject<BlockEntityType<InputHatchTile.SerialHeat>> INPUT_HATCH_SERIAL_HEAT = TILES.register("input_hatch_serial_heat", () -> new BlockEntityType<InputHatchTile.SerialHeat>((pos, state) -> new InputHatchTile.SerialHeat(pos, state), Set.of(ModBlocks.INPUT_HATCH_SERIAL_HEAT.get()), null));
+    public static final RegistryObject<BlockEntityType<InputHatchTile.ParallelHeat>> INPUT_HATCH_PARALLEL_HEAT = TILES.register("input_hatch_parallel_heat", () -> new BlockEntityType<InputHatchTile.ParallelHeat>((pos, state) -> new InputHatchTile.ParallelHeat(pos, state), Set.of(ModBlocks.INPUT_HATCH_PARALLEL_HEAT.get()), null));
+    
 }

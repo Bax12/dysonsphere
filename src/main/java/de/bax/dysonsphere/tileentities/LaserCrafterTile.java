@@ -124,7 +124,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     @Override
     public void receiveLaserEnergy(double energy) {
         if(energy <= 0) return;
-        energy = energy / Math.max(1, (getHeatHandler() - HeatHandler.HEAT_AMBIENT) / ENERGY_INPUT_HEAT_RESISTANCE);
+        energy = energy / Math.max(1, (getCurrentHeat() - HeatHandler.HEAT_AMBIENT) / ENERGY_INPUT_HEAT_RESISTANCE);
         this.energy = this.energy + energy;
         dirty = true;
     }
@@ -216,7 +216,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
         return currentRecipe != null ? Optional.of(currentRecipe) : Optional.empty();
     }
 
-    public double getHeatHandler(){
+    public double getCurrentHeat(){
         return heatHandler.getHeatStored();
     }
 
@@ -281,7 +281,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
             return col + offset + (offset << 8);
         } else if (tintIndex == 1){
             int col = 0xFFFF0000;
-            int offset = 255 - (int) Math.min(Math.max(this.getHeatHandler() - HeatHandler.HEAT_AMBIENT, 0) / 5, 255);
+            int offset = 255 - (int) Math.min(Math.max(this.getCurrentHeat() - HeatHandler.HEAT_AMBIENT, 0) / 5, 255);
 
             return col + offset + (offset << 8);
         }
