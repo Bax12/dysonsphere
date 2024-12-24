@@ -9,12 +9,17 @@ import javax.annotation.Nullable;
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import de.bax.dysonsphere.color.ModColors.ITintableTileBlock;
+import de.bax.dysonsphere.containers.InputHatchParallelContainer;
+import de.bax.dysonsphere.containers.InputHatchSerialContainer;
 import de.bax.dysonsphere.tileentities.InputHatchTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
@@ -35,6 +40,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.NetworkHooks;
 
 public class InputHatchBlock extends Block implements EntityBlock, ITintableTileBlock {
 
@@ -104,11 +110,25 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
     
     @Override
     public InteractionResult use(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer, @Nonnull InteractionHand pHand, @Nonnull BlockHitResult pHit) {
-        if(!pLevel.isClientSide){
-            pState = pState.cycle(ATTACHED);
-            pLevel.setBlock(pPos, pState, 3);
+        // if(!pLevel.isClientSide){
+        //     pState = pState.cycle(ATTACHED);
+        //     pLevel.setBlock(pPos, pState, 3);
+        // }
+        // return InteractionResult.CONSUME;
+
+        if(!pLevel.isClientSide && pPlayer instanceof ServerPlayer serverPlayer){
+            BlockEntity tile = pLevel.getBlockEntity(pPos);
+            if(tile instanceof InputHatchTile.Serial serial){
+                NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvider) ->
+                new InputHatchSerialContainer(containerId, playerInventory, serial), Component.translatable("container.dysonsphere.input_hatch_serial" + (type.isHeatConducting ? "_heat" : ""))), pPos);
+                return InteractionResult.CONSUME;
+            } else if(tile instanceof InputHatchTile.Parallel parallel){
+                NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvider) ->
+                new InputHatchParallelContainer(containerId, playerInventory, parallel), Component.translatable("container.dysonsphere.input_hatch_parallel" + (type.isHeatConducting ? "_heat" : ""))), pPos);
+                return InteractionResult.CONSUME;
+            }
         }
-        return InteractionResult.CONSUME;
+        return InteractionResult.SUCCESS;
     }
 
     @Override

@@ -21,4 +21,6 @@ public class ModContainers {
     public static final RegistryObject<MenuType<LaserPatternControllerInventoryContainer>> LASER_PATTERN_CONTROLLER_INVENTORY_CONTAINER = CONTAINERS.register("laser_pattern_controller_inventory_container", () -> IForgeMenuType.create(LaserPatternControllerInventoryContainer::fromNetwork));
     public static final RegistryObject<MenuType<LaserControllerContainer>> LASER_CONTROLLER_CONTAINER = CONTAINERS.register("laser_controller_container", () -> IForgeMenuType.create(LaserControllerContainer::fromNetwork));
     public static final RegistryObject<MenuType<GrapplingHookHarnessInventoryContainer>> GRAPPLING_HOOK_HARNESS_INVENTORY_CONTAINER = CONTAINERS.register("grappling_hook_harness_inventory_container", () -> IForgeMenuType.create(GrapplingHookHarnessInventoryContainer::fromNetwork));
+    public static final RegistryObject<MenuType<InputHatchSerialContainer>> INPUT_HATCH_SERIAL_CONTAINER = CONTAINERS.register("input_hatch_serial_container", () -> IForgeMenuType.create(InputHatchSerialContainer::fromNetwork));
+    public static final RegistryObject<MenuType<InputHatchParallelContainer>> INPUT_HATCH_PARALLEL_CONTAINER = CONTAINERS.register("input_hatch_parallel_container", () -> IForgeMenuType.create(InputHatchParallelContainer::fromNetwork));
 }
