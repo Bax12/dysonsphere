@@ -86,6 +86,8 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.ds_energy_receiver_energy", "To Receive:");
         add("tooltip.dysonsphere.ds_energy_receiver_nosky","Cannot see the sky!");
         add("tooltip.dysonsphere.ds_energy_receiver_wanted", "Wanted Heat Input");
+        add("tooltip.dysonsphere.railgun_nosky","Cannot see the sky!");
+        add("tooltip.dysonsphere.railgun_dsfull","Dyson Sphere cannot accept part!");
         add("tooltip.dysonsphere.heat_generator_neighbor_neg", "Neighbor of Negative %s");
         add("tooltip.dysonsphere.heat_generator_neighbor_pos", "Neighbor of Positive %s");
         add("tooltip.dysonsphere.heat_generator_axis", "Axis: %s");

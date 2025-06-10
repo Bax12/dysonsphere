@@ -174,7 +174,9 @@
   "tooltip.dysonsphere.orbital_laser_hud_pattern_lasers": "Lasers: %sx %s:%s",
   "tooltip.dysonsphere.orbital_laser_hud_pattern_name": "%s : %s",
   "tooltip.dysonsphere.orbital_lasers_unavailable": "Not enough lasers available!",
+  "tooltip.dysonsphere.railgun_dsfull": "Dyson Sphere cannot accept part!",
   "tooltip.dysonsphere.railgun_launch_energy": "Required Launch Energy: %s RF",
+  "tooltip.dysonsphere.railgun_nosky": "Cannot see the sky!",
   "tooltip.dysonsphere.spoiler_components": "<Press Shift for components>",
   "tooltip.dysonsphere.spoiler_stats": "<Press Control for Grappling Hook stats>"
 }

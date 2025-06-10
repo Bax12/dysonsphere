@@ -112,6 +112,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         @Override
         public boolean addDysonSpherePart(ItemStack stack, boolean simulate) {
             if(stack.getCapability(DSCapabilities.DS_PART).isPresent()){
+                if(completion >= 1f) return false; //Deny new parts when already full.
                 if(!simulate){
                     int count = parts.getOrDefault(stack.getItem(), 0);
                     parts.put(stack.getItem(), count + stack.getCount());
@@ -143,7 +144,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
 
         @Override
         public float getCompletionPercentage() {
-            return completion;
+            return Math.min(completion, 1); //Prevent printing something like 100,001%
         }
 
         @Override
