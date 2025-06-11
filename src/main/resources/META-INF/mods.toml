@@ -17,7 +17,7 @@ license="${mod_license}"
 # The modid of the mod
 modId="dysonsphere" #mandatory
 # The version number of the mod
-version="0.4-2" #mandatory
+version="0.4-3" #mandatory
 # A display name for the mod
 displayName="Dyson Sphere Project" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/
