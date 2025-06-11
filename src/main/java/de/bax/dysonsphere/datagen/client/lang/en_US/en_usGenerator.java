@@ -232,6 +232,15 @@ public class en_usGenerator extends LanguageProvider{
         add("config.jade.plugin_dysonsphere.ds_energy_receiver", "ds_receiver_target_rate");
         add("config.jade.plugin_dysonsphere.heat_generator", "heat_generator");
         add("config.jade.plugin_dysonsphere.laser_controller", "laser_controller");
+
+        //commands
+        add("commands.dysonsphere.list", "Dyson Sphere Parts:");
+        add("commands.dysonsphere.add_success", "Added %sx %s to the Dyson Sphere");
+        add("commands.dysonsphere.add_failure", "Failed to add %s. Can it fit into the Dyson Sphere?");
+        add("commands.dysonsphere.remove_success", "Removed %sx %s from the Dyson Sphere");
+        add("commands.dysonsphere.remove_failure", "Failed to remove %s. Is it part of the Dyson Sphere?");
+        add("commands.dysonsphere.set_success", "Set %s count to %s (or maximum)");
+        add("commands.dysonsphere.set_failure", "Failed to set %s count. Does it belong in a Dyson Sphere?");
     }
     
     
