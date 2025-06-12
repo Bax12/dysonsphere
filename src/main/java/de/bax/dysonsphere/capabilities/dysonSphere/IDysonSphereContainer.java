@@ -22,6 +22,17 @@ public interface IDysonSphereContainer {
      */
     boolean addDysonSpherePart(ItemStack stack, boolean simulate);
 
+    /**
+     * Remove a part to the Dyson Sphere
+     * @param stack
+     *      the ItemStack to be removed from the DysonSphere (aka launched into the sun orbit)
+     * @param simulate
+     *      if TRUE the ItemStack will only be simulated to be removed
+     * @return
+     *      TRUE if the ItemStack was removed successfully (or can be removed if simulated)
+     */
+    boolean removeDysonSpherePart(ItemStack stack, boolean simulate);
+
 
     /**
      * Get all currently active parts of the Dyson Sphere

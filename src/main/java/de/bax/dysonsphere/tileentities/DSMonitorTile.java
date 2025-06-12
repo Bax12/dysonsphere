@@ -113,6 +113,7 @@ public class DSMonitorTile extends BaseTile {
         dsEnergyDraw = tag.getDouble("energy_draw");
         CompoundTag inv = tag.getCompound("parts");
             if(inv != null){
+                dsParts.clear(); //without it causes issues when removing the last parts of the dysonsphere
                 for(String itemKey : inv.getAllKeys()){
                     Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemKey));
                     int count = inv.getInt(itemKey);

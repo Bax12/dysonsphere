@@ -28,6 +28,13 @@
   "block.dysonsphere.laser_crafter_block": "Precision Laser Workbench",
   "block.dysonsphere.laser_pattern_controller_block": "Laser Pattern Controller Terminal",
   "block.dysonsphere.railgun_block": "Electromagnetic Orbital Launcher",
+  "commands.dysonsphere.add_failure": "Failed to add %s. Can it fit into the Dyson Sphere?",
+  "commands.dysonsphere.add_success": "Added %sx %s to the Dyson Sphere",
+  "commands.dysonsphere.list": "Dyson Sphere Parts:",
+  "commands.dysonsphere.remove_failure": "Failed to remove %s. Is it part of the Dyson Sphere?",
+  "commands.dysonsphere.remove_success": "Removed %sx %s from the Dyson Sphere",
+  "commands.dysonsphere.set_failure": "Failed to set %s count. Does it belong in a Dyson Sphere?",
+  "commands.dysonsphere.set_success": "Set %s count to %s (or maximum)",
   "config.jade.plugin_dysonsphere.ds_energy_receiver": "ds_receiver_target_rate",
   "config.jade.plugin_dysonsphere.heat": "heat",
   "config.jade.plugin_dysonsphere.heat_generator": "heat_generator",
@@ -174,7 +181,9 @@
   "tooltip.dysonsphere.orbital_laser_hud_pattern_lasers": "Lasers: %sx %s:%s",
   "tooltip.dysonsphere.orbital_laser_hud_pattern_name": "%s : %s",
   "tooltip.dysonsphere.orbital_lasers_unavailable": "Not enough lasers available!",
+  "tooltip.dysonsphere.railgun_dsfull": "Dyson Sphere cannot accept part!",
   "tooltip.dysonsphere.railgun_launch_energy": "Required Launch Energy: %s RF",
+  "tooltip.dysonsphere.railgun_nosky": "Cannot see the sky!",
   "tooltip.dysonsphere.spoiler_components": "<Press Shift for components>",
   "tooltip.dysonsphere.spoiler_stats": "<Press Control for Grappling Hook stats>"
 }

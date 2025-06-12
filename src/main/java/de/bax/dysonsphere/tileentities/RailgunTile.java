@@ -51,6 +51,8 @@ public class RailgunTile extends BaseTile {
 
     protected float launchMult = 1f;
 
+    protected boolean canAddToDS = true;
+
     public RailgunTile(BlockPos pos, BlockState state) {
         super(ModTiles.RAILGUN.get(), pos, state);
     }
@@ -79,14 +81,18 @@ public class RailgunTile extends BaseTile {
 
             // DysonSphere.LOGGER.info("Railgun I: {}", inventory.getStackInSlot(0));
 
+            canAddToDS = true;
             ItemStack invStack = inventory.getStackInSlot(0);
-            if(energyStorage.getEnergyStored() >= getLaunchEnergy() && !invStack.isEmpty() && level.canSeeSky(worldPosition.above())){
+            if(energyStorage.getEnergyStored() >= getLaunchEnergy() && !invStack.isEmpty() && canSeeSky()){
                 level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
                     if(ds.addDysonSpherePart(invStack.copyWithCount(1), false)){
                         invStack.shrink(1);
                         inventory.setStackInSlot(0, invStack);
                         energyStorage.extractEnergy(getLaunchEnergy(), false);
                         level.playSound(null, worldPosition, ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS);
+                    } else {
+                        //set unable to add flag
+                        canAddToDS = false;
                     }
                 });
             }
@@ -106,6 +112,14 @@ public class RailgunTile extends BaseTile {
                 }
             }
         }
+    }
+
+    public boolean canSeeSky(){
+        return level != null && level.canSeeSky(worldPosition.above());
+    }
+
+    public boolean canAddToDS(){
+        return canAddToDS;
     }
 
     @Override
@@ -129,6 +143,9 @@ public class RailgunTile extends BaseTile {
         if(tag.contains("launchMult")) {
             launchMult = tag.getFloat("launchMult");
         }
+        if(tag.contains("canAdd")){
+            canAddToDS = tag.getBoolean("canAdd");
+        }
     }
 
     @Override
@@ -137,6 +154,7 @@ public class RailgunTile extends BaseTile {
         tag.put("Energy", energyStorage.serializeNBT());
         tag.put("Inventory", inventory.serializeNBT());
         tag.putFloat("launchMult", launchMult);
+        tag.putBoolean("canAdd", canAddToDS);
     }
 
     public void dropContent() {

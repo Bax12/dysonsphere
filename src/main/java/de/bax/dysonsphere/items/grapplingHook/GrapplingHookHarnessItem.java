@@ -2,6 +2,8 @@ package de.bax.dysonsphere.items.grapplingHook;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,6 +37,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -171,7 +175,14 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @javax.annotation.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(@Nonnull ItemStack pStack, @Nullable Level pLevel, @Nonnull  List<Component> pTooltipComponents, @Nonnull  TooltipFlag pIsAdvanced) {
+        if(pLevel != null && pLevel.isClientSide){
+            addClientTooltip(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    protected void addClientTooltip(@Nonnull ItemStack pStack, @Nullable Level pLevel, @Nonnull  List<Component> pTooltipComponents, @Nonnull  TooltipFlag pIsAdvanced){
         pStack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((itemHandler) -> {
             //TODO: Add Component list
             ItemStack hook = itemHandler.getStackInSlot(SLOT_HOOK);
@@ -219,7 +230,7 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
         });
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use( @Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         if(!level.isClientSide){
             NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
@@ -231,7 +242,7 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
 
 
     @Override
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+    public void inventoryTick(@Nonnull ItemStack pStack, @Nonnull Level pLevel, @Nonnull Entity pEntity, int pSlotId, boolean pIsSelected) {
         super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
         if(pEntity instanceof Player player){
             pStack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).ifPresent((hook) -> {
@@ -241,21 +252,21 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
     }
 
     @Override
-    public boolean isBarVisible(ItemStack pStack) {
+    public boolean isBarVisible(@Nonnull ItemStack pStack) {
         return pStack.getCapability(ForgeCapabilities.ITEM_HANDLER).map((itemHandler) -> {
             return itemHandler.getStackInSlot(SLOT_ENGINE).isBarVisible();
         }).orElse(false);
     }
 
     @Override
-    public int getBarColor(ItemStack pStack) {
+    public int getBarColor(@Nonnull ItemStack pStack) {
         return pStack.getCapability(ForgeCapabilities.ITEM_HANDLER).map((itemHandler) -> {
             return itemHandler.getStackInSlot(SLOT_ENGINE).getBarColor();
         }).orElse(0);
     }
 
     @Override
-    public int getBarWidth(ItemStack pStack) {
+    public int getBarWidth(@Nonnull ItemStack pStack) {
         return pStack.getCapability(ForgeCapabilities.ITEM_HANDLER).map((itemHandler) -> {
             return itemHandler.getStackInSlot(SLOT_ENGINE).getBarWidth();
         }).orElse(0);
@@ -283,21 +294,23 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
         return 0xFF00FF;
     }
 
-    public static ClampedItemPropertyFunction getItemPropertiesAllParts() {
-        return new ClampedItemPropertyFunction() {
-                    @Override
-                    public float unclampedCall(ItemStack pStack, @Nullable ClientLevel pLevel, @Nullable LivingEntity pEntity, int pSeed) {
-                        return pStack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).map((hookFrame) -> {
-                            return (hookFrame.getHook().isPresent() && hookFrame.getEngine().isPresent()) ? 1f : 0f;
-                        }).orElse(0f);
-                    }
-                };
-    }
+    // @OnlyIn(Dist.CLIENT)
+    // public static ClampedItemPropertyFunction getItemPropertiesAllParts() {
+    //     return new ClampedItemPropertyFunction() {
+    //                 @Override
+    //                 public float unclampedCall(@Nonnull ItemStack pStack, @Nullable ClientLevel pLevel, @Nullable LivingEntity pEntity, int pSeed) {
+    //                     return pStack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).map((hookFrame) -> {
+    //                         return (hookFrame.getHook().isPresent() && hookFrame.getEngine().isPresent()) ? 1f : 0f;
+    //                     }).orElse(0f);
+    //                 }
+    //             };
+    // }
 
+    @OnlyIn(Dist.CLIENT)
     public static ClampedItemPropertyFunction getItemPropertiesHook() {
         return new ClampedItemPropertyFunction() {
                     @Override
-                    public float unclampedCall(ItemStack pStack, @Nullable ClientLevel pLevel, @Nullable LivingEntity pEntity, int pSeed) {
+                    public float unclampedCall(@Nonnull ItemStack pStack, @Nullable ClientLevel pLevel, @Nullable LivingEntity pEntity, int pSeed) {
                         return pStack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).map((hookFrame) -> {
                             return (hookFrame.getHook().isPresent()) ? 1f : 0f;
                         }).orElse(0f);
@@ -305,10 +318,11 @@ public class GrapplingHookHarnessItem extends Item implements ITintableItem, Equ
                 };
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static ClampedItemPropertyFunction getItemPropertiesEngine() {
         return new ClampedItemPropertyFunction() {
                     @Override
-                    public float unclampedCall(ItemStack pStack, @Nullable ClientLevel pLevel, @Nullable LivingEntity pEntity, int pSeed) {
+                    public float unclampedCall(@Nonnull ItemStack pStack, @Nullable ClientLevel pLevel, @Nullable LivingEntity pEntity, int pSeed) {
                         return pStack.getCapability(DSCapabilities.GRAPPLING_HOOK_FRAME).map((hookFrame) -> {
                             return (hookFrame.getEngine().isPresent()) ? 1f : 0f;
                         }).orElse(0f);
