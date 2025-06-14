@@ -1,13 +1,20 @@
 package de.bax.dysonsphere.gui;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.joml.Matrix4f;
+
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
 import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.items.ModItems;
@@ -22,9 +29,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Font.DisplayMode;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.NonNullList;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
@@ -144,6 +154,8 @@ public class ModHuds {
 
 
     public static ResourceLocation HUD_LOC = AssetUtil.getGuiLocation("gui_lower");
+    protected static int deltaTime = 0; //its client side so should be fine?
+    protected static long lastGameTime = 0;
     public static void renderLaserCrafterHud(LaserCrafterTile tile, ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight){
         if(Minecraft.getInstance().screen != null) return;
         Font font = Minecraft.getInstance().font;
@@ -153,12 +165,12 @@ public class ModHuds {
         }).orElse(ItemStack.EMPTY);
         if(Minecraft.getInstance().player.isShiftKeyDown()){
             Component msg = Component.translatable("tooltip.dysonsphere.energy_display", AssetUtil.FLOAT_FORMAT.format(tile.getCharge()), AssetUtil.FLOAT_FORMAT.format(tile.getRecipe().map((recipe) -> {return recipe.inputEnergy();}).orElse(0l)));
-            font.drawInBatch(msg, screenWidth * 0.5f - (font.width(msg)/2), screenHeight * 0.6f, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
+            font.drawInBatch(msg, screenWidth * 0.5f - (font.width(msg)/2), screenHeight * 0.6f + 20f, -1, true, guiGraphics.pose().last().pose(), guiGraphics.bufferSource(), DisplayMode.NORMAL, 0, 255);
         }
 
         if(!input.isEmpty()){
             int posX = (int) (screenWidth * 0.5f) - 20;
-            int posY = (int) (screenHeight * 0.6f - 30);
+            int posY = (int) (screenHeight * 0.6f) - 30;
             guiGraphics.blit(HUD_LOC, posX, posY, 15, 180, 16, 28);
             guiGraphics.renderItem(input, posX, posY + 12);
             if(!result.isEmpty()){
@@ -166,6 +178,77 @@ public class ModHuds {
                 guiGraphics.renderItem(result, posX + 41, posY + 6);
             }
         }
+
+        List<ItemStack> parallelInputs = tile.acceptorHandler.getInputs(ProviderType.PARALLEL);
+        //draw a rotation circle of the parallel Input around the main gui
+        if(!parallelInputs.isEmpty()){
+            int centerX = (int) (screenWidth * 0.5f);
+            int centerY = (int) (screenHeight * 0.6f) - 30;
+            double rads = Math.PI / parallelInputs.size() * 2;
+            double radius = 35d;
+            
+            if(!Minecraft.getInstance().player.isShiftKeyDown()){
+                deltaTime += tile.getLevel().getGameTime() - lastGameTime;
+                //use and freeze deltatime instead of using global time to stop rotation in place instead of snapping to default pos
+            }
+            lastGameTime = tile.getLevel().getGameTime();
+
+
+            double offset = ((deltaTime) / 100d ) % (2 * Math.PI);
+            for(int i = 0; i < parallelInputs.size(); i++){
+                double posX = (centerX + (Math.cos(i * rads + offset) * radius));
+                double posY = (centerY + (Math.sin(i * rads + offset) * radius));
+                // guiGraphics.renderItem(parallelInputs.get(i), posX, posY);
+                
+                //basically guiGraphics.renderItem(), but not limited to int positions
+                BakedModel bakedModel = Minecraft.getInstance().getItemRenderer().getModel(parallelInputs.get(i), tile.getLevel(), Minecraft.getInstance().player, 0);
+                guiGraphics.pose().pushPose();
+                guiGraphics.pose().translate((float)(posX + 8), (float)(posY + 8), 150f);
+                guiGraphics.pose().mulPoseMatrix((new Matrix4f()).scaling(1.0F, -1.0F, 1.0F));
+                guiGraphics.pose().scale(16.0F, 16.0F, 16.0F);
+                boolean flatLighting = !bakedModel.usesBlockLight();
+                if (flatLighting) {
+                    Lighting.setupForFlatItems();
+                }
+                Minecraft.getInstance().getItemRenderer().render(parallelInputs.get(i), ItemDisplayContext.GUI, false, guiGraphics.pose(), guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, bakedModel);
+                guiGraphics.flush();
+                if (flatLighting) {
+                    Lighting.setupFor3DItems();
+                }
+                guiGraphics.pose().popPose();
+            }
+        }
+
+        List<ItemStack> serialInputs = tile.acceptorHandler.getInputs(ProviderType.SERIAL);
+        //draw a straight line of (over)stacked inputs, below the main ui, centered
+        if(!serialInputs.isEmpty()){
+            Map<Item,Integer> stacks = serialInputs.stream().collect(HashMap<Item,Integer>::new, (map, stack) -> {
+                map.merge(stack.getItem(), stack.getCount(), Integer::sum);
+            }, (mainMap, mergeMap) -> {
+                mergeMap.entrySet().forEach((entry) -> {//straight from the map isn't working. with the entrySet there is no issue.
+                    mainMap.merge(entry.getKey(), entry.getValue(), Integer::sum);
+                });
+            });
+
+            // DysonSphere.LOGGER.info("ModHuds renderLaserCrafterHud: stacks: " + Arrays.toString(stacks.entrySet().toArray()));
+
+            int halfOffset = 8 - (stacks.size() / 10);
+            int centerX = (int) (screenWidth * 0.5f) - (stacks.size() * halfOffset);
+            int centerY = (int) (screenHeight * 0.6f) + 30;
+
+
+            int i = 0;
+            for(Entry<Item,Integer> entry : stacks.entrySet()){
+                guiGraphics.renderItem(entry.getKey().getDefaultInstance(), centerX + (halfOffset*2*i), centerY);
+                guiGraphics.renderItemDecorations(font, entry.getKey().getDefaultInstance(), centerX + (halfOffset*2*i), centerY, entry.getValue().toString());
+                i++;
+                // guiGraphics.renderItem(itemStack, centerX + (halfOffset*2*i), centerY);
+            }
+            
+        }
+
+
+        
         
     }
 

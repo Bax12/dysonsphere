@@ -21,6 +21,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.AndCondition;
@@ -584,7 +585,24 @@ public class RecipeGenerator extends RecipeProvider {
         })
         .build(consumer, ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.getId());
 
-        
+        Recipe.shaped(ModBlocks.INPUT_HATCH_PARALLEL.get())
+            .pattern("ICI")
+            .pattern("CHC")
+            .pattern("ICI")
+            .define('I', DSTags.itemCoilIron)
+            .define('C', ModItems.COMPONENT_SMART_ALLOY.get())
+            .define('H', Blocks.HOPPER)
+            .save(consumer);
+
+        Recipe.shapeless(ModBlocks.INPUT_HATCH_PARALLEL_HEAT.get())
+            .requires(ModBlocks.INPUT_HATCH_PARALLEL.get())
+            .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
+            .save(consumer);
+
+        Recipe.shapeless(ModBlocks.INPUT_HATCH_SERIAL_HEAT.get())
+            .requires(ModBlocks.INPUT_HATCH_SERIAL.get())
+            .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
+            .save(consumer);
     }
     
 

@@ -31,6 +31,10 @@ public class DSTags {
     public static final TagKey<Item> itemWireCopper = TagKey.create(Registries.ITEM, forgeLoc("wires/copper"));
     public static final TagKey<Item> itemWireIron = TagKey.create(Registries.ITEM, forgeLoc("wires/iron"));
 
+    public static final TagKey<Item> itemWrench = TagKey.create(Registries.ITEM, forgeLoc("wrenches"));
+    public static final TagKey<Item> itemToolWrench = TagKey.create(Registries.ITEM, forgeLoc("tools/wrench"));
+    public static final TagKey<Item> itemTool = TagKey.create(Registries.ITEM, forgeLoc("tools"));
+
     public static final TagKey<Item> itemCapsule = TagKey.create(Registries.ITEM, modLoc("space_capsules"));
     public static final TagKey<Item> itemCapsuleEmpty = TagKey.create(Registries.ITEM, modLoc("space_capsules/empty"));
     public static final TagKey<Item> itemCapsuleSolar = TagKey.create(Registries.ITEM, modLoc("space_capsules/solar"));

@@ -1,6 +1,10 @@
 package de.bax.dysonsphere.tileentities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,6 +14,10 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputAcceptor;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
+import de.bax.dysonsphere.capabilities.inputHatch.InputAcceptorHandler;
 import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import de.bax.dysonsphere.recipes.LaserCraftingRecipe;
@@ -25,7 +33,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITintableTile, IHeatTile{
 
@@ -78,11 +85,21 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
         }
     };
 
+    public InputAcceptorHandler acceptorHandler = new InputAcceptorHandler(this){
+        public void addInputProvider(LazyOptional<IInputProvider> provider) {
+            super.addInputProvider(provider);
+            if(provider.isPresent()){
+                setChanged();
+            }
+        };
+    };
+
     
 
     protected LazyOptional<IItemHandler> lazyInv = LazyOptional.of(() -> inventory);
     protected LazyOptional<ILaserReceiver> lazyLaserReceptor = LazyOptional.of(() -> this);
     protected LazyOptional<IHeatContainer> lazyHeat = LazyOptional.of(() -> heatHandler);
+    protected LazyOptional<IInputAcceptor> lazyAcceptor = LazyOptional.of(() -> acceptorHandler);
 
 
     protected double energy = 0;
@@ -107,6 +124,9 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
         }
         if(cap.equals(DSCapabilities.HEAT)){
             return lazyHeat.cast();
+        }
+        if(cap.equals(DSCapabilities.INPUT_ACCEPTOR)){
+            return lazyAcceptor.cast();
         }
 
 
@@ -150,7 +170,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
             if(ticksElapsed % 5 == 0){
                 if(energy > 0){
                     if(currentRecipe != null){
-                        if((currentRecipe.input().test(input.getStackInSlot(0)))){
+                        if((currentRecipe.matches(input.getStackInSlot(0), acceptorHandler.getInputs(ProviderType.PARALLEL)))){
                             if(energy >= currentRecipe.inputEnergy()){
                                 if(canOutput()){
                                     input.extractItem(0, 1, false);
@@ -171,6 +191,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
                     bleedEnergy();
                     heatHandler.splitShare();
                 }
+                acceptorHandler.tick();
                 if(dirty){
                     dirty = false;
                     sendSyncPackageToNearbyPlayers();
@@ -184,6 +205,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
             } else {
                 currentRecipe = null;
             }
+            acceptorHandler.tick();
             
         }
     }
@@ -196,8 +218,11 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     }
 
     protected void setCurrentRecipe(){
-        Optional<LaserCraftingRecipe> recipe = level.getRecipeManager().getRecipeFor(ModRecipes.LASER_CRAFTING_TYPE.get(), new RecipeWrapper(input), level);
-        currentRecipe = recipe.orElse(null);
+        List<LaserCraftingRecipe> recipes = new ArrayList<>(level.getRecipeManager().getAllRecipesFor(ModRecipes.LASER_CRAFTING_TYPE.get()));
+        recipes.removeIf((recipe) -> {
+            return !recipe.matches(this.input.getStackInSlot(0), acceptorHandler.getInputs(ProviderType.PARALLEL));
+        });
+        currentRecipe = recipes.size() >= 1 ? recipes.get(0) : null; //ambiguous recipe ==> whatever recipe
     }
 
     protected boolean canOutput(){
@@ -221,7 +246,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     }
 
     @Override
-    public void load(CompoundTag pTag) {
+    public void load(@Nonnull CompoundTag pTag) {
         super.load(pTag);
         if(pTag.contains("invInput")){
             input.deserializeNBT(pTag.getCompound("invInput"));
@@ -235,6 +260,9 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
         if(pTag.contains("heat")){
             heatHandler.deserializeNBT(pTag.getCompound("heat"));
         }
+        if(pTag.contains("acceptor")){
+            acceptorHandler.deserializeNBT(pTag.getCompound("acceptor"));
+        }
         // DysonSphere.LOGGER.info("laserCrafterTile load input: {}, output: {}, energy: {}", input.getStackInSlot(0), output.getStackInSlot(0), energy);
     }
 
@@ -243,19 +271,23 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
         super.onLoad();
         setCurrentRecipe();
         heatHandler.updateNeighbors(level, worldPosition);
+        acceptorHandler.updateNeighbors(level, worldPosition);
+        acceptorHandler.markForRefresh();
     }
 
     public void onNeighborChange(){
         heatHandler.updateNeighbors(level, worldPosition);
+        acceptorHandler.updateNeighbors(level, worldPosition);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
+    protected void saveAdditional(@Nonnull CompoundTag pTag) {
         super.saveAdditional(pTag);
         pTag.put("invInput", input.serializeNBT());
         pTag.put("invOutput", output.serializeNBT());
         pTag.putDouble("energy", energy);
         pTag.put("heat", heatHandler.serializeNBT());
+        pTag.put("acceptor", acceptorHandler.serializeNBT());
         // DysonSphere.LOGGER.info("laserCrafterTile saveAdditional input: {}, output: {}, energy: {}", input.getStackInSlot(0), output.getStackInSlot(0), energy);
     }
 
@@ -323,6 +355,11 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     @Override
     public IHeatContainer getHeatContainer() {
         return heatHandler;
+    }
+
+    public void onRemove() {
+        this.dropContent();
+        acceptorHandler.onRemove();
     }
 
 

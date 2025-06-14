@@ -1,0 +1,72 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:gears"
+        }
+      ],
+      "recipe": {
+        "type": "dysonsphere:laser_crafting",
+        "extraInputs": [
+          {
+            "tag": "forge:coils/copper"
+          },
+          {
+            "tag": "forge:coils/copper"
+          },
+          {
+            "tag": "forge:coils/copper"
+          },
+          {
+            "tag": "forge:coils/copper"
+          }
+        ],
+        "input": {
+          "item": "dysonsphere:input_hatch_parallel"
+        },
+        "inputEnergy": 300000,
+        "output": {
+          "item": "dysonsphere:input_hatch_serial"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:gears"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "dysonsphere:laser_crafting",
+        "extraInputs": [
+          {
+            "tag": "forge:circuits"
+          },
+          {
+            "tag": "forge:circuits"
+          },
+          {
+            "tag": "forge:circuits"
+          },
+          {
+            "tag": "forge:circuits"
+          }
+        ],
+        "input": {
+          "item": "dysonsphere:input_hatch_parallel"
+        },
+        "inputEnergy": 300000,
+        "output": {
+          "item": "dysonsphere:input_hatch_serial"
+        }
+      }
+    }
+  ]
+}

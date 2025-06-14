@@ -1,5 +1,6 @@
 {
   "type": "dysonsphere:laser_crafting",
+  "extraInputs": [],
   "input": {
     "item": "dysonsphere:construct_ender"
   },

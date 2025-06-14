@@ -5,10 +5,13 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.bax.dysonsphere.blocks.InputHatchBlock;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
+import de.bax.dysonsphere.capabilities.inputHatch.InputProviderHandler;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -56,8 +59,22 @@ public abstract class InputHatchTile extends BaseTile {
         }
     };
 
+    public InputProviderHandler providerHandler = new InputProviderHandler(this, input){
+        @Override
+        public void onUplinkChange() {
+            super.onUplinkChange();
+            updateBlockState();
+        };
+
+        @Override
+        public ProviderType getType() {
+            return getProviderType();
+        }
+    };
+
     protected LazyOptional<IItemHandler> lazyInv = LazyOptional.of(() -> input);
     protected LazyOptional<IHeatContainer> lazyHeat = LazyOptional.of(() -> heatHandler);
+    // protected LazyOptional<IInputProvider> lazyProvider = LazyOptional.of(() -> providerHandler);
 
     protected boolean dirty = false;
     protected boolean isHeatConducting = false;
@@ -69,6 +86,8 @@ public abstract class InputHatchTile extends BaseTile {
 
     public abstract int getSignalStrength();
 
+    protected abstract ProviderType getProviderType();
+
 
     @Override
     public void load(@Nonnull CompoundTag pTag) {
@@ -79,6 +98,9 @@ public abstract class InputHatchTile extends BaseTile {
         if(pTag.contains("heat")){
             heatHandler.deserializeNBT(pTag.getCompound("heat"));
         }
+        if(pTag.contains("provider")){
+            providerHandler.deserializeNBT(pTag.getCompound("provider"));
+        }
     }
 
     @Override
@@ -86,6 +108,7 @@ public abstract class InputHatchTile extends BaseTile {
         super.saveAdditional(pTag);
         pTag.put("invInput", input.serializeNBT());
         pTag.put("heat", heatHandler.serializeNBT());
+        pTag.put("provider", providerHandler.serializeNBT());
     }
 
     @SuppressWarnings("null")
@@ -99,14 +122,37 @@ public abstract class InputHatchTile extends BaseTile {
                     sendSyncPackageToNearbyPlayers();
                 }
             }
+
+            // if (ticksElapsed == 50){
+            //     providerHandler.updateNeighbors(level, worldPosition);
+            // }
         } else {
-            level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0); 
+            // level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0); 
         }
     }
 
     public void onNeighborChange(){
         heatHandler.updateNeighbors(level, worldPosition);
+        providerHandler.updateNeighbors();
     }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        heatHandler.updateNeighbors(level, worldPosition);
+        // providerHandler.updateNeighbors(level, worldPosition);
+        // providerHandler.onLoad();
+    }
+
+    public void onRemove(){
+        dropContent();
+        providerHandler.onRemove();
+    }
+
+    public void onPlacedInWorld(){
+        providerHandler.onPlacedInWorld();
+    }
+
 
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
@@ -115,6 +161,9 @@ public abstract class InputHatchTile extends BaseTile {
         }
         if(isHeatConducting && cap.equals(DSCapabilities.HEAT)){
             return lazyHeat.cast();
+        }
+        if(cap.equals(DSCapabilities.INPUT_PROVIDER)){
+            return providerHandler.lazyProvider.cast();
         }
         return LazyOptional.empty();
     }
@@ -140,8 +189,40 @@ public abstract class InputHatchTile extends BaseTile {
     @SuppressWarnings("null")
     public void dropContent() {
         for(int i = 0; i < input.getSlots(); i++){
-            ItemEntity entity = new ItemEntity(level, getBlockPos().getX(),getBlockPos().getY(), getBlockPos().getZ(), input.getStackInSlot(i));
-            level.addFreshEntity(entity);
+            ItemStack stack = input.getStackInSlot(i);
+            if(!stack.isEmpty()){
+                ItemEntity entity = new ItemEntity(level, getBlockPos().getX(),getBlockPos().getY(), getBlockPos().getZ(), stack);
+                level.addFreshEntity(entity);
+            }
+        }
+    }
+
+    protected void updateBlockState(){
+        boolean changed = false;
+        if(level != null){
+            BlockState state = level.getBlockState(worldPosition);
+            if((state.getBlock() instanceof InputHatchBlock)) {
+                if(state.getValue(InputHatchBlock.ATTACHED)){
+                    if(providerHandler.getAcceptorUplinkDirection() == null){
+                        state = state.setValue(InputHatchBlock.ATTACHED, false);
+                        changed = true;
+                    } else {
+                        if(!state.getValue(InputHatchBlock.FACING).equals(providerHandler.getAcceptorUplinkDirection())){
+                            state = state.setValue(InputHatchBlock.FACING, providerHandler.getAcceptorUplinkDirection());
+                            changed = true;
+                        }
+                    }
+                } else if(providerHandler.getAcceptorUplinkDirection() != null){
+                    state = state.setValue(InputHatchBlock.ATTACHED, true);
+                    if(!state.getValue(InputHatchBlock.FACING).equals(providerHandler.getAcceptorUplinkDirection())){
+                        state = state.setValue(InputHatchBlock.FACING, providerHandler.getAcceptorUplinkDirection());
+                    }
+                    changed = true;
+                }
+                if(changed && !level.isClientSide()){
+                    level.setBlock(worldPosition, state, 67);
+                }    
+            }
         }
     }
 
@@ -157,8 +238,13 @@ public abstract class InputHatchTile extends BaseTile {
         public Serial(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
             super(blockEntityType, pos, state);
         }
+
+        @Override
+        protected ProviderType getProviderType() {
+            return ProviderType.SERIAL;
+        }
         
-                @Override
+        @Override
         protected int getSlotCount() {
             return SLOTS;
         }
@@ -193,7 +279,12 @@ public abstract class InputHatchTile extends BaseTile {
             super(blockEntityType, pos, state);
         }
         
-                @Override
+        @Override
+        protected ProviderType getProviderType() {
+            return ProviderType.PARALLEL;
+        }
+
+        @Override
         protected int getSlotCount() {
             return SLOTS;
         }

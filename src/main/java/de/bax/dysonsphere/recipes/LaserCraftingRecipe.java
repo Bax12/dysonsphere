@@ -1,7 +1,14 @@
 package de.bax.dysonsphere.recipes;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nullable;
 
+import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import net.minecraft.core.RegistryAccess;
@@ -17,15 +24,50 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-public record LaserCraftingRecipe(ResourceLocation id, Ingredient input, ItemStack output, long inputEnergy) implements Recipe<RecipeWrapper> {
+public record LaserCraftingRecipe(ResourceLocation id, Ingredient input, List<Ingredient> extraInputs, ItemStack output, long inputEnergy) implements Recipe<RecipeWrapper> {
 
     @Override
-    public boolean matches(RecipeWrapper pContainer, Level pLevel) {
-        return input().test(pContainer.getItem(0));
+    public boolean matches(@Nonnull RecipeWrapper pContainer, @Nonnull Level pLevel) {
+        if(this.input.test(pContainer.getItem(0))){
+            List<ItemStack> extraStacks = new ArrayList<>();
+            for(int i = 1; i < pContainer.getContainerSize(); i++){
+                extraStacks.add(pContainer.getItem(i));
+            }
+            return matches(pContainer.getItem(0), extraStacks);
+        }
+        return false;
+    }
+
+    // public boolean matches(Ingredient input, List<Ingredient> extraInputs){
+    //     return this.input.equals(input) && extraInputs.containsAll(this.extraInputs) && this.extraInputs.containsAll(extraInputs);
+    // }
+
+    public boolean matches(ItemStack input, List<ItemStack> extraInputs){
+        if(this.input.test(input)){
+            // for (Ingredient extraIngredient : this.extraInputs) {
+            //     if(!extraInputs.stream().anyMatch(extraIngredient)){
+            //         return false;
+            //     }
+            // }
+            extraInputs = new ArrayList<>(extraInputs); //ensure list is mutable
+            for (Ingredient extraIngredient : this.extraInputs) {
+                // if(extraStacks.stream().noneMatch(extraIngredient)){
+                //     return false;
+                // }
+                ItemStack stack = extraInputs.stream().filter(extraIngredient).findFirst().orElse(ItemStack.EMPTY);
+                if(stack.isEmpty()){
+                    return false; //nothing matches the checked ingredient
+                }
+                extraInputs.remove(stack); //remove the match, so a single item cannot full fill multiple ingredients
+            }
+            return true;
+        }
+        return false;
+        // return matches(Ingredient.of(input), extraInputs.stream().map(Ingredient::of).toList());
     }
 
     @Override
-    public ItemStack assemble(RecipeWrapper pContainer, RegistryAccess pRegistryAccess) {
+    public ItemStack assemble(@Nonnull RecipeWrapper pContainer, @Nonnull RegistryAccess pRegistryAccess) {
         return getResultItem(pRegistryAccess);
     }
 
@@ -35,7 +77,7 @@ public record LaserCraftingRecipe(ResourceLocation id, Ingredient input, ItemSta
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+    public ItemStack getResultItem(@Nonnull RegistryAccess pRegistryAccess) {
         return output();
     }
 
@@ -59,6 +101,10 @@ public record LaserCraftingRecipe(ResourceLocation id, Ingredient input, ItemSta
         return true;
     }
 
+    public List<Ingredient> extraInputs(){
+        return ImmutableList.copyOf(extraInputs);
+    }
+
     public ItemStack output(){
         return output.copy();
     }
@@ -66,26 +112,42 @@ public record LaserCraftingRecipe(ResourceLocation id, Ingredient input, ItemSta
     public static class Serializer implements RecipeSerializer<LaserCraftingRecipe> {
 
         @Override
-        public LaserCraftingRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
+        public LaserCraftingRecipe fromJson(@Nonnull ResourceLocation pRecipeId, @Nonnull JsonObject pSerializedRecipe) {
             Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "input"));
 			ItemStack output = CraftingHelper.getItemStack(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"), true);
             long inputEnergy = pSerializedRecipe.get("inputEnergy").getAsLong();
-            return new LaserCraftingRecipe(pRecipeId, ingredient, output, inputEnergy);
+            List<Ingredient> extraInputs = new ArrayList<Ingredient>();
+            JsonArray extraJson = pSerializedRecipe.get("extraInputs").getAsJsonArray();
+            if(extraJson != null){
+                extraJson.forEach((element) -> {
+                    extraInputs.add(Ingredient.fromJson(element));
+                });
+            }
+            return new LaserCraftingRecipe(pRecipeId, ingredient, extraInputs, output, inputEnergy);
         }
 
         @Override
-        public @Nullable LaserCraftingRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
+        public @Nullable LaserCraftingRecipe fromNetwork(@Nonnull ResourceLocation pRecipeId, @Nonnull FriendlyByteBuf pBuffer) {
             Ingredient ingredient = Ingredient.fromNetwork(pBuffer);
             ItemStack output = pBuffer.readItem();
             long inputEnergy = pBuffer.readLong();
-            return new LaserCraftingRecipe(pRecipeId, ingredient, output, inputEnergy);
+            int extraCount = pBuffer.readInt();
+            List<Ingredient> extraInputs = new ArrayList<Ingredient>();
+            for(int i = 0; i < extraCount; i++){
+                extraInputs.add(Ingredient.fromNetwork(pBuffer));
+            }
+            return new LaserCraftingRecipe(pRecipeId, ingredient, extraInputs, output, inputEnergy);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf pBuffer, LaserCraftingRecipe pRecipe) {
+        public void toNetwork(@Nonnull FriendlyByteBuf pBuffer, @Nonnull LaserCraftingRecipe pRecipe) {
             pRecipe.input().toNetwork(pBuffer);
             pBuffer.writeItem(pRecipe.output);
             pBuffer.writeLong(pRecipe.inputEnergy());
+            pBuffer.writeInt(pRecipe.extraInputs.size());
+            for(Ingredient extra : pRecipe.extraInputs){
+                extra.toNetwork(pBuffer);
+            }
         }
 
     }

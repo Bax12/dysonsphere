@@ -94,7 +94,7 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
     @Override
     @Nullable
     public BlockEntity newBlockEntity(@Nonnull BlockPos pPos, @Nonnull BlockState pState) {
-        DysonSphere.LOGGER.info("InputHatchBlock: newBlockEntity: type: {}, state: {}", type, pState.getBlock().getName());
+        // DysonSphere.LOGGER.info("InputHatchBlock: newBlockEntity: type: {}, state: {}", type, pState.getBlock().getName());
         switch (type) {
             case SERIAL:
                 return new InputHatchTile.Serial(pPos, pState);
@@ -110,11 +110,14 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
     
     @Override
     public InteractionResult use(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer, @Nonnull InteractionHand pHand, @Nonnull BlockHitResult pHit) {
-        // if(!pLevel.isClientSide){
-        //     pState = pState.cycle(ATTACHED);
-        //     pLevel.setBlock(pPos, pState, 3);
+        // if(pPlayer.isShiftKeyDown()){
+        //     if(!pLevel.isClientSide){
+        //         pState = pState.cycle(ATTACHED);
+        //         pLevel.setBlock(pPos, pState, 67);
+        //     }
+        //     return InteractionResult.CONSUME;
         // }
-        // return InteractionResult.CONSUME;
+        
 
         if(!pLevel.isClientSide && pPlayer instanceof ServerPlayer serverPlayer){
             BlockEntity tile = pLevel.getBlockEntity(pPos);
@@ -138,17 +141,25 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
 
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        if(!level.isClientSide() && level.getBlockEntity(pos) instanceof InputHatchTile tile){
+        if(/*!level.isClientSide() &&*/ level.getBlockEntity(pos) instanceof InputHatchTile tile){
             tile.onNeighborChange();
         }
     }
 
     @Override
     public void onRemove(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull BlockState pNewState, boolean pMovedByPiston) {
-        if(!pLevel.isClientSide && pLevel.getBlockEntity(pPos) instanceof InputHatchTile tile){
-            tile.dropContent();
+        if(!pLevel.isClientSide && pLevel.getBlockEntity(pPos) instanceof InputHatchTile tile && !pMovedByPiston){
+            tile.onRemove();
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
+    }
+
+    @Override
+    public void onPlace(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull BlockState pOldState, boolean pMovedByPiston) {
+        if(!pLevel.isClientSide && pLevel.getBlockEntity(pPos) instanceof InputHatchTile tile && !pMovedByPiston){
+            tile.onPlacedInWorld();
+        }
+        super.onPlace(pState, pLevel, pPos, pOldState, pMovedByPiston);
     }
 
     @Override

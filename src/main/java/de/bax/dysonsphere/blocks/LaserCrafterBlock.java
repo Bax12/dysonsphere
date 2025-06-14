@@ -1,15 +1,17 @@
 package de.bax.dysonsphere.blocks;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import de.bax.dysonsphere.DysonSphere;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
 import de.bax.dysonsphere.color.ModColors.ITintableTileBlock;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.tileentities.LaserCrafterTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -39,7 +41,7 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
 
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+    public InteractionResult use(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer, @Nonnull InteractionHand pHand, @Nonnull BlockHitResult pHit) {
         if(!pLevel.isClientSide){
             if(pLevel.getBlockEntity(pPos) instanceof LaserCrafterTile tile){
                 ItemStack playerStack = pPlayer.getMainHandItem();
@@ -78,8 +80,7 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
                     }
                 }
             }
-        }
-        
+        }         
         
         
         return InteractionResult.CONSUME;
@@ -105,7 +106,7 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
         if(!pLevel.isClientSide && pLevel.getBlockEntity(pPos) instanceof LaserCrafterTile tile){
-            tile.dropContent();
+            tile.onRemove();
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
     }

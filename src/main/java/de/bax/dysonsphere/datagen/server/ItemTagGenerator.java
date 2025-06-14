@@ -2,6 +2,8 @@ package de.bax.dysonsphere.datagen.server;
 
 import java.util.concurrent.CompletableFuture;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.DysonSphere;
@@ -21,7 +23,7 @@ public class ItemTagGenerator extends ItemTagsProvider {
     }
 
     @Override
-    protected void addTags(Provider provider) {
+    protected void addTags(@Nonnull Provider provider) {
         tag(DSTags.itemCoil).add(ModItems.COIL_COPPER.get(), ModItems.COIL_IRON.get());
         tag(DSTags.itemCoilCopper).add(ModItems.COIL_COPPER.get());
         tag(DSTags.itemCoilIron).add(ModItems.COIL_IRON.get());
@@ -43,6 +45,10 @@ public class ItemTagGenerator extends ItemTagsProvider {
         tag(DSTags.curioBelt).add(ModItems.GRAPPLING_HOOK_HARNESS.get());
         tag(DSTags.curioHands).add(ModItems.LASER_CONTROLLER.get());
         tag(DSTags.curioBracelet).add(ModItems.LASER_CONTROLLER.get());
+
+        // tag(DSTags.itemWrench).add(ModItems.WRENCH.get());
+        // tag(DSTags.itemTool).add(ModItems.WRENCH.get());
+        // tag(DSTags.itemToolWrench).add(ModItems.WRENCH.get());
     }
     
     

@@ -101,7 +101,7 @@ public class BlockStateGenerator extends BlockStateProvider{
                 ConfiguredModel.builder()
                     .modelFile((modelAttachedFunc).apply(state))
                     .rotationX(dir == Direction.DOWN ? 180 : dir.getAxis().isHorizontal() ? 90 : 0)
-                    .rotationY(dir.getAxis().isVertical() ? 0 : (((int) dir.toYRot())) % 360)
+                    .rotationY(dir.getAxis().isVertical() ? 0 : ((((int) dir.toYRot())) % 360) - 180)
                     .build()
                 : 
                 ConfiguredModel.builder()

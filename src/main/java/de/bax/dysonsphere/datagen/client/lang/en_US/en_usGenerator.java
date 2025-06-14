@@ -26,6 +26,10 @@ public class en_usGenerator extends LanguageProvider{
         addBlock(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK, "Laser Pattern Controller Terminal");
         addBlock(ModBlocks.LASER_CONTROLLER_BLOCK, "Laser Control Station");
         addBlock(ModBlocks.LASER_CRAFTER_BLOCK, "Precision Laser Workbench");
+        addBlock(ModBlocks.INPUT_HATCH_PARALLEL, "Parallel Input Hatch");
+        addBlock(ModBlocks.INPUT_HATCH_PARALLEL_HEAT, "Parallel Input Hatch (heat-transfer)");
+        addBlock(ModBlocks.INPUT_HATCH_SERIAL, "Serial Input Hatch");
+        addBlock(ModBlocks.INPUT_HATCH_SERIAL_HEAT, "Serial Input Hatch (heat-transfer)");
 
 
         //items
@@ -59,6 +63,7 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.GRAPPLING_HOOK_ROPE_ENDER, "Ender Rope");
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE, "Pneumatic Engine");
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL, "Mechanical Engine");
+        // addItem(ModItems.WRENCH, "Wrench");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");
