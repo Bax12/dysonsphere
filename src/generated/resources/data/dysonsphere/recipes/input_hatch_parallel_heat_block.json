@@ -3,13 +3,13 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "dysonsphere:input_hatch_serial"
+      "item": "dysonsphere:input_hatch_parallel_block"
     },
     {
       "item": "dysonsphere:heat_pipe_block"
     }
   ],
   "result": {
-    "item": "dysonsphere:input_hatch_serial_heat"
+    "item": "dysonsphere:input_hatch_parallel_heat_block"
   }
 }

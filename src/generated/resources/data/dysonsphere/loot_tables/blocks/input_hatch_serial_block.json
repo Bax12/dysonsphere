@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "dysonsphere:input_hatch_serial"
+          "name": "dysonsphere:input_hatch_serial_block"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "dysonsphere:blocks/input_hatch_serial"
+  "random_sequence": "dysonsphere:blocks/input_hatch_serial_block"
 }

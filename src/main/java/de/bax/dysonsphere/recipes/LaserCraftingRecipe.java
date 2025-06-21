@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -107,6 +108,13 @@ public record LaserCraftingRecipe(ResourceLocation id, Ingredient input, List<In
 
     public ItemStack output(){
         return output.copy();
+    }
+
+    public List<Ingredient> allInputs(){
+        ArrayList<Ingredient> list = new ArrayList<>();
+        list.add(input);
+        list.addAll(extraInputs);
+        return list;
     }
 
     public static class Serializer implements RecipeSerializer<LaserCraftingRecipe> {

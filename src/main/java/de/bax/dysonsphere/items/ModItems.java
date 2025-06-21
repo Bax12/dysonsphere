@@ -64,7 +64,7 @@ public class ModItems {
     public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_MANUAL = ITEMS.register("grappling_hook_engine_manual", () -> new GrapplingHookManualEngineItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_ROPE_ENDER = ITEMS.register("grappling_hook_rope_ender", () -> new GrapplingHookEnderRopeItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_PRESSURE = ITEMS.register("grappling_hook_engine_pressure", () -> new GrapplingHookPressureEngine());
-    // public static final RegistryObject<Item> WRENCH = ITEMS.register("wrench", () -> new WrenchItem()); //not really needed?
+    public static final RegistryObject<Item> WRENCH = ITEMS.register("wrench", () -> new WrenchItem()); //not really needed?
     
 
     public static RegistryObject<Item> registerItem(String name) {

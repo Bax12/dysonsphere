@@ -603,6 +603,14 @@ public class RecipeGenerator extends RecipeProvider {
             .requires(ModBlocks.INPUT_HATCH_SERIAL.get())
             .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
             .save(consumer);
+
+        Recipe.shaped(ModItems.WRENCH.get())
+            .pattern("I I")
+            .pattern(" C ")
+            .pattern(" I ")
+            .define('I', DSTags.itemIngotSmartAlloy)
+            .define('C', DSTags.itemCoilCopper)
+            .save(consumer);
     }
     
 

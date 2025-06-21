@@ -11,6 +11,7 @@ import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import de.bax.dysonsphere.color.ModColors.ITintableTileBlock;
 import de.bax.dysonsphere.containers.InputHatchParallelContainer;
 import de.bax.dysonsphere.containers.InputHatchSerialContainer;
+import de.bax.dysonsphere.items.tools.WrenchItem;
 import de.bax.dysonsphere.tileentities.InputHatchTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.core.BlockPos;
@@ -121,6 +122,12 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
 
         if(!pLevel.isClientSide && pPlayer instanceof ServerPlayer serverPlayer){
             BlockEntity tile = pLevel.getBlockEntity(pPos);
+            if(WrenchItem.isWrench(pPlayer.getItemInHand(pHand))){
+                if(tile instanceof InputHatchTile hatchTile){
+                    hatchTile.onPlacedInWorld(); //reload connections when hit with a wrench. Like all precision machinery.
+                    return InteractionResult.SUCCESS;
+                }
+            }
             if(tile instanceof InputHatchTile.Serial serial){
                 NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvider) ->
                 new InputHatchSerialContainer(containerId, playerInventory, serial), Component.translatable("container.dysonsphere.input_hatch_serial" + (type.isHeatConducting ? "_heat" : ""))), pPos);

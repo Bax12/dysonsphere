@@ -13,6 +13,13 @@
             "item" : "#input"
         },
         {
+            "type": "patchouli:custom",
+            "x": 30,
+            "y": 27,
+            "class": "de.bax.dysonsphere.compat.patchouli.LaserCraftingExtraComponent",
+            "guard": "#hasExtraInputs"
+        },
+        {
             "type" : "patchouli:item",
             "x": 80,
             "y": 21,
@@ -25,8 +32,8 @@
             "image": "dysonsphere:textures/gui/gui_lower.png",
             "width": 65,
             "height": 28,
-            "u": 15,
-            "v": 180,
+            "u": 35,
+            "v": 200,
             "x": 30,
             "y": 15
         },
@@ -53,6 +60,14 @@
             "y": 97,
             "item" : "#input2",
             "guard": "#hasRecipe2"
+        },
+        {
+            "type": "patchouli:custom",
+            "x": 30,
+            "y": 97,
+            "class": "de.bax.dysonsphere.compat.patchouli.LaserCraftingExtraComponent",
+            "lookup": "#recipe2",
+            "guard": "#hasExtraInputs2"
         },
         {
             "type" : "patchouli:item",

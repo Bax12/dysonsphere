@@ -1,4 +1,4 @@
-// 1.20.1	2025-06-14T16:39:47.253864278	Tags for minecraft:item mod id dysonsphere
+// 1.20.1	2025-06-14T23:53:52.816700331	Tags for minecraft:item mod id dysonsphere
 be6bfd5075f01d29330dd4cb8e5c05688de517bd data/curios/tags/items/back.json
 be6bfd5075f01d29330dd4cb8e5c05688de517bd data/curios/tags/items/belt.json
 4942b962d24a4b203fa76fb05e54743b46c67ae5 data/curios/tags/items/bracelet.json
@@ -16,3 +16,6 @@ b855986449f7e11619f1d69f0728a97ba9f3c430 data/forge/tags/items/coils/copper.json
 0cc633e55123683f9f81215c3b761f6f2078647c data/forge/tags/items/coils/iron.json
 7ba1390baf206d8505f35a2b7099f640984f7069 data/forge/tags/items/ingots.json
 7ba1390baf206d8505f35a2b7099f640984f7069 data/forge/tags/items/ingots/nitinol.json
+1b0217b682d170c7744d3cdc1b061b12d86e43ea data/forge/tags/items/tools.json
+1b0217b682d170c7744d3cdc1b061b12d86e43ea data/forge/tags/items/tools/wrench.json
+1b0217b682d170c7744d3cdc1b061b12d86e43ea data/forge/tags/items/wrenches.json

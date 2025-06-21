@@ -25,11 +25,11 @@
           }
         ],
         "input": {
-          "item": "dysonsphere:input_hatch_parallel"
+          "item": "dysonsphere:input_hatch_parallel_block"
         },
         "inputEnergy": 300000,
         "output": {
-          "item": "dysonsphere:input_hatch_serial"
+          "item": "dysonsphere:input_hatch_serial_block"
         }
       }
     },
@@ -60,11 +60,11 @@
           }
         ],
         "input": {
-          "item": "dysonsphere:input_hatch_parallel"
+          "item": "dysonsphere:input_hatch_parallel_block"
         },
         "inputEnergy": 300000,
         "output": {
-          "item": "dysonsphere:input_hatch_serial"
+          "item": "dysonsphere:input_hatch_serial_block"
         }
       }
     }

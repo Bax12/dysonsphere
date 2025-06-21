@@ -3,7 +3,6 @@ package de.bax.dysonsphere.compat.patchouli;
 import de.bax.dysonsphere.recipes.LaserCraftingRecipe;
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
@@ -34,6 +33,12 @@ public class LaserCraftingRecipeProcessor implements IComponentProcessor {
         if(key.equals("input")){
             return IVariable.from(recipe.input().getItems()[0]);
         }
+        if(key.equals("hasExtraInputs")){
+            return IVariable.wrap(!recipe.extraInputs().isEmpty());
+        }
+        if(key.equals("extraInputs")){
+            return IVariable.wrapList(recipe.extraInputs().stream().map((extra) -> { return IVariable.from(extra.getItems()[0]);}).toList());
+        }
         if(key.equals("output")){
             return IVariable.from(recipe.output());
         }
@@ -47,6 +52,9 @@ public class LaserCraftingRecipeProcessor implements IComponentProcessor {
         if(hasRecipe2){
             if(key.equals("input2")){
                 return IVariable.from(recipe2.input().getItems()[0]);
+            }
+            if(key.equals("extraInputs2")){
+                return IVariable.wrapList(recipe2.extraInputs().stream().map((extra) -> { return IVariable.from(extra.getItems()[0]);}).toList());
             }
             if(key.equals("output2")){
                 return IVariable.from(recipe2.output());

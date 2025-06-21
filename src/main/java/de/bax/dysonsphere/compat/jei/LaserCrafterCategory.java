@@ -2,12 +2,14 @@ package de.bax.dysonsphere.compat.jei;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
+import org.joml.Math;
+
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.gui.BaseGui;
-import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.recipes.LaserCraftingRecipe;
-import de.bax.dysonsphere.tileentities.RailgunTile;
 import de.bax.dysonsphere.util.AssetUtil;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -32,7 +34,7 @@ public class LaserCrafterCategory implements IRecipeCategory<LaserCraftingRecipe
 
     @Override
     public IDrawable getBackground() {
-        return DSJeiPlugin.guiHelper.drawableBuilder(BaseGui.GUI_INVENTORY_LOC, 15, 180, 65, 28).build();
+        return DSJeiPlugin.guiHelper.drawableBuilder(BaseGui.GUI_INVENTORY_LOC, 12, 175, 111, 78).build();
     }
 
     @Override
@@ -41,14 +43,22 @@ public class LaserCrafterCategory implements IRecipeCategory<LaserCraftingRecipe
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, LaserCraftingRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 0, 12).addIngredients(recipe.input());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 45, 6).addItemStack(recipe.output());
+    public void setRecipe(@Nonnull IRecipeLayoutBuilder builder, @Nonnull LaserCraftingRecipe recipe, @Nonnull IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 23, 37).addIngredients(recipe.input());
+        int extraCount = recipe.extraInputs().size();
+        float radius = 20f;
+        double rads = Math.PI * 2 / (extraCount + 1); //always leave above input slot empty. Thats where the laser lives.
+        for(int i = 0; i < extraCount; i++){
+            int posX = (int) (Math.sin(rads * (i+1) + Math.PI) * radius + 23); //without Math.PI offset the laser slot is on the bottom instead.
+            int posY = (int) (Math.cos(rads * (i+1) + Math.PI) * radius + 37);
+            builder.addSlot(RecipeIngredientRole.INPUT, posX, posY).addIngredients(recipe.extraInputs().get(i));
+        }
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 68, 31).addItemStack(recipe.output());
     }
 
     @Override
-    public List<Component> getTooltipStrings(LaserCraftingRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
-        if(mouseX >= 0 && mouseX <= 16 && mouseY >= 0 && mouseY <= 12){
+    public List<Component> getTooltipStrings(@Nonnull LaserCraftingRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        if(mouseX >= 23 && mouseX <= 39 && mouseY >= 12 && mouseY <= 27){
             return List.of(Component.translatable("tooltip.dysonsphere.laser_crafter_energy_needed", AssetUtil.FLOAT_FORMAT.format(recipe.inputEnergy())));
         }
         

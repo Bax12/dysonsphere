@@ -171,10 +171,10 @@ public class ModHuds {
         if(!input.isEmpty()){
             int posX = (int) (screenWidth * 0.5f) - 20;
             int posY = (int) (screenHeight * 0.6f) - 30;
-            guiGraphics.blit(HUD_LOC, posX, posY, 15, 180, 16, 28);
+            guiGraphics.blit(HUD_LOC, posX, posY, 35, 200, 16, 28);
             guiGraphics.renderItem(input, posX, posY + 12);
             if(!result.isEmpty()){
-                guiGraphics.blit(HUD_LOC, posX + 16, posY, 31, 180, 24, 28);
+                guiGraphics.blit(HUD_LOC, posX + 16, posY, 54, 200, 24, 28);
                 guiGraphics.renderItem(result, posX + 41, posY + 6);
             }
         }

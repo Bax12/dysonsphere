@@ -1,0 +1,15 @@
+{
+    "name": "Wrench",
+    "icon": "dysonsphere:wrench",
+    "category": "dysonsphere:tools",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "It's a Wrench. Nothing special about it.$(br) Every other wrench you can get your hands on will work just as well or better."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:wrench"
+        }
+    ]
+}

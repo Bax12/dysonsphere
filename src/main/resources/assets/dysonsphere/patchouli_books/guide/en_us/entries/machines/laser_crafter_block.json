@@ -14,7 +14,11 @@
         },
         {
             "type": "patchouli:text",
-            "text": "The large amounts of energy focused in the small enclosure are hardly contained. The Workbench will constantly loose its energy and convert it into heat. The hotter the Workbench the harder it gets to add more energy. Active cooling is required"
+            "text": "The large amounts of energy focused in the small enclosure are hardly contained. The Workbench will constantly loose its energy and convert it into heat. The hotter the Workbench the harder it gets to add more energy. Active cooling is required$(br)The $(item)Laser Control Station$() can be used to automate Laser Strikes. Just aim carefully"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "Can be expanded with $(thing)Input Hatches$(). Recipes with more than one inputs will require the additional surrounding inputs in $(item)Parallel Input Hatches$().$(br)Parallel and Heat-Transfer Hatches can help with automation"
         }
     ]
 }

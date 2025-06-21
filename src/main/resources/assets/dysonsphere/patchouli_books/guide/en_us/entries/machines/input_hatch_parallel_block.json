@@ -1,0 +1,15 @@
+{
+    "name": "Parallel Input Hatch",
+    "icon": "dysonsphere:input_hatch_parallel_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The Parallel Input Hatch allows a machine to work on an additional item at once, effectively expanding the available recipes. As the internal Buffer of Parallel Input Hatches is quite limited, using Serial Input Hatches alongside them is recommended"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:input_hatch_parallel_block"
+        }
+    ]
+}

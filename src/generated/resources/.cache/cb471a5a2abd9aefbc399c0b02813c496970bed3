@@ -1,4 +1,4 @@
-// 1.20.1	2025-06-14T16:39:47.25283451	Item Models: dysonsphere
+// 1.20.1	2025-06-21T21:26:43.478548127	Item Models: dysonsphere
 08df4d89635e2e188dd96816aec2f9bae0ab9a10 assets/dysonsphere/models/item/bucket_steam.json
 0c919b80842cdf42590d975217ce52f08031c9a4 assets/dysonsphere/models/item/coil_copper.json
 b8734755e92b5bfc21c0d87305b6726dc96ac95b assets/dysonsphere/models/item/coil_iron.json
@@ -22,10 +22,10 @@ fdcdd959d2223cc4a0a4711533250dda916ce0c2 assets/dysonsphere/models/item/heat_gen
 8e20d93bfb381a78f88a129e03b41119317e0cd8 assets/dysonsphere/models/item/heat_pipe_block.json
 b0b2a8a67fb8a55712064eff53a75ac1dd0159ba assets/dysonsphere/models/item/heat_shielding.json
 6018bdd4889bbd5faf68d4e2000e6c76a7f575d6 assets/dysonsphere/models/item/ingot_smart_alloy.json
-7181b604b94c80d269b33ce6c6dd0560fe068f6b assets/dysonsphere/models/item/input_hatch_parallel.json
-7181b604b94c80d269b33ce6c6dd0560fe068f6b assets/dysonsphere/models/item/input_hatch_parallel_heat.json
-3da62bb8818e7c47ac89277a46dd6a9616b243dd assets/dysonsphere/models/item/input_hatch_serial.json
-3da62bb8818e7c47ac89277a46dd6a9616b243dd assets/dysonsphere/models/item/input_hatch_serial_heat.json
+385de5e6fc83981a9d09c365841af884c5044327 assets/dysonsphere/models/item/input_hatch_parallel_block.json
+385de5e6fc83981a9d09c365841af884c5044327 assets/dysonsphere/models/item/input_hatch_parallel_heat_block.json
+9103a07644922bbaf597fb5531467bae24fbf856 assets/dysonsphere/models/item/input_hatch_serial_block.json
+9103a07644922bbaf597fb5531467bae24fbf856 assets/dysonsphere/models/item/input_hatch_serial_heat_block.json
 c02338c348836f023f97a9ffb35c652934ac72ae assets/dysonsphere/models/item/laser_controller_block.json
 c2c74a8cdbd8340e12f72b6bb140221d1997c979 assets/dysonsphere/models/item/laser_crafter_block.json
 c80dd86541fd9190eaf35a044ee26a167bbd6e78 assets/dysonsphere/models/item/laser_pattern.json
@@ -33,3 +33,4 @@ d70f9f57d4ffaad7b0938525033fc1fdcbf0293c assets/dysonsphere/models/item/laser_pa
 077b5b8e6d0e6f01511d1fbafa4371b1828d8ffa assets/dysonsphere/models/item/solar_foil.json
 f1fbc7c832d61e3d7808683fd87beb05f8646054 assets/dysonsphere/models/item/thermopile.json
 ebc0b4199eba896eb8e8577dff448cc7776fd2be assets/dysonsphere/models/item/universe_whisper.json
+02e6cf230ed0768e4a4e6712b44d2e3bad2bd56c assets/dysonsphere/models/item/wrench.json

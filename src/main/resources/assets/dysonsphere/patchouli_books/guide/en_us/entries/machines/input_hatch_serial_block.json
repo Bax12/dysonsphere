@@ -1,0 +1,15 @@
+{
+    "name": "Serial Input Hatch",
+    "icon": "dysonsphere:input_hatch_serial_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The Serial Input Hatch allows a machine consume the items from its internal buffer instead of the machine inventory. Preventing recipe layouts to be lost and making batch-crafting easier."
+        },
+        {
+            "type": "dysonsphere:laser_recipe",
+            "recipe": "dysonsphere:laser_crafting/input_hatch_serial_block"
+        }
+    ]
+}

@@ -16,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -44,7 +45,11 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
 
     @Override
     public List<ItemStack> getInputs(ProviderType type) {
-        return getInventoryFromProviders(inputProviders.stream().filter((entry -> entry.map((provider) -> {return provider.getType().equals(type);}).orElse(false))).collect(Collectors.toList()));
+        return getInventoryFromProviders(getProviders(type));
+    }
+
+    protected List<LazyOptional<IInputProvider>> getProviders(ProviderType type){
+        return inputProviders.stream().filter((entry -> entry.map((provider) -> {return provider.getType().equals(type);}).orElse(false))).collect(Collectors.toList());
     }
 
     protected List<ItemStack> getInventoryFromProviders(List<LazyOptional<IInputProvider>> lazyProviders){
@@ -67,6 +72,32 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         }
 
         return stacks;
+    }
+
+    public List<Ingredient> consumeInputs(List<Ingredient> ingredient){
+        List<Ingredient> mutableIngredients = new ArrayList<>(ingredient);
+        consumeInputType(mutableIngredients, ProviderType.SERIAL);
+        consumeInputType(mutableIngredients, ProviderType.PARALLEL);
+        return mutableIngredients;
+    }
+
+    protected List<Ingredient> consumeInputType(List<Ingredient> ingredients, ProviderType type){
+        for(LazyOptional<IInputProvider> lazyProvider : getProviders(type)){
+            lazyProvider.ifPresent((provider) -> {
+                provider.getInventory().ifPresent((inventory) -> {
+                    for(int i = inventory.getSlots()-1; i >= 0; i--){
+                        int slotNumber = i; //to satisfy the non-changing constraint of the lambda below.
+                        ingredients.removeIf((ingredient) -> {
+                            if(ingredient.test(inventory.extractItem(slotNumber, 1, true))){
+                                return !inventory.extractItem(slotNumber, 1, false).isEmpty();
+                            }
+                            return false;
+                        });
+                    }
+                });
+            });
+        }
+        return ingredients;
     }
 
     public void updateNeighbors(Level level, BlockPos pos){
@@ -94,10 +125,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
                 if(level != null){
                     BlockEntity providerTile = level.getBlockEntity(pos);
                     if(providerTile != null){
-                        LazyOptional<IInputProvider> lazyProvider = providerTile.getCapability(DSCapabilities.INPUT_PROVIDER);
-                        if(lazyProvider.isPresent()) {                        
-                                inputProviders.add(lazyProvider);
-                        }
+                        addInputProvider(providerTile.getCapability(DSCapabilities.INPUT_PROVIDER));
                     }
                 }
             }

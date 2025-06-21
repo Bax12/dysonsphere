@@ -9,6 +9,7 @@ import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
 import de.bax.dysonsphere.color.ModColors.ITintableTileBlock;
 import de.bax.dysonsphere.items.ModItems;
+import de.bax.dysonsphere.items.tools.WrenchItem;
 import de.bax.dysonsphere.tileentities.LaserCrafterTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.core.BlockPos;
@@ -47,6 +48,9 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
                 ItemStack playerStack = pPlayer.getMainHandItem();
                 if(playerStack.is(ModItems.TARGET_DESIGNATOR.get())){
                     return InteractionResult.PASS;
+                }
+                if(WrenchItem.isWrench(playerStack)){
+                    tile.acceptorHandler.markForRefresh();
                 }
                 ItemStack outputStack = tile.output.extractItem(0, Integer.MAX_VALUE, false);
                 //output if output isn't empty

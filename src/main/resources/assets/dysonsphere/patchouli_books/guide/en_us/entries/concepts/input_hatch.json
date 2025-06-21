@@ -1,0 +1,24 @@
+{
+    "name": "About Input Hatches",
+    "icon": "dysonsphere:input_hatch_serial_block",
+    "category": "dysonsphere:concepts",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "$(thing)Input Hatches$() allow the input of compatible machines to be extended by placing the input hatch adjacent to the machine. Some change the available recipes, some make providing the needed inputs easier."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "The input hatches of different kinds can be chained to each other.$(br)Placing them in between compatible machines or breaking parts of the link can jam the hatches. Using a $(item)Wrench$() on them should solve the issues."
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:machines/laser_crafter_block",
+                "dysonsphere:machines/input_hatch_serial_block",
+                "dysonsphere:machines/input_hatch_parallel_block",
+                "dysonsphere:machines/input_hatch_heat_block"
+            ]
+        }
+    ]
+}

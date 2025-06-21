@@ -27,6 +27,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -167,13 +168,19 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     public void tick(){
         if(!level.isClientSide){
             ticksElapsed++;
+            if(ticksElapsed == 20){
+                acceptorHandler.markForRefresh();
+            }
             if(ticksElapsed % 5 == 0){
                 if(energy > 0){
                     if(currentRecipe != null){
                         if((currentRecipe.matches(input.getStackInSlot(0), acceptorHandler.getInputs(ProviderType.PARALLEL)))){
                             if(energy >= currentRecipe.inputEnergy()){
                                 if(canOutput()){
-                                    input.extractItem(0, 1, false);
+                                    List<Ingredient> ingredients = acceptorHandler.consumeInputs(currentRecipe.allInputs());
+                                    if(ingredients.contains(currentRecipe.input())){ //consume input only if not provided by input providers
+                                        input.extractItem(0, 1, false);
+                                    }
                                     output.insertItem(0, currentRecipe.output(), false);
                                     energy = Math.max(0, energy - currentRecipe.inputEnergy()); 
                                     currentRecipe = null;

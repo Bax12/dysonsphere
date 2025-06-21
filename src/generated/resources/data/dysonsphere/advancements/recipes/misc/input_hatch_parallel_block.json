@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "dysonsphere:input_hatch_serial_heat"
+        "recipe": "dysonsphere:input_hatch_parallel_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "dysonsphere:input_hatch_serial_heat"
+      "dysonsphere:input_hatch_parallel_block"
     ]
   },
   "sends_telemetry_event": false

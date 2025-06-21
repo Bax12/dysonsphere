@@ -119,6 +119,8 @@ public abstract class InputHatchTile extends BaseTile {
 
                 if(isHeatConducting){
                     heatHandler.splitShare();
+                }
+                if(dirty){
                     sendSyncPackageToNearbyPlayers();
                 }
             }

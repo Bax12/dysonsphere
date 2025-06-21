@@ -63,7 +63,7 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.GRAPPLING_HOOK_ROPE_ENDER, "Ender Rope");
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE, "Pneumatic Engine");
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL, "Mechanical Engine");
-        // addItem(ModItems.WRENCH, "Wrench");
+        addItem(ModItems.WRENCH, "Wrench");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");
@@ -78,6 +78,10 @@ public class en_usGenerator extends LanguageProvider{
         add("container.dysonsphere.laser_controller_inventory", "Active Laser Patterns");
         add("container.dysonsphere.laser_controller_block", "Laser Control Station");
         add("container.dysonsphere.grappling_hook_harness_inventory", "Grappling Hook Frame");
+        add("container.dysonsphere.input_hatch_serial", "Serial Input Hatch");
+        add("container.dysonsphere.input_hatch_serial_heat", "Serial Input Hatch (heat-transfer)");
+        add("container.dysonsphere.input_hatch_parallel", "Parallel Input Hatch");
+        add("container.dysonsphere.input_hatch_parallel_heat", "Parallel Input Hatch (heat-transfer)");
 
         //tooltips
         add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
