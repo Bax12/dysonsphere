@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 
 public abstract class InputProviderHandler implements IInputProvider, INBTSerializable<CompoundTag> {
@@ -26,6 +27,7 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
     protected BlockPos acceptorPos;
 
     protected LazyOptional<IItemHandler> lazyInventory;
+    protected LazyOptional<IEnergyStorage> lazyEnergy;
 
     protected final BlockEntity tile;
 
@@ -33,6 +35,7 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
     protected LazyOptional<IInputProvider>[] neighborList = new LazyOptional[6];
 
     public LazyOptional<IInputProvider> lazyProvider = LazyOptional.of(() -> this);
+
 
     //all values are calculated or references. So we do not need to save anything to nbt
 
@@ -59,6 +62,7 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
         return acceptorDistance;
     }
 
+    @SuppressWarnings("null")
     public void updateNeighbors(){
         // boolean updateUplink = false;
         for(Direction dir : Direction.values()){
@@ -102,6 +106,7 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
         onUplinkChange();
     }
 
+    @SuppressWarnings("null")
     @Override
     public void updateUplink(){
         int minDistance = MAX_DISTANCE; //this creates a hard limit for the provider chaining distance. Probably fails for other reasons way before that.
@@ -244,5 +249,13 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
         });
     }
     
+    public void setEnergy(LazyOptional<IEnergyStorage> lazyEnergy) {
+        this.lazyEnergy = lazyEnergy;
+    }
+
+    @Override
+    public LazyOptional<IEnergyStorage> getEnergy() {
+        return lazyEnergy;
+    }
     
 }

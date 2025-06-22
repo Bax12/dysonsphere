@@ -24,6 +24,7 @@ public class BlockStateGenerator extends BlockStateProvider{
 
     @Override
     protected void registerStatesAndModels() {
+        buildCubeAll(ModBlocks.SMART_ALLOY_BLOCK);
         buildCubeAll(ModBlocks.HEAT_PIPE_BLOCK);
 
         buildHorizontalBlock(ModBlocks.DS_MONITOR_BLOCK);
@@ -36,9 +37,13 @@ public class BlockStateGenerator extends BlockStateProvider{
 
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_SERIAL);
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_PARALLEL);
+        buildInputHatchBlock(ModBlocks.INPUT_HATCH_PROXY);
+        buildInputHatchBlock(ModBlocks.INPUT_HATCH_ENERGY);
 
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_SERIAL_HEAT, blockTexture(ModBlocks.INPUT_HATCH_SERIAL.get()));
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_PARALLEL_HEAT, blockTexture(ModBlocks.INPUT_HATCH_PARALLEL.get()));
+        buildInputHatchBlock(ModBlocks.INPUT_HATCH_PROXY_HEAT, blockTexture(ModBlocks.INPUT_HATCH_PROXY.get()));
+        buildInputHatchBlock(ModBlocks.INPUT_HATCH_ENERGY_HEAT, blockTexture(ModBlocks.INPUT_HATCH_ENERGY.get()));
 
         buildPillarBlock(ModBlocks.HEAT_EXCHANGER_BLOCK);
         buildPillarBlock(ModBlocks.HEAT_GENERATOR_BLOCK);

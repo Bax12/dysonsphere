@@ -179,7 +179,7 @@ public class ModHuds {
             }
         }
 
-        List<ItemStack> parallelInputs = tile.acceptorHandler.getInputs(ProviderType.PARALLEL);
+        List<ItemStack> parallelInputs = tile.acceptorHandler.getItemInputs(ProviderType.PARALLEL);
         //draw a rotation circle of the parallel Input around the main gui
         if(!parallelInputs.isEmpty()){
             int centerX = (int) (screenWidth * 0.5f);
@@ -219,7 +219,7 @@ public class ModHuds {
             }
         }
 
-        List<ItemStack> serialInputs = tile.acceptorHandler.getInputs(ProviderType.SERIAL);
+        List<ItemStack> serialInputs = tile.acceptorHandler.getItemInputs(ProviderType.SERIAL);
         //draw a straight line of (over)stacked inputs, below the main ui, centered
         if(!serialInputs.isEmpty()){
             Map<Item,Integer> stacks = serialInputs.stream().collect(HashMap<Item,Integer>::new, (map, stack) -> {

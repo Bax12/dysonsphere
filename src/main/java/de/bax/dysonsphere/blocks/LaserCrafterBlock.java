@@ -51,6 +51,7 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
                 }
                 if(WrenchItem.isWrench(playerStack)){
                     tile.acceptorHandler.markForRefresh();
+                    return InteractionResult.SUCCESS;
                 }
                 ItemStack outputStack = tile.output.extractItem(0, Integer.MAX_VALUE, false);
                 //output if output isn't empty

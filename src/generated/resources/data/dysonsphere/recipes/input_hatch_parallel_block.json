@@ -1,24 +1,72 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "C": {
-      "item": "dysonsphere:component_smart_alloy"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:gears"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "H": {
+            "item": "dysonsphere:input_hatch_proxy_block"
+          },
+          "P": {
+            "item": "minecraft:piston"
+          },
+          "S": {
+            "tag": "forge:ingots/nitinol"
+          }
+        },
+        "pattern": [
+          "SPS",
+          "SHS",
+          "SPS"
+        ],
+        "result": {
+          "item": "dysonsphere:input_hatch_parallel_block"
+        },
+        "show_notification": true
+      }
     },
-    "H": {
-      "item": "minecraft:hopper"
-    },
-    "I": {
-      "tag": "forge:coils/iron"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:gears"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "G": {
+            "tag": "forge:gears"
+          },
+          "H": {
+            "item": "dysonsphere:input_hatch_proxy_block"
+          },
+          "S": {
+            "tag": "forge:ingots/nitinol"
+          }
+        },
+        "pattern": [
+          "GGG",
+          "SHS",
+          "GGG"
+        ],
+        "result": {
+          "item": "dysonsphere:input_hatch_parallel_block"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "ICI",
-    "CHC",
-    "ICI"
-  ],
-  "result": {
-    "item": "dysonsphere:input_hatch_parallel_block"
-  },
-  "show_notification": true
+  ]
 }

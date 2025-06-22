@@ -1,0 +1,90 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:circuits"
+        }
+      ],
+      "recipe": {
+        "type": "dysonsphere:laser_crafting",
+        "extraInputs": [
+          {
+            "tag": "forge:coils/copper"
+          },
+          {
+            "tag": "forge:coils/copper"
+          },
+          {
+            "tag": "forge:coils/copper"
+          },
+          {
+            "tag": "forge:coils/copper"
+          },
+          {
+            "tag": "forge:coils/iron"
+          },
+          {
+            "tag": "forge:coils/iron"
+          },
+          {
+            "tag": "forge:coils/iron"
+          },
+          {
+            "tag": "forge:coils/iron"
+          }
+        ],
+        "input": {
+          "item": "dysonsphere:input_hatch_proxy_block"
+        },
+        "inputEnergy": 800000,
+        "output": {
+          "item": "dysonsphere:input_hatch_energy_block"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:circuits"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "dysonsphere:laser_crafting",
+        "extraInputs": [
+          {
+            "tag": "forge:circuits"
+          },
+          {
+            "item": "dysonsphere:heat_shielding"
+          },
+          {
+            "tag": "forge:circuits"
+          },
+          {
+            "tag": "forge:circuits"
+          },
+          {
+            "item": "dysonsphere:heat_shielding"
+          },
+          {
+            "tag": "forge:circuits"
+          }
+        ],
+        "input": {
+          "item": "dysonsphere:input_hatch_proxy_block"
+        },
+        "inputEnergy": 800000,
+        "output": {
+          "item": "dysonsphere:input_hatch_energy_block"
+        }
+      }
+    }
+  ]
+}

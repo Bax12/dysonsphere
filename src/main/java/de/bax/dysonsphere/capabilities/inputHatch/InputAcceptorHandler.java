@@ -44,7 +44,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
     }
 
     @Override
-    public List<ItemStack> getInputs(ProviderType type) {
+    public List<ItemStack> getItemInputs(ProviderType type) {
         return getInventoryFromProviders(getProviders(type));
     }
 
@@ -74,7 +74,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         return stacks;
     }
 
-    public List<Ingredient> consumeInputs(List<Ingredient> ingredient){
+    public List<Ingredient> consumeItemInputs(List<Ingredient> ingredient){
         List<Ingredient> mutableIngredients = new ArrayList<>(ingredient);
         consumeInputType(mutableIngredients, ProviderType.SERIAL);
         consumeInputType(mutableIngredients, ProviderType.PARALLEL);
@@ -98,6 +98,32 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
             });
         }
         return ingredients;
+    }
+
+    //sum up the maximum extractable energy of all energy providers
+    @Override
+    public int getEnergyInput() {
+        return getProviders(ProviderType.ENERGY).stream().mapToInt((lazyProvider) -> {
+            return lazyProvider.map((provider) -> {
+                return provider.getEnergy().map((energy) -> {
+                    return energy.extractEnergy(Integer.MAX_VALUE, true);
+                }).orElse(0);
+            }).orElse(0);
+        }).sum();
+    }
+
+    //returns the energy not consumed
+    @Override
+    public int consumeEnergy(int energyToConsume) {
+        for(var lazyProvider : getProviders(ProviderType.ENERGY)){
+            int toConsume = energyToConsume; //to satisfy the non-changing constraint of the lambda below.
+            energyToConsume =- lazyProvider.map((provider) -> {
+                return provider.getEnergy().map((energy) -> {
+                    return energy.extractEnergy(toConsume, false);
+                }).orElse(0);
+            }).orElse(0);
+        }
+        return energyToConsume;
     }
 
     public void updateNeighbors(Level level, BlockPos pos){

@@ -44,16 +44,34 @@ public class LaserCraftingRecipeGenerator {
 
         ConditionalRecipe.builder()
             .addCondition(RecipeConditions.GEAR_TAG_EMPTY).addRecipe((consumer) -> {
-                RecipeBuilder.of(ModBlocks.INPUT_HATCH_SERIAL.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PARALLEL.get()))
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_SERIAL.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
                 .addExtraInput(Ingredient.of(DSTags.itemCoilCopper),4)
                 .energyRequired(300_000).save(consumer);
             })
             .addCondition(RecipeConditions.GEAR_EXISTS).addRecipe((consumer) -> {
-                RecipeBuilder.of(ModBlocks.INPUT_HATCH_SERIAL.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PARALLEL.get()))
-                .addExtraInput(Ingredient.of(DSTags.itemCircuit),4)
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_SERIAL.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
+                .addExtraInput(Ingredient.of(DSTags.itemGear),4)
                 .energyRequired(300_000).save(consumer);
             })
             .build(pWriter, RecipeBuilder.getLocation(ModBlocks.INPUT_HATCH_SERIAL.getId()));
+
+        ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_ENERGY.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
+                .addExtraInput(Ingredient.of(DSTags.itemCoilCopper),4)
+                .addExtraInput(Ingredient.of(DSTags.itemCoilIron),4)
+                .energyRequired(800_000).save(consumer);
+            })
+            .addCondition(RecipeConditions.CIRCUIT_EXISTS).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_ENERGY.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit),1) //for a prettier pattern
+                .addExtraInput(Ingredient.of(ModItems.HEAT_SHIELDING.get()),1)
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit),2)
+                .addExtraInput(Ingredient.of(ModItems.HEAT_SHIELDING.get()),1)
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit),1)
+                .energyRequired(800_000).save(consumer);
+            })
+            .build(pWriter, RecipeBuilder.getLocation(ModBlocks.INPUT_HATCH_ENERGY.getId()));
     }
 
     public static class RecipeBuilder {

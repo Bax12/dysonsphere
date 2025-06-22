@@ -6,7 +6,6 @@ import javax.annotation.Nonnull;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
-import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.tags.DSTags;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -25,7 +24,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.AndCondition;
-import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
 import net.minecraftforge.common.crafting.conditions.OrCondition;
 
 public class RecipeGenerator extends RecipeProvider {
@@ -585,7 +583,7 @@ public class RecipeGenerator extends RecipeProvider {
         })
         .build(consumer, ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.getId());
 
-        Recipe.shaped(ModBlocks.INPUT_HATCH_PARALLEL.get())
+        Recipe.shaped(ModBlocks.INPUT_HATCH_PROXY.get())
             .pattern("ICI")
             .pattern("CHC")
             .pattern("ICI")
@@ -593,6 +591,32 @@ public class RecipeGenerator extends RecipeProvider {
             .define('C', ModItems.COMPONENT_SMART_ALLOY.get())
             .define('H', Blocks.HOPPER)
             .save(consumer);
+
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.GEAR_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModBlocks.INPUT_HATCH_PARALLEL.get())
+            .pattern("SPS")
+            .pattern("SHS")
+            .pattern("SPS")
+            .define('S', DSTags.itemIngotSmartAlloy)
+            .define('P', Items.PISTON)
+            .define('H', ModBlocks.INPUT_HATCH_PROXY.get())
+            .save(con);
+        })
+        .addCondition(RecipeConditions.GEAR_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModBlocks.INPUT_HATCH_PARALLEL.get())
+            .pattern("GGG")
+            .pattern("SHS")
+            .pattern("GGG")
+            .define('S', DSTags.itemIngotSmartAlloy)
+            .define('G', DSTags.itemGear)
+            .define('H', ModBlocks.INPUT_HATCH_PROXY.get())
+            .save(con);
+        })
+        .build(consumer, ModBlocks.INPUT_HATCH_PARALLEL.getId());
+
 
         Recipe.shapeless(ModBlocks.INPUT_HATCH_PARALLEL_HEAT.get())
             .requires(ModBlocks.INPUT_HATCH_PARALLEL.get())
@@ -604,6 +628,16 @@ public class RecipeGenerator extends RecipeProvider {
             .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
             .save(consumer);
 
+        Recipe.shapeless(ModBlocks.INPUT_HATCH_PROXY_HEAT.get())
+            .requires(ModBlocks.INPUT_HATCH_PROXY.get())
+            .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
+            .save(consumer);
+
+        Recipe.shapeless(ModBlocks.INPUT_HATCH_ENERGY_HEAT.get())
+            .requires(ModBlocks.INPUT_HATCH_ENERGY.get())
+            .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
+            .save(consumer);
+
         Recipe.shaped(ModItems.WRENCH.get())
             .pattern("I I")
             .pattern(" C ")
@@ -611,6 +645,17 @@ public class RecipeGenerator extends RecipeProvider {
             .define('I', DSTags.itemIngotSmartAlloy)
             .define('C', DSTags.itemCoilCopper)
             .save(consumer);
+
+        Recipe.shaped(ModBlocks.SMART_ALLOY_BLOCK.get())
+            .pattern("III")
+            .pattern("III")
+            .pattern("III")
+            .define('I', ModItems.INGOT_SMART_ALLOY.get())
+            .save(consumer);
+        
+        Recipe.shapeless(ModItems.INGOT_SMART_ALLOY.get(), 9)
+            .requires(ModBlocks.SMART_ALLOY_BLOCK.get())
+            .save(consumer, ModItems.INGOT_SMART_ALLOY.getId().withSuffix("_uncompress"));
     }
     
 

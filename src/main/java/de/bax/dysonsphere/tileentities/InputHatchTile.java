@@ -23,6 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -38,6 +40,10 @@ public abstract class InputHatchTile extends BaseTile {
 
         public int getSlotLimit(int slot) {
             return getSlotSize(slot);
+        };
+
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return allowItem(slot, stack);
         };
     };
 
@@ -88,6 +94,14 @@ public abstract class InputHatchTile extends BaseTile {
 
     protected abstract ProviderType getProviderType();
 
+    protected abstract int getSlotCount();
+    protected abstract int getSlotSize(int slot);
+    protected void internalTick(){};
+
+    protected boolean allowItem(int slot, ItemStack stack){
+        return true;
+    }
+
 
     @Override
     public void load(@Nonnull CompoundTag pTag) {
@@ -120,8 +134,10 @@ public abstract class InputHatchTile extends BaseTile {
                 if(isHeatConducting){
                     heatHandler.splitShare();
                 }
+                internalTick();
                 if(dirty){
                     sendSyncPackageToNearbyPlayers();
+                    dirty = false;
                 }
             }
 
@@ -170,8 +186,13 @@ public abstract class InputHatchTile extends BaseTile {
         return LazyOptional.empty();
     }
 
-    protected abstract int getSlotCount();
-    protected abstract int getSlotSize(int slot);
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyInv.invalidate();
+        lazyHeat.invalidate();
+        providerHandler.lazyProvider.invalidate();
+    }
     
     @Override
     public void setChanged() {
@@ -228,7 +249,7 @@ public abstract class InputHatchTile extends BaseTile {
         }
     }
 
-
+    //the following section could probably be more generic...
     public static class Serial extends InputHatchTile {
 
         public static final int SLOTS = 5;
@@ -303,6 +324,136 @@ public abstract class InputHatchTile extends BaseTile {
 
     }
 
+    public static class Proxy extends InputHatchTile {
+        
+        public Proxy(BlockPos pos, BlockState state){
+            this(ModTiles.INPUT_HATCH_PROXY.get(), pos, state);
+        }
+
+        public Proxy(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+            super(blockEntityType, pos, state);
+        }
+
+        @Override
+        protected int getSlotCount() {
+            return 0;
+        }
+
+        @Override
+        protected int getSlotSize(int slot) {
+            return 0;
+        }
+
+        @Override
+        public int getSignalStrength() {
+            return 0;
+        }
+
+        @Override
+        protected ProviderType getProviderType() {
+            return ProviderType.PROXY;
+        }
+
+    }
+
+    public static class Energy extends InputHatchTile{
+
+        public static final int SLOTS = 1;
+        public static int energyCapacity = 150000; //todo: add config
+
+        public EnergyStorage energyStorage = new EnergyStorage(energyCapacity){
+            @Override
+            public int extractEnergy(int maxExtract, boolean simulate) {
+                if(!simulate){
+                    setChanged();
+                }
+                return super.extractEnergy(maxExtract, simulate);
+            }
+
+            public int receiveEnergy(int maxReceive, boolean simulate) {
+                if(!simulate){
+                    setChanged();
+                }
+                return super.receiveEnergy(maxReceive, simulate);
+            };
+        };
+
+        public LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
+        
+        public Energy(BlockPos pos, BlockState state){
+            this(ModTiles.INPUT_HATCH_ENERGY.get(), pos, state);
+        }
+
+        public Energy(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+            super(blockEntityType, pos, state);
+
+        }
+
+        @Override
+        public int getSignalStrength() {
+            return energyStorage.getEnergyStored() * 15 / energyStorage.getMaxEnergyStored(); //multiply to target scale first to avoid issues with int division
+        }
+
+        @Override
+        protected ProviderType getProviderType() {
+            return ProviderType.ENERGY;
+        }
+
+        @Override
+        protected int getSlotCount() {
+            return SLOTS;
+        }
+
+        @Override
+        protected int getSlotSize(int slot) {
+            return 1;
+        }
+
+        @Override
+        public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+            if(cap.equals(ForgeCapabilities.ENERGY)){
+                return lazyEnergyStorage.cast();
+            }
+            return super.getCapability(cap, side);
+        }
+
+        @Override
+        public void invalidateCaps() {
+            super.invalidateCaps();
+            lazyEnergyStorage.invalidate();
+        }
+
+        @Override
+        protected void saveAdditional(@Nonnull CompoundTag pTag) {
+            super.saveAdditional(pTag);
+            pTag.put("Energy", energyStorage.serializeNBT());
+        }
+
+        @Override
+        public void load(@Nonnull CompoundTag pTag) {
+            super.load(pTag);
+            if(pTag.contains("Energy")){
+                energyStorage.deserializeNBT(pTag.get("Energy"));
+            } 
+        }
+
+        @Override
+        protected void internalTick() {
+            if(energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored()){
+                input.getStackInSlot(0).getCapability(ForgeCapabilities.ENERGY).ifPresent((itemEnergy) -> {
+                    if(energyStorage.receiveEnergy(itemEnergy.extractEnergy(Integer.MAX_VALUE, true), true) > 0){
+                        energyStorage.receiveEnergy(itemEnergy.extractEnergy(Integer.MAX_VALUE, false), false);
+                    }
+                });
+            }
+        }
+
+        @Override
+        protected boolean allowItem(int slot, ItemStack stack) {
+            return stack.getCapability(ForgeCapabilities.ENERGY).isPresent();
+        }
+    }
+
     public static class SerialHeat extends Serial implements ITintableTile, IHeatTile{
         
         public SerialHeat(BlockPos pos, BlockState state){
@@ -331,6 +482,33 @@ public abstract class InputHatchTile extends BaseTile {
 
     }
 
+    public static class ProxyHeat extends Proxy implements ITintableTile, IHeatTile{
+
+        public ProxyHeat(BlockPos pos, BlockState state){
+            super(ModTiles.INPUT_HATCH_PROXY_HEAT.get(), pos, state);
+            this.isHeatConducting = true;
+        }
+
+        @Override
+        public IHeatContainer getHeatContainer() {
+            return heatHandler;
+        }
+
+    }
+
+    public static class EnergyHeat extends Energy implements ITintableTile, IHeatTile{
+
+        public EnergyHeat(BlockPos pos, BlockState state){
+            super(ModTiles.INPUT_HATCH_ENERGY_HEAT.get(), pos, state);
+            this.isHeatConducting = true;
+        }
+
+        @Override
+        public IHeatContainer getHeatContainer() {
+            return heatHandler;
+        }
+
+    }
 
 
 }

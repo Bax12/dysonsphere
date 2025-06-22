@@ -24,6 +24,7 @@ public class ModBlocks {
     @SuppressWarnings("null")
     public static Properties defaultMetal = Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).destroyTime(0.7f).explosionResistance(6.0f).pushReaction(PushReaction.IGNORE);
 
+    public static final RegistryObject<Block> SMART_ALLOY_BLOCK = registerBlock("smart_alloy_block", () -> new Block(defaultMetal.pushReaction(PushReaction.NORMAL)));
         
     public static final RegistryObject<Block> HEAT_PIPE_BLOCK = registerBlock("heat_pipe_block", () -> new HeatPipeBlock());
     public static final RegistryObject<Block> DS_MONITOR_BLOCK = registerBlock("dysonsphere_monitor_block", () -> new DSMonitorBlock());
@@ -39,7 +40,10 @@ public class ModBlocks {
     public static final RegistryObject<Block> INPUT_HATCH_PARALLEL = registerBlockWithColorItem("input_hatch_parallel_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.PARALLEL));
     public static final RegistryObject<Block> INPUT_HATCH_SERIAL_HEAT = registerBlockWithColorItem("input_hatch_serial_heat_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.SERIAL_HEAT));
     public static final RegistryObject<Block> INPUT_HATCH_PARALLEL_HEAT = registerBlockWithColorItem("input_hatch_parallel_heat_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.PARALLEL_HEAT));
-    
+    public static final RegistryObject<Block> INPUT_HATCH_PROXY = registerBlockWithColorItem("input_hatch_proxy_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.PROXY));
+    public static final RegistryObject<Block> INPUT_HATCH_PROXY_HEAT = registerBlockWithColorItem("input_hatch_proxy_heat_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.PROXY_HEAT));
+    public static final RegistryObject<Block> INPUT_HATCH_ENERGY = registerBlockWithColorItem("input_hatch_energy_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.ENERGY));
+    public static final RegistryObject<Block> INPUT_HATCH_ENERGY_HEAT = registerBlockWithColorItem("input_hatch_energy_heat_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.ENERGY_HEAT));
 
     public static RegistryObject<Block> registerBlock(String name, Supplier<? extends Block> sup) {
         RegistryObject<Block> block = BLOCKS.register(name, sup);

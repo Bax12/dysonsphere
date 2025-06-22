@@ -174,10 +174,10 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
             if(ticksElapsed % 5 == 0){
                 if(energy > 0){
                     if(currentRecipe != null){
-                        if((currentRecipe.matches(input.getStackInSlot(0), acceptorHandler.getInputs(ProviderType.PARALLEL)))){
+                        if((currentRecipe.matches(input.getStackInSlot(0), acceptorHandler.getItemInputs(ProviderType.PARALLEL)))){
                             if(energy >= currentRecipe.inputEnergy()){
                                 if(canOutput()){
-                                    List<Ingredient> ingredients = acceptorHandler.consumeInputs(currentRecipe.allInputs());
+                                    List<Ingredient> ingredients = acceptorHandler.consumeItemInputs(currentRecipe.allInputs());
                                     if(ingredients.contains(currentRecipe.input())){ //consume input only if not provided by input providers
                                         input.extractItem(0, 1, false);
                                     }
@@ -227,7 +227,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     protected void setCurrentRecipe(){
         List<LaserCraftingRecipe> recipes = new ArrayList<>(level.getRecipeManager().getAllRecipesFor(ModRecipes.LASER_CRAFTING_TYPE.get()));
         recipes.removeIf((recipe) -> {
-            return !recipe.matches(this.input.getStackInSlot(0), acceptorHandler.getInputs(ProviderType.PARALLEL));
+            return !recipe.matches(this.input.getStackInSlot(0), acceptorHandler.getItemInputs(ProviderType.PARALLEL));
         });
         currentRecipe = recipes.size() >= 1 ? recipes.get(0) : null; //ambiguous recipe ==> whatever recipe
     }

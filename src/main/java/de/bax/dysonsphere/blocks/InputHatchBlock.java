@@ -6,9 +6,9 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import de.bax.dysonsphere.color.ModColors.ITintableTileBlock;
+import de.bax.dysonsphere.containers.InputHatchEnergyContainer;
 import de.bax.dysonsphere.containers.InputHatchParallelContainer;
 import de.bax.dysonsphere.containers.InputHatchSerialContainer;
 import de.bax.dysonsphere.items.tools.WrenchItem;
@@ -58,25 +58,26 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
     
     public static final VoxelShape Shape_S = Stream.of(Block.box(1,1,1,15,15,16), Block.box(14,0,14,16,2,15.975), Block.box(14,14,0,16,16,2), Block.box(14,0,0,16,2,2), Block.box(14,14,14,16,16,15.975), Block.box(0,0,0,2,2,2), Block.box(0,14,14,2,16,15.975), Block.box(0,0,14,2,2,15.975), Block.box(0,14,0,2,16,2), Block.box(2,15,0,14,16,1), Block.box(2,0,0,14,1,1), Block.box(15,0,2,16,1,14), Block.box(15,15,2,16,16,14), Block.box(0,15,2,1,16,14), Block.box(0,0,2,1,1,14), Block.box(15,2,0,16,14,1), Block.box(0,2,0,1,14,1)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
     
-    public static final VoxelShape Shape_W = Stream.of(Block.box(0,1,1,15,15,15), Block.box(0.025000000000000355,0,14,2,2,16), Block.box(14,14,14,16,16,16), Block.box(14,0,14,16,2,16), Block.box(0.025000000000000355,14,14,2,16,16), Block.box(14,0,0,16,2,2), Block.box(0.025000000000000355,14,0,2,16,2), Block.box(0.025000000000000355,0,0,2,2,2), Block.box(14,14,0,16,16,2), Block.box(15,15,2,16,16,14), Block.box(15,0,2,16,1,14), Block.box(2,0,15,14,1,16), Block.box(2,15,15,14,16,16), Block.box(2,15,0,14,16,1), Block.box(2,0,0,14,1,1), Block.box(15,2,15,16,14,16), Block.box(15,2,0,16,14,1)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+    public static final VoxelShape Shape_W = Stream.of(Block.box(0,1,1,15,15,15), Block.box(0.025,0,14,2,2,16), Block.box(14,14,14,16,16,16), Block.box(14,0,14,16,2,16), Block.box(0.025,14,14,2,16,16), Block.box(14,0,0,16,2,2), Block.box(0.025,14,0,2,16,2), Block.box(0.025,0,0,2,2,2), Block.box(14,14,0,16,16,2), Block.box(15,15,2,16,16,14), Block.box(15,0,2,16,1,14), Block.box(2,0,15,14,1,16), Block.box(2,15,15,14,16,16), Block.box(2,15,0,14,16,1), Block.box(2,0,0,14,1,1), Block.box(15,2,15,16,14,16), Block.box(15,2,0,16,14,1)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public static final VoxelShape Shape_D = Stream.of(Block.box(1,0,1,15,15,15), Block.box(0,0.025,14,2,2,16), Block.box(0,14,0,2,16,2), Block.box(0,14,14,2,16,16), Block.box(0,0.025,0,2,2,2), Block.box(14,14,14,16,16,16), Block.box(14,0.025,0,16,2,2), Block.box(14,0.025,14,16,2,16), Block.box(14,14,0,16,16,2), Block.box(2,15,0,14,16,1), Block.box(2,15,15,14,16,16), Block.box(0,2,15,1,14,16), Block.box(0,2,0,1,14,1), Block.box(15,2,0,16,14,1), Block.box(15,2,15,16,14,16), Block.box(0,15,2,1,16,14), Block.box(15,15,2,16,16,14)).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     protected static Set<BlockEntityType<?>> VALID_ENTITY_TYPES;
 
     public enum TYPE {
-        SERIAL(true, false),
-        PARALLEL(false, false),
-        SERIAL_HEAT(true, true),
-        PARALLEL_HEAT(false, true);
+        SERIAL,
+        PARALLEL,
+        SERIAL_HEAT,
+        PARALLEL_HEAT,
+        PROXY,
+        PROXY_HEAT,
+        ENERGY,
+        ENERGY_HEAT;
 
-        public boolean isSerial;
-        public boolean isHeatConducting;
-
-        TYPE(boolean serial, boolean heatConduction){
-            this.isSerial = serial;
-            this.isHeatConducting = heatConduction;
-        }
+        
+        public boolean isHeatConducting(){
+            return this.name().endsWith("_HEAT");
+        };
     }
 
     public final TYPE type;
@@ -105,6 +106,14 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
                 return new InputHatchTile.Parallel(pPos, pState);
             case PARALLEL_HEAT:
                 return new InputHatchTile.ParallelHeat(pPos, pState);
+            case ENERGY:
+                return new InputHatchTile.Energy(pPos, pState);
+            case ENERGY_HEAT:
+                return new InputHatchTile.EnergyHeat(pPos, pState);
+            case PROXY:
+                return new InputHatchTile.Proxy(pPos, pState);
+            case PROXY_HEAT:
+                return new InputHatchTile.ProxyHeat(pPos, pState);
         }
         return null;
     }
@@ -130,11 +139,15 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
             }
             if(tile instanceof InputHatchTile.Serial serial){
                 NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvider) ->
-                new InputHatchSerialContainer(containerId, playerInventory, serial), Component.translatable("container.dysonsphere.input_hatch_serial" + (type.isHeatConducting ? "_heat" : ""))), pPos);
+                new InputHatchSerialContainer(containerId, playerInventory, serial), Component.translatable("container.dysonsphere.input_hatch_serial" + (type.isHeatConducting() ? "_heat" : ""))), pPos);
                 return InteractionResult.CONSUME;
             } else if(tile instanceof InputHatchTile.Parallel parallel){
                 NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvider) ->
-                new InputHatchParallelContainer(containerId, playerInventory, parallel), Component.translatable("container.dysonsphere.input_hatch_parallel" + (type.isHeatConducting ? "_heat" : ""))), pPos);
+                new InputHatchParallelContainer(containerId, playerInventory, parallel), Component.translatable("container.dysonsphere.input_hatch_parallel" + (type.isHeatConducting() ? "_heat" : ""))), pPos);
+                return InteractionResult.CONSUME;
+            } else  if(tile instanceof InputHatchTile.Energy energy){
+                NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvider) ->
+                new InputHatchEnergyContainer(containerId, playerInventory, energy), Component.translatable("container.dysonsphere.input_hatch_energy" + (type.isHeatConducting() ? "_heat" : ""))), pPos);
                 return InteractionResult.CONSUME;
             }
         }
@@ -186,7 +199,8 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@Nonnull Level pLevel, @Nonnull BlockState pState, @Nonnull BlockEntityType<T> pBlockEntityType) {        
         if(VALID_ENTITY_TYPES == null){
-            VALID_ENTITY_TYPES = Set.of(ModTiles.INPUT_HATCH_PARALLEL.get(), ModTiles.INPUT_HATCH_SERIAL.get(), ModTiles.INPUT_HATCH_PARALLEL_HEAT.get(), ModTiles.INPUT_HATCH_SERIAL_HEAT.get());
+            VALID_ENTITY_TYPES = Set.of(ModTiles.INPUT_HATCH_PARALLEL.get(), ModTiles.INPUT_HATCH_SERIAL.get(), ModTiles.INPUT_HATCH_PARALLEL_HEAT.get(), ModTiles.INPUT_HATCH_SERIAL_HEAT.get(),
+                ModTiles.INPUT_HATCH_ENERGY.get(), ModTiles.INPUT_HATCH_PROXY.get(), ModTiles.INPUT_HATCH_ENERGY_HEAT.get(), ModTiles.INPUT_HATCH_PROXY_HEAT.get()); //Really need a better scaling solution for this.
         }
         return VALID_ENTITY_TYPES.contains(pBlockEntityType) ? (teLevel, pos, teState, tile) -> {
             ((InputHatchTile)tile).tick();
@@ -198,7 +212,7 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
         if(level != null && level.getBlockEntity(pos) instanceof ITintableTile tile){
             return tile.getTintColor(tintIndex);
         }
-        return type.isHeatConducting ? 0x00b4b4b4 :  0x00252525;
+        return type.isHeatConducting() ? 0x00b4b4b4 :  0x00252525;
     }
 
     @Override

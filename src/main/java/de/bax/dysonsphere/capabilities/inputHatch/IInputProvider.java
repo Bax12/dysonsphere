@@ -6,18 +6,25 @@ import java.util.Set;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 
 public interface IInputProvider {
 
     public static enum ProviderType {
         PARALLEL,
-        SERIAL;
+        SERIAL,
+        PROXY,
+        ENERGY;
     }
     
     public BlockEntity getTile();
 
     public LazyOptional<IItemHandler> getInventory();
+
+    public default LazyOptional<IEnergyStorage> getEnergy(){
+        return LazyOptional.empty();
+    }
 
     public LazyOptional<IInputAcceptor> getAcceptor();
 

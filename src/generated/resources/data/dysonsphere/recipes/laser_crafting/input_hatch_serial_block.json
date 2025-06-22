@@ -25,7 +25,7 @@
           }
         ],
         "input": {
-          "item": "dysonsphere:input_hatch_parallel_block"
+          "item": "dysonsphere:input_hatch_proxy_block"
         },
         "inputEnergy": 300000,
         "output": {
@@ -47,20 +47,20 @@
         "type": "dysonsphere:laser_crafting",
         "extraInputs": [
           {
-            "tag": "forge:circuits"
+            "tag": "forge:gears"
           },
           {
-            "tag": "forge:circuits"
+            "tag": "forge:gears"
           },
           {
-            "tag": "forge:circuits"
+            "tag": "forge:gears"
           },
           {
-            "tag": "forge:circuits"
+            "tag": "forge:gears"
           }
         ],
         "input": {
-          "item": "dysonsphere:input_hatch_parallel_block"
+          "item": "dysonsphere:input_hatch_proxy_block"
         },
         "inputEnergy": 300000,
         "output": {

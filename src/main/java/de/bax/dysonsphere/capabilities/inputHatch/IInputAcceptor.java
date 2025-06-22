@@ -23,9 +23,13 @@ public interface IInputAcceptor {
 
     // public List<ItemStack> getParallelInputs();
 
-    public List<ItemStack> getInputs(IInputProvider.ProviderType type);
+    public List<ItemStack> getItemInputs(IInputProvider.ProviderType type);
 
-    public List<Ingredient> consumeInputs(List<Ingredient> items);
+    public List<Ingredient> consumeItemInputs(List<Ingredient> items);
+
+    public int getEnergyInput();
+
+    public int consumeEnergy(int energy);
 
     public void addInputProvider(LazyOptional<IInputProvider> provider);
 

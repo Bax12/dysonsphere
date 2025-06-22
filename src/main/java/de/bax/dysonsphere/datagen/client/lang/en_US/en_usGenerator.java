@@ -17,6 +17,7 @@ public class en_usGenerator extends LanguageProvider{
     @Override
     protected void addTranslations() {
         //blocks
+        addBlock(ModBlocks.SMART_ALLOY_BLOCK, "Smart Alloy Block");
         addBlock(ModBlocks.HEAT_PIPE_BLOCK, "Thermal Coupler");
         addBlock(ModBlocks.DS_MONITOR_BLOCK, "Dyson Sphere Observer");
         addBlock(ModBlocks.RAILGUN_BLOCK, "Electromagnetic Orbital Launcher");
@@ -30,7 +31,10 @@ public class en_usGenerator extends LanguageProvider{
         addBlock(ModBlocks.INPUT_HATCH_PARALLEL_HEAT, "Parallel Input Hatch (heat-transfer)");
         addBlock(ModBlocks.INPUT_HATCH_SERIAL, "Serial Input Hatch");
         addBlock(ModBlocks.INPUT_HATCH_SERIAL_HEAT, "Serial Input Hatch (heat-transfer)");
-
+        addBlock(ModBlocks.INPUT_HATCH_PROXY, "Proxy Input Hatch");
+        addBlock(ModBlocks.INPUT_HATCH_PROXY_HEAT, "Proxy Input Hatch (heat-transfer)");
+        addBlock(ModBlocks.INPUT_HATCH_ENERGY, "Energy Input Hatch");
+        addBlock(ModBlocks.INPUT_HATCH_ENERGY_HEAT, "Energy Input Hatch (heat-transfer)");
 
         //items
         addItem(ModItems.COIL_COPPER, "Copper Wire Coil");
@@ -82,6 +86,8 @@ public class en_usGenerator extends LanguageProvider{
         add("container.dysonsphere.input_hatch_serial_heat", "Serial Input Hatch (heat-transfer)");
         add("container.dysonsphere.input_hatch_parallel", "Parallel Input Hatch");
         add("container.dysonsphere.input_hatch_parallel_heat", "Parallel Input Hatch (heat-transfer)");
+        add("container.dysonsphere.input_hatch_energy", "Energy Input Hatch");
+        add("container.dysonsphere.input_hatch_energy_heat", "Energy Input Hatch (heat-transfer)");
 
         //tooltips
         add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
