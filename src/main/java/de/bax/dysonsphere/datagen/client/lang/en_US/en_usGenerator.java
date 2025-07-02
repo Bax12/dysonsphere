@@ -49,6 +49,7 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.HEAT_SHIELDING, "Heat Shielding");
         addItem(ModItems.RAILGUN, "Electromagnetic Launcher");
         addItem(ModItems.STEAM_BUCKET, "Steam Bucket");
+        addItem(ModItems.HELIUM_BUCKET, "Helium Bucket");
         addItem(ModItems.LASER_CONTROLLER, "Orbital Uplink Bracelet");
         addItem(ModItems.TARGET_DESIGNATOR, "Target Designator");
         addItem(ModItems.LASER_PATTERN, "Orbital Laser Pattern");
@@ -73,6 +74,7 @@ public class en_usGenerator extends LanguageProvider{
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");
+        add("fluid.dysonsphere.helium", "Helium");
 
 
         //guis

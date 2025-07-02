@@ -26,8 +26,6 @@ import de.bax.dysonsphere.tileentities.LaserControllerTile;
 import de.bax.dysonsphere.tileentities.LaserCrafterTile;
 import de.bax.dysonsphere.tileentities.LaserPatternControllerTile;
 import de.bax.dysonsphere.tileentities.RailgunTile;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

@@ -2,6 +2,8 @@ package de.bax.dysonsphere.datagen.server;
 
 import java.util.concurrent.CompletableFuture;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.DysonSphere;
@@ -20,8 +22,9 @@ public class FluidTagGenerator extends FluidTagsProvider{
     
 
     @Override
-    protected void addTags(Provider provider) {
+    protected void addTags(@Nonnull Provider provider) {
         tag(DSTags.fluidSteam).add(ModFluids.STEAM.get());
+        tag(DSTags.fluidHelium).add(ModFluids.HELIUM.get());
     }
 
 
