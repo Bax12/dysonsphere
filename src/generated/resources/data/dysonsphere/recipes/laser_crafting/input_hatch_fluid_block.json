@@ -12,24 +12,30 @@
         "type": "dysonsphere:laser_crafting",
         "extraInputs": [
           {
-            "tag": "forge:coils/copper"
+            "tag": "forge:ingots/nitinol"
           },
           {
-            "tag": "forge:coils/copper"
+            "tag": "forge:ingots/nitinol"
           },
           {
-            "tag": "forge:coils/copper"
+            "item": "minecraft:bucket"
           },
           {
-            "tag": "forge:coils/copper"
+            "item": "minecraft:bucket"
+          },
+          {
+            "tag": "forge:ingots/nitinol"
+          },
+          {
+            "tag": "forge:ingots/nitinol"
           }
         ],
         "input": {
           "item": "dysonsphere:input_hatch_proxy_block"
         },
-        "inputEnergy": 300000,
+        "inputEnergy": 800000,
         "output": {
-          "item": "dysonsphere:input_hatch_serial_block"
+          "item": "dysonsphere:input_hatch_fluid_block"
         }
       }
     },
@@ -50,7 +56,7 @@
             "tag": "forge:gears"
           },
           {
-            "tag": "forge:gears"
+            "item": "minecraft:bucket"
           },
           {
             "tag": "forge:gears"
@@ -59,7 +65,7 @@
             "tag": "forge:gears"
           },
           {
-            "tag": "forge:gears"
+            "item": "minecraft:bucket"
           },
           {
             "tag": "forge:gears"
@@ -68,9 +74,9 @@
         "input": {
           "item": "dysonsphere:input_hatch_proxy_block"
         },
-        "inputEnergy": 300000,
+        "inputEnergy": 800000,
         "output": {
-          "item": "dysonsphere:input_hatch_serial_block"
+          "item": "dysonsphere:input_hatch_fluid_block"
         }
       }
     }

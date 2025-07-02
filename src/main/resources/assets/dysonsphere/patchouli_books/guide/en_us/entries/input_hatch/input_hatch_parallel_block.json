@@ -1,7 +1,7 @@
 {
     "name": "Parallel Input Hatch",
     "icon": "dysonsphere:input_hatch_parallel_block",
-    "category": "dysonsphere:machines",
+    "category": "dysonsphere:input_hatch",
     "pages": [
         {
             "type": "patchouli:text",

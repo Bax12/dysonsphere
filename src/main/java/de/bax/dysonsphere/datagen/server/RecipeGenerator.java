@@ -638,6 +638,11 @@ public class RecipeGenerator extends RecipeProvider {
             .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
             .save(consumer);
 
+        Recipe.shapeless(ModBlocks.INPUT_HATCH_FLUID_HEAT.get())
+            .requires(ModBlocks.INPUT_HATCH_FLUID.get())
+            .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
+            .save(consumer);
+
         Recipe.shaped(ModItems.WRENCH.get())
             .pattern("I I")
             .pattern(" C ")

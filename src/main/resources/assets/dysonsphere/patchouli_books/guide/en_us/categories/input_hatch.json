@@ -1,0 +1,6 @@
+{
+    "name": "Input Hatches",
+    "description": "Different machines can be extended with adjacent Input Hatches, the possibilities depend on the Input Hatch and the machine. Not all Hatches provide a benefit to all the machine they can connect to.",
+    "icon": "dysonsphere:input_hatch_proxy_block",
+    "parent": "dysonsphere:machines"
+}

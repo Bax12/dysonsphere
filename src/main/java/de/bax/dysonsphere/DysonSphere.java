@@ -29,6 +29,7 @@ import de.bax.dysonsphere.gui.GrapplingHookHarnessInventoryGui;
 import de.bax.dysonsphere.gui.HeatExchangerGui;
 import de.bax.dysonsphere.gui.HeatGeneratorGui;
 import de.bax.dysonsphere.gui.InputHatchEnergyGui;
+import de.bax.dysonsphere.gui.InputHatchFluidGui;
 import de.bax.dysonsphere.gui.InputHatchParallelGui;
 import de.bax.dysonsphere.gui.InputHatchSerialGui;
 import de.bax.dysonsphere.gui.LaserControllerGui;
@@ -243,7 +244,7 @@ public class DysonSphere
                 MenuScreens.register(ModContainers.INPUT_HATCH_SERIAL_CONTAINER.get(), InputHatchSerialGui::new);
                 MenuScreens.register(ModContainers.INPUT_HATCH_PARALLEL_CONTAINER.get(), InputHatchParallelGui::new);
                 MenuScreens.register(ModContainers.INPUT_HATCH_ENERGY_CONTAINER.get(), InputHatchEnergyGui::new);
-
+                MenuScreens.register(ModContainers.INPUT_HATCH_FLUID_CONTAINER.get(), InputHatchFluidGui::new);
 
                 // ItemProperties.register(ModItems.GRAPPLING_HOOK_HARNESS.get(), new ResourceLocation(MODID, "has_parts"), GrapplingHookHarnessItem.getItemPropertiesAllParts());
                 ItemProperties.register(ModItems.GRAPPLING_HOOK_HARNESS.get(), new ResourceLocation(MODID, "has_hook"), GrapplingHookHarnessItem.getItemPropertiesHook());

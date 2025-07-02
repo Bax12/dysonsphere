@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import de.bax.dysonsphere.color.ModColors.ITintableTileBlock;
 import de.bax.dysonsphere.containers.InputHatchEnergyContainer;
+import de.bax.dysonsphere.containers.InputHatchFluidContainer;
 import de.bax.dysonsphere.containers.InputHatchParallelContainer;
 import de.bax.dysonsphere.containers.InputHatchSerialContainer;
 import de.bax.dysonsphere.items.tools.WrenchItem;
@@ -72,7 +73,9 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
         PROXY,
         PROXY_HEAT,
         ENERGY,
-        ENERGY_HEAT;
+        ENERGY_HEAT,
+        FLUID,
+        FLUID_HEAT;
 
         
         public boolean isHeatConducting(){
@@ -114,6 +117,10 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
                 return new InputHatchTile.Proxy(pPos, pState);
             case PROXY_HEAT:
                 return new InputHatchTile.ProxyHeat(pPos, pState);
+            case FLUID:
+                return new InputHatchTile.Fluid(pPos, pState);
+            case FLUID_HEAT:
+                return new InputHatchTile.FluidHeat(pPos, pState);
         }
         return null;
     }
@@ -148,6 +155,10 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
             } else  if(tile instanceof InputHatchTile.Energy energy){
                 NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvider) ->
                 new InputHatchEnergyContainer(containerId, playerInventory, energy), Component.translatable("container.dysonsphere.input_hatch_energy" + (type.isHeatConducting() ? "_heat" : ""))), pPos);
+                return InteractionResult.CONSUME;
+            } else  if(tile instanceof InputHatchTile.Fluid fluid){
+                NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvider) ->
+                new InputHatchFluidContainer(containerId, playerInventory, fluid), Component.translatable("container.dysonsphere.input_hatch_fluid" + (type.isHeatConducting() ? "_heat" : ""))), pPos);
                 return InteractionResult.CONSUME;
             }
         }
@@ -200,7 +211,8 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@Nonnull Level pLevel, @Nonnull BlockState pState, @Nonnull BlockEntityType<T> pBlockEntityType) {        
         if(VALID_ENTITY_TYPES == null){
             VALID_ENTITY_TYPES = Set.of(ModTiles.INPUT_HATCH_PARALLEL.get(), ModTiles.INPUT_HATCH_SERIAL.get(), ModTiles.INPUT_HATCH_PARALLEL_HEAT.get(), ModTiles.INPUT_HATCH_SERIAL_HEAT.get(),
-                ModTiles.INPUT_HATCH_ENERGY.get(), ModTiles.INPUT_HATCH_PROXY.get(), ModTiles.INPUT_HATCH_ENERGY_HEAT.get(), ModTiles.INPUT_HATCH_PROXY_HEAT.get()); //Really need a better scaling solution for this.
+                ModTiles.INPUT_HATCH_ENERGY.get(), ModTiles.INPUT_HATCH_PROXY.get(), ModTiles.INPUT_HATCH_ENERGY_HEAT.get(), ModTiles.INPUT_HATCH_PROXY_HEAT.get(), 
+                ModTiles.INPUT_HATCH_FLUID.get(), ModTiles.INPUT_HATCH_FLUID_HEAT.get()); //Really need a better scaling solution for this.
         }
         return VALID_ENTITY_TYPES.contains(pBlockEntityType) ? (teLevel, pos, teState, tile) -> {
             ((InputHatchTile)tile).tick();

@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 
 public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<CompoundTag> {
 
@@ -76,12 +77,12 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
 
     public List<Ingredient> consumeItemInputs(List<Ingredient> ingredient){
         List<Ingredient> mutableIngredients = new ArrayList<>(ingredient);
-        consumeInputType(mutableIngredients, ProviderType.SERIAL);
-        consumeInputType(mutableIngredients, ProviderType.PARALLEL);
+        consumeItemInputType(mutableIngredients, ProviderType.SERIAL);
+        consumeItemInputType(mutableIngredients, ProviderType.PARALLEL);
         return mutableIngredients;
     }
 
-    protected List<Ingredient> consumeInputType(List<Ingredient> ingredients, ProviderType type){
+    protected List<Ingredient> consumeItemInputType(List<Ingredient> ingredients, ProviderType type){
         for(LazyOptional<IInputProvider> lazyProvider : getProviders(type)){
             lazyProvider.ifPresent((provider) -> {
                 provider.getInventory().ifPresent((inventory) -> {
@@ -105,9 +106,14 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
     public int getEnergyInput() {
         return getProviders(ProviderType.ENERGY).stream().mapToInt((lazyProvider) -> {
             return lazyProvider.map((provider) -> {
-                return provider.getEnergy().map((energy) -> {
-                    return energy.extractEnergy(Integer.MAX_VALUE, true);
-                }).orElse(0);
+                if(provider.getAcceptor().map((acceptor) -> { //prevent multiple acceptors from using the same input
+                    return acceptor.equals(this);
+                }).orElse(false)){
+                    return provider.getEnergy().map((energy) -> {
+                        return energy.extractEnergy(Integer.MAX_VALUE, true);
+                    }).orElse(0);
+                }
+                return 0;
             }).orElse(0);
         }).sum();
     }
@@ -124,6 +130,31 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
             }).orElse(0);
         }
         return energyToConsume;
+    }
+
+
+    @Override
+    public List<FluidStack> getFluidInputs() {
+        List<FluidStack> fluids = new ArrayList<>();
+        getProviders(ProviderType.FLUID).stream().forEach((lazyProvider) -> {
+            lazyProvider.ifPresent((provider) -> {
+                if(provider.getAcceptor().map((acceptor) -> { //prevent multiple acceptors from using the same input
+                    return acceptor.equals(this);
+                }).orElse(false)){
+                    provider.getFluid().ifPresent((fluid) -> {
+                        for(int i = 0; i < fluid.getTanks(); i++ ){
+                            fluids.add(fluid.getFluidInTank(i));
+                        }
+                    });
+                }
+            });
+        });
+        return fluids;
+    }
+
+    @Override
+    public List<FluidStack> consumeFluidInputs(List<FluidStack> fluids) {
+        return null;
     }
 
     public void updateNeighbors(Level level, BlockPos pos){

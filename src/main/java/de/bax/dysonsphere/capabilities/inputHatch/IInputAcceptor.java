@@ -6,6 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 
 public interface IInputAcceptor {
 
@@ -30,6 +31,10 @@ public interface IInputAcceptor {
     public int getEnergyInput();
 
     public int consumeEnergy(int energy);
+
+    public List<FluidStack> getFluidInputs();
+
+    public List<FluidStack> consumeFluidInputs(List<FluidStack> fluids);
 
     public void addInputProvider(LazyOptional<IInputProvider> provider);
 

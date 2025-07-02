@@ -24,4 +24,5 @@ public class ModContainers {
     public static final RegistryObject<MenuType<InputHatchSerialContainer>> INPUT_HATCH_SERIAL_CONTAINER = CONTAINERS.register("input_hatch_serial_container", () -> IForgeMenuType.create(InputHatchSerialContainer::fromNetwork));
     public static final RegistryObject<MenuType<InputHatchParallelContainer>> INPUT_HATCH_PARALLEL_CONTAINER = CONTAINERS.register("input_hatch_parallel_container", () -> IForgeMenuType.create(InputHatchParallelContainer::fromNetwork));
     public static final RegistryObject<MenuType<InputHatchEnergyContainer>> INPUT_HATCH_ENERGY_CONTAINER = CONTAINERS.register("input_hatch_energy_container", () -> IForgeMenuType.create(InputHatchEnergyContainer::fromNetwork));
+    public static final RegistryObject<MenuType<InputHatchFluidContainer>> INPUT_HATCH_FLUID_CONTAINER = CONTAINERS.register("input_hatch_fluid_container", () -> IForgeMenuType.create(InputHatchFluidContainer::fromNetwork));
 }

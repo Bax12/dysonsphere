@@ -50,7 +50,7 @@ public class LaserCraftingRecipeGenerator {
             })
             .addCondition(RecipeConditions.GEAR_EXISTS).addRecipe((consumer) -> {
                 RecipeBuilder.of(ModBlocks.INPUT_HATCH_SERIAL.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
-                .addExtraInput(Ingredient.of(DSTags.itemGear),4)
+                .addExtraInput(Ingredient.of(DSTags.itemGear),6)
                 .energyRequired(300_000).save(consumer);
             })
             .build(pWriter, RecipeBuilder.getLocation(ModBlocks.INPUT_HATCH_SERIAL.getId()));
@@ -72,6 +72,25 @@ public class LaserCraftingRecipeGenerator {
                 .energyRequired(800_000).save(consumer);
             })
             .build(pWriter, RecipeBuilder.getLocation(ModBlocks.INPUT_HATCH_ENERGY.getId()));
+
+        ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.GEAR_TAG_EMPTY).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_FLUID.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
+                .addExtraInput(Ingredient.of(DSTags.itemIngotSmartAlloy),2)
+                .addExtraInput(Ingredient.of(Items.BUCKET),2)
+                .addExtraInput(Ingredient.of(DSTags.itemIngotSmartAlloy),2)
+                .energyRequired(800_000).save(consumer);
+            })
+            .addCondition(RecipeConditions.GEAR_EXISTS).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_FLUID.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
+                .addExtraInput(Ingredient.of(DSTags.itemGear),1) //for a prettier pattern
+                .addExtraInput(Ingredient.of(Items.BUCKET),1)
+                .addExtraInput(Ingredient.of(DSTags.itemGear),2)
+                .addExtraInput(Ingredient.of(Items.BUCKET),1)
+                .addExtraInput(Ingredient.of(DSTags.itemGear),1)
+                .energyRequired(800_000).save(consumer);
+            })
+            .build(pWriter, RecipeBuilder.getLocation(ModBlocks.INPUT_HATCH_FLUID.getId()));
     }
 
     public static class RecipeBuilder {

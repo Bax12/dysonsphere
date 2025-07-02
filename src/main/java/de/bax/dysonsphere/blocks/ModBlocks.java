@@ -44,6 +44,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> INPUT_HATCH_PROXY_HEAT = registerBlockWithColorItem("input_hatch_proxy_heat_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.PROXY_HEAT));
     public static final RegistryObject<Block> INPUT_HATCH_ENERGY = registerBlockWithColorItem("input_hatch_energy_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.ENERGY));
     public static final RegistryObject<Block> INPUT_HATCH_ENERGY_HEAT = registerBlockWithColorItem("input_hatch_energy_heat_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.ENERGY_HEAT));
+    public static final RegistryObject<Block> INPUT_HATCH_FLUID = registerBlockWithColorItem("input_hatch_fluid_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.FLUID));
+    public static final RegistryObject<Block> INPUT_HATCH_FLUID_HEAT = registerBlockWithColorItem("input_hatch_fluid_heat_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.FLUID_HEAT));
 
     public static RegistryObject<Block> registerBlock(String name, Supplier<? extends Block> sup) {
         RegistryObject<Block> block = BLOCKS.register(name, sup);

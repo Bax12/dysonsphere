@@ -1,0 +1,15 @@
+{
+    "name": "Energy Input Hatch",
+    "icon": "dysonsphere:input_hatch_energy_block",
+    "category": "dysonsphere:input_hatch",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The Energy Input Hatch provides an internal RF energy buffer to the machine. Effectively increasing the internal energy buffer of compatible machines."
+        },
+        {
+            "type": "dysonsphere:laser_recipe",
+            "recipe": "dysonsphere:laser_crafting/input_hatch_energy_block"
+        }
+    ]
+}

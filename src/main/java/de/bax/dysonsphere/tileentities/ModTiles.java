@@ -33,5 +33,6 @@ public class ModTiles {
     public static final RegistryObject<BlockEntityType<InputHatchTile.ProxyHeat>> INPUT_HATCH_PROXY_HEAT = TILES.register("input_hatch_proxy_heat", () -> new BlockEntityType<InputHatchTile.ProxyHeat>((pos, state) -> new InputHatchTile.ProxyHeat(pos, state), Set.of(ModBlocks.INPUT_HATCH_PROXY_HEAT.get()), null));
     public static final RegistryObject<BlockEntityType<InputHatchTile.Energy>> INPUT_HATCH_ENERGY = TILES.register("input_hatch_energy", () -> new BlockEntityType<InputHatchTile.Energy>((pos, state) -> new InputHatchTile.Energy(pos, state), Set.of(ModBlocks.INPUT_HATCH_ENERGY.get()), null));
     public static final RegistryObject<BlockEntityType<InputHatchTile.EnergyHeat>> INPUT_HATCH_ENERGY_HEAT = TILES.register("input_hatch_energy_heat", () -> new BlockEntityType<InputHatchTile.EnergyHeat>((pos, state) -> new InputHatchTile.EnergyHeat(pos, state), Set.of(ModBlocks.INPUT_HATCH_ENERGY_HEAT.get()), null));
-    
+    public static final RegistryObject<BlockEntityType<InputHatchTile.Fluid>> INPUT_HATCH_FLUID = TILES.register("input_hatch_fluid", () -> new BlockEntityType<InputHatchTile.Fluid>((pos, state) -> new InputHatchTile.Fluid(pos, state), Set.of(ModBlocks.INPUT_HATCH_FLUID.get()), null));
+    public static final RegistryObject<BlockEntityType<InputHatchTile.FluidHeat>> INPUT_HATCH_FLUID_HEAT = TILES.register("input_hatch_fluid_heat", () -> new BlockEntityType<InputHatchTile.FluidHeat>((pos, state) -> new InputHatchTile.FluidHeat(pos, state), Set.of(ModBlocks.INPUT_HATCH_FLUID_HEAT.get()), null));
 }

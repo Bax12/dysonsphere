@@ -39,11 +39,13 @@ public class BlockStateGenerator extends BlockStateProvider{
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_PARALLEL);
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_PROXY);
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_ENERGY);
+        buildInputHatchBlock(ModBlocks.INPUT_HATCH_FLUID);
 
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_SERIAL_HEAT, blockTexture(ModBlocks.INPUT_HATCH_SERIAL.get()));
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_PARALLEL_HEAT, blockTexture(ModBlocks.INPUT_HATCH_PARALLEL.get()));
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_PROXY_HEAT, blockTexture(ModBlocks.INPUT_HATCH_PROXY.get()));
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_ENERGY_HEAT, blockTexture(ModBlocks.INPUT_HATCH_ENERGY.get()));
+        buildInputHatchBlock(ModBlocks.INPUT_HATCH_FLUID_HEAT, blockTexture(ModBlocks.INPUT_HATCH_FLUID.get()));
 
         buildPillarBlock(ModBlocks.HEAT_EXCHANGER_BLOCK);
         buildPillarBlock(ModBlocks.HEAT_GENERATOR_BLOCK);

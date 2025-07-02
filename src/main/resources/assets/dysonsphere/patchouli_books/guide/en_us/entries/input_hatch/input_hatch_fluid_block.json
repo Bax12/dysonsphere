@@ -1,0 +1,15 @@
+{
+    "name": "Fluid Input Hatch",
+    "icon": "dysonsphere:input_hatch_fluid_block",
+    "category": "dysonsphere:input_hatch",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The Fluid Input Hatch provides a Fluid Tank to the connected machine, allowing for more recipes to be created or larger amounts of fluid to be buffered."
+        },
+        {
+            "type": "dysonsphere:laser_recipe",
+            "recipe": "dysonsphere:laser_crafting/input_hatch_fluid_block"
+        }
+    ]
+}

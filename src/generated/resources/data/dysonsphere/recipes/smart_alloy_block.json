@@ -1,36 +1,18 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    {
-      "item": "dysonsphere:ingot_smart_alloy"
-    },
-    {
-      "item": "dysonsphere:ingot_smart_alloy"
-    },
-    {
-      "item": "dysonsphere:ingot_smart_alloy"
-    },
-    {
-      "item": "dysonsphere:ingot_smart_alloy"
-    },
-    {
-      "item": "dysonsphere:ingot_smart_alloy"
-    },
-    {
-      "item": "dysonsphere:ingot_smart_alloy"
-    },
-    {
-      "item": "dysonsphere:ingot_smart_alloy"
-    },
-    {
-      "item": "dysonsphere:ingot_smart_alloy"
-    },
-    {
+  "key": {
+    "I": {
       "item": "dysonsphere:ingot_smart_alloy"
     }
+  },
+  "pattern": [
+    "III",
+    "III",
+    "III"
   ],
   "result": {
     "item": "dysonsphere:smart_alloy_block"
-  }
+  },
+  "show_notification": true
 }

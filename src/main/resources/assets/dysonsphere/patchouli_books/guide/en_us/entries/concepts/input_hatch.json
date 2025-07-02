@@ -15,9 +15,12 @@
             "type": "patchouli:relations",
             "entries": [
                 "dysonsphere:machines/laser_crafter_block",
-                "dysonsphere:machines/input_hatch_serial_block",
-                "dysonsphere:machines/input_hatch_parallel_block",
-                "dysonsphere:machines/input_hatch_heat_block"
+                "dysonsphere:input_hatch/input_hatch_proxy_block",
+                "dysonsphere:input_hatch/input_hatch_heat_block",
+                "dysonsphere:input_hatch/input_hatch_parallel_block",
+                "dysonsphere:input_hatch/input_hatch_serial_block",
+                "dysonsphere:input_hatch/input_hatch_energy_block",
+                "dysonsphere:input_hatch/input_hatch_fluid_block"
             ]
         }
     ]

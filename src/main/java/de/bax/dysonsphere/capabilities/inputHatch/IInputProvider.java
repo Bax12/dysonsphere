@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 
 public interface IInputProvider {
@@ -15,14 +16,21 @@ public interface IInputProvider {
         PARALLEL,
         SERIAL,
         PROXY,
-        ENERGY;
+        ENERGY,
+        FLUID;
     }
     
     public BlockEntity getTile();
 
-    public LazyOptional<IItemHandler> getInventory();
+    public default LazyOptional<IItemHandler> getInventory(){
+        return LazyOptional.empty();
+    };
 
     public default LazyOptional<IEnergyStorage> getEnergy(){
+        return LazyOptional.empty();
+    }
+
+    public default LazyOptional<IFluidHandler> getFluid(){
         return LazyOptional.empty();
     }
 

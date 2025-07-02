@@ -4,7 +4,7 @@
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "dysonsphere:block/input_hatch_block",
-		"particle": "dysonsphere:block/input_hatch_block"
+		"particle": "dysonsphere:block/smart_alloy_block"
 	},
 	"elements": [
 		{

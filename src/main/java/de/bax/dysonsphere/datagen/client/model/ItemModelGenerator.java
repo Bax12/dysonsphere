@@ -38,7 +38,8 @@ public class ItemModelGenerator extends ItemModelProvider{
             ModBlocks.INPUT_HATCH_SERIAL_HEAT.get().asItem(),
             ModBlocks.INPUT_HATCH_PARALLEL_HEAT.get().asItem(),
             ModBlocks.INPUT_HATCH_PROXY_HEAT.get().asItem(),
-            ModBlocks.INPUT_HATCH_ENERGY_HEAT.get().asItem()
+            ModBlocks.INPUT_HATCH_ENERGY_HEAT.get().asItem(),
+            ModBlocks.INPUT_HATCH_FLUID_HEAT.get().asItem()
         );
 
         
@@ -49,6 +50,7 @@ public class ItemModelGenerator extends ItemModelProvider{
         getBuilder(ModBlocks.INPUT_HATCH_PARALLEL_HEAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + ModBlocks.INPUT_HATCH_PARALLEL.getId().getPath())));
         getBuilder(ModBlocks.INPUT_HATCH_PROXY_HEAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + ModBlocks.INPUT_HATCH_PROXY.getId().getPath())));
         getBuilder(ModBlocks.INPUT_HATCH_ENERGY_HEAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + ModBlocks.INPUT_HATCH_ENERGY.getId().getPath())));
+        getBuilder(ModBlocks.INPUT_HATCH_FLUID_HEAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + ModBlocks.INPUT_HATCH_FLUID.getId().getPath())));
     }
     
 

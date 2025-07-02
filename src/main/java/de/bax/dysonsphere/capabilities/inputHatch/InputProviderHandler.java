@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 
 public abstract class InputProviderHandler implements IInputProvider, INBTSerializable<CompoundTag> {
@@ -28,6 +29,7 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
 
     protected LazyOptional<IItemHandler> lazyInventory;
     protected LazyOptional<IEnergyStorage> lazyEnergy;
+    protected LazyOptional<IFluidHandler> lazyFluid;
 
     protected final BlockEntity tile;
 
@@ -256,6 +258,15 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
     @Override
     public LazyOptional<IEnergyStorage> getEnergy() {
         return lazyEnergy;
+    }
+
+    public void setFluid(LazyOptional<IFluidHandler> lazyFluid) {
+        this.lazyFluid = lazyFluid;
+    }
+
+    @Override
+    public LazyOptional<IFluidHandler> getFluid() {
+        return lazyFluid;
     }
     
 }

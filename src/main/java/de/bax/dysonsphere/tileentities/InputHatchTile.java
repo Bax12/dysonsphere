@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.blocks.InputHatchBlock;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.capabilities.fluid.FluidTankCustom;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
@@ -25,6 +26,9 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -354,6 +358,15 @@ public abstract class InputHatchTile extends BaseTile {
             return ProviderType.PROXY;
         }
 
+        //no item handling here. Call super for possible heat handling though.
+        @Override
+        public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+            if(cap.equals(ForgeCapabilities.ITEM_HANDLER)){
+                return LazyOptional.empty();
+            }
+            return super.getCapability(cap, side);
+        }
+
     }
 
     public static class Energy extends InputHatchTile{
@@ -450,8 +463,117 @@ public abstract class InputHatchTile extends BaseTile {
 
         @Override
         protected boolean allowItem(int slot, ItemStack stack) {
-            return stack.getCapability(ForgeCapabilities.ENERGY).isPresent();
+            return stack.getCapability(ForgeCapabilities.ENERGY).map((energy) -> {
+                return energy.canExtract();
+            }).orElse(false);
         }
+    }
+
+    public static class Fluid extends InputHatchTile {
+
+        public static final int SLOTS = 2;
+        public static final int SLOT_INPUT = 0;
+        public static final int SLOT_OUTPUT = 1;
+        public static int fluidCapacity = 10000; //todo: add config
+
+        public FluidTankCustom fluidStorage = new FluidTankCustom(fluidCapacity){
+            @Override
+            protected void onContentsChanged() {
+                super.onContentsChanged();
+                setChanged();
+            }
+        };
+
+        public LazyOptional<IFluidHandler> lazyFluidStorage = LazyOptional.of(() -> fluidStorage);
+
+        public Fluid(BlockPos pos, BlockState state) {
+            this(ModTiles.INPUT_HATCH_FLUID.get(), pos, state);
+        }
+
+        public Fluid(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+            super(type, pos, state);
+        }
+
+        @Override
+        public int getSignalStrength() {
+            return fluidStorage.getFluidAmount() * 15 / fluidStorage.getCapacity();
+        }
+
+        @Override
+        protected ProviderType getProviderType() {
+            return ProviderType.FLUID;
+        }
+
+        @Override
+        protected int getSlotCount() {
+            return SLOTS;
+        }
+
+        @Override
+        protected int getSlotSize(int slot) {
+            return 1;
+        }
+
+        @Override
+        public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+            if(cap.equals(ForgeCapabilities.FLUID_HANDLER)){
+                return lazyFluidStorage.cast();
+            }
+            return super.getCapability(cap, side);
+        }
+
+        @Override
+        public void invalidateCaps() {
+            super.invalidateCaps();
+            lazyFluidStorage.invalidate();
+        }
+
+        @Override
+        protected void saveAdditional(@Nonnull CompoundTag pTag) {
+            super.saveAdditional(pTag);
+            pTag.put("Fluid", fluidStorage.writeToNBT(new CompoundTag()));
+        }
+
+        @Override
+        public void load(@Nonnull CompoundTag pTag) {
+            super.load(pTag);
+            if(pTag.contains("Fluid")){
+                fluidStorage.readFromNBT(pTag.getCompound("Fluid"));
+            }
+        }
+
+        @Override
+        protected void internalTick() {
+            if(fluidStorage.getFluidAmount() < fluidStorage.getCapacity()){
+                input.getStackInSlot(SLOT_INPUT).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent((item) -> {
+                    if(fluidStorage.isEmpty()){
+                        if(fluidStorage.fill(item.drain(fluidStorage.getCapacity(), FluidAction.SIMULATE), FluidAction.SIMULATE) > 0){
+                            fluidStorage.fill(item.drain(fluidStorage.getCapacity(), FluidAction.EXECUTE), FluidAction.EXECUTE);
+                        }
+                    } else {
+                        if(fluidStorage.fill(item.drain(new FluidStack(fluidStorage.getFluid(), fluidStorage.getCapacity()-fluidStorage.getFluidAmount()), FluidAction.SIMULATE), FluidAction.SIMULATE) > 0){
+                            fluidStorage.fill(item.drain(new FluidStack(fluidStorage.getFluid(), fluidStorage.getCapacity()-fluidStorage.getFluidAmount()), FluidAction.EXECUTE), FluidAction.EXECUTE);
+                        }
+                    }
+                });
+            }
+            if(fluidStorage.getFluidAmount() > 0){
+                input.getStackInSlot(SLOT_OUTPUT).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent((item) -> {
+                    if(item.fill(fluidStorage.drain(Integer.MAX_VALUE, FluidAction.SIMULATE), FluidAction.SIMULATE) > 0){
+                        item.fill(fluidStorage.drain(Integer.MAX_VALUE, FluidAction.EXECUTE), FluidAction.EXECUTE);
+                    }
+                });
+            }
+        }
+
+        @Override
+        protected boolean allowItem(int slot, ItemStack stack) {
+            return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((fluid) -> {
+                return (slot == SLOT_INPUT && !fluid.drain(Integer.MAX_VALUE, FluidAction.SIMULATE).isEmpty())
+                        || (slot == SLOT_OUTPUT && (fluid.fill(fluidStorage.getFluid(), FluidAction.SIMULATE) > 0));
+            }).orElse(false);
+        }
+        
     }
 
     public static class SerialHeat extends Serial implements ITintableTile, IHeatTile{
@@ -508,6 +630,20 @@ public abstract class InputHatchTile extends BaseTile {
             return heatHandler;
         }
 
+    }
+
+    public static class FluidHeat extends Fluid implements ITintableTile, IHeatTile{
+
+        public FluidHeat(BlockPos pos, BlockState state) {
+            super(ModTiles.INPUT_HATCH_FLUID_HEAT.get(), pos, state);
+            this.isHeatConducting = true;
+        }
+
+        @Override
+        public IHeatContainer getHeatContainer() {
+            return heatHandler;
+        }
+        
     }
 
 
