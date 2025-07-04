@@ -5,7 +5,48 @@
       "conditions": [
         {
           "type": "forge:tag_empty",
-          "tag": "forge:ingots/signalum"
+          "tag": "forge:ingots/lumium"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "tag": "forge:coils/copper"
+          },
+          "E": {
+            "tag": "dysonsphere:space_capsules/empty"
+          },
+          "G": {
+            "tag": "forge:ingots/gold"
+          },
+          "H": {
+            "item": "dysonsphere:heat_shielding"
+          },
+          "S": {
+            "item": "dysonsphere:solar_foil"
+          }
+        },
+        "pattern": [
+          "SSS",
+          "CEC",
+          "GHG"
+        ],
+        "result": {
+          "item": "dysonsphere:capsule_solar_0"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:ingots/lumium"
+          }
         }
       ],
       "recipe": {
@@ -21,64 +62,20 @@
           "H": {
             "item": "dysonsphere:heat_shielding"
           },
-          "R": {
-            "tag": "forge:storage_blocks/redstone"
+          "L": {
+            "tag": "forge:ingots/lumium"
           },
           "S": {
-            "tag": "forge:ingots/nitinol"
-          },
-          "T": {
-            "item": "dysonsphere:heat_pipe_block"
+            "item": "dysonsphere:solar_foil"
           }
         },
         "pattern": [
-          "SCS",
-          "TET",
-          "HRH"
+          "SSS",
+          "CEC",
+          "LHL"
         ],
         "result": {
-          "item": "dysonsphere:capsule_laser"
-        },
-        "show_notification": true
-      }
-    },
-    {
-      "conditions": [
-        {
-          "type": "forge:not",
-          "value": {
-            "type": "forge:tag_empty",
-            "tag": "forge:ingots/signalum"
-          }
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "category": "misc",
-        "key": {
-          "C": {
-            "tag": "forge:coils/copper"
-          },
-          "E": {
-            "tag": "dysonsphere:space_capsules/empty"
-          },
-          "S": {
-            "tag": "forge:ingots/nitinol"
-          },
-          "T": {
-            "item": "dysonsphere:heat_pipe_block"
-          },
-          "s": {
-            "tag": "forge:ingots/signalum"
-          }
-        },
-        "pattern": [
-          "SCS",
-          "sEs",
-          "TsT"
-        ],
-        "result": {
-          "item": "dysonsphere:capsule_laser"
+          "item": "dysonsphere:capsule_solar_0"
         },
         "show_notification": true
       }

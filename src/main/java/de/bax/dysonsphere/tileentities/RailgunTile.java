@@ -38,7 +38,7 @@ public class RailgunTile extends BaseTile {
         public int getSlotLimit(int slot) {
             return 1;
         };
-        public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
+        public boolean isItemValid(int slot, ItemStack stack) {
             return stack.getCapability(DSCapabilities.DS_PART).isPresent();
         };
     };

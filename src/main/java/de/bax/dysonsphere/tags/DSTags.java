@@ -19,6 +19,7 @@ public class DSTags {
 
     public static final TagKey<Item> itemIngot = TagKey.create(Registries.ITEM, forgeLoc("ingots"));
     public static final TagKey<Item> itemIngotSmartAlloy = TagKey.create(Registries.ITEM, forgeLoc("ingots/nitinol"));
+    public static final TagKey<Item> itemIngotSentient = TagKey.create(Registries.ITEM, forgeLoc("ingots/sentient"));
 
     public static final TagKey<Item> itemIngotNickel = TagKey.create(Registries.ITEM, forgeLoc("ingots/nickel"));
     public static final TagKey<Item> itemIngotTitanium = TagKey.create(Registries.ITEM, forgeLoc("ingots/titanium"));
@@ -40,6 +41,11 @@ public class DSTags {
     public static final TagKey<Item> itemCapsuleEmpty = TagKey.create(Registries.ITEM, modLoc("space_capsules/empty"));
     public static final TagKey<Item> itemCapsuleSolar = TagKey.create(Registries.ITEM, modLoc("space_capsules/solar"));
     public static final TagKey<Item> itemCapsuleLaser = TagKey.create(Registries.ITEM, modLoc("space_capsules/laser"));
+    public static final TagKey<Item> itemCapsuleStructure = TagKey.create(Registries.ITEM, modLoc("space_capsules/structure"));
+    public static final TagKey<Item> itemCapsuleT0 = TagKey.create(Registries.ITEM, modLoc("space_capsules/tier0"));
+    public static final TagKey<Item> itemCapsuleT1 = TagKey.create(Registries.ITEM, modLoc("space_capsules/tier1"));
+    public static final TagKey<Item> itemCapsuleT2 = TagKey.create(Registries.ITEM, modLoc("space_capsules/tier2"));
+    public static final TagKey<Item> itemCapsuleT3 = TagKey.create(Registries.ITEM, modLoc("space_capsules/tier3"));
 
     public static final TagKey<Item> itemGrapplingHookComponent = TagKey.create(Registries.ITEM, modLoc("grappling_hook_components"));
     public static final TagKey<Item> itemGrapplingHookHook = TagKey.create(Registries.ITEM, modLoc("grappling_hook_components/hook"));

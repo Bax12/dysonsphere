@@ -51,7 +51,7 @@ public class RecipeGenerator extends RecipeProvider {
         ConditionalRecipe.builder()
         .addCondition(RecipeConditions.LUMIUM_TAG_EMPTY)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.CAPSULE_SOLAR.get())
+            Recipe.shaped(ModItems.CAPSULE_SOLAR_0.get())
             .pattern("SSS")
             .pattern("CEC")
             .pattern("GHG")
@@ -64,7 +64,7 @@ public class RecipeGenerator extends RecipeProvider {
         })
         .addCondition(RecipeConditions.LUMIUM_EXISTS)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.CAPSULE_SOLAR.get())
+            Recipe.shaped(ModItems.CAPSULE_SOLAR_0.get())
             .pattern("SSS")
             .pattern("CEC")
             .pattern("LHL")
@@ -75,7 +75,7 @@ public class RecipeGenerator extends RecipeProvider {
             .define('H', ModItems.HEAT_SHIELDING.get())
             .save(con);
         })
-        .build(consumer, ModItems.CAPSULE_SOLAR.getId());
+        .build(consumer, ModItems.CAPSULE_SOLAR_0.getId());
 
         ConditionalRecipe.builder()
         .addCondition(RecipeConditions.WIRE_COPPER_TAG_EMPTY)
@@ -394,7 +394,7 @@ public class RecipeGenerator extends RecipeProvider {
         ConditionalRecipe.builder()
         .addCondition(RecipeConditions.SIGNALUM_TAG_EMPTY)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.CAPSULE_LASER.get())
+            Recipe.shaped(ModItems.CAPSULE_LASER_0.get())
                 .pattern("SCS")
                 .pattern("TET")
                 .pattern("HRH")
@@ -408,7 +408,7 @@ public class RecipeGenerator extends RecipeProvider {
         })
         .addCondition(RecipeConditions.SIGNALUM_EXISTS)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.CAPSULE_LASER.get())
+            Recipe.shaped(ModItems.CAPSULE_LASER_0.get())
                 .pattern("SCS")
                 .pattern("sEs")
                 .pattern("TsT")
@@ -419,7 +419,7 @@ public class RecipeGenerator extends RecipeProvider {
                 .define('s', DSTags.itemIngotSignalum)
                 .save(con);
         })
-        .build(consumer, ModItems.CAPSULE_LASER.getId());
+        .build(consumer, ModItems.CAPSULE_LASER_0.getId());
 
         Recipe.shaped(ModItems.CONSTRUCT_ENDER.get())
             .pattern("ECE")

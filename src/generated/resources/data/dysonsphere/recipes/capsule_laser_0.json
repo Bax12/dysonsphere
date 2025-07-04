@@ -5,7 +5,7 @@
       "conditions": [
         {
           "type": "forge:tag_empty",
-          "tag": "forge:ingots/lumium"
+          "tag": "forge:ingots/signalum"
         }
       ],
       "recipe": {
@@ -18,23 +18,26 @@
           "E": {
             "tag": "dysonsphere:space_capsules/empty"
           },
-          "G": {
-            "tag": "forge:ingots/gold"
-          },
           "H": {
             "item": "dysonsphere:heat_shielding"
           },
+          "R": {
+            "tag": "forge:storage_blocks/redstone"
+          },
           "S": {
-            "item": "dysonsphere:solar_foil"
+            "tag": "forge:ingots/nitinol"
+          },
+          "T": {
+            "item": "dysonsphere:heat_pipe_block"
           }
         },
         "pattern": [
-          "SSS",
-          "CEC",
-          "GHG"
+          "SCS",
+          "TET",
+          "HRH"
         ],
         "result": {
-          "item": "dysonsphere:capsule_solar"
+          "item": "dysonsphere:capsule_laser_0"
         },
         "show_notification": true
       }
@@ -45,7 +48,7 @@
           "type": "forge:not",
           "value": {
             "type": "forge:tag_empty",
-            "tag": "forge:ingots/lumium"
+            "tag": "forge:ingots/signalum"
           }
         }
       ],
@@ -59,23 +62,23 @@
           "E": {
             "tag": "dysonsphere:space_capsules/empty"
           },
-          "H": {
-            "item": "dysonsphere:heat_shielding"
-          },
-          "L": {
-            "tag": "forge:ingots/lumium"
-          },
           "S": {
-            "item": "dysonsphere:solar_foil"
+            "tag": "forge:ingots/nitinol"
+          },
+          "T": {
+            "item": "dysonsphere:heat_pipe_block"
+          },
+          "s": {
+            "tag": "forge:ingots/signalum"
           }
         },
         "pattern": [
-          "SSS",
-          "CEC",
-          "LHL"
+          "SCS",
+          "sEs",
+          "TsT"
         ],
         "result": {
-          "item": "dysonsphere:capsule_solar"
+          "item": "dysonsphere:capsule_laser_0"
         },
         "show_notification": true
       }

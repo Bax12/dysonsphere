@@ -22,22 +22,22 @@ public class TooltipHandler {
             Minecraft mc = Minecraft.getInstance();
             if(Screen.hasControlDown()){
                 event.getItemStack().getCapability(DSCapabilities.GRAPPLING_HOOK_HOOK).ifPresent((hook) -> {
-                    event.getTooltipElements().add(Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_max_hooks", hook.getMaxHookCount(mc.level, mc.player)))));
-                    event.getTooltipElements().add(Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_gravity", hook.getGravity(mc.level, mc.player)))));
+                    event.getTooltipElements().add(1, Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_max_hooks", hook.getMaxHookCount(mc.level, mc.player)))));
+                    event.getTooltipElements().add(2, Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_gravity", hook.getGravity(mc.level, mc.player)))));
                 });
                 event.getItemStack().getCapability(DSCapabilities.GRAPPLING_HOOK_ROPE).ifPresent((rope) -> {
-                    event.getTooltipElements().add(Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_max_distance", rope.getMaxDistance(mc.level, mc.player)))));
-                    event.getTooltipElements().add(Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_gravity_mult", rope.getHookGravityMultiplier(mc.level, mc.player)))));
-                    event.getTooltipElements().add(Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_launch_mult", rope.getLaunchForceMultiplier(mc.level, mc.player)))));
-                    event.getTooltipElements().add(Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_winch_mult", rope.getWinchForceMultiplier(mc.level, mc.player)))));
+                    event.getTooltipElements().add(1, Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_max_distance", rope.getMaxDistance(mc.level, mc.player)))));
+                    event.getTooltipElements().add(2, Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_gravity_mult", rope.getHookGravityMultiplier(mc.level, mc.player)))));
+                    event.getTooltipElements().add(3, Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_launch_mult", rope.getLaunchForceMultiplier(mc.level, mc.player)))));
+                    event.getTooltipElements().add(4, Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_winch_mult", rope.getWinchForceMultiplier(mc.level, mc.player)))));
                 });
                 event.getItemStack().getCapability(DSCapabilities.GRAPPLING_HOOK_ENGINE).ifPresent((engine) -> {
-                    event.getTooltipElements().add(Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_launch_force", engine.getLaunchForce(mc.level, mc.player)))));
-                    event.getTooltipElements().add(Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_winch_force", engine.getWinchForce(mc.level, mc.player)))));
+                    event.getTooltipElements().add(1, Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_launch_force", engine.getLaunchForce(mc.level, mc.player)))));
+                    event.getTooltipElements().add(2, Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.grappling_hook_winch_force", engine.getWinchForce(mc.level, mc.player)))));
                 });
             } else {
                 if(event.getItemStack().getCapability(DSCapabilities.GRAPPLING_HOOK_HOOK).isPresent() || event.getItemStack().getCapability(DSCapabilities.GRAPPLING_HOOK_ROPE).isPresent() ||event.getItemStack().getCapability(DSCapabilities.GRAPPLING_HOOK_ENGINE).isPresent()){
-                    event.getTooltipElements().add(Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.spoiler_stats"), Style.EMPTY.withColor(5636095))));
+                    event.getTooltipElements().add(1, Either.left(FormattedText.of(I18n.get("tooltip.dysonsphere.spoiler_stats"), Style.EMPTY.withColor(5636095))));
                 }
                 
             }

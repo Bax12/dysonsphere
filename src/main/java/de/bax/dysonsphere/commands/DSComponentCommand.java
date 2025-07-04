@@ -47,6 +47,9 @@ public class DSComponentCommand {
         }).then(Commands.argument("DSPart", ItemArgument.item(context)).executes((command) -> {
             return list(command.getSource(), ItemArgument.getItem(command, "DSPart").getItem());
         })))
+        .then(Commands.literal("reset").then(Commands.literal("yesIWantToWipeTheDysonSphere").executes((command) -> {
+            return reset(command.getSource());
+        })))
         );
     }
 
@@ -134,5 +137,12 @@ public class DSComponentCommand {
         }
 
         return count;
+    }
+
+    private static int reset(CommandSourceStack source){
+        source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
+            dysonsphere.resetDysonSphereParts();
+        });
+        return 0;
     }
 }

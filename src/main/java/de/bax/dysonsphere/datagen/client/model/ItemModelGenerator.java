@@ -23,9 +23,19 @@ public class ItemModelGenerator extends ItemModelProvider{
     @Override
     protected void registerModels() {
         Set<RegistryObject<Item>> complexItems = ImmutableSet.of(
-            ModItems.CAPSULE_SOLAR,
             ModItems.CAPSULE_EMPTY,
-            ModItems.CAPSULE_LASER,
+            ModItems.CAPSULE_SOLAR_0,
+            ModItems.CAPSULE_LASER_0,
+            ModItems.CAPSULE_STRUCTURE_0,
+            ModItems.CAPSULE_SOLAR_1,
+            ModItems.CAPSULE_LASER_1,
+            ModItems.CAPSULE_STRUCTURE_1,
+            ModItems.CAPSULE_SOLAR_2,
+            ModItems.CAPSULE_LASER_2,
+            ModItems.CAPSULE_STRUCTURE_2,
+            ModItems.CAPSULE_SOLAR_3,
+            ModItems.CAPSULE_LASER_3,
+            ModItems.CAPSULE_STRUCTURE_3,
             ModItems.RAILGUN,
             ModItems.TARGET_DESIGNATOR,
             ModItems.LASER_CONTROLLER,

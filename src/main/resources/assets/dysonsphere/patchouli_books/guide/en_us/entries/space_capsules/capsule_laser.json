@@ -1,6 +1,6 @@
 {
     "name": "Laser Satellite",
-    "icon": "dysonsphere:capsule_laser",
+    "icon": "dysonsphere:capsule_laser_0",
     "category": "dysonsphere:space_capsules",
     "pages": [
         {
@@ -9,7 +9,7 @@
         },
         {
             "type": "patchouli:crafting",
-            "recipe": "dysonsphere:capsule_laser",
+            "recipe": "dysonsphere:capsule_laser_0",
             "title" : "Laser Satellite"
         }
     ]

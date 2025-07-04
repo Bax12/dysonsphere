@@ -31,10 +31,18 @@ public class ItemTagGenerator extends ItemTagsProvider {
         tag(DSTags.itemIngot).add(ModItems.INGOT_SMART_ALLOY.get());
         tag(DSTags.itemIngotSmartAlloy).add(ModItems.INGOT_SMART_ALLOY.get());
 
-        tag(DSTags.itemCapsule).add(ModItems.CAPSULE_SOLAR.get(), ModItems.CAPSULE_EMPTY.get(), ModItems.CAPSULE_LASER.get());
+        tag(DSTags.itemCapsule).add(ModItems.CAPSULE_SOLAR_0.get(), ModItems.CAPSULE_SOLAR_1.get(), ModItems.CAPSULE_SOLAR_2.get(), ModItems.CAPSULE_SOLAR_3.get(),
+            ModItems.CAPSULE_LASER_0.get(), ModItems.CAPSULE_LASER_1.get(), ModItems.CAPSULE_LASER_2.get(), ModItems.CAPSULE_LASER_3.get(),
+            ModItems.CAPSULE_STRUCTURE_0.get(), ModItems.CAPSULE_STRUCTURE_1.get(), ModItems.CAPSULE_STRUCTURE_2.get(), ModItems.CAPSULE_STRUCTURE_3.get());
         tag(DSTags.itemCapsuleEmpty).add(ModItems.CAPSULE_EMPTY.get());
-        tag(DSTags.itemCapsuleSolar).add(ModItems.CAPSULE_SOLAR.get());
-        tag(DSTags.itemCapsuleLaser).add(ModItems.CAPSULE_LASER.get());
+        tag(DSTags.itemCapsuleSolar).add(ModItems.CAPSULE_SOLAR_0.get(), ModItems.CAPSULE_SOLAR_1.get(), ModItems.CAPSULE_SOLAR_2.get(), ModItems.CAPSULE_SOLAR_3.get());
+        tag(DSTags.itemCapsuleLaser).add(ModItems.CAPSULE_LASER_0.get(), ModItems.CAPSULE_LASER_1.get(), ModItems.CAPSULE_LASER_2.get(), ModItems.CAPSULE_LASER_3.get());
+        tag(DSTags.itemCapsuleStructure).add(ModItems.CAPSULE_STRUCTURE_0.get(), ModItems.CAPSULE_STRUCTURE_1.get(), ModItems.CAPSULE_STRUCTURE_2.get(), ModItems.CAPSULE_STRUCTURE_3.get());
+        tag(DSTags.itemCapsuleT0).add(ModItems.CAPSULE_LASER_0.get(), ModItems.CAPSULE_SOLAR_0.get(), ModItems.CAPSULE_STRUCTURE_0.get());
+        tag(DSTags.itemCapsuleT1).add(ModItems.CAPSULE_LASER_1.get(), ModItems.CAPSULE_SOLAR_1.get(), ModItems.CAPSULE_STRUCTURE_1.get());
+        tag(DSTags.itemCapsuleT2).add(ModItems.CAPSULE_LASER_2.get(), ModItems.CAPSULE_SOLAR_2.get(), ModItems.CAPSULE_STRUCTURE_2.get());
+        tag(DSTags.itemCapsuleT3).add(ModItems.CAPSULE_LASER_3.get(), ModItems.CAPSULE_SOLAR_3.get(), ModItems.CAPSULE_STRUCTURE_3.get());
+        
 
         tag(DSTags.itemGrapplingHookComponent).add(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get(), ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2.get(), ModItems.GRAPPLING_HOOK_ENGINE_MANUAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.get(), ModItems.GRAPPLING_HOOK_ENGINE_STEAM.get(), ModItems.GRAPPLING_HOOK_HOOK_BLAZE.get(), ModItems.GRAPPLING_HOOK_HOOK_SLIME.get(), ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY.get(), ModItems.GRAPPLING_HOOK_HOOK_WOOD.get(), ModItems.GRAPPLING_HOOK_ROPE_ENDER.get(), Items.CHAIN, Items.STRING, Items.TRIPWIRE_HOOK);
         tag(DSTags.itemGrapplingHookHook).add(ModItems.GRAPPLING_HOOK_HOOK_BLAZE.get(), ModItems.GRAPPLING_HOOK_HOOK_SLIME.get(), ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY.get(), ModItems.GRAPPLING_HOOK_HOOK_WOOD.get(), Items.TRIPWIRE_HOOK);

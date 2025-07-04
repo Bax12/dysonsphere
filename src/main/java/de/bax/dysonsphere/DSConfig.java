@@ -7,8 +7,7 @@ import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookStringRope;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookTripWireHook;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.entities.LaserStrikeEntity;
-import de.bax.dysonsphere.items.CapsuleLaserItem;
-import de.bax.dysonsphere.items.CapsuleSolarItem;
+import de.bax.dysonsphere.items.CapsuleItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookBlazeHookItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookElectricEngineItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookEnderRopeItem;
@@ -773,11 +772,11 @@ public class DSConfig {
                         GrapplingHookChainRope.WINCH_FORCE = GRAPPLING_HOOK_ROPE_CHAIN_WINCH_FORCE.get().floatValue();
                         GrapplingHookChainRope.GRAVITY = GRAPPLING_HOOK_ROPE_CHAIN_GRAVITY.get().floatValue();
 
-                        CapsuleSolarItem.energyProvided = SOLAR_CAPSULE_ENERGY_PROVIDED.get();
-                        CapsuleSolarItem.completionProgress = SOLAR_CAPSULE_COMPLETION.get().floatValue();
+                        CapsuleItem.TYPE.SOLAR_0.energyProvided = SOLAR_CAPSULE_ENERGY_PROVIDED.get();
+                        CapsuleItem.TYPE.SOLAR_0.completionProgress = SOLAR_CAPSULE_COMPLETION.get().floatValue();
                         
-                        CapsuleLaserItem.energyProvided = -LASER_CAPSULE_ENERGY_CONSUMED.get();
-                        CapsuleLaserItem.completionProgress = LASER_CAPSULE_COMPLETION.get().floatValue();
+                        CapsuleItem.TYPE.LASER_0.energyProvided = -LASER_CAPSULE_ENERGY_CONSUMED.get();
+                        CapsuleItem.TYPE.LASER_0.completionProgress = LASER_CAPSULE_COMPLETION.get().floatValue();
 
                         DysonSphere.LOGGER.info("Common Config loaded!");
                 }

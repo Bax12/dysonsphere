@@ -1,4 +1,4 @@
-// 1.20.1	2025-06-14T23:53:52.816700331	Tags for minecraft:item mod id dysonsphere
+// 1.20.1	2025-07-04T01:23:28.137915938	Tags for minecraft:item mod id dysonsphere
 be6bfd5075f01d29330dd4cb8e5c05688de517bd data/curios/tags/items/back.json
 be6bfd5075f01d29330dd4cb8e5c05688de517bd data/curios/tags/items/belt.json
 4942b962d24a4b203fa76fb05e54743b46c67ae5 data/curios/tags/items/bracelet.json
@@ -7,10 +7,15 @@ be6bfd5075f01d29330dd4cb8e5c05688de517bd data/curios/tags/items/belt.json
 9418f62851e3132a49484291369c43ef4cba7e39 data/dysonsphere/tags/items/grappling_hook_components/engine.json
 f1e1fa2f9b038364d5242b74e5370226d4af7e7b data/dysonsphere/tags/items/grappling_hook_components/hook.json
 754444d6d40db941baaf005f24b515f236290286 data/dysonsphere/tags/items/grappling_hook_components/rope.json
-5f090296cbe5e131fe4c4cee834f7a8fa429d36c data/dysonsphere/tags/items/space_capsules.json
+ef4be19b7a5cd734247aee3330b6c2f17fc297e7 data/dysonsphere/tags/items/space_capsules.json
 85b86ff151ee0b2cc6fb657fd836aa7b7ea7fde9 data/dysonsphere/tags/items/space_capsules/empty.json
-209893c7d03837f4ebc3cfd6e8d0792ea57655cb data/dysonsphere/tags/items/space_capsules/laser.json
-069bfa6551484f9182943d6109523f3e3c76dcdb data/dysonsphere/tags/items/space_capsules/solar.json
+c45f0abc5bf3f40e89c0a0ca64a3cdbb143a7495 data/dysonsphere/tags/items/space_capsules/laser.json
+568ecf3622c02d322f00e11f4b389e1542088480 data/dysonsphere/tags/items/space_capsules/solar.json
+001e5a55e2b4eb0f1773931eafeb638054263f9b data/dysonsphere/tags/items/space_capsules/structure.json
+befe14fe5510d21f475e5d20158ad20704b225c2 data/dysonsphere/tags/items/space_capsules/tier0.json
+717cd89a3df8d9b1dff1f119754cd1d3c38b5f7d data/dysonsphere/tags/items/space_capsules/tier1.json
+c6ae28dc9d432ba9470b27967c9b7c533fb1ce61 data/dysonsphere/tags/items/space_capsules/tier2.json
+6392e748d2bd0036da121da1544b25266bcf87d9 data/dysonsphere/tags/items/space_capsules/tier3.json
 d7735d0dde6a34f9eefe54f4ad8516003b33fc95 data/forge/tags/items/coils.json
 b855986449f7e11619f1d69f0728a97ba9f3c430 data/forge/tags/items/coils/copper.json
 0cc633e55123683f9f81215c3b761f6f2078647c data/forge/tags/items/coils/iron.json

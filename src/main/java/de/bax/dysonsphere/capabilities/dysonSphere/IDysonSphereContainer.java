@@ -1,10 +1,13 @@
 package de.bax.dysonsphere.capabilities.dysonSphere;
 
+import java.util.function.Predicate;
+
 import com.google.common.collect.ImmutableMap;
 
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -33,6 +36,13 @@ public interface IDysonSphereContainer {
      */
     boolean removeDysonSpherePart(ItemStack stack, boolean simulate);
 
+    /**
+     * Reset all parts in the Dyson Sphere to 0. 
+     * Make sure this is not called on accident!
+     * @return true if reset was successful
+     */
+    boolean resetDysonSphereParts();
+
 
     /**
      * Get all currently active parts of the Dyson Sphere
@@ -41,9 +51,19 @@ public interface IDysonSphereContainer {
      */
     ImmutableMap<Item, Integer> getDysonSphereParts();
 
-
+    /**
+     * Get the amount of a specific item in the DysonSphere
+     * @param part the item to check
+     * @return the amount of the item currently in the DysonSphere
+     */
     int getDysonSpherePartCount(Item part);
 
+    /**
+     * Get the amount of a specific Ingredient in the DysonSphere
+     * @param part the Ingredient to check
+     * @return the amount of the items matching with the ingredient currently in the DysonSphere
+     */
+    int getDysonSpherePartCount(Predicate<ItemStack> item);
 
     /**
      * get the energy generation capacity of the Dyson Sphere

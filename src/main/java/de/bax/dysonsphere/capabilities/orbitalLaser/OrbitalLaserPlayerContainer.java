@@ -12,10 +12,12 @@ import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.network.LaserCooldownSyncPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
+import de.bax.dysonsphere.tags.DSTags;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -65,7 +67,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
         public OrbitalLaserContainer(){
             if(!containingEntity.level().isClientSide){
                 containingEntity.level().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
-                    dsLaserCount = dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(ModItems.CAPSULE_LASER.get()) : 0;
+                    dsLaserCount = dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0;
                     dysonsphere.registerEnergyReceiver(lazyDSReceiver);
                 });
             }
@@ -114,7 +116,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
             }
             if(!containingEntity.level().isClientSide){
                 containingEntity.level().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
-                    dsLaserCount = dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(ModItems.CAPSULE_LASER.get()) : 0;
+                    dsLaserCount = dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0;
                     dysonsphere.registerEnergyReceiver(lazyDSReceiver);
                 });
             } else {
@@ -168,7 +170,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
 
         @Override
         public void handleDysonSphereChange(IDysonSphereContainer dysonSphere) {
-            int count = dysonSphere.getDysonSphereEnergy() >= 0 ? dysonSphere.getDysonSpherePartCount(ModItems.CAPSULE_LASER.get()) : 0;//return 0 if dysonsphere is overloaded, not using utaisation as we ignore the wordly consumers for our lasers
+            int count = dysonSphere.getDysonSphereEnergy() >= 0 ? dysonSphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0;//return 0 if dysonsphere is overloaded, not using utilization as we ignore the worldly consumers for our lasers
             if(count != dsLaserCount){
                 dsLaserCount = count;
                 if(containingEntity instanceof ServerPlayer serverPlayer){

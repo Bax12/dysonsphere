@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,6 +23,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -237,6 +239,20 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         @Override
         public int getDysonSpherePartCount(Item part) {
             return parts.getOrDefault(part, 0);
+        }
+
+        public int getDysonSpherePartCount(Predicate<ItemStack> item){
+            return parts.keySet().stream().filter((part) -> {
+                return item.test(part.getDefaultInstance());
+            }).mapToInt((part) -> {
+                return parts.getOrDefault(part, 0);
+            }).sum();
+        }
+
+        @Override
+        public boolean resetDysonSphereParts() {
+            parts.clear();
+            return true;
         }
         
     }
