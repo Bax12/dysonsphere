@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 
 public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<CompoundTag> {
@@ -101,36 +102,45 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         return ingredients;
     }
 
-    //sum up the maximum extractable energy of all energy providers
     @Override
-    public int getEnergyInput() {
-        return getProviders(ProviderType.ENERGY).stream().mapToInt((lazyProvider) -> {
+    public List<LazyOptional<IEnergyStorage>> getEnergyProviders() {
+        return getProviders(ProviderType.ENERGY).stream().map((lazyProvider) -> {
             return lazyProvider.map((provider) -> {
-                if(provider.getAcceptor().map((acceptor) -> { //prevent multiple acceptors from using the same input
-                    return acceptor.equals(this);
-                }).orElse(false)){
-                    return provider.getEnergy().map((energy) -> {
-                        return energy.extractEnergy(Integer.MAX_VALUE, true);
-                    }).orElse(0);
-                }
-                return 0;
-            }).orElse(0);
-        }).sum();
+                return provider.getEnergy();
+            }).orElse(LazyOptional.empty());
+        }).toList();
     }
 
-    //returns the energy not consumed
-    @Override
-    public int consumeEnergy(int energyToConsume) {
-        for(var lazyProvider : getProviders(ProviderType.ENERGY)){
-            int toConsume = energyToConsume; //to satisfy the non-changing constraint of the lambda below.
-            energyToConsume =- lazyProvider.map((provider) -> {
-                return provider.getEnergy().map((energy) -> {
-                    return energy.extractEnergy(toConsume, false);
-                }).orElse(0);
-            }).orElse(0);
-        }
-        return energyToConsume;
-    }
+    // //sum up the maximum extractable energy of all energy providers
+    // @Override
+    // public int getEnergyInput() {
+    //     return getProviders(ProviderType.ENERGY).stream().mapToInt((lazyProvider) -> {
+    //         return lazyProvider.map((provider) -> {
+    //             if(provider.getAcceptor().map((acceptor) -> { //prevent multiple acceptors from using the same input
+    //                 return acceptor.equals(this);
+    //             }).orElse(false)){
+    //                 return provider.getEnergy().map((energy) -> {
+    //                     return energy.extractEnergy(Integer.MAX_VALUE, true);
+    //                 }).orElse(0);
+    //             }
+    //             return 0;
+    //         }).orElse(0);
+    //     }).sum();
+    // }
+
+    // //returns the energy not consumed
+    // @Override
+    // public int consumeEnergy(int energyToConsume) {
+    //     for(var lazyProvider : getProviders(ProviderType.ENERGY)){
+    //         int toConsume = energyToConsume; //to satisfy the non-changing constraint of the lambda below.
+    //         energyToConsume =- lazyProvider.map((provider) -> {
+    //             return provider.getEnergy().map((energy) -> {
+    //                 return energy.extractEnergy(toConsume, false);
+    //             }).orElse(0);
+    //         }).orElse(0);
+    //     }
+    //     return energyToConsume;
+    // }
 
 
     @Override
@@ -173,10 +183,14 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         if(this.shouldRefreshProvider()){
             this.refreshProvider();
         }
-        if(!updateSet.isEmpty()){
-            updateSubUplink(ImmutableSet.copyOf(updateSet));
-        }
+        // if(!updateSet.isEmpty()){
+        //     updateSubUplink(ImmutableSet.copyOf(updateSet));
+        // }
+        // while (!updateSet.isEmpty()) {
+        //     updateSubUplink(ImmutableSet.copyOf(updateSet));
+        // }
         if(!inputProviderPosSet.isEmpty()){
+            inputProviders.clear();
             for(BlockPos pos : inputProviderPosSet){
                 Level level = tile.getLevel();
                 if(level != null){
@@ -186,6 +200,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
                     }
                 }
             }
+            inputProviderPosSet.clear();
         }
     }
 
@@ -199,6 +214,14 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
             }
         }
     }
+
+    // @Override
+    // public void removeInputProvider(LazyOptional<IInputProvider> provider) {
+    //     inputProviders.remove(provider);
+    //     // provider.ifPresent((input) -> {
+    //     //     input.updateUplink();
+    //     // });
+    // }
 
     @Override
     public CompoundTag serializeNBT() {
@@ -256,17 +279,20 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
     }
 
     protected void updateSubUplink(Collection<LazyOptional<IInputProvider>> lazyProviders){
-        updateSet.clear();
+        // updateSet.clear();
         for(LazyOptional<IInputProvider> lazyProvider : lazyProviders){
             if(completedUpdateSet.contains(lazyProvider)) continue;
             lazyProvider.ifPresent((provider) -> {
                 addInputProvider(lazyProvider);
                 provider.updateUplink();
                 
-                updateSet.addAll(provider.getSubProviders(updateSet));
+
+                // updateSet.addAll(provider.getSubProviders(updateSet));
+                completedUpdateSet.add(lazyProvider);
+                updateSubUplink(provider.getSubProviders());
             });
         }
-        completedUpdateSet.addAll(lazyProviders); //prevent looping back to already completed providers
+        // completedUpdateSet.addAll(lazyProviders); //prevent looping back to already completed providers
     }
 
     @Override

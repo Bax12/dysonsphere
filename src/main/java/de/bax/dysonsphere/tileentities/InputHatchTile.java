@@ -399,7 +399,7 @@ public abstract class InputHatchTile extends BaseTile {
 
         public Energy(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
             super(blockEntityType, pos, state);
-
+            providerHandler.setEnergy(lazyEnergyStorage);
         }
 
         @Override
@@ -492,6 +492,7 @@ public abstract class InputHatchTile extends BaseTile {
 
         public Fluid(BlockEntityType<?> type, BlockPos pos, BlockState state) {
             super(type, pos, state);
+            providerHandler.setFluid(lazyFluidStorage);
         }
 
         @Override

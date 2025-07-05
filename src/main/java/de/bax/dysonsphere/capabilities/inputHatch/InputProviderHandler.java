@@ -140,6 +140,9 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
         
         acceptorDistance = minDistance; 
         if(acceptorDistance >= MAX_DISTANCE){
+            // lazyAcceptor.ifPresent((acceptor) -> {
+            //     acceptor.removeInputProvider(lazyProvider);
+            // });
             lazyAcceptor = LazyOptional.empty();
             if(uplinkDirection != null){
                 uplinkDirection = null;
@@ -147,6 +150,9 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
             }
         } else {
             if(newDirection != null && !newDirection.equals(uplinkDirection)){
+                // lazyAcceptor.ifPresent((acceptor) -> {
+                //     acceptor.removeInputProvider(lazyProvider);
+                // });
                 uplinkDirection = newDirection;
                 onUplinkChange();
             }
@@ -156,17 +162,25 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
     @SuppressWarnings("null")
     public void onUplinkChange(){
         if(acceptorDistance == 1){
-            lazyAcceptor = tile.getLevel().getBlockEntity(tile.getBlockPos().relative(uplinkDirection)).getCapability(DSCapabilities.INPUT_ACCEPTOR);
+            BlockEntity acceptorTile = tile.getLevel().getBlockEntity(tile.getBlockPos().relative(uplinkDirection));
+            if (acceptorTile != null){
+                lazyAcceptor = acceptorTile.getCapability(DSCapabilities.INPUT_ACCEPTOR);
+            }
         } else if(acceptorDistance < MAX_DISTANCE) {
             lazyAcceptor = neighborList[uplinkDirection.ordinal()].map((provider) -> {
                 return provider.getAcceptor();
             }).orElse(LazyOptional.empty());
         }
         if(getAcceptor().isPresent()){
-            getAcceptor().addListener((acceptor) -> {
-                this.updateUplink();
+            getAcceptor().ifPresent((acceptor) -> {
+                 //with this tiles can run into an infinite loop on server stop. - I cannot find why it was needed...
+                // getAcceptor().addListener((lazyAcceptor) -> {
+                //     if(!acceptor.getTile().isRemoved()){
+                //         this.updateUplink();
+                //     }
+                // });
+                acceptor.addInputProvider(lazyProvider);
             });
-            getAcceptor().resolve().get().addInputProvider(lazyProvider);
         } else {
             uplinkDirection = null;
             acceptorDistance = MAX_DISTANCE;

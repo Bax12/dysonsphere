@@ -93,6 +93,11 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
                 setChanged();
             }
         };
+
+        public void refreshProvider() {
+            super.refreshProvider();
+            setChanged();
+        };
     };
 
     
@@ -140,6 +145,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
         lazyLaserReceptor.invalidate();
         lazyInv.invalidate();
         lazyHeat.invalidate();
+        lazyAcceptor.invalidate();
     }
 
     @Override
@@ -213,7 +219,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
                 currentRecipe = null;
             }
             acceptorHandler.tick();
-            
+
         }
     }
 

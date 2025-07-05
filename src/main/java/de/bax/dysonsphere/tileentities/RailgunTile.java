@@ -1,11 +1,18 @@
 package de.bax.dysonsphere.tileentities;
 
+import java.util.Collection;
+
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.capabilities.energy.AcceptorEnergyWrapper;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputAcceptor;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider;
+import de.bax.dysonsphere.capabilities.inputHatch.InputAcceptorHandler;
 import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.compat.ad_astra.AdAstra;
 import de.bax.dysonsphere.sounds.ModSounds;
@@ -29,7 +36,21 @@ public class RailgunTile extends BaseTile {
     public static int baseLaunchEnergy = 90000;
     public static int energyCapacity = 150000;
 
-    public EnergyStorage energyStorage = new EnergyStorage(energyCapacity);
+    public EnergyStorage energyStorage = new EnergyStorage(energyCapacity){
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            if(!simulate){
+                setChanged();
+            }
+            return super.receiveEnergy(maxReceive, simulate);
+        };
+
+        public int extractEnergy(int maxExtract, boolean simulate) {
+            if(!simulate){
+                setChanged();
+            }
+            return super.extractEnergy(maxExtract, simulate);
+        };
+    };
     public ItemStackHandler inventory = new ItemStackHandler(1) {
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
@@ -43,11 +64,29 @@ public class RailgunTile extends BaseTile {
         };
     };
 
+    public InputAcceptorHandler acceptorHandler = new InputAcceptorHandler(this){
+        public void addInputProvider(LazyOptional<IInputProvider> provider) {
+            super.addInputProvider(provider);
+            if(provider.isPresent()){
+                setChanged();
+            }//TODO: Sync issues: Removing a hatch does not remove dependend hatches on the client side only.
+        };
+
+        public void refreshProvider() {
+            super.refreshProvider();
+            setChanged();
+        };
+    };
+
     public LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
     public LazyOptional<IItemHandler> lazyInventory = LazyOptional.of(() -> inventory);
+    protected LazyOptional<IInputAcceptor> lazyAcceptor = LazyOptional.of(() -> acceptorHandler);
+
+    public AcceptorEnergyWrapper acceptorStorage = new AcceptorEnergyWrapper(lazyEnergyStorage, acceptorHandler);
 
     protected int ticksElapsed = 0;
-    protected int lastEnergy = 0;
+    // protected int lastEnergy = 0;
+    protected boolean dirty = false;
 
     protected float launchMult = 1f;
 
@@ -63,6 +102,8 @@ public class RailgunTile extends BaseTile {
             return lazyEnergyStorage.cast();
         } else if (cap.equals(ForgeCapabilities.ITEM_HANDLER)) {
             return lazyInventory.cast();
+        } else if (cap.equals(DSCapabilities.INPUT_ACCEPTOR)){
+            return lazyAcceptor.cast();
         }
         return super.getCapability(cap, side);
     }
@@ -72,6 +113,7 @@ public class RailgunTile extends BaseTile {
         super.invalidateCaps();
         lazyEnergyStorage.invalidate();
         lazyInventory.invalidate();
+        lazyAcceptor.invalidate();
     }
     
     public void tick() {
@@ -80,7 +122,10 @@ public class RailgunTile extends BaseTile {
             // energyStorage.receiveEnergy(50000, false);
 
             // DysonSphere.LOGGER.info("Railgun I: {}", inventory.getStackInSlot(0));
-
+            if(ticksElapsed == 20){
+                acceptorHandler.markForRefresh();
+            }
+            acceptorHandler.tick();
             canAddToDS = true;
             ItemStack invStack = inventory.getStackInSlot(0);
             if(energyStorage.getEnergyStored() >= getLaunchEnergy() && !invStack.isEmpty() && canSeeSky()){
@@ -96,10 +141,10 @@ public class RailgunTile extends BaseTile {
                     }
                 });
             }
-            if(ticksElapsed++ % 5 == 0 && lastEnergy != energyStorage.getEnergyStored()){
-                this.setChanged();
-                lastEnergy = energyStorage.getEnergyStored();
-                
+            
+            if(ticksElapsed++ % 5 == 0 && dirty){
+                // lastEnergy = energyStorage.getEnergyStored();
+                dirty = false;
                 sendSyncPackageToNearbyPlayers();
             } 
             if(ticksElapsed % 200 == 20 && ModCompat.isLoaded(ModCompat.MODID.AD_ASTRA)){ //recheck the launch multiplier every 10 seconds. Gravity should not change so frequently, right?
@@ -107,11 +152,26 @@ public class RailgunTile extends BaseTile {
                 launchMult = AdAstra.getOrbitalLaunchMult(level, worldPosition);
                 if(last != launchMult){
                     this.setChanged();
-                    lastEnergy = energyStorage.getEnergyStored();
+                    // lastEnergy = energyStorage.getEnergyStored();
                     sendSyncPackageToNearbyPlayers();
                 }
             }
+            // DysonSphere.LOGGER.debug("RailgunTile: tick: acceptorCount: {}", acceptorHandler.inputProviders.size());
+            // DysonSphere.LOGGER.debug("RailgunTile: tick: energyProviderCount: {}", acceptorHandler.getEnergyProviders().size());
+            // DysonSphere.LOGGER.debug("RailgunTile: tick: energyProvided: {}", acceptorHandler.getEnergyInput());
+        } else {
+            level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0);
+            acceptorHandler.tick();
+            // DysonSphere.LOGGER.debug("RailgunTile: tick: acceptorCount: {}", acceptorHandler.inputProviders.size());
+            // DysonSphere.LOGGER.debug("RailgunTile: tick: energyProviderCount: {}", acceptorHandler.getEnergyProviders().size());
+            // DysonSphere.LOGGER.debug("RailgunTile: tick: energyProvided: {}", acceptorHandler.getEnergyInput());
         }
+    }
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        dirty = true;
     }
 
     public boolean canSeeSky(){
@@ -128,8 +188,13 @@ public class RailgunTile extends BaseTile {
         if(!level.isClientSide && ModCompat.isLoaded(ModCompat.MODID.AD_ASTRA)){
             launchMult = AdAstra.getOrbitalLaunchMult(level, worldPosition);
         }
+        acceptorHandler.updateNeighbors(level, worldPosition);
+        acceptorHandler.markForRefresh();
     }
 
+    public void onNeighborChange(){
+        acceptorHandler.updateNeighbors(level, worldPosition);
+    }
 
     @Override
     public void load(@Nonnull CompoundTag tag) {
@@ -146,6 +211,9 @@ public class RailgunTile extends BaseTile {
         if(tag.contains("canAdd")){
             canAddToDS = tag.getBoolean("canAdd");
         }
+        if(tag.contains("acceptor")){
+            acceptorHandler.deserializeNBT(tag.getCompound("acceptor"));
+        }
     }
 
     @Override
@@ -155,6 +223,7 @@ public class RailgunTile extends BaseTile {
         tag.put("Inventory", inventory.serializeNBT());
         tag.putFloat("launchMult", launchMult);
         tag.putBoolean("canAdd", canAddToDS);
+        tag.put("acceptor", acceptorHandler.serializeNBT());
     }
 
     public void dropContent() {
@@ -169,6 +238,11 @@ public class RailgunTile extends BaseTile {
 
     public int getLaunchEnergy() {
         return (int) (baseLaunchEnergy * launchMult);
+    }
+
+    public void onRemove() {
+        this.dropContent();
+        acceptorHandler.onRemove();
     }
     
 

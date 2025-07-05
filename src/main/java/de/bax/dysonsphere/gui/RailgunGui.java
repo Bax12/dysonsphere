@@ -16,13 +16,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.level.Level;
 
 public class RailgunGui extends BaseGui<RailgunContainer> {
 
     public static final ResourceLocation RES_LOC = AssetUtil.getGuiLocation("gui_railgun");
     private final RailgunTile tile;
     private EnergyDisplay energy;
+    private EnergyDisplay energyInput;
     private int ticksPassed = 0;
 
     public RailgunGui(RailgunContainer container, Inventory inventory, Component pTitle) {
@@ -37,18 +37,42 @@ public class RailgunGui extends BaseGui<RailgunContainer> {
     @Override
     protected void init() {
         super.init();
-        this.energy = new EnergyDisplay(this.leftPos + 15, this.topPos + 5, tile.energyStorage){
+
+        boolean extraEnergy = tile.acceptorStorage.getEnergyStored() > 0;
+        // boolean extraEnergy = false;
+        this.energy = new EnergyDisplay(this.leftPos + (extraEnergy ? 35 : 15), this.topPos + 5, tile.energyStorage){
             @Override
             protected void addTooltip(List<Component> tooltip) {
+                if(extraEnergy) {
+                    tooltip.add(Component.translatable("tooltip.dysonsphere.energy_internal"));
+                }
                 super.addTooltip(tooltip);
                 tooltip.add(Component.translatable("tooltip.dysonsphere.railgun_launch_energy", AssetUtil.FLOAT_FORMAT.format(tile.getLaunchEnergy())));
             }
             @Override
             public void draw(GuiGraphics guiGraphics) {
                 super.draw(guiGraphics);
-                guiGraphics.hLine(this.xPos + 1, this.xPos + 19, yPos + 85 - (85 * tile.getLaunchEnergy() / energy.getMaxEnergyStored()), 0xFF2e6dff);
+                if(!extraEnergy){
+                    guiGraphics.hLine(this.xPos + 1, this.xPos + 19, yPos + 85 - (85 * tile.getLaunchEnergy() / energy.getMaxEnergyStored()), 0xFF2e6dff);
+                }
             }
         };
+        if(extraEnergy){
+            this.energyInput = new EnergyDisplay(this.leftPos + 10, this.topPos + 5, tile.acceptorStorage){
+                @Override
+                protected void addTooltip(List<Component> tooltip) {
+                    tooltip.add(Component.translatable("tooltip.dysonsphere.energy_external"));
+                    super.addTooltip(tooltip);
+                    tooltip.add(Component.translatable("tooltip.dysonsphere.railgun_launch_energy", AssetUtil.FLOAT_FORMAT.format(tile.getLaunchEnergy())));
+                }
+                @Override
+                public void draw(GuiGraphics guiGraphics) {
+                    super.draw(guiGraphics);
+                    guiGraphics.hLine(this.xPos + 1, this.xPos + 19, yPos + 85 - (85 * tile.getLaunchEnergy() / energy.getMaxEnergyStored()), 0xFF2e6dff);
+                }
+            };
+        }
+        
     }
 
     @Override
@@ -72,13 +96,18 @@ public class RailgunGui extends BaseGui<RailgunContainer> {
         }
 
         energy.draw(guiGraphics);
+        if(energyInput != null){
+            energyInput.draw(guiGraphics);
+        }
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         energy.drawOverlay(guiGraphics, mouseX, mouseY);
-
+        if(energyInput != null){
+            energyInput.drawOverlay(guiGraphics, mouseX, mouseY);
+        }
         if(mouseX >= this.leftPos + 77 && mouseY >= this.topPos + 2 && mouseX < this.leftPos + 100 && mouseY < this.topPos + 50){
             List<Component> tooltip = new ArrayList<>();
             if((!tile.canSeeSky())){

@@ -6,6 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IInputAcceptor {
@@ -28,15 +29,19 @@ public interface IInputAcceptor {
 
     public List<Ingredient> consumeItemInputs(List<Ingredient> items);
 
-    public int getEnergyInput();
+    // public int getEnergyInput(); //most usecases need a IEnergyStorage. Easier with the AcceptorEnergyWrapper.
 
-    public int consumeEnergy(int energy);
+    // public int consumeEnergy(int energy);
+
+    public List<LazyOptional<IEnergyStorage>> getEnergyProviders();
 
     public List<FluidStack> getFluidInputs();
 
     public List<FluidStack> consumeFluidInputs(List<FluidStack> fluids);
 
     public void addInputProvider(LazyOptional<IInputProvider> provider);
+
+    // public void removeInputProvider(LazyOptional<IInputProvider> provider);
 
     public void markForRefresh(); //set a bool to refresh the collection of connected providers on the next tick. Should cascade through the providers and set the direction and distance to the acceptor. Should be called when a provider is placed or broken.
 
