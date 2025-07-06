@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableSet;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
 import net.minecraft.core.BlockPos;
@@ -32,6 +33,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
     protected final BlockEntity tile;
 
     protected boolean shouldRefreshProvider = false;
+    protected boolean unpackPosList = false;
 
     protected Set<LazyOptional<IInputProvider>> updateSet = new HashSet<>();
     protected Set<LazyOptional<IInputProvider>> completedUpdateSet = new HashSet<>();
@@ -50,7 +52,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         return getInventoryFromProviders(getProviders(type));
     }
 
-    protected List<LazyOptional<IInputProvider>> getProviders(ProviderType type){
+    public List<LazyOptional<IInputProvider>> getProviders(ProviderType type){
         return inputProviders.stream().filter((entry -> entry.map((provider) -> {return provider.getType().equals(type);}).orElse(false))).collect(Collectors.toList());
     }
 
@@ -58,13 +60,17 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         List<ItemStack> stacks = new ArrayList<ItemStack>();
         for(LazyOptional<IInputProvider> lazyProvider : lazyProviders){
             lazyProvider.ifPresent((provider) -> {
+                DysonSphere.LOGGER.debug("Has Acceptor: {}", provider.getAcceptor().isPresent());
                 if(provider.getAcceptor().map((acceptor) -> { //prevent multiple acceptors from using the same input
+                    // DysonSphere.LOGGER.debug("Is Correct Acceptor: {}", acceptor.equals(this));
                     return acceptor.equals(this);
                 }).orElse(false)){
                     provider.getInventory().ifPresent((inv) -> {
                         for(int i = 0; i < inv.getSlots(); i++){
                             ItemStack stack = inv.getStackInSlot(i);
+                            // DysonSphere.LOGGER.debug("stack to add: {}", stack);
                             if(!stack.isEmpty()){
+                                // DysonSphere.LOGGER.debug("stack added: {}", stack);
                                 stacks.add(stack);
                             }
                         }
@@ -72,7 +78,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
                 }
             });
         }
-
+        // DysonSphere.LOGGER.debug("stacks size: {}", stacks.size());
         return stacks;
     }
 
@@ -189,8 +195,10 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         // while (!updateSet.isEmpty()) {
         //     updateSubUplink(ImmutableSet.copyOf(updateSet));
         // }
-        if(!inputProviderPosSet.isEmpty()){
-            inputProviders.clear();
+        // if(!inputProviderPosSet.isEmpty()){ //used to load providers and sync them to the client.
+        
+        if(unpackPosList){
+            inputProviders.clear(); //will never be called when no provider is present, keeping the old ones in the client memory.
             for(BlockPos pos : inputProviderPosSet){
                 Level level = tile.getLevel();
                 if(level != null){
@@ -201,6 +209,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
                 }
             }
             inputProviderPosSet.clear();
+            unpackPosList = false;
         }
     }
 
@@ -211,8 +220,10 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
                 provider.ifPresent((input) -> {
                     input.updateUplink();
                 });
+                onChange();
             }
         }
+        DysonSphere.LOGGER.debug("InputAcceptorHandler: AddInputProvider: Par.providerCount: {}", this.getProviders(ProviderType.PARALLEL).size());
     }
 
     // @Override
@@ -241,9 +252,19 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
     public void deserializeNBT(CompoundTag nbt) {
         if(nbt.contains("providers")){
             long[] packedPosList = nbt.getLongArray("providers");
+            // inputProviders.clear(); //will never be called when no provider is present, keeping the old ones in the client memory.
+            // Level level = tile.getLevel();
             for(long packedPos : packedPosList){
                 inputProviderPosSet.add(BlockPos.of(packedPos));
+                // if(level != null){
+                //     BlockEntity providerTile = level.getBlockEntity(BlockPos.of(packedPos));
+                //     if(providerTile != null){
+                //         addInputProvider(providerTile.getCapability(DSCapabilities.INPUT_PROVIDER));
+                //     }
+                // }
+            
             }
+            unpackPosList = true;
 
         }
     }
@@ -276,6 +297,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         });
         inputProviders.clear();
         updateSubUplink(Arrays.asList(neighborList));
+        onChange();
     }
 
     protected void updateSubUplink(Collection<LazyOptional<IInputProvider>> lazyProviders){
@@ -298,6 +320,10 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
     @Override
     public BlockEntity getTile() {
         return tile;
+    }
+
+    protected void onChange(){
+        //should be overridden in the using class when an explicit change call is needed.
     }
 
     

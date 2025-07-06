@@ -87,15 +87,19 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     };
 
     public InputAcceptorHandler acceptorHandler = new InputAcceptorHandler(this){
-        public void addInputProvider(LazyOptional<IInputProvider> provider) {
-            super.addInputProvider(provider);
-            if(provider.isPresent()){
-                setChanged();
-            }
-        };
+        // public void addInputProvider(LazyOptional<IInputProvider> provider) {
+        //     super.addInputProvider(provider);
+        //     if(provider.isPresent()){
+        //         setChanged();
+        //     }
+        // };
 
-        public void refreshProvider() {
-            super.refreshProvider();
+        // public void refreshProvider() {
+        //     super.refreshProvider();
+        //     setChanged();
+        // };
+
+        protected void onChange() {
             setChanged();
         };
     };
@@ -174,9 +178,9 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     public void tick(){
         if(!level.isClientSide){
             ticksElapsed++;
-            if(ticksElapsed == 20){
-                acceptorHandler.markForRefresh();
-            }
+            // if(ticksElapsed == 40){
+            //     acceptorHandler.markForRefresh();
+            // }
             if(ticksElapsed % 5 == 0){
                 if(energy > 0){
                     if(currentRecipe != null){
@@ -203,7 +207,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
                     }
                     bleedEnergy();
                     heatHandler.splitShare();
-                }
+                }                
                 acceptorHandler.tick();
                 if(dirty){
                     dirty = false;

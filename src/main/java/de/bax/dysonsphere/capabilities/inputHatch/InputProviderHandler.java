@@ -3,6 +3,7 @@ package de.bax.dysonsphere.capabilities.inputHatch;
 import java.util.Arrays;
 import java.util.Set;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -181,22 +182,27 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
                 // });
                 acceptor.addInputProvider(lazyProvider);
             });
+            
         } else {
             uplinkDirection = null;
             acceptorDistance = MAX_DISTANCE;
         }
-    };
+        onChanged();
+    }
 
     @Override
     public LazyOptional<IInputAcceptor> getAcceptor() {
         if(acceptorPos != null){
             Level level = this.tile.getLevel();
-            if(level != null){
+            // DysonSphere.LOGGER.debug("getAcceptor: level: {}", level);
+            if(level != null && (level.isClientSide || !lazyAcceptor.isPresent())){
                 BlockEntity tile = level.getBlockEntity(acceptorPos);
+                // DysonSphere.LOGGER.debug("getAcceptor: tile: {}", tile);
                 if(tile != null) {
                     lazyAcceptor = tile.getCapability(DSCapabilities.INPUT_ACCEPTOR);
+                    // DysonSphere.LOGGER.debug("getAcceptor: acceptor: {}", lazyAcceptor.isPresent());
+                    // acceptorPos = null;
                 }
-                acceptorPos = null;
             }
         }
         return lazyAcceptor;
@@ -242,8 +248,11 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
             acceptorPos = BlockPos.of(nbt.getLong("pos"));
         }
         if(nbt.contains("uplink")){
+            int oldDirection = uplinkDirection != null ? uplinkDirection.ordinal() : -1;
             uplinkDirection = Direction.values()[nbt.getInt("uplink")];
-            onUplinkChange();
+            if(uplinkDirection.ordinal() != oldDirection){
+                onUplinkChange();
+            } 
         }
         if(nbt.contains("distance")){
             acceptorDistance = nbt.getInt("distance");
@@ -281,6 +290,10 @@ public abstract class InputProviderHandler implements IInputProvider, INBTSerial
     @Override
     public LazyOptional<IFluidHandler> getFluid() {
         return lazyFluid;
+    }
+
+    protected void onChanged(){
+
     }
     
 }

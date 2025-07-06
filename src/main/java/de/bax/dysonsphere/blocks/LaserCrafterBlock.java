@@ -43,6 +43,10 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
 
     @Override
     public InteractionResult use(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer, @Nonnull InteractionHand pHand, @Nonnull BlockHitResult pHit) {
+        // if(pLevel.getBlockEntity(pPos) instanceof LaserCrafterTile tile){
+        //     DysonSphere.LOGGER.debug("laserCrafterBlock: use: parallelProviderCount: {}", tile.acceptorHandler.getProviders(ProviderType.PARALLEL).size());
+        //     DysonSphere.LOGGER.debug("laserCrafterBlock: use: parallelItemCount: {}", tile.acceptorHandler.getItemInputs(ProviderType.PARALLEL).size());
+        // }
         if(!pLevel.isClientSide){
             if(pLevel.getBlockEntity(pPos) instanceof LaserCrafterTile tile){
                 ItemStack playerStack = pPlayer.getMainHandItem();

@@ -11,6 +11,7 @@ import de.bax.dysonsphere.capabilities.fluid.FluidTankCustom;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputAcceptor;
 import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
 import de.bax.dysonsphere.capabilities.inputHatch.InputProviderHandler;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
@@ -80,6 +81,18 @@ public abstract class InputHatchTile extends BaseTile {
         public ProviderType getType() {
             return getProviderType();
         }
+
+        // @Override
+        // public LazyOptional<IInputAcceptor> getAcceptor() {
+        //     setChanged();
+        //     return super.getAcceptor();
+        // };
+
+        @Override
+        protected void onChanged(){
+            setChanged();
+        }
+
     };
 
     protected LazyOptional<IItemHandler> lazyInv = LazyOptional.of(() -> input);
