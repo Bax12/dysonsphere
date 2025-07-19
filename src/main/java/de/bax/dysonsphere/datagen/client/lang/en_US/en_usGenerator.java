@@ -60,12 +60,13 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.RAILGUN, "Electromagnetic Launcher");
         addItem(ModItems.STEAM_BUCKET, "Steam Bucket");
         addItem(ModItems.HELIUM_BUCKET, "Helium Bucket");
-        addItem(ModItems.LASER_CONTROLLER, "Orbital Uplink Bracelet");
+        addItem(ModItems.LASER_CONTROLLER, "Orbital Uplink Bracer");
         addItem(ModItems.TARGET_DESIGNATOR, "Target Designator");
         addItem(ModItems.LASER_PATTERN, "Orbital Laser Pattern");
         addItem(ModItems.UNIVERSE_WHISPER, "Whisper of the Universe");
         addItem(ModItems.INGOT_SMART_ALLOY, "Smart Alloy Ingot");
         addItem(ModItems.COMPONENT_SMART_ALLOY, "Smart Alloy Component");
+        addItem(ModItems.INGOT_SENTIENT_ALLOY, "Sentient Alloy Ingot");
         addItem(ModItems.CONSTRUCT_ENDER, "Stabilized Ender Construct");
         addItem(ModItems.GRAPPLING_HOOK_HARNESS, "Grappling Hook Frame");
         addItem(ModItems.GRAPPLING_HOOK_CONTROLLER, "Grappling Hook Controller");

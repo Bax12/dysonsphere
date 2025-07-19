@@ -15,6 +15,7 @@ import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.recipes.ModRecipes;
 import de.bax.dysonsphere.tags.DSTags;
+import de.bax.dysonsphere.util.SerializationUtil;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -166,7 +167,7 @@ public class LaserCraftingRecipeGenerator {
                 jsonExtras.add(extra.toJson());
             }
             pJson.add("extraInputs", jsonExtras);
-            pJson.add("output", serializeItemStack(output));
+            pJson.add("output", SerializationUtil.serializeItemStack(output));
             pJson.addProperty("inputEnergy", inputEnergy);
         }
 
@@ -192,19 +193,7 @@ public class LaserCraftingRecipeGenerator {
             return null;
         }
 
-        private static JsonObject serializeItemStack(ItemStack stack){
-            JsonObject json = new JsonObject();
-
-            json.addProperty("item", ForgeRegistries.ITEMS.getKey(stack.getItem()).toString());
-            if(stack.hasTag()){
-                json.addProperty("tag", stack.getTag().getAsString());
-            }
-            if(stack.getCount() > 1){
-                json.addProperty("count", stack.getCount());
-            }           
-            
-            return json;
-        }
+        
 
     }
     

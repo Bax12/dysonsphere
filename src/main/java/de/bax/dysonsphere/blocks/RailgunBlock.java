@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import de.bax.dysonsphere.containers.RailgunContainer;
+import de.bax.dysonsphere.items.tools.WrenchItem;
 import de.bax.dysonsphere.sounds.ModSounds;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import de.bax.dysonsphere.tileentities.RailgunTile;
@@ -19,6 +20,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -89,8 +91,12 @@ public class RailgunBlock extends Block implements EntityBlock {
     @Override
     public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
         if(!level.isClientSide && player instanceof ServerPlayer serverPlayer){
-            BlockEntity tile = level.getBlockEntity(pos);
-            if(tile != null && tile.getType().equals(ModTiles.RAILGUN.get())){
+            if(level.getBlockEntity(pos) instanceof RailgunTile tile){
+                ItemStack playerStack = player.getMainHandItem();
+                if(WrenchItem.isWrench(playerStack)){
+                    tile.acceptorHandler.markForRefresh();
+                    return InteractionResult.SUCCESS;
+                }
                 // player.openMenu(new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
                 // new RailgunContainer(containerId, playerInventory, (RailgunTile) tile), Component.translatable("container.dysonsphere.railgun")));
                 // if(player.isCrouching()){

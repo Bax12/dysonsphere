@@ -60,9 +60,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         List<ItemStack> stacks = new ArrayList<ItemStack>();
         for(LazyOptional<IInputProvider> lazyProvider : lazyProviders){
             lazyProvider.ifPresent((provider) -> {
-                DysonSphere.LOGGER.debug("Has Acceptor: {}", provider.getAcceptor().isPresent());
                 if(provider.getAcceptor().map((acceptor) -> { //prevent multiple acceptors from using the same input
-                    // DysonSphere.LOGGER.debug("Is Correct Acceptor: {}", acceptor.equals(this));
                     return acceptor.equals(this);
                 }).orElse(false)){
                     provider.getInventory().ifPresent((inv) -> {
@@ -223,7 +221,6 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
                 onChange();
             }
         }
-        DysonSphere.LOGGER.debug("InputAcceptorHandler: AddInputProvider: Par.providerCount: {}", this.getProviders(ProviderType.PARALLEL).size());
     }
 
     // @Override

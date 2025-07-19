@@ -18,4 +18,7 @@ public class ModRecipes {
 
     public static final RegistryObject<RecipeType<HeatExchangerRecipe>> HEAT_EXCHANGER_TYPE = TYPES.register("heat_exchanger", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "heat_exchanger")));
     public static final RegistryObject<RecipeSerializer<HeatExchangerRecipe>> HEAT_EXCHANGER_SERIALIZER = SERIALIZERS.register("heat_exchanger", HeatExchangerRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<OrbitalLaunchRecipe>> ORBITAL_LAUNCH_TYPE = TYPES.register("orbital_launch", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "orbital_launch")));
+    public static final RegistryObject<RecipeSerializer<OrbitalLaunchRecipe>> ORBITAL_LAUNCH_SERIALIZER = SERIALIZERS.register("orbital_launch", OrbitalLaunchRecipe.Serializer::new);
 }

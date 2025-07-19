@@ -1,13 +1,10 @@
 package de.bax.dysonsphere.tileentities;
 
-import java.util.Collection;
-
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.energy.AcceptorEnergyWrapper;
 import de.bax.dysonsphere.capabilities.inputHatch.IInputAcceptor;

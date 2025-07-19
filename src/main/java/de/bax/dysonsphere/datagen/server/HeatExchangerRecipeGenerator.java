@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.recipes.ModRecipes;
+import de.bax.dysonsphere.util.SerializationUtil;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -111,8 +112,8 @@ public class HeatExchangerRecipeGenerator {
 
         @Override
         public void serializeRecipeData(@Nonnull JsonObject pJson) {
-            pJson.add("input", serializeFluidStack(input));
-            pJson.add("output", serializeFluidStack(output));
+            pJson.add("input", SerializationUtil.serializeFluidStack(input));
+            pJson.add("output", SerializationUtil.serializeFluidStack(output));
             pJson.addProperty("minHeat", minHeat);
             pJson.addProperty("heatConsumption", heatConsumption);
             pJson.addProperty("heatScaling", heatScaling);
@@ -141,13 +142,7 @@ public class HeatExchangerRecipeGenerator {
             return null;
         }
 
-        private static JsonObject serializeFluidStack(FluidStack stack){
-            JsonObject json = new JsonObject();
 
-            json.addProperty("fluid", ForgeRegistries.FLUIDS.getKey(stack.getFluid()).toString());
-            json.addProperty("amount", stack.getAmount());
-            return json;
-        }
 
     }
 
