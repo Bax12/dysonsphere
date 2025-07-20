@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.recipes.ModRecipes;
+import de.bax.dysonsphere.util.FluidIngredient;
 import de.bax.dysonsphere.util.SerializationUtil;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -38,7 +38,7 @@ public class OrbitalLaunchRecipeGenerator {
         private Ingredient input;
         private ItemStack launchStack;
         private List<Ingredient> extraInputs = new ArrayList<>();
-        private List<FluidStack> fluidInputs = new ArrayList<>();
+        private List<FluidIngredient> fluidInputs = new ArrayList<>();
         private int baseEnergy;
 
         private RecipeBuilder(ItemStack launchStack){
@@ -79,7 +79,7 @@ public class OrbitalLaunchRecipeGenerator {
             return this;
         }
 
-        public RecipeBuilder addFluidInput(FluidStack fluid){
+        public RecipeBuilder addFluidInput(FluidIngredient fluid){
             fluidInputs.add(fluid);
             return this;
         }
@@ -106,7 +106,7 @@ public class OrbitalLaunchRecipeGenerator {
 
     }
 
-    public static record Recipe(ResourceLocation id, Ingredient input, ItemStack launchStack, List<Ingredient> extraInputs, List<FluidStack> fluidInputs, int baseEnergy) implements FinishedRecipe {
+    public static record Recipe(ResourceLocation id, Ingredient input, ItemStack launchStack, List<Ingredient> extraInputs, List<FluidIngredient> fluidInputs, int baseEnergy) implements FinishedRecipe {
 
         @Override
         public void serializeRecipeData(@Nonnull JsonObject pJson) {
@@ -119,8 +119,8 @@ public class OrbitalLaunchRecipeGenerator {
             }
             pJson.add("extraInputs", jsonExtras);
             JsonArray jsonFluids = new JsonArray();
-            for(FluidStack fluid : fluidInputs()){
-                jsonFluids.add(SerializationUtil.serializeFluidStack(fluid));
+            for(FluidIngredient fluid : fluidInputs()){
+                jsonFluids.add(fluid.toJson());
             }
             pJson.add("fluidInputs", jsonFluids);
         }

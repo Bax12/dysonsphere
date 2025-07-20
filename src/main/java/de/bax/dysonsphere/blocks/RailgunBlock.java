@@ -118,11 +118,11 @@ public class RailgunBlock extends Block implements EntityBlock {
     @Override
     public void animateTick(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull RandomSource random) {
         if(level.isClientSide){
-            BlockEntity tile = level.getBlockEntity(pos);
-            if(tile instanceof RailgunTile railgunTile){
-                int energy = railgunTile.energyStorage.getEnergyStored();
-                int energyCap = railgunTile.energyStorage.getMaxEnergyStored();
-                int i = energy == energyCap ? 0 : (int) (50f * energy / railgunTile.getLaunchEnergy());
+            if(level.getBlockEntity(pos) instanceof RailgunTile railgunTile){
+                // int energy = railgunTile.energyStorage.getEnergyStored();
+                // int energyCap = railgunTile.energyStorage.getMaxEnergyStored();
+                // int i = energy == energyCap ? 0 : (int) (50f * energy / railgunTile.getLaunchEnergy());
+                int i = railgunTile.getEnergyScaled(50f);
                 if(i != 0){
                     level.playLocalSound(pos.getX() + 0.5f, pos.getY() + 1.5f, pos.getZ() + 0.5f, ModSounds.RAILGUN_CHARGE.get(), SoundSource.BLOCKS, 0.3f * i / 50f, 0.9f, false);
                 } 

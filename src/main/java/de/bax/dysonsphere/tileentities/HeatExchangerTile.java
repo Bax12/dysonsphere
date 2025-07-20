@@ -141,7 +141,7 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
         if(!level.isClientSide){
             if(ticksElapsed++ % 5 == 0){
                 pushPullFluids();
-                if((curRecipe == null && !inputTank.getFluid().isEmpty()) || (curRecipe != null && !inputTank.getFluid().isFluidEqual(curRecipe.input()))){
+                if((curRecipe == null && !inputTank.getFluid().isEmpty()) || (curRecipe != null && !curRecipe.matches(inputTank.getFluid()))){
                     setCurrentRecipe();
                 }
                 if(curRecipe != null){
@@ -316,7 +316,7 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
             curRecipe = null;
         } else {
             Optional<HeatExchangerRecipe> recipe = level.getRecipeManager().getAllRecipesFor(ModRecipes.HEAT_EXCHANGER_TYPE.get()).stream().filter((heatRecipe) -> {
-                return heatRecipe.input().isFluidEqual(inputTank.getFluid());
+                return heatRecipe.matches(inputTank.getFluid());
             }).findFirst();
             curRecipe = recipe.orElse(null);
             
@@ -339,7 +339,7 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
 
     public Optional<HeatExchangerRecipe> getCurrentRecipe(){
         if(level.isClientSide){
-            if((curRecipe == null && !inputTank.getFluid().isEmpty()) || (curRecipe != null && !inputTank.getFluid().isFluidEqual(curRecipe.input()))){
+            if((curRecipe == null && !inputTank.getFluid().isEmpty()) || (curRecipe != null && !curRecipe.matches(inputTank.getFluid()))){
                 setCurrentRecipe();
             }
         }

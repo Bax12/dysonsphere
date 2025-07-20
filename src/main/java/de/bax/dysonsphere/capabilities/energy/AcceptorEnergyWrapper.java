@@ -39,28 +39,30 @@ public class AcceptorEnergyWrapper implements IEnergyStorage {
         return !inputAcceptor.getEnergyProviders().isEmpty();
     }
 
+    //receive to internal first
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
+        int received = internalStorage.map(e -> e.receiveEnergy(maxReceive, simulate)).orElse(0);
         Iterator<LazyOptional<IEnergyStorage>> storageIterator = inputAcceptor.getEnergyProviders().iterator();
-        int received = 0;
         while (storageIterator.hasNext() && maxReceive - received > 0) {
             int toReceive = maxReceive - received;
-            received += storageIterator.next().map((energy) -> {
-                return energy.receiveEnergy(toReceive, simulate);
-            }).orElse(0);
+            received += storageIterator.next().map(e -> e.receiveEnergy(toReceive, simulate)).orElse(0);
         }
         return received;
     }
 
+    //extract from providers first
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
         Iterator<LazyOptional<IEnergyStorage>> storageIterator = inputAcceptor.getEnergyProviders().iterator();
         int extracted = 0;
         while (storageIterator.hasNext() && maxExtract - extracted > 0) {
             int toExtract = maxExtract - extracted;
-            extracted += storageIterator.next().map((energy) -> {
-                return energy.extractEnergy(toExtract, simulate);
-            }).orElse(0);
+            extracted += storageIterator.next().map(e -> e.extractEnergy(toExtract, simulate)).orElse(0);
+        }
+        int leftover = maxExtract - extracted;
+        if(leftover > 0){
+            extracted += internalStorage.map(e -> e.extractEnergy(leftover, simulate)).orElse(0);
         }
         return extracted;
     }
@@ -68,37 +70,33 @@ public class AcceptorEnergyWrapper implements IEnergyStorage {
     @Override
     public int getEnergyStored() {
         return inputAcceptor.getEnergyProviders().stream().mapToInt((lazy) -> {
-            return lazy.map((energy) -> {
-                return energy.getEnergyStored();
-            }).orElse(0);
-        }).sum();
+            return lazy.map(IEnergyStorage::getEnergyStored).orElse(0);
+        }).sum() + 
+        internalStorage.map(IEnergyStorage::getEnergyStored).orElse(0);
     }
 
     @Override
     public int getMaxEnergyStored() {
         return inputAcceptor.getEnergyProviders().stream().mapToInt((lazy) -> {
-            return lazy.map((energy) -> {
-                return energy.getMaxEnergyStored();
-            }).orElse(0);
-        }).sum();
+            return lazy.map(IEnergyStorage::getMaxEnergyStored).orElse(0);
+        }).sum() + 
+        internalStorage.map(IEnergyStorage::getMaxEnergyStored).orElse(0);
     }
 
     @Override
     public boolean canExtract() {
-        return inputAcceptor.getEnergyProviders().stream().filter((lazy) -> {
-            return lazy.map((energy) -> {
-                return energy.canExtract();
-            }).orElse(false);
-        }).count() > 0;
+        return internalStorage.map(IEnergyStorage::canExtract).orElse(false) || 
+            inputAcceptor.getEnergyProviders().stream().filter((lazy) -> {
+                return lazy.map(IEnergyStorage::canExtract).orElse(false);
+            }).count() > 0;
     }
 
     @Override
     public boolean canReceive() {
-        return inputAcceptor.getEnergyProviders().stream().filter((lazy) -> {
-            return lazy.map((energy) -> {
-                return energy.canReceive();
-            }).orElse(false);
-        }).count() > 0;
+        return internalStorage.map(IEnergyStorage::canReceive).orElse(false) || 
+            inputAcceptor.getEnergyProviders().stream().filter((lazy) -> {
+                return lazy.map(IEnergyStorage::canReceive).orElse(false);
+            }).count() > 0;
     }
     
 }

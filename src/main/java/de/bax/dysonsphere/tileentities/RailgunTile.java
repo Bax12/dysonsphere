@@ -1,5 +1,10 @@
 package de.bax.dysonsphere.tileentities;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NotNull;
@@ -9,9 +14,12 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.energy.AcceptorEnergyWrapper;
 import de.bax.dysonsphere.capabilities.inputHatch.IInputAcceptor;
 import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
 import de.bax.dysonsphere.capabilities.inputHatch.InputAcceptorHandler;
 import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.compat.ad_astra.AdAstra;
+import de.bax.dysonsphere.recipes.ModRecipes;
+import de.bax.dysonsphere.recipes.OrbitalLaunchRecipe;
 import de.bax.dysonsphere.sounds.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,6 +33,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -82,8 +91,8 @@ public class RailgunTile extends BaseTile {
     public AcceptorEnergyWrapper acceptorStorage = new AcceptorEnergyWrapper(lazyEnergyStorage, acceptorHandler);
 
     protected int ticksElapsed = 0;
-    // protected int lastEnergy = 0;
     protected boolean dirty = false;
+    protected OrbitalLaunchRecipe currentRecipe;
 
     protected float launchMult = 1f;
 
@@ -115,28 +124,48 @@ public class RailgunTile extends BaseTile {
     
     public void tick() {
         if(!level.isClientSide){
-            // DysonSphere.LOGGER.info("Railgun E: {}", energyStorage.getEnergyStored());
-            // energyStorage.receiveEnergy(50000, false);
-
-            // DysonSphere.LOGGER.info("Railgun I: {}", inventory.getStackInSlot(0));
             if(ticksElapsed == 20){
                 acceptorHandler.markForRefresh();
             }
             acceptorHandler.tick();
             canAddToDS = true;
             ItemStack invStack = inventory.getStackInSlot(0);
-            if(energyStorage.getEnergyStored() >= getLaunchEnergy() && !invStack.isEmpty() && canSeeSky()){
-                level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
-                    if(ds.addDysonSpherePart(invStack.copyWithCount(1), false)){
-                        invStack.shrink(1);
-                        inventory.setStackInSlot(0, invStack);
-                        energyStorage.extractEnergy(getLaunchEnergy(), false);
-                        level.playSound(null, worldPosition, ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS);
-                    } else {
-                        //set unable to add flag
-                        canAddToDS = false;
-                    }
-                });
+
+            // if(energyStorage.getEnergyStored() >= getLaunchEnergy() && !invStack.isEmpty() && canSeeSky()){
+            //     level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
+            //         if(ds.addDysonSpherePart(invStack.copyWithCount(1), false)){
+            //             invStack.shrink(1);
+            //             inventory.setStackInSlot(0, invStack);
+            //             energyStorage.extractEnergy(getLaunchEnergy(), false);
+            //             level.playSound(null, worldPosition, ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS);
+            //         } else {
+            //             //set unable to add flag
+            //             canAddToDS = false;
+            //         }
+            //     });
+            // }
+            
+            if(currentRecipe != null && acceptorStorage.extractEnergy(getLaunchEnergy(), true) >= getLaunchEnergy() && canSeeSky()){
+                if(currentRecipe.matches(invStack, acceptorHandler.getItemInputs(ProviderType.PARALLEL), acceptorHandler.getFluidInputs())){
+                    level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
+                        if(ds.addDysonSpherePart(currentRecipe.launchStack(), false)){
+                            invStack.shrink(1);
+                            inventory.setStackInSlot(0, invStack);
+                            acceptorStorage.extractEnergy(getLaunchEnergy(), false);
+                            level.playSound(null, worldPosition, ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS);
+                        } else {
+                            // set unable to add flag
+                            canAddToDS = false;
+                        }
+                    });
+                } else {
+                    currentRecipe = null;
+                }
+            }
+            if(currentRecipe == null){
+                if(!invStack.isEmpty()){
+                    setCurrentRecipe();
+                }
             }
             
             if(ticksElapsed++ % 5 == 0 && dirty){
@@ -153,16 +182,26 @@ public class RailgunTile extends BaseTile {
                     sendSyncPackageToNearbyPlayers();
                 }
             }
-            // DysonSphere.LOGGER.debug("RailgunTile: tick: acceptorCount: {}", acceptorHandler.inputProviders.size());
-            // DysonSphere.LOGGER.debug("RailgunTile: tick: energyProviderCount: {}", acceptorHandler.getEnergyProviders().size());
-            // DysonSphere.LOGGER.debug("RailgunTile: tick: energyProvided: {}", acceptorHandler.getEnergyInput());
         } else {
             level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0);
+            if(!inventory.getStackInSlot(0).isEmpty()){
+                setCurrentRecipe();
+            } else {
+                currentRecipe = null;
+            }
             acceptorHandler.tick();
-            // DysonSphere.LOGGER.debug("RailgunTile: tick: acceptorCount: {}", acceptorHandler.inputProviders.size());
-            // DysonSphere.LOGGER.debug("RailgunTile: tick: energyProviderCount: {}", acceptorHandler.getEnergyProviders().size());
-            // DysonSphere.LOGGER.debug("RailgunTile: tick: energyProvided: {}", acceptorHandler.getEnergyInput());
         }
+    }
+
+    protected void setCurrentRecipe(){
+        List<OrbitalLaunchRecipe> recipes = new ArrayList<>(Objects.requireNonNull(getLevel()).getRecipeManager().getAllRecipesFor(ModRecipes.ORBITAL_LAUNCH_TYPE.get()));
+        ItemStack input = this.inventory.getStackInSlot(0);
+        List<ItemStack> extraInputs = acceptorHandler.getItemInputs(ProviderType.PARALLEL);
+        List<FluidStack> fluidInputs = acceptorHandler.getFluidInputs();
+        recipes.removeIf((recipe) -> {
+            return !recipe.matches(input, extraInputs, fluidInputs);
+        });
+        currentRecipe = recipes.size() >= 1 ? recipes.get(0) : null;
     }
 
     @Override
@@ -177,6 +216,10 @@ public class RailgunTile extends BaseTile {
 
     public boolean canAddToDS(){
         return canAddToDS;
+    }
+
+    public Optional<OrbitalLaunchRecipe> getRecipe(){
+        return currentRecipe != null ? Optional.of(currentRecipe) : Optional.empty();
     }
 
     @Override
@@ -234,7 +277,15 @@ public class RailgunTile extends BaseTile {
 
 
     public int getLaunchEnergy() {
-        return (int) (baseLaunchEnergy * launchMult);
+        return currentRecipe != null ? (int) (currentRecipe.baseEnergy() * launchMult) : 0;
+    }
+
+    public int getEnergyScaled(float scale){
+        int launch = getLaunchEnergy();
+        if(launch == 0){
+            return 0;
+        }
+        return (int) (energyStorage.getEnergyStored() * scale / Math.max(getLaunchEnergy(), 1));
     }
 
     public void onRemove() {

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonObject;
 
+import de.bax.dysonsphere.util.FluidIngredient;
 import de.bax.dysonsphere.util.SerializationUtil;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-public record HeatExchangerRecipe(ResourceLocation id, FluidStack input, FluidStack output, double minHeat, double heatConsumption, float heatScaling, float scalingFactor) implements Recipe<RecipeWrapper> {
+public record HeatExchangerRecipe(ResourceLocation id, FluidIngredient input, FluidStack output, double minHeat, double heatConsumption, float heatScaling, float scalingFactor) implements Recipe<RecipeWrapper> {
 
     @Override
     public boolean matches(@Nonnull RecipeWrapper pContainer, @Nonnull Level pLevel) {
@@ -26,7 +27,7 @@ public record HeatExchangerRecipe(ResourceLocation id, FluidStack input, FluidSt
     }
 
     public boolean matches(FluidStack fluid){
-        return input.isFluidEqual(fluid);
+        return input.test(fluid);
     }
 
     @Override
@@ -64,9 +65,9 @@ public record HeatExchangerRecipe(ResourceLocation id, FluidStack input, FluidSt
         return true;
     }
 
-    public FluidStack input() {
-        return input.copy();
-    }
+    // public FluidStack input() {
+    //     return input.copy();
+    // }
 
     public FluidStack output() {
         return output.copy();
@@ -76,7 +77,7 @@ public record HeatExchangerRecipe(ResourceLocation id, FluidStack input, FluidSt
 
         @Override
         public HeatExchangerRecipe fromJson(@Nonnull ResourceLocation pRecipeId, @Nonnull JsonObject pSerializedRecipe) {
-            FluidStack input = SerializationUtil.deserializeFluidStack(pSerializedRecipe.getAsJsonObject("input"));
+            FluidIngredient input = FluidIngredient.fromJson(pSerializedRecipe.getAsJsonObject("input"));
             FluidStack output = SerializationUtil.deserializeFluidStack(pSerializedRecipe.getAsJsonObject("output"));
             double minHeat = pSerializedRecipe.get("minHeat").getAsDouble();
             double heatConsumption = pSerializedRecipe.get("heatConsumption").getAsDouble();
@@ -89,7 +90,7 @@ public record HeatExchangerRecipe(ResourceLocation id, FluidStack input, FluidSt
 
         @Override
         public @Nullable HeatExchangerRecipe fromNetwork(@Nonnull ResourceLocation pRecipeId, @Nonnull FriendlyByteBuf pBuffer) {
-            FluidStack input = FluidStack.readFromPacket(pBuffer);
+            FluidIngredient input = FluidIngredient.readFromPacket(pBuffer);
             FluidStack output = FluidStack.readFromPacket(pBuffer);
             double minHeat = pBuffer.readDouble();
             double heatConsumption = pBuffer.readDouble();

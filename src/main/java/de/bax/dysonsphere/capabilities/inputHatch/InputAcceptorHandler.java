@@ -1,5 +1,6 @@
 package de.bax.dysonsphere.capabilities.inputHatch;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

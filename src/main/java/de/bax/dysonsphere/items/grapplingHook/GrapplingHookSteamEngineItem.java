@@ -11,7 +11,9 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.grapplingHook.IGrapplingHookEngine;
 import de.bax.dysonsphere.entities.GrapplingHookEntity;
 import de.bax.dysonsphere.fluids.ModFluids;
+import de.bax.dysonsphere.tags.DSTags;
 import de.bax.dysonsphere.util.AssetUtil;
+import de.bax.dysonsphere.util.FluidIngredient;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -48,6 +50,8 @@ public class GrapplingHookSteamEngineItem extends Item {
         return 1;
     }
 
+    protected static final FluidIngredient tankWhitelist = FluidIngredient.of(DSTags.fluidSteam, 1);
+
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
                 return new ICapabilityProvider() {
@@ -57,7 +61,8 @@ public class GrapplingHookSteamEngineItem extends Item {
                     return LazyOptional.of(() -> new FluidHandlerItemStack(stack, CAPACITY){
                         @Override
                         public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-                            return stack.isFluidEqual(new FluidStack(ModFluids.STEAM.get(), 5));
+                            // return stack.isFluidEqual(new FluidStack(ModFluids.STEAM.get(), 5));
+                            return tankWhitelist.test(stack);
                         }
                         public boolean canFillFluidType(FluidStack fluid) {
                             return isFluidValid(0, fluid);

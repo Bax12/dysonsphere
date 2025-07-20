@@ -206,8 +206,8 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
                         }
                     }
                     bleedEnergy();
-                    heatHandler.splitShare();
-                }                
+                }   
+                heatHandler.splitShare();             
                 acceptorHandler.tick();
                 if(dirty){
                     dirty = false;
@@ -236,8 +236,10 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
 
     protected void setCurrentRecipe(){
         List<LaserCraftingRecipe> recipes = new ArrayList<>(level.getRecipeManager().getAllRecipesFor(ModRecipes.LASER_CRAFTING_TYPE.get()));
+        ItemStack input = this.input.getStackInSlot(0);
+        List<ItemStack> extraInputs = acceptorHandler.getItemInputs(ProviderType.PARALLEL);
         recipes.removeIf((recipe) -> {
-            return !recipe.matches(this.input.getStackInSlot(0), acceptorHandler.getItemInputs(ProviderType.PARALLEL));
+            return !recipe.matches(input, extraInputs);
         });
         currentRecipe = recipes.size() >= 1 ? recipes.get(0) : null; //ambiguous recipe ==> whatever recipe
     }

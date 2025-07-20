@@ -12,6 +12,7 @@ public class DSTags {
 
     public static final TagKey<Fluid> fluidSteam = TagKey.create(Registries.FLUID, forgeLoc("steam"));
     public static final TagKey<Fluid> fluidHelium = TagKey.create(Registries.FLUID, forgeLoc("helium"));
+    public static final TagKey<Fluid> fluidGaseous = TagKey.create(Registries.FLUID, forgeLoc("gaseous"));
 
     public static final TagKey<Item> itemCoil = TagKey.create(Registries.ITEM, forgeLoc("coils"));
     public static final TagKey<Item> itemCoilCopper = TagKey.create(Registries.ITEM, forgeLoc("coils/copper"));

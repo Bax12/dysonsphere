@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import de.bax.dysonsphere.util.FluidIngredient;
 import de.bax.dysonsphere.util.SerializationUtil;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -25,10 +26,36 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-public record OrbitalLaunchRecipe(ResourceLocation id, Ingredient input, ItemStack launchStack, List<Ingredient> extraInputs, List<FluidStack> fluidInputs, int baseEnergy) implements Recipe<RecipeWrapper> {
+public record OrbitalLaunchRecipe(ResourceLocation id, Ingredient input, ItemStack launchStack, List<Ingredient> extraInputs, List<FluidIngredient> fluidInputs, int baseEnergy) implements Recipe<RecipeWrapper> {
 
     @Override
     public boolean matches(@Nonnull RecipeWrapper pContainer, @Nonnull Level pLevel) {
+        return false;
+    }
+
+    public boolean matches(ItemStack input, List<ItemStack> extraInputs, List<FluidStack> fluidInputs){
+        if(this.input().test(input)){
+            extraInputs = new ArrayList<>(extraInputs);
+            for(Ingredient extraIngredient : this.extraInputs()){
+                ItemStack stack = extraInputs.stream().filter(extraIngredient).findFirst().orElse(ItemStack.EMPTY);
+                if(stack.isEmpty()){
+                    return false;
+                }
+                extraInputs.remove(stack);
+            }
+
+            fluidInputs = new ArrayList<>(fluidInputs);
+            for(FluidIngredient fluidInput : this.fluidInputs()){
+                FluidStack fluidStack = fluidInputs.stream().filter((fluid) -> {
+                    return fluidInput.test(fluid);
+                }).findFirst().orElse(FluidStack.EMPTY);
+                if(fluidStack.isEmpty()){
+                    return false;
+                }
+                fluidInputs.remove(fluidStack);
+            }
+            return true;
+        }
         return false;
     }
 
@@ -62,6 +89,10 @@ public record OrbitalLaunchRecipe(ResourceLocation id, Ingredient input, ItemSta
         return ModRecipes.ORBITAL_LAUNCH_TYPE.get();
     }
 
+    public ItemStack launchStack(){
+        return launchStack.copy();
+    }
+
     public static class Serializer implements RecipeSerializer<OrbitalLaunchRecipe> {
 
 		@Override
@@ -76,11 +107,11 @@ public record OrbitalLaunchRecipe(ResourceLocation id, Ingredient input, ItemSta
                     extraInputs.add(Ingredient.fromJson(element));
                 });
             }
-            List<FluidStack> fluidInputs = new ArrayList<FluidStack>();
+            List<FluidIngredient> fluidInputs = new ArrayList<FluidIngredient>();
             JsonArray fluidJson = pSerializedRecipe.get("fluidInputs").getAsJsonArray();
             if(fluidJson != null){
                 fluidJson.forEach((element) -> {
-                    fluidInputs.add(SerializationUtil.deserializeFluidStack(element.getAsJsonObject()));
+                    fluidInputs.add(FluidIngredient.fromJson(element.getAsJsonObject()));
                 });
             }
             return new OrbitalLaunchRecipe(pRecipeId, ingredient, launchStack, extraInputs, fluidInputs, baseEnergy);
@@ -97,9 +128,9 @@ public record OrbitalLaunchRecipe(ResourceLocation id, Ingredient input, ItemSta
                 extraInputs.add(Ingredient.fromNetwork(pBuffer));
             }
             int fluidCount = pBuffer.readInt();
-            List<FluidStack> fluidInputs = new ArrayList<FluidStack>();
+            List<FluidIngredient> fluidInputs = new ArrayList<FluidIngredient>();
             for (int i = 0; i < fluidCount; i++) {
-                fluidInputs.add(FluidStack.readFromPacket(pBuffer));
+                fluidInputs.add(FluidIngredient.readFromPacket(pBuffer));
             }
             return new OrbitalLaunchRecipe(pRecipeId, ingredient, launchStack, extraInputs, fluidInputs, baseEnergy);
 		}
@@ -114,7 +145,7 @@ public record OrbitalLaunchRecipe(ResourceLocation id, Ingredient input, ItemSta
                 extra.toNetwork(pBuffer);
             }
             pBuffer.writeInt(pRecipe.fluidInputs().size());
-            for(FluidStack fluid : pRecipe.fluidInputs()){
+            for(FluidIngredient fluid : pRecipe.fluidInputs()){
                 fluid.writeToPacket(pBuffer);
             }
 		}
