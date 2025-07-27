@@ -93,6 +93,13 @@ public record OrbitalLaunchRecipe(ResourceLocation id, Ingredient input, ItemSta
         return launchStack.copy();
     }
 
+    public List<Ingredient> allInputs(){
+        ArrayList<Ingredient> list = new ArrayList<>();
+        list.add(input);
+        list.addAll(extraInputs);
+        return list;
+    }
+
     public static class Serializer implements RecipeSerializer<OrbitalLaunchRecipe> {
 
 		@Override

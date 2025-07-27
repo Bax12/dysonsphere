@@ -27,6 +27,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -145,13 +146,17 @@ public class RailgunTile extends BaseTile {
             //     });
             // }
             
-            if(currentRecipe != null && acceptorStorage.extractEnergy(getLaunchEnergy(), true) >= getLaunchEnergy() && canSeeSky()){
-                if(currentRecipe.matches(invStack, acceptorHandler.getItemInputs(ProviderType.PARALLEL), acceptorHandler.getFluidInputs())){
+            if(currentRecipe != null  && canSeeSky()){
+                if(currentRecipe.matches(invStack, acceptorHandler.getItemInputs(ProviderType.PARALLEL), acceptorHandler.getFluidInputs()) && acceptorStorage.extractEnergy(getLaunchEnergy(), true) >= getLaunchEnergy()){
                     level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
                         if(ds.addDysonSpherePart(currentRecipe.launchStack(), false)){
-                            invStack.shrink(1);
-                            inventory.setStackInSlot(0, invStack);
+                            List<Ingredient> ingredients = acceptorHandler.consumeItemInputs(currentRecipe.allInputs());
+                            if(ingredients.contains(currentRecipe.input())){
+                                invStack.shrink(1);
+                                inventory.setStackInSlot(0, invStack);
+                            }
                             acceptorStorage.extractEnergy(getLaunchEnergy(), false);
+                            acceptorHandler.consumeFluidInputs(currentRecipe.fluidInputs()); //we checked the recipe and have no internal tank. there should never be a returned fluid here.
                             level.playSound(null, worldPosition, ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS);
                         } else {
                             // set unable to add flag

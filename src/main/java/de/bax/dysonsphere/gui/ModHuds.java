@@ -21,7 +21,9 @@ import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.keybinds.ModKeyBinds;
 import de.bax.dysonsphere.network.LaserPatternActivatedPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
+import de.bax.dysonsphere.tileentities.LaserControllerTile;
 import de.bax.dysonsphere.tileentities.LaserCrafterTile;
+import de.bax.dysonsphere.tileentities.ModTiles;
 import de.bax.dysonsphere.util.AssetUtil;
 import de.bax.dysonsphere.util.InventoryUtil;
 import net.minecraft.ChatFormatting;
@@ -45,9 +47,9 @@ public class ModHuds {
 
 
     public static final IGuiOverlay ORBITAL_LASER_HUD = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        if(DSConfig.GUI_ORBITAL_LASER_ENABLED_VALUE && InventoryUtil.isInExtendedPlayerInventory(Minecraft.getInstance().player, (stack) -> {
+        if(DSConfig.GUI_ORBITAL_LASER_ENABLED_VALUE && (InventoryUtil.isInExtendedPlayerInventory(Minecraft.getInstance().player, (stack) -> {
             return stack.is(ModItems.LASER_CONTROLLER.get()) || stack.is(ModItems.TARGET_DESIGNATOR.get());
-        })){
+        }) || (Minecraft.getInstance().hitResult instanceof BlockHitResult hit && Minecraft.getInstance().level.getBlockEntity(hit.getBlockPos()) instanceof LaserControllerTile))){
             renderOrbitalLaserHUD(gui, guiGraphics, partialTick, screenWidth, screenHeight);
         }
     };

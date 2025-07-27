@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.recipes.ModRecipes;
+import de.bax.dysonsphere.tags.DSTags;
 import de.bax.dysonsphere.util.FluidIngredient;
 import de.bax.dysonsphere.util.SerializationUtil;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -32,6 +33,15 @@ public class OrbitalLaunchRecipeGenerator {
     public static void buildRecipes(Consumer<FinishedRecipe> pWriter){
         RecipeBuilder.of(ModItems.CAPSULE_SOLAR_0).baseEnergy(90_000).save(pWriter);
         RecipeBuilder.of(ModItems.CAPSULE_LASER_0).baseEnergy(110_000).save(pWriter);
+        RecipeBuilder.of(ModItems.CAPSULE_STRUCTURE_0).baseEnergy(160_000).save(pWriter);
+
+        RecipeBuilder.of(ModItems.CAPSULE_SOLAR_1).baseEnergy(900_000).save(pWriter);
+        RecipeBuilder.of(ModItems.CAPSULE_LASER_1).baseEnergy(1_100_000).save(pWriter);
+        RecipeBuilder.of(ModItems.CAPSULE_STRUCTURE_1).baseEnergy(1_600_000).save(pWriter);
+
+        RecipeBuilder.of(ModItems.CAPSULE_SOLAR_1).baseEnergy(90_000).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).save(pWriter, "capsule_solar_1_helium");
+        RecipeBuilder.of(ModItems.CAPSULE_LASER_1).baseEnergy(110_000).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).save(pWriter, "capsule_laser_1_helium");
+        RecipeBuilder.of(ModItems.CAPSULE_STRUCTURE_1).baseEnergy(160_000).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).save(pWriter, "capsule_structure_1_helium");
     }
 
     public static class RecipeBuilder {
@@ -89,6 +99,10 @@ public class OrbitalLaunchRecipeGenerator {
         }
 
         public void save(Consumer<FinishedRecipe> consumer, ResourceLocation location){
+            this.save(consumer, location.getPath());
+        }
+
+        public void save(Consumer<FinishedRecipe> consumer, String location){
             if(input == null){
                 input = Ingredient.of(launchStack);
             }

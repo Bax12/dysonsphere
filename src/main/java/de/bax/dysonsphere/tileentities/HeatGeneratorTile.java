@@ -35,7 +35,7 @@ public class HeatGeneratorTile extends BaseTile implements IHeatTile {
         // };
 
         public double getThermalConductivity() {
-            return 0.25d;
+            return 0.025d;
         };
 
         public double extractHeat(double maxExtract, boolean simulate) {

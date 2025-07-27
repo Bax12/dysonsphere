@@ -200,7 +200,7 @@ public abstract class InputHatchTile extends BaseTile {
         if(cap.equals(DSCapabilities.INPUT_PROVIDER)){
             return providerHandler.lazyProvider.cast();
         }
-        return LazyOptional.empty();
+        return super.getCapability(cap, side);
     }
 
     @Override
@@ -483,6 +483,8 @@ public abstract class InputHatchTile extends BaseTile {
     }
 
     public static class Fluid extends InputHatchTile {
+
+        //todo: add bucket r-click interaction and fix filling from internal item duplication...
 
         public static final int SLOTS = 2;
         public static final int SLOT_INPUT = 0;

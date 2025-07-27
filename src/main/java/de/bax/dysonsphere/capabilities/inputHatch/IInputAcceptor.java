@@ -2,6 +2,7 @@ package de.bax.dysonsphere.capabilities.inputHatch;
 
 import java.util.List;
 
+import de.bax.dysonsphere.util.FluidIngredient;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -37,7 +38,7 @@ public interface IInputAcceptor {
 
     public List<FluidStack> getFluidInputs();
 
-    public List<FluidStack> consumeFluidInputs(List<FluidStack> fluids);
+    public List<FluidIngredient> consumeFluidInputs(List<FluidIngredient> fluids);
 
     public void addInputProvider(LazyOptional<IInputProvider> provider);
 

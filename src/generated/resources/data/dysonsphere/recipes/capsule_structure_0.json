@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:light_gray_concrete"
+    },
+    "E": {
+      "item": "dysonsphere:capsule_empty"
+    },
+    "S": {
+      "item": "dysonsphere:component_smart_alloy"
+    }
+  },
+  "pattern": [
+    "SCS",
+    "SES",
+    "SCS"
+  ],
+  "result": {
+    "item": "dysonsphere:capsule_structure_0"
+  },
+  "show_notification": true
+}

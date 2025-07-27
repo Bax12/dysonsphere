@@ -5,6 +5,7 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.compat.IModCompat;
+import de.bax.dysonsphere.tileentities.InputHatchTile;
 import mekanism.api.heat.IHeatHandler;
 import mekanism.api.lasers.ILaserReceptor;
 import net.minecraft.resources.ResourceLocation;
@@ -41,9 +42,10 @@ public class Mekanism implements IModCompat {
             event.addListener(() -> {
                 event.getObject().getCapability(LASER_RECEPTOR).invalidate();
             });
-        } /*else if(event.getObject() instanceof IMekanismHeatHandler heat){ //Currently I see no need for this
+        } 
+        /*if(event.getObject() instanceof IMekanismHeatHandler heat){ //Currently I see no need for this
 
-        } */else if(event.getObject() instanceof IHeatTile heat){
+        } else*/ if(event.getObject() instanceof IHeatTile heat){
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "ds2mek_heat_handler"), new DS2MekHeatHandler(heat));
             event.addListener(() -> {
                 event.getObject().getCapability(HEAT_HANDLER).invalidate();

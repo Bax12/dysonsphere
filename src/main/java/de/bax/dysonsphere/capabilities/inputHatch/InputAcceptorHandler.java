@@ -1,6 +1,5 @@
 package de.bax.dysonsphere.capabilities.inputHatch;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -9,11 +8,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableSet;
-
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
+import de.bax.dysonsphere.util.FluidIngredient;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -25,6 +22,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<CompoundTag> {
 
@@ -81,6 +79,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         return stacks;
     }
 
+    //return remainder of input list, that was not consumed from input hatches.
     public List<Ingredient> consumeItemInputs(List<Ingredient> ingredient){
         List<Ingredient> mutableIngredients = new ArrayList<>(ingredient);
         consumeItemInputType(mutableIngredients, ProviderType.SERIAL);
@@ -168,8 +167,26 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
     }
 
     @Override
-    public List<FluidStack> consumeFluidInputs(List<FluidStack> fluids) {
-        return null;
+    public List<FluidIngredient> consumeFluidInputs(List<FluidIngredient> fluids) {
+        List<FluidIngredient> mutableIngredients = new ArrayList<>(fluids);
+        getProviders(ProviderType.FLUID).stream().forEach((lazyProvider) -> {
+            lazyProvider.ifPresent((provider) -> {
+                 if(provider.getAcceptor().map((acceptor) -> { //prevent multiple acceptors from using the same input
+                    return acceptor.equals(this);
+                }).orElse(false)){
+                    provider.getFluid().ifPresent((fluid) -> {
+                        mutableIngredients.removeIf((ingredient) -> {
+                            if(ingredient.test(fluid.drain(ingredient.getAmount(), FluidAction.SIMULATE))){
+                                fluid.drain(ingredient.getAmount(), FluidAction.EXECUTE);
+                                return true;
+                            }
+                            return false;
+                        });
+                    });
+                }
+            });
+        });
+        return mutableIngredients;
     }
 
     public void updateNeighbors(Level level, BlockPos pos){

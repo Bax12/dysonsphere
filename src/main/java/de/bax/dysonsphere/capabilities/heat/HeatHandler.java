@@ -105,7 +105,7 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
     }
 
     public double getThermalConductivity(){
-        return 1;
+        return 0.1;
     }
 
     public void splitShare(){

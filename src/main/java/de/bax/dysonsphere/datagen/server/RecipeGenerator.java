@@ -422,6 +422,15 @@ public class RecipeGenerator extends RecipeProvider {
         })
         .build(consumer, ModItems.CAPSULE_LASER_0.getId());
 
+        Recipe.shaped(ModItems.CAPSULE_STRUCTURE_0.get())
+            .pattern("SCS")
+            .pattern("SES")
+            .pattern("SCS")
+            .define('S', ModItems.COMPONENT_SMART_ALLOY.get())
+            .define('C', Items.LIGHT_GRAY_CONCRETE)
+            .define('E', ModItems.CAPSULE_EMPTY.get())
+            .save(consumer);
+
         Recipe.shaped(ModItems.CONSTRUCT_ENDER.get())
             .pattern("ECE")
             .pattern("CEC")
