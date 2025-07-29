@@ -19,6 +19,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
@@ -42,6 +44,8 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.network.NetworkHooks;
 
 public class InputHatchBlock extends Block implements EntityBlock, ITintableTileBlock {
@@ -157,6 +161,27 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
                 new InputHatchEnergyContainer(containerId, playerInventory, energy), Component.translatable("container.dysonsphere.input_hatch_energy" + (type.isHeatConducting() ? "_heat" : ""))), pPos);
                 return InteractionResult.CONSUME;
             } else  if(tile instanceof InputHatchTile.Fluid fluid){
+
+                if(pPlayer.getItemInHand(pHand).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((fluidItem) -> {
+                    int amount = fluid.fluidStorage.fill(fluidItem.drain(Integer.MAX_VALUE, FluidAction.SIMULATE), FluidAction.SIMULATE);
+                    if(amount > 0){
+                        fluid.fluidStorage.fill(fluidItem.drain(amount, FluidAction.EXECUTE), FluidAction.EXECUTE);
+                        pPlayer.setItemInHand(pHand, fluidItem.getContainer());
+                        return true;
+                    } else {
+                        amount = fluidItem.fill(fluid.fluidStorage.drain(Integer.MAX_VALUE, FluidAction.SIMULATE), FluidAction.SIMULATE);
+                        if(amount > 0){
+                            fluidItem.fill(fluid.fluidStorage.drain(amount, FluidAction.EXECUTE), FluidAction.EXECUTE);
+                            pPlayer.setItemInHand(pHand, fluidItem.getContainer());
+                            return true;
+                        }
+                    }
+                    return false;
+                }).orElse(false)){
+                    pLevel.playSound(null, pPos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 0.6f, 1f);
+                    return InteractionResult.SUCCESS;
+                }
+
                 NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvider) ->
                 new InputHatchFluidContainer(containerId, playerInventory, fluid), Component.translatable("container.dysonsphere.input_hatch_fluid" + (type.isHeatConducting() ? "_heat" : ""))), pPos);
                 return InteractionResult.CONSUME;

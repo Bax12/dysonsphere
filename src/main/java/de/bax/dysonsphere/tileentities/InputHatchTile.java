@@ -484,8 +484,6 @@ public abstract class InputHatchTile extends BaseTile {
 
     public static class Fluid extends InputHatchTile {
 
-        //todo: add bucket r-click interaction and fix filling from internal item duplication...
-
         public static final int SLOTS = 2;
         public static final int SLOT_INPUT = 0;
         public static final int SLOT_OUTPUT = 1;
@@ -565,18 +563,22 @@ public abstract class InputHatchTile extends BaseTile {
                     if(fluidStorage.isEmpty()){
                         if(fluidStorage.fill(item.drain(fluidStorage.getCapacity(), FluidAction.SIMULATE), FluidAction.SIMULATE) > 0){
                             fluidStorage.fill(item.drain(fluidStorage.getCapacity(), FluidAction.EXECUTE), FluidAction.EXECUTE);
+                            input.setStackInSlot(SLOT_INPUT, item.getContainer());
                         }
                     } else {
                         if(fluidStorage.fill(item.drain(new FluidStack(fluidStorage.getFluid(), fluidStorage.getCapacity()-fluidStorage.getFluidAmount()), FluidAction.SIMULATE), FluidAction.SIMULATE) > 0){
                             fluidStorage.fill(item.drain(new FluidStack(fluidStorage.getFluid(), fluidStorage.getCapacity()-fluidStorage.getFluidAmount()), FluidAction.EXECUTE), FluidAction.EXECUTE);
+                            input.setStackInSlot(SLOT_INPUT, item.getContainer());
                         }
                     }
                 });
             }
             if(fluidStorage.getFluidAmount() > 0){
                 input.getStackInSlot(SLOT_OUTPUT).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent((item) -> {
-                    if(item.fill(fluidStorage.drain(Integer.MAX_VALUE, FluidAction.SIMULATE), FluidAction.SIMULATE) > 0){
-                        item.fill(fluidStorage.drain(Integer.MAX_VALUE, FluidAction.EXECUTE), FluidAction.EXECUTE);
+                    int amount = item.fill(fluidStorage.drain(Integer.MAX_VALUE, FluidAction.SIMULATE), FluidAction.SIMULATE);
+                    if(amount > 0){
+                        item.fill(fluidStorage.drain(amount, FluidAction.EXECUTE), FluidAction.EXECUTE);
+                        input.setStackInSlot(SLOT_OUTPUT, item.getContainer());
                     }
                 });
             }
@@ -584,9 +586,11 @@ public abstract class InputHatchTile extends BaseTile {
 
         @Override
         protected boolean allowItem(int slot, ItemStack stack) {
+            stack = stack.copyWithCount(getSlotSize(slot)); //SlotItemHandler thinks it needs to test insert with max stack size, breaking the fill logic of buckets. Stupid hack but it works 
             return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((fluid) -> {
                 return (slot == SLOT_INPUT && !fluid.drain(Integer.MAX_VALUE, FluidAction.SIMULATE).isEmpty())
                         || (slot == SLOT_OUTPUT && (fluid.fill(fluidStorage.getFluid(), FluidAction.SIMULATE) > 0));
+                        //the output slot cannot be filled when the internal tank is empty. Don't think thats an issue.
             }).orElse(false);
         }
         

@@ -51,7 +51,7 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     public FluidTankCustom inputTank = new FluidTankCustom(fluidCapacity){
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return stack.isFluidEqual(new FluidStack(Fluids.WATER, 5));
+            return stack.isFluidEqual(new FluidStack(Fluids.WATER, 5)); //TODO adapt to recipes 
         }
         protected void onContentsChanged() {
             shouldUpdate = true;
@@ -65,7 +65,7 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     public FluidTankCustom outputTank = new FluidTankCustom(fluidCapacity){
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return stack.isFluidEqual(new FluidStack(ModFluids.STEAM.get(), 5));
+            return stack.isFluidEqual(new FluidStack(ModFluids.STEAM.get(), 5)); //TODO adapt to recipes 
         }
         protected void onContentsChanged() {
             shouldUpdate = true;
@@ -87,12 +87,12 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
             if(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()){
                 if(slot == slotInput){
                     return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((handler) -> {
-                        return handler.drain(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), FluidAction.SIMULATE).getAmount() > 0;
+                        return handler.drain(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), FluidAction.SIMULATE).getAmount() > 0; //TODO adapt to recipes 
                     }).get();
                 } else if (slot == slotOutput){
                     ItemStack copyStack = stack.copyWithCount(1);
                     return copyStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((handler) -> {
-                        return handler.fill(new FluidStack(ModFluids.STEAM.get(), Integer.MAX_VALUE), FluidAction.SIMULATE) > 0;
+                        return handler.fill(new FluidStack(ModFluids.STEAM.get(), Integer.MAX_VALUE), FluidAction.SIMULATE) > 0; //TODO adapt to recipes 
                     }).get();
                 }
             }
