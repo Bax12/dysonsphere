@@ -1,12 +1,15 @@
 package de.bax.dysonsphere.tileentities;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import com.google.common.collect.ImmutableList;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.fluid.FluidHandlerMap;
@@ -17,6 +20,7 @@ import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.recipes.HeatExchangerRecipe;
 import de.bax.dysonsphere.recipes.ModRecipes;
+import de.bax.dysonsphere.util.FluidIngredient;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -47,11 +51,14 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     public static final int slotInput = 0;
     public static final int slotOutput = 1;
 
+    public static List<FluidIngredient> inputs;
+
     public HeatHandler heatHandler = new HeatHandler(maxHeat);
     public FluidTankCustom inputTank = new FluidTankCustom(fluidCapacity){
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return stack.isFluidEqual(new FluidStack(Fluids.WATER, 5)); //TODO adapt to recipes 
+            // return stack.isFluidEqual(new FluidStack(Fluids.WATER, 5)); //TODO adapt to recipes 
+            return inputs.stream().anyMatch(i -> i.test(stack));
         }
         protected void onContentsChanged() {
             shouldUpdate = true;
@@ -65,7 +72,8 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     public FluidTankCustom outputTank = new FluidTankCustom(fluidCapacity){
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return stack.isFluidEqual(new FluidStack(ModFluids.STEAM.get(), 5)); //TODO adapt to recipes 
+            // return stack.isFluidEqual(new FluidStack(ModFluids.STEAM.get(), 5)); //TODO adapt to recipes 
+            return true; //cannot be filled anyways.
         }
         protected void onContentsChanged() {
             shouldUpdate = true;
@@ -87,12 +95,12 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
             if(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()){
                 if(slot == slotInput){
                     return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((handler) -> {
-                        return handler.drain(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), FluidAction.SIMULATE).getAmount() > 0; //TODO adapt to recipes 
+                        return handler.drain(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), FluidAction.SIMULATE).getAmount() > 0;
                     }).get();
                 } else if (slot == slotOutput){
                     ItemStack copyStack = stack.copyWithCount(1);
                     return copyStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((handler) -> {
-                        return handler.fill(new FluidStack(ModFluids.STEAM.get(), Integer.MAX_VALUE), FluidAction.SIMULATE) > 0; //TODO adapt to recipes 
+                        return handler.fill(new FluidStack(outputTank.getFluid().getFluid(), Integer.MAX_VALUE), FluidAction.SIMULATE) > 0; 
                     }).get();
                 }
             }
@@ -174,7 +182,7 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(@Nonnull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("Heat",heatHandler.serializeNBT());
         CompoundTag nbt = new CompoundTag();
@@ -194,6 +202,9 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     @Override
     public void onLoad() {
         super.onLoad();
+        if(inputs == null){
+            inputs = level.getRecipeManager().getAllRecipesFor(ModRecipes.HEAT_EXCHANGER_TYPE.get()).stream().map(r -> r.input()).toList();
+        }
         Arrays.fill(exchangerNeighbors, Optional.empty());
         Arrays.fill(fluidNeighbors, LazyOptional.empty());
         updateNeighbors();
