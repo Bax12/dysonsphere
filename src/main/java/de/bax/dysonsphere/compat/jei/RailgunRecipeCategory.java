@@ -59,7 +59,7 @@ public class RailgunRecipeCategory implements IRecipeCategory<OrbitalLaunchRecip
     public List<Component> getTooltipStrings(@Nonnull OrbitalLaunchRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if(mouseX >= 5 && mouseX <= 14 && mouseY >= 5 && mouseY <= 69){
             // NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
-            return List.of(Component.translatable("tooltip.dysonsphere.railgun_launch_energy", AssetUtil.FLOAT_FORMAT.format(recipe.baseEnergy())));
+            return List.of(Component.translatable("tooltip.dysonsphere.railgun_base_launch_energy", AssetUtil.FLOAT_FORMAT.format(recipe.baseEnergy())));
         }
         return List.of();
     }

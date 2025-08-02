@@ -115,6 +115,8 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.number_input.minus_button","- %s");
         
         add("tooltip.dysonsphere.railgun_launch_energy", "Required Launch Energy: %s RF");
+        add("tooltip.dysonsphere.railgun_base_launch_energy", "Required Base Launch Energy: %s RF");
+        add("tooltip.dysonsphere.railgun_launch_mult", "Local Launch Multiplier: x%s");
         add("tooltip.dysonsphere.ds_energy_receiver_energy", "To Receive:");
         add("tooltip.dysonsphere.ds_energy_receiver_nosky","Cannot see the sky!");
         add("tooltip.dysonsphere.ds_energy_receiver_wanted", "Wanted Heat Input");

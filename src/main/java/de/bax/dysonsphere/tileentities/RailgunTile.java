@@ -285,6 +285,10 @@ public class RailgunTile extends BaseTile {
         return currentRecipe != null ? (int) (currentRecipe.baseEnergy() * launchMult) : 0;
     }
 
+    public float getLaunchMult() {
+        return launchMult;
+    }
+
     public int getEnergyScaled(float scale){
         int launch = getLaunchEnergy();
         if(launch == 0){

@@ -6,11 +6,14 @@ import javax.annotation.Nonnull;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
+import de.bax.dysonsphere.gui.HeatExchangerGui;
+import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.recipes.ModRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
+import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -62,6 +65,13 @@ public class DSJeiPlugin implements IModPlugin {
         registration.addRecipes(RAILGUN.getRecipeType(), recipeManager.getAllRecipesFor(ModRecipes.ORBITAL_LAUNCH_TYPE.get()));
         registration.addRecipes(HEAT_EXCHANGER.getRecipeType(), recipeManager.getAllRecipesFor(ModRecipes.HEAT_EXCHANGER_TYPE.get()));
         registration.addRecipes(LASER_CRAFTER.getRecipeType(), recipeManager.getAllRecipesFor(ModRecipes.LASER_CRAFTING_TYPE.get()));
+    }
+
+    @Override
+    public void registerGuiHandlers(@Nonnull IGuiHandlerRegistration registration) {
+        registration.addRecipeClickArea(RailgunGui.class, 78, 21, 22, 39, RAILGUN.getRecipeType());
+        registration.addRecipeClickArea(HeatExchangerGui.class, 36, 39, 41, 15, HEAT_EXCHANGER.getRecipeType());
+        registration.addRecipeClickArea(HeatExchangerGui.class, 98, 39, 42, 15, HEAT_EXCHANGER.getRecipeType());
     }
     
 }

@@ -78,6 +78,7 @@ public class RailgunGui extends BaseGui<RailgunContainer> {
             protected void addTooltip(List<Component> tooltip) {
                 super.addTooltip(tooltip);
                 tooltip.add(Component.translatable("tooltip.dysonsphere.railgun_launch_energy", AssetUtil.FLOAT_FORMAT.format(tile.getLaunchEnergy())));
+                tooltip.add(Component.translatable("tooltip.dysonsphere.railgun_launch_mult", AssetUtil.FLOAT_FORMAT.format(tile.getLaunchMult())));
             }
             @Override
             public void draw(GuiGraphics guiGraphics) {
@@ -125,7 +126,7 @@ public class RailgunGui extends BaseGui<RailgunContainer> {
         // if(energyInput != null){
         //     energyInput.drawOverlay(guiGraphics, mouseX, mouseY);
         // }
-        if(mouseX >= this.leftPos + 77 && mouseY >= this.topPos + 2 && mouseX < this.leftPos + 100 && mouseY < this.topPos + 50){
+        if(mouseX >= this.leftPos + 77 && mouseY >= this.topPos + 2 && mouseX < this.leftPos + 100 && mouseY < this.topPos + 20){
             List<Component> tooltip = new ArrayList<>();
             if((!tile.canSeeSky())){
                 tooltip.add(Component.translatable("tooltip.dysonsphere.railgun_nosky"));

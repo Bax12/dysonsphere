@@ -18,7 +18,12 @@ public class HeatPipeTile extends BaseTile implements IHeatTile{
 
     public static double maxHeat = 1950;
 
-    public HeatHandler heatHandler = new HeatHandler(maxHeat);
+    public HeatHandler heatHandler = new HeatHandler(maxHeat){
+        @Override
+        public double getThermalConductivity() {
+            return 0.95d;
+        }
+    };
 
     protected LazyOptional<IHeatContainer> lazyHeatContainer = LazyOptional.of(() -> heatHandler);
 
