@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import de.bax.dysonsphere.containers.RailgunContainer;
+import de.bax.dysonsphere.gui.components.AcceptorFluidDisplay;
 import de.bax.dysonsphere.gui.components.EnergyDisplay;
 import de.bax.dysonsphere.tileentities.RailgunTile;
 import de.bax.dysonsphere.util.AssetUtil;
@@ -22,7 +23,7 @@ public class RailgunGui extends BaseGui<RailgunContainer> {
     public static final ResourceLocation RES_LOC = AssetUtil.getGuiLocation("gui_railgun");
     private final RailgunTile tile;
     private EnergyDisplay energy;
-    // private EnergyDisplay energyInput;
+    private AcceptorFluidDisplay fluid;
     private int ticksPassed = 0;
 
     public RailgunGui(RailgunContainer container, Inventory inventory, Component pTitle) {
@@ -90,6 +91,8 @@ public class RailgunGui extends BaseGui<RailgunContainer> {
                 
             }
         };
+
+        this.fluid = new AcceptorFluidDisplay(this.leftPos + 144, this.topPos + 5, tile.acceptorHandler);
         
     }
 
@@ -114,18 +117,14 @@ public class RailgunGui extends BaseGui<RailgunContainer> {
         }
 
         energy.draw(guiGraphics);
-        // if(energyInput != null){
-        //     energyInput.draw(guiGraphics);
-        // }
+        fluid.draw(guiGraphics);
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         energy.drawOverlay(guiGraphics, mouseX, mouseY);
-        // if(energyInput != null){
-        //     energyInput.drawOverlay(guiGraphics, mouseX, mouseY);
-        // }
+        fluid.drawOverlay(guiGraphics, mouseX, mouseY);
         if(mouseX >= this.leftPos + 77 && mouseY >= this.topPos + 2 && mouseX < this.leftPos + 100 && mouseY < this.topPos + 20){
             List<Component> tooltip = new ArrayList<>();
             if((!tile.canSeeSky())){

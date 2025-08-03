@@ -167,6 +167,15 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
     }
 
     @Override
+    public int getFluidCapacity() {
+        return getProviders(ProviderType.FLUID).stream().mapToInt(lazy -> lazy.map((provider) -> {
+            return provider.getFluid().map((fluid) -> {
+                return fluid.getTankCapacity(0); //change to iterating all tanks if we every have a multi tank fluid provider.
+            }).orElse(0);
+        }).orElse(0)).sum();
+    }
+
+    @Override
     public List<FluidIngredient> consumeFluidInputs(List<FluidIngredient> fluids) {
         List<FluidIngredient> mutableIngredients = new ArrayList<>(fluids);
         getProviders(ProviderType.FLUID).stream().forEach((lazyProvider) -> {

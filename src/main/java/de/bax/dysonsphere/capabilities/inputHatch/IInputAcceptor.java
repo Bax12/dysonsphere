@@ -38,6 +38,8 @@ public interface IInputAcceptor {
 
     public List<FluidStack> getFluidInputs();
 
+    public int getFluidCapacity();
+
     public List<FluidIngredient> consumeFluidInputs(List<FluidIngredient> fluids);
 
     public void addInputProvider(LazyOptional<IInputProvider> provider);

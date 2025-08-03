@@ -12,6 +12,7 @@ import de.bax.dysonsphere.gui.HeatExchangerGui;
 import de.bax.dysonsphere.recipes.HeatExchangerRecipe;
 import de.bax.dysonsphere.util.AssetUtil;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -25,6 +26,8 @@ import net.minecraft.world.level.material.Fluid;
 
 public class HeatExchangerCategory implements IRecipeCategory<HeatExchangerRecipe> {
     
+    protected IDrawableStatic heatScale;
+
     @Override
     public RecipeType<HeatExchangerRecipe> getRecipeType() {
         return RecipeType.create(DysonSphere.MODID, "heat_exchanger", HeatExchangerRecipe.class);
@@ -48,16 +51,16 @@ public class HeatExchangerCategory implements IRecipeCategory<HeatExchangerRecip
     @Override
     public void setRecipe(@Nonnull IRecipeLayoutBuilder builder, @Nonnull HeatExchangerRecipe recipe, @Nonnull IFocusGroup focuses) {
         IDrawable overlay = DSJeiPlugin.guiHelper.drawableBuilder(BaseGui.GUI_INVENTORY_LOC, 0, 180, 12, 28).build();
-        var inputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 5, 5).setFluidRenderer(100, false, 10, 26).setOverlay(overlay, -1, -1);
+        IRecipeSlotBuilder inputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 5, 5).setFluidRenderer(100, false, 10, 26).setOverlay(overlay, -1, -1);
         for(Fluid fluid : recipe.input().getFluids()){
             inputSlot.addFluidStack(fluid, recipe.input().getAmount());
         }
         builder.addSlot(RecipeIngredientRole.OUTPUT, 52, 5).addFluidStack(recipe.output().getFluid(), recipe.output().getAmount()).setFluidRenderer(100, false, 10, 26).setOverlay(overlay, -1, -1);
+        heatScale = DSJeiPlugin.guiHelper.drawableBuilder(BaseGui.GUI_INVENTORY_LOC, 106, 142, 9, 32).build();
     }
 
     @Override
     public void draw(@Nonnull HeatExchangerRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, @Nonnull GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        IDrawableStatic heatScale = DSJeiPlugin.guiHelper.drawableBuilder(BaseGui.GUI_INVENTORY_LOC, 106, 142, 9, 32).build();
         heatScale.draw(guiGraphics, 29, 2);
     }
 
