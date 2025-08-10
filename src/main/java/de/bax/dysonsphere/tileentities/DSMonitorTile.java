@@ -22,7 +22,7 @@ public class DSMonitorTile extends BaseTile {
 
     protected float dsCompletionPercentage = 0;
     protected double dsEnergy = 0;
-    protected Map<Item, Integer> dsParts = new HashMap<>();
+    protected Map<Item, Long> dsParts = new HashMap<>();
     protected float dsUsage = 0;
     protected double dsEnergyDraw = 0;
     protected int ticksElapsed = 0;
@@ -96,7 +96,7 @@ public class DSMonitorTile extends BaseTile {
         dsParts.forEach((item, count) -> {
             ResourceLocation itemKey = ForgeRegistries.ITEMS.getKey(item);
             if(itemKey != null){
-                invTag.putInt(itemKey.toString(), count);
+                invTag.putLong(itemKey.toString(), count);
             }
         });
         if(invTag.size() > 0){
@@ -116,13 +116,13 @@ public class DSMonitorTile extends BaseTile {
                 dsParts.clear(); //without it causes issues when removing the last parts of the dysonsphere
                 for(String itemKey : inv.getAllKeys()){
                     Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemKey));
-                    int count = inv.getInt(itemKey);
+                    long count = inv.getLong(itemKey);
                     dsParts.put(item, count);
                 }
             }
     }
 
-    public Map<Item, Integer> getDsParts() {
+    public Map<Item, Long> getDsParts() {
         return dsParts;
     }
 

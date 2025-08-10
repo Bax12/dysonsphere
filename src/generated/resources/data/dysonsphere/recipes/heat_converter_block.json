@@ -5,28 +5,30 @@
       "conditions": [
         {
           "type": "forge:tag_empty",
-          "tag": "forge:ingots/tungsten"
+          "tag": "forge:circuits"
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
         "category": "misc",
         "key": {
-          "B": {
-            "tag": "forge:ingots/brick"
-          },
           "C": {
-            "tag": "forge:storage_blocks/coal"
+            "tag": "forge:coils/copper"
+          },
+          "E": {
+            "item": "dysonsphere:construct_ender"
+          },
+          "S": {
+            "tag": "forge:ingots/sentient"
           }
         },
         "pattern": [
-          "BBB",
-          "BCB",
-          "BBB"
+          "SES",
+          "CEC",
+          "SES"
         ],
         "result": {
-          "count": 2,
-          "item": "dysonsphere:heat_shielding"
+          "item": "dysonsphere:heat_converter_block"
         },
         "show_notification": true
       }
@@ -37,7 +39,7 @@
           "type": "forge:not",
           "value": {
             "type": "forge:tag_empty",
-            "tag": "forge:ingots/tungsten"
+            "tag": "forge:circuits"
           }
         }
       ],
@@ -45,24 +47,23 @@
         "type": "minecraft:crafting_shaped",
         "category": "misc",
         "key": {
-          "B": {
-            "tag": "forge:ingots/brick"
-          },
           "C": {
-            "tag": "forge:storage_blocks/coal"
+            "tag": "forge:circuits"
           },
-          "T": {
-            "tag": "forge:ingots/tungsten"
+          "E": {
+            "item": "dysonsphere:construct_ender"
+          },
+          "S": {
+            "tag": "forge:ingots/sentient"
           }
         },
         "pattern": [
-          "BTB",
-          "TCT",
-          "BTB"
+          "SES",
+          "CEC",
+          "SES"
         ],
         "result": {
-          "count": 4,
-          "item": "dysonsphere:heat_shielding"
+          "item": "dysonsphere:heat_converter_block"
         },
         "show_notification": true
       }

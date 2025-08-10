@@ -129,7 +129,7 @@ public class RecipeGenerator extends RecipeProvider {
         ConditionalRecipe.builder()
         .addCondition(RecipeConditions.TUNGSTEN_TAG_EMPTY)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.HEAT_SHIELDING.get())
+            Recipe.shaped(ModItems.HEAT_SHIELDING.get(), 2)
             .pattern("BBB")
             .pattern("BCB")
             .pattern("BBB")
@@ -139,7 +139,7 @@ public class RecipeGenerator extends RecipeProvider {
         })
         .addCondition(RecipeConditions.TUNGSTEN_EXISTS)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.HEAT_SHIELDING.get())
+            Recipe.shaped(ModItems.HEAT_SHIELDING.get(), 4)
             .pattern("BTB")
             .pattern("TCT")
             .pattern("BTB")
@@ -269,12 +269,45 @@ public class RecipeGenerator extends RecipeProvider {
             .define('T', ModItems.THERMOPILE.get())
             .save(consumer);
 
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY)
+        .addRecipe((con)-> {
+            Recipe.shaped(ModBlocks.HEAT_CONVERTER_BLOCK.get())
+                .pattern("SES")
+                .pattern("CEC")
+                .pattern("SES")
+                .define('S', DSTags.itemIngotSentient)
+                .define('E', ModItems.CONSTRUCT_ENDER.get())
+                .define('C', DSTags.itemCoilCopper)
+                .save(con);
+        })
+        .addCondition(RecipeConditions.CIRCUIT_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModBlocks.HEAT_CONVERTER_BLOCK.get())
+                .pattern("SES")
+                .pattern("CEC")
+                .pattern("SES")
+                .define('S', DSTags.itemIngotSentient)
+                .define('E', ModItems.CONSTRUCT_ENDER.get())
+                .define('C', DSTags.itemCircuit)
+                .save(con);
+        })
+        .build(consumer, ModBlocks.HEAT_CONVERTER_BLOCK.getId());
+
         
         Recipe.shapeless(Items.BAKED_POTATO, 8)
             .requires(Items.POTATO, 8)
             .requires(ModItems.STEAM_BUCKET.get())
             .save(consumer, new ResourceLocation(DysonSphere.MODID, "baked_potato"));
             
+        Recipe.shaped(ModItems.INGOT_SENTIENT_ALLOY.get(), 2)
+            .pattern("III")
+            .pattern("ISI")
+            .pattern("III")
+            .define('I', DSTags.itemIngotSmartAlloy)
+            .define('S', DSTags.itemIngotSentient)
+            .save(consumer);
+
         ConditionalRecipe.builder()
         .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY)
         .addRecipe((con) -> {

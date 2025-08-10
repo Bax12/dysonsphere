@@ -1,11 +1,10 @@
 package de.bax.dysonsphere.tileentities;
 
-import java.util.Random;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.capabilities.energy.ExternalEnergyWrapper;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
@@ -50,8 +49,17 @@ public class HeatGeneratorTile extends BaseTile implements IHeatTile {
     };
     public EnergyStorage energyStorage = new EnergyStorage(energyCapacity);
 
+    protected IEnergyStorage externalEnergy = new ExternalEnergyWrapper(energyStorage) {
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            return 0;
+        };
+        public boolean canReceive() {
+            return false;
+        };
+    };
+
     protected LazyOptional<IHeatContainer> lazyHeatContainer = LazyOptional.of(() -> heatHandler);
-    protected LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
+    protected LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.of(() -> externalEnergy);
 
     protected int ticksElapsed = 0;
     protected double lastHeat = 0;

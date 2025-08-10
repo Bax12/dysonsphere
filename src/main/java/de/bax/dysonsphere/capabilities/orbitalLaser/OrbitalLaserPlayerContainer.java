@@ -67,7 +67,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
         public OrbitalLaserContainer(){
             if(!containingEntity.level().isClientSide){
                 containingEntity.level().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
-                    dsLaserCount = dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0;
+                    dsLaserCount = (int) (dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0);
                     dysonsphere.registerEnergyReceiver(lazyDSReceiver);
                 });
             }
@@ -116,7 +116,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
             }
             if(!containingEntity.level().isClientSide){
                 containingEntity.level().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
-                    dsLaserCount = dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0;
+                    dsLaserCount = (int) (dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0);
                     dysonsphere.registerEnergyReceiver(lazyDSReceiver);
                 });
             } else {
@@ -170,7 +170,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
 
         @Override
         public void handleDysonSphereChange(IDysonSphereContainer dysonSphere) {
-            int count = dysonSphere.getDysonSphereEnergy() >= 0 ? dysonSphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0;//return 0 if dysonsphere is overloaded, not using utilization as we ignore the worldly consumers for our lasers
+            int count = (int) (dysonSphere.getDysonSphereEnergy() >= 0 ? dysonSphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0);//return 0 if dysonsphere is overloaded, not using utilization as we ignore the worldly consumers for our lasers
             if(count != dsLaserCount){
                 dsLaserCount = count;
                 if(containingEntity instanceof ServerPlayer serverPlayer){

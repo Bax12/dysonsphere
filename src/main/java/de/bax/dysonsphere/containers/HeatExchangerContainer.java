@@ -22,8 +22,8 @@ public class HeatExchangerContainer extends BaseContainer {
 
         this.tile = tile;
 
-        this.addSlot(new SlotItemHandler(tile.inventory, tile.slotInput, 39, 69));
-        this.addSlot(new SlotItemHandler(tile.inventory, tile.slotOutput, 121, 69));
+        this.addSlot(new SlotItemHandler(tile.inventory, HeatExchangerTile.slotInput, 39, 69));
+        this.addSlot(new SlotItemHandler(tile.inventory, HeatExchangerTile.slotOutput, 121, 69));
 
         addInventorySlots(inv);
     }

@@ -63,8 +63,8 @@ public class HeatGeneratorGui extends BaseGui<HeatGeneratorContainer> {
             if(tilePos != null && tileNeg != null){
                 LazyOptional<IHeatContainer> heatNegContainer = tilePos.getCapability(DSCapabilities.HEAT, dirNeg);
                 LazyOptional<IHeatContainer> heatPosContainer = tileNeg.getCapability(DSCapabilities.HEAT, dirPos);
-                n1Handler = heatNegContainer.map((handler) -> {return handler;}).get();
-                n2Handler = heatPosContainer.map((handler) -> {return handler;}).get();
+                n1Handler = heatNegContainer.map((handler) -> {return handler;}).orElse(null);
+                n2Handler = heatPosContainer.map((handler) -> {return handler;}).orElse(null);
             }
         }
 

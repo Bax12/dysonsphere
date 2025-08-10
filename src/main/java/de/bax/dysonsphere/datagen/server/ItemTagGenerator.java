@@ -28,8 +28,9 @@ public class ItemTagGenerator extends ItemTagsProvider {
         tag(DSTags.itemCoilCopper).add(ModItems.COIL_COPPER.get());
         tag(DSTags.itemCoilIron).add(ModItems.COIL_IRON.get());
 
-        tag(DSTags.itemIngot).add(ModItems.INGOT_SMART_ALLOY.get());
+        tag(DSTags.itemIngot).add(ModItems.INGOT_SMART_ALLOY.get(), ModItems.INGOT_SENTIENT_ALLOY.get());
         tag(DSTags.itemIngotSmartAlloy).add(ModItems.INGOT_SMART_ALLOY.get());
+        tag(DSTags.itemIngotSentient).add(ModItems.INGOT_SENTIENT_ALLOY.get());
 
         tag(DSTags.itemCapsule).add(ModItems.CAPSULE_SOLAR_0.get(), ModItems.CAPSULE_SOLAR_1.get(), ModItems.CAPSULE_SOLAR_2.get(), ModItems.CAPSULE_SOLAR_3.get(),
             ModItems.CAPSULE_LASER_0.get(), ModItems.CAPSULE_LASER_1.get(), ModItems.CAPSULE_LASER_2.get(), ModItems.CAPSULE_LASER_3.get(),

@@ -23,6 +23,11 @@ public class HeatPipeTile extends BaseTile implements IHeatTile{
         public double getThermalConductivity() {
             return 0.95d;
         }
+        
+        @Override
+        public boolean shouldAirTrade() {
+            return false;
+        };
     };
 
     protected LazyOptional<IHeatContainer> lazyHeatContainer = LazyOptional.of(() -> heatHandler);

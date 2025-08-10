@@ -19,11 +19,10 @@ import de.bax.dysonsphere.network.DSLightSyncPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -32,6 +31,8 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag> {
+
+    public static final float DS_COMPLETED = 100f; //does this really count as magic number?
 
     boolean allowOverworldAccess;
 
@@ -74,7 +75,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
     
     public class DysonSphere implements IDysonSphereContainer {
 
-        Map<Item, Integer> parts = new HashMap<>();
+        Map<Item, Long> parts = new HashMap<>();
         protected double energy = 0.0d; //prone to rounding errors, only visible with large changes in the part lists without restart.
         protected float completion = 0.0f; //in percent 0.0 - 100.0
         Set<LazyOptional<IDSEnergyReceiver>> receivers = new HashSet<>();
@@ -87,7 +88,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             parts.forEach((item, count) -> {
                 ResourceLocation itemKey = ForgeRegistries.ITEMS.getKey(item);
                 if(itemKey != null){
-                    invTag.putInt(itemKey.toString(), count);
+                    invTag.putLong(itemKey.toString(), count);
                 }
             });
             if(invTag.size() > 0){
@@ -102,7 +103,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             if(inv != null){
                 for(String itemKey : inv.getAllKeys()){
                     Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemKey));
-                    int count = inv.getInt(itemKey);
+                    long count = inv.getLong(itemKey);
                     parts.put(item, count);
                 }
             }
@@ -118,21 +119,15 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         @Override
         public boolean addDysonSpherePart(ItemStack stack, boolean simulate) {
             if(stack.getCapability(DSCapabilities.DS_PART).isPresent()){
-                if(completion >= 100f) return false; //Deny new parts when already full.
+                if(completion >= DS_COMPLETED) return false; //Deny new parts when already full.
                 if(!simulate){
-                    int count = parts.getOrDefault(stack.getItem(), 0);
+                    long count = parts.getOrDefault(stack.getItem(), 0l);
                     parts.put(stack.getItem(), count + stack.getCount());
                     stack.getCapability(DSCapabilities.DS_PART).ifPresent((part) -> {
                         energy += (part.getEnergyProvided() * stack.getCount());
                         completion += (part.getCompletionProgress() * stack.getCount());
                     });
-                    receivers.forEach((lazyReceiver) -> {
-                        lazyReceiver.ifPresent((receiver) -> {
-                            receiver.handleDysonSphereChange(this);
-                        });
-                    });
-                    //update client light level
-                    ModPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new DSLightSyncPackage(completion));
+                    updateDSPartListeners();
                 }
                 
                 return true;
@@ -140,12 +135,38 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             return false;
         }
 
+        
+        @Override
+        public int addDysonSpherePartBulk(ItemStack stack, int amount){
+            long count = parts.getOrDefault(stack.getItem(), 0l);
+
+            LazyOptional<IDSPart> cap = stack.getCapability(DSCapabilities.DS_PART);
+            if(!cap.isPresent() || amount <= 0) return 0;
+
+            Tuple<Integer, Float> stats = cap.map((part) -> {
+                return new Tuple<Integer,Float>(part.getEnergyProvided() * amount, part.getCompletionProgress() * amount);
+            }).orElse(new Tuple<>(0, 0f));
+            
+            if(completion + stats.getB() <= DS_COMPLETED){
+                completion += stats.getB();
+                energy += stats.getA();
+                parts.put(stack.getItem(), count + amount);
+
+                updateDSPartListeners();
+                return amount;
+            } else {
+                float singleCompletion = stats.getB() / amount;
+                int partsToAdd = (int) ((DS_COMPLETED - completion) / singleCompletion);
+                return addDysonSpherePartBulk(stack, partsToAdd); //should only ever recurse once.
+            }
+        }
+
         @Override
         public boolean removeDysonSpherePart(ItemStack stack, boolean simulate) {
             if(stack.getCapability(DSCapabilities.DS_PART).isPresent()){
                 if(!parts.containsKey(stack.getItem()) || parts.get(stack.getItem()) < stack.getCount()) return false;
                 if(!simulate){
-                    int count = parts.get(stack.getItem()) - stack.getCount();
+                    long count = parts.get(stack.getItem()) - stack.getCount();
                     if(count > 0){
                         parts.put(stack.getItem(), count);
                     } else {
@@ -155,11 +176,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                         energy -= (part.getEnergyProvided() * stack.getCount());
                         completion -= (part.getCompletionProgress() * stack.getCount());
                     });
-                    receivers.forEach((lazyReceiver) -> {
-                        lazyReceiver.ifPresent((receiver) -> {
-                            receiver.handleDysonSphereChange(this);
-                        });
-                    });
+                    updateDSPartListeners();
                 }
                 return true;
             }
@@ -167,7 +184,41 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         }
 
         @Override
-        public ImmutableMap<Item, Integer> getDysonSphereParts() {
+        public int removeDysonSpherePartBulk(ItemStack stack, int amount) {
+            if(amount <= 0 || !parts.containsKey(stack.getItem())) return 0;
+            long present = parts.get(stack.getItem());
+
+            LazyOptional<IDSPart> cap = stack.getCapability(DSCapabilities.DS_PART); //has to be present, as it's in the partlist.
+            Tuple<Integer, Float> singleStats = cap.map((part) -> {
+                return new Tuple<Integer,Float>(part.getEnergyProvided(), part.getCompletionProgress());
+            }).orElse(new Tuple<>(0, 0f));
+
+            if(present - amount >= 0){
+                completion -= singleStats.getB() * amount;
+                energy -= singleStats.getA() * amount;
+                parts.put(stack.getItem(), present - amount);
+                updateDSPartListeners();
+                return amount;
+            } else {
+                completion -= singleStats.getB() * present;
+                energy -= singleStats.getA() * present;
+                parts.remove(stack.getItem());
+                updateDSPartListeners();
+                return (int) present;
+            }
+        }
+
+        protected void updateDSPartListeners(){
+            receivers.forEach((lazyReceiver) -> {
+                        lazyReceiver.ifPresent((receiver) -> {
+                            receiver.handleDysonSphereChange(this);
+                        });
+                    });
+                ModPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new DSLightSyncPackage(completion / DS_COMPLETED));//completion is 0 - 100, light is 0-1
+        }
+
+        @Override
+        public ImmutableMap<Item, Long> getDysonSphereParts() {
             return ImmutableMap.copyOf(parts);
         }
 
@@ -186,7 +237,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             if(energy <= 0){
                 return Float.NaN;
             }
-            return (float) ((getEnergyRequested() / energy) * 100f);
+            return (float) ((getEnergyRequested() / energy) * DS_COMPLETED);
         }
 
         
@@ -237,21 +288,24 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         }
 
         @Override
-        public int getDysonSpherePartCount(Item part) {
-            return parts.getOrDefault(part, 0);
+        public long getDysonSpherePartCount(Item part) {
+            return parts.getOrDefault(part, 0l);
         }
 
-        public int getDysonSpherePartCount(Predicate<ItemStack> item){
+        public long getDysonSpherePartCount(Predicate<ItemStack> item){
             return parts.keySet().stream().filter((part) -> {
                 return item.test(part.getDefaultInstance());
-            }).mapToInt((part) -> {
-                return parts.getOrDefault(part, 0);
+            }).mapToLong((part) -> {
+                return parts.getOrDefault(part, 0l);
             }).sum();
         }
 
         @Override
         public boolean resetDysonSphereParts() {
             parts.clear();
+            completion = 0f;
+            //update client light level
+            updateDSPartListeners();
             return true;
         }
         

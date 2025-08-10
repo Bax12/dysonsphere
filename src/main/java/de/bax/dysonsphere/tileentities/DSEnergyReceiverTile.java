@@ -14,6 +14,7 @@ import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
+import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import de.bax.dysonsphere.network.IUpdateReceiverTile;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.network.TileUpdatePackage;
@@ -27,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTile, IHeatTile {
+public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTile, IHeatTile, ITintableTile {
 
     public static double maxHeat = 1700;
 
@@ -172,6 +173,17 @@ public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTil
     @Override
     public IHeatContainer getHeatContainer() {
         return heatHandler;
+    }
+
+    @Override
+    public int getTintColor(int tintIndex) {
+        if (tintIndex == 0){
+            int col = 0xFFFF0000;
+            int offset = 255 - (int) Math.min(Math.max(heatHandler.getHeatStored() - HeatHandler.HEAT_AMBIENT, 0) / 5, 255);
+
+            return col + offset + (offset << 8);
+        }
+        return 0xFFFFFFFF;
     }
 
 }

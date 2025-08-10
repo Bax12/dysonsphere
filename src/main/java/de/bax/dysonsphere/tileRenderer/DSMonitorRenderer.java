@@ -94,14 +94,20 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
             // DysonSphere.LOGGER.info("DSMonitorRenderer render dscompletion: {}", tile.getDsCompletionPercentage()); //tile delivers 0.0 wrongfully.
             font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_completion", df.format(tile.getDsCompletionPercentage())), 0, 10F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
             df.setMaximumFractionDigits(0);
-            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_capacity", df.format(tile.getDsEnergy())), 0, 20F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+            poseStack.pushPose();
+            var comp = Component.translatable("tooltip.dysonsphere.ds_monitor_capacity", df.format(tile.getDsEnergy()));
+            float scale = Math.min(125F / font.width(comp), 1f);
+            matrix = poseStack.last().pose();
+            poseStack.scale(scale, 1, 1);
+            font.drawInBatch(comp, 0, 20F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+            poseStack.popPose();
             font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_parts"), 0, 30F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
             float drawOffset = 40f;
-            for (Entry<Item, Integer> entry : tile.getDsParts().entrySet()){
+            for (Entry<Item, Long> entry : tile.getDsParts().entrySet()){
                 poseStack.pushPose();
-                var comp = Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey().getName(ItemStack.EMPTY), entry.getValue());
+                comp = Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey().getName(ItemStack.EMPTY), entry.getValue());
                 // DysonSphere.LOGGER.info("DSMonitorRenderer render fontWidth: {}", font.width(comp));
-                float scale = Math.min(125F / font.width(comp), 1f);
+                scale = Math.min(125F / font.width(comp), 1f);
                 // scale = 2f;
                 poseStack.scale(scale, 1, 1);
                 matrix = poseStack.last().pose();

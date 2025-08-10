@@ -1,5 +1,7 @@
 package de.bax.dysonsphere.containers;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -31,7 +33,7 @@ public abstract class BaseContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int slot) {
+    public ItemStack quickMoveStack(@Nonnull Player player, int slot) {
         int inventoryStart = getInventorySlotCount();
         int inventoryEnd = inventoryStart + 26;
         int hotbarStart = inventoryEnd + 1;
@@ -84,7 +86,7 @@ public abstract class BaseContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@Nonnull Player player) {
         return player.distanceToSqr(getTileEntity().getBlockPos().getX() + 0.5D, getTileEntity().getBlockPos().getY() + 0.5D, getTileEntity().getBlockPos().getZ() + 0.5D) <= 64 && !getTileEntity().isRemoved() && getTileEntity().getLevel().getBlockEntity(getTileEntity().getBlockPos()) == getTileEntity();
     }
 

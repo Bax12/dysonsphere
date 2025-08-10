@@ -15,7 +15,6 @@ import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.capabilities.inputHatch.IInputAcceptor;
-import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider;
 import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
 import de.bax.dysonsphere.capabilities.inputHatch.InputAcceptorHandler;
 import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;

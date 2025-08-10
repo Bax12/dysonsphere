@@ -17,6 +17,7 @@ import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookStringRope;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookTripWireHook;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserPlayerContainer;
 import de.bax.dysonsphere.compat.ModCompat;
+import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.containers.ModContainers;
 import de.bax.dysonsphere.entities.ModEntities;
 import de.bax.dysonsphere.entityRenderer.GrapplingHookHarnessRenderLayer;
@@ -26,6 +27,7 @@ import de.bax.dysonsphere.entityRenderer.TargetDesignatorRenderer;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
 import de.bax.dysonsphere.gui.GrapplingHookHarnessInventoryGui;
+import de.bax.dysonsphere.gui.HeatConverterGui;
 import de.bax.dysonsphere.gui.HeatExchangerGui;
 import de.bax.dysonsphere.gui.HeatGeneratorGui;
 import de.bax.dysonsphere.gui.InputHatchEnergyGui;
@@ -120,6 +122,7 @@ public class DysonSphere
         ModEntities.ENTITIES.register(modEventBus);
         ModRecipes.TYPES.register(modEventBus);
         ModRecipes.SERIALIZERS.register(modEventBus);
+        ModConstructs.CONSTRUCTS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -236,6 +239,7 @@ public class DysonSphere
                 MenuScreens.register(ModContainers.DS_ENERGY_RECEIVER_CONTAINER.get(), DSEnergyReceiverGui::new);
                 MenuScreens.register(ModContainers.HEAT_GENERATOR_CONTAINER.get(), HeatGeneratorGui::new);
                 MenuScreens.register(ModContainers.HEAT_EXCHANGER_CONTAINER.get(), HeatExchangerGui::new);
+                MenuScreens.register(ModContainers.HEAT_CONVERTER_CONTAINER.get(), HeatConverterGui::new);
                 MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER_CONTAINER.get(), LaserPatternControllerGui::new);
                 MenuScreens.register(ModContainers.LASER_CONTROLLER_INVENTORY_CONTAINER.get(), LaserControllerInventoryGui::new);
                 MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER_INVENTORY_CONTAINER.get(), LaserPatternControllerInventoryGui::new);

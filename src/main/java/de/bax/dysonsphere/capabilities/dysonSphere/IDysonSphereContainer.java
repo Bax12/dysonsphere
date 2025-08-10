@@ -26,6 +26,14 @@ public interface IDysonSphereContainer {
     boolean addDysonSpherePart(ItemStack stack, boolean simulate);
 
     /**
+     * Bulk add amount of item. 
+     * @param stack the stack representing the item to add
+     * @param amount how many items to add
+     * @return the added amount.
+     */
+    int addDysonSpherePartBulk(ItemStack stack, int amount);
+
+    /**
      * Remove a part to the Dyson Sphere
      * @param stack
      *      the ItemStack to be removed from the DysonSphere (aka launched into the sun orbit)
@@ -35,6 +43,14 @@ public interface IDysonSphereContainer {
      *      TRUE if the ItemStack was removed successfully (or can be removed if simulated)
      */
     boolean removeDysonSpherePart(ItemStack stack, boolean simulate);
+
+    /**
+     * Bulk remove amount of item. 
+     * @param stack the stack representing the item to remove
+     * @param amount how many items to remove
+     * @return the removed amount.
+     */
+    int removeDysonSpherePartBulk(ItemStack stack, int amount);
 
     /**
      * Reset all parts in the Dyson Sphere to 0. 
@@ -49,21 +65,21 @@ public interface IDysonSphereContainer {
      * @return
      *      A ImmutableList of all currently active Parts of the Dyson Sphere.
      */
-    ImmutableMap<Item, Integer> getDysonSphereParts();
+    ImmutableMap<Item, Long> getDysonSphereParts();
 
     /**
      * Get the amount of a specific item in the DysonSphere
      * @param part the item to check
      * @return the amount of the item currently in the DysonSphere
      */
-    int getDysonSpherePartCount(Item part);
+    long getDysonSpherePartCount(Item part);
 
     /**
      * Get the amount of a specific Ingredient in the DysonSphere
      * @param part the Ingredient to check
      * @return the amount of the items matching with the ingredient currently in the DysonSphere
      */
-    int getDysonSpherePartCount(Predicate<ItemStack> item);
+    long getDysonSpherePartCount(Predicate<ItemStack> item);
 
     /**
      * get the energy generation capacity of the Dyson Sphere

@@ -26,7 +26,7 @@ public class AirHeatHandler implements IHeatContainer{
 
     @Override
     public double getThermalConductivity() {
-        return 0.01;
+        return 0.1;
     }
     
 }

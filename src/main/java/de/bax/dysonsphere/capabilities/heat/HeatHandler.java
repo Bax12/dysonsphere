@@ -36,6 +36,10 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
         this.maxHeat = maxHeat;
     }
 
+    public boolean shouldAirTrade(){
+        return true;
+    }
+
     @Override
     public double receiveHeat(double maxReceive, boolean simulate) {
         maxReceive = Math.min(maxReceive, maxHeat - heat) * getThermalConductivity();
@@ -95,7 +99,7 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
                 if (neighborHandler.isPresent()){
                     neighborList[dir.ordinal()] = neighborHandler;
                 }
-            } else if(level.getBlockState(neiPos).isAir()){
+            } else if(shouldAirTrade() && level.getBlockState(neiPos).isAir()){
                 neighborList[dir.ordinal()] = LazyOptional.of(() -> new AirHeatHandler());
             } else {
                 neighborList[dir.ordinal()] = LazyOptional.empty();

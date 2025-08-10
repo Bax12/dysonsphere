@@ -24,6 +24,7 @@ public class en_usGenerator extends LanguageProvider{
         addBlock(ModBlocks.DS_ENERGY_RECEIVER_BLOCK, "Dyson Sphere Energy Receiver");
         addBlock(ModBlocks.HEAT_EXCHANGER_BLOCK, "Thermal Exchanger");
         addBlock(ModBlocks.HEAT_GENERATOR_BLOCK, "Thermoelectric Generator");
+        addBlock(ModBlocks.HEAT_CONVERTER_BLOCK, "Thermostatic Converter");
         addBlock(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK, "Laser Pattern Controller Terminal");
         addBlock(ModBlocks.LASER_CONTROLLER_BLOCK, "Laser Control Station");
         addBlock(ModBlocks.LASER_CRAFTER_BLOCK, "Precision Laser Workbench");
@@ -93,6 +94,7 @@ public class en_usGenerator extends LanguageProvider{
         add("container.dysonsphere.ds_energy_receiver", "Dyson Sphere Energy Receiver");
         add("container.dysonsphere.heat_generator", "Thermoelectric Generator");
         add("container.dysonsphere.heat_exchanger", "Thermal Exchanger");
+        add("container.dysonsphere.heat_converter", "Thermostatic Converter");
         add("container.dysonsphere.laser_pattern_controller","Laser Pattern Controller Terminal");
         add("container.dysonsphere.laser_controller_inventory", "Active Laser Patterns");
         add("container.dysonsphere.laser_controller_block", "Laser Control Station");

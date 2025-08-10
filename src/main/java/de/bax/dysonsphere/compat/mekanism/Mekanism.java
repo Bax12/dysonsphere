@@ -5,7 +5,6 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
 import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.compat.IModCompat;
-import de.bax.dysonsphere.tileentities.InputHatchTile;
 import mekanism.api.heat.IHeatHandler;
 import mekanism.api.lasers.ILaserReceptor;
 import net.minecraft.resources.ResourceLocation;
