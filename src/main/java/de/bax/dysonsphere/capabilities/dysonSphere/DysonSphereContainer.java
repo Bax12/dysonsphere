@@ -2,6 +2,7 @@ package de.bax.dysonsphere.capabilities.dysonSphere;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -9,12 +10,15 @@ import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dsPart.IDSPart;
+import de.bax.dysonsphere.constructs.Construct;
+import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.network.DSLightSyncPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import net.minecraft.core.Direction;
@@ -79,12 +83,12 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         protected double energy = 0.0d; //prone to rounding errors, only visible with large changes in the part lists without restart.
         protected float completion = 0.0f; //in percent 0.0 - 100.0
         Set<LazyOptional<IDSEnergyReceiver>> receivers = new HashSet<>();
-
+        Set<Construct> constructsActive = new HashSet<>();
+        Set<Construct> constructsInactive = new HashSet<>();
 
         public CompoundTag save(){
             CompoundTag tag = new CompoundTag();
             CompoundTag invTag = new CompoundTag();
-            //TODO
             parts.forEach((item, count) -> {
                 ResourceLocation itemKey = ForgeRegistries.ITEMS.getKey(item);
                 if(itemKey != null){
@@ -94,8 +98,25 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             if(invTag.size() > 0){
                 tag.put("inv", invTag);
             }
+            saveConstructs(tag, "constructsActive", constructsActive);
+            saveConstructs(tag, "constructsInactive", constructsInactive);
 
             return tag;
+        }
+
+        protected static void saveConstructs(CompoundTag tag, String key, Set<Construct> constructs){
+            StringBuilder conKeys = new StringBuilder();
+            constructs.forEach((construct) -> {
+                ResourceLocation conKey = ModConstructs.registry().getKey(construct);
+                if(conKey != null){
+                    conKeys.append(conKey.toString());
+                    conKeys.append(',');
+                }
+            });
+            if(!conKeys.isEmpty()){
+                conKeys.deleteCharAt(conKeys.length()-1);//remove last separator
+                tag.putString(key, conKeys.toString());
+            }
         }
 
         public void load(CompoundTag tag){
@@ -114,6 +135,16 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                     completion += (part.getCompletionProgress() * count);
                 });
             });
+            loadConstructs(tag, "constructsActive", constructsActive);
+            loadConstructs(tag, "constructsInactive", constructsInactive);
+        }
+
+        protected static void loadConstructs(CompoundTag tag, String key, Set<Construct> constructs){
+            if(tag.contains(key)){
+                for(String conKey : tag.getString(key).split(",")){
+                    constructs.add(ModConstructs.registry().getValue(new ResourceLocation(conKey)));
+                }
+            }
         }
 
         @Override
@@ -210,16 +241,64 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
 
         protected void updateDSPartListeners(){
             receivers.forEach((lazyReceiver) -> {
-                        lazyReceiver.ifPresent((receiver) -> {
-                            receiver.handleDysonSphereChange(this);
-                        });
-                    });
-                ModPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new DSLightSyncPackage(completion / DS_COMPLETED));//completion is 0 - 100, light is 0-1
+                lazyReceiver.ifPresent((receiver) -> {
+                    receiver.handleDysonSphereChange(this);
+                });
+            });
+            ModPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new DSLightSyncPackage(completion / DS_COMPLETED));//completion is 0 - 100, light is 0-1
         }
 
         @Override
-        public ImmutableMap<Item, Long> getDysonSphereParts() {
+        public Map<Item, Long> getDysonSphereParts() {
             return ImmutableMap.copyOf(parts);
+        }
+
+        @Override
+        public boolean addConstruct(Construct construct){
+            if(construct == null) return false;
+            if(!constructsInactive.contains(construct)){
+                return constructsActive.add(construct);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean removeConstruct(Construct construct){
+            if(!constructsInactive.remove(construct)){
+                return constructsActive.remove(construct);
+            }
+            return true;
+        }
+
+        @Override
+        public boolean enableConstruct(Construct construct){
+            if(constructsInactive.remove(construct)){
+                return constructsActive.add(construct);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean disableConstruct(Construct construct){
+            if(constructsActive.remove(construct)){
+                return constructsInactive.add(construct);
+            }
+            return false;
+        }
+
+        @Override
+        public List<Construct> getAllConstructs(){
+            return ImmutableList.<Construct>builder().addAll(constructsActive).addAll(constructsInactive).build();
+        }
+
+        @Override
+        public List<Construct> getEnabledConstructs(){
+            return ImmutableList.copyOf(constructsActive);
+        }
+
+        @Override
+        public List<Construct> getDisabledConstructs(){
+            return ImmutableList.copyOf(constructsInactive);
         }
 
         @Override

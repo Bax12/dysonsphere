@@ -88,6 +88,14 @@ public class en_usGenerator extends LanguageProvider{
         add("fluid.dysonsphere.steam", "Steam");
         add("fluid.dysonsphere.helium", "Helium");
 
+        //constructs
+        add("construct.dysonsphere.cargo_launcher", "Cargo Delivery Platform");
+        add("construct.dysonsphere.heat_sink", "Stellar Heat Sink");
+        add("construct.dysonsphere.helium_mine", "Solar Resource Extractor");
+        add("construct.dysonsphere.plasma_launcher", "Plasma Launcher Platform");
+        add("construct.dysonsphere.solar_lamp", "Solar Lamp");
+        add("construct.dysonsphere.stabilizer", "Dyson Sphere Spacial Stabilizer");
+
 
         //guis
         add("container.dysonsphere.railgun", "Electromagnetic Orbital Launcher");
@@ -271,12 +279,26 @@ public class en_usGenerator extends LanguageProvider{
 
         //commands
         add("commands.dysonsphere.list", "Dyson Sphere Parts:");
+        add("commands.dysonsphere.list_empty", "No Parts in the Dyson Sphere");
         add("commands.dysonsphere.add_success", "Added %sx %s to the Dyson Sphere");
         add("commands.dysonsphere.add_failure", "Failed to add %s. Can it fit into the Dyson Sphere?");
         add("commands.dysonsphere.remove_success", "Removed %sx %s from the Dyson Sphere");
         add("commands.dysonsphere.remove_failure", "Failed to remove %s. Is it part of the Dyson Sphere?");
         add("commands.dysonsphere.set_success", "Set %s count to %s (or maximum)");
         add("commands.dysonsphere.set_failure", "Failed to set %s count. Does it belong in a Dyson Sphere?");
+
+        add("commands.dysonsphere.constructs.list", "Dyson Sphere Constructs:");
+        add("commands.dysonsphere.constructs.list_empty", "No Constructs in the Dyson Sphere");
+        add("commands.dysonsphere.constructs.enabled", ": enabled");
+        add("commands.dysonsphere.constructs.disabled", ": disabled");
+        add("commands.dysonsphere.constructs.add_success", "Added %s to the Dyson Sphere");
+        add("commands.dysonsphere.constructs.add_failure", "Failed to add %s. Is it already there?");
+        add("commands.dysonsphere.constructs.remove_success", "Removed %s from the Dyson Sphere");
+        add("commands.dysonsphere.constructs.remove_failure", "Failed to remove %s. Is it there?");
+        add("commands.dysonsphere.constructs.enable_success", "Enabled %s.");
+        add("commands.dysonsphere.constructs.enable_failure", "Failed to enable %s. Is it there?");
+        add("commands.dysonsphere.constructs.disable_success", "Disabled %s.");
+        add("commands.dysonsphere.constructs.disable_failure", "Failed to disable %s. Is it there?");
     }
     
     

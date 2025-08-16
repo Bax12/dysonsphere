@@ -27,6 +27,7 @@ public class DSComponentCommand {
         dispatcher.register(Commands.literal("dysonsphere").requires((req) -> {
             return req.hasPermission(2);//Same as weather, no idea what it means
         })
+        .then(Commands.literal("part")
         .then(Commands.literal("add").then(Commands.argument("DSPart", ItemArgument.item(context)).executes((command) -> {
             return add(command.getSource(), ItemArgument.getItem(command, "DSPart").getItem(), 1);
         })
@@ -50,7 +51,7 @@ public class DSComponentCommand {
         .then(Commands.literal("reset").then(Commands.literal("yesIWantToWipeTheDysonSphere").executes((command) -> {
             return reset(command.getSource());
         })))
-        );
+        ));
     }
 
     private static int list(CommandSourceStack source, Item item){
@@ -61,8 +62,7 @@ public class DSComponentCommand {
             source.sendSuccess(() -> {
                 return Component.translatable("commands.dysonsphere.list_empty");
             }, true);
-        }
-        if(item != null){
+        } else if(item != null){
             source.sendSuccess(() -> {
                 return Component.translatable("commands.dysonsphere.list").append(Component.literal("\n"))
                 .append(item.getDefaultInstance().getDisplayName()).append(Component.literal(" : " + parts.getOrDefault(item, 0l)));

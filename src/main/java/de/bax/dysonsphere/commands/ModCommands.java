@@ -12,5 +12,6 @@ public class ModCommands {
     @SubscribeEvent
     public static void register(RegisterCommandsEvent event){
         DSComponentCommand.register(event.getDispatcher(), event.getBuildContext());
+        DSConstructCommand.register(event.getDispatcher(), event.getBuildContext());
     }
 }

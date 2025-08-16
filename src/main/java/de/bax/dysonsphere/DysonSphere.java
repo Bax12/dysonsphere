@@ -16,6 +16,7 @@ import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookPlayerContaine
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookStringRope;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookTripWireHook;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserPlayerContainer;
+import de.bax.dysonsphere.commands.ModCommands;
 import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.containers.ModContainers;

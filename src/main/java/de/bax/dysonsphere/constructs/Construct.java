@@ -1,8 +1,11 @@
 package de.bax.dysonsphere.constructs;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 public class Construct {
@@ -28,7 +31,7 @@ public class Construct {
     }
 
     public void onDSChange(IDysonSphereContainer ds){
-        for (var component : components.entrySet()) {
+        for (Entry<Item, ComponentCount> component : components.entrySet()) {
             long count = ds.getDysonSpherePartCount(component.getKey());
             shouldBreak = shouldBreak || count < component.getValue().required();
             canWork = !shouldBreak && canWork && count > component.getValue().foundation();
@@ -36,6 +39,11 @@ public class Construct {
                 break;
             }
         }
+    }
+
+    public Component getDisplayName(){
+        ResourceLocation loc = ModConstructs.registry().getKey(this);
+        return Component.translatable("construct." + loc.getNamespace() + "." + loc.getPath());
     }
 
     

@@ -1,13 +1,13 @@
 package de.bax.dysonsphere.capabilities.dysonSphere;
 
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
-import com.google.common.collect.ImmutableMap;
-
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
+import de.bax.dysonsphere.constructs.Construct;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -65,7 +65,7 @@ public interface IDysonSphereContainer {
      * @return
      *      A ImmutableList of all currently active Parts of the Dyson Sphere.
      */
-    ImmutableMap<Item, Long> getDysonSphereParts();
+    Map<Item, Long> getDysonSphereParts();
 
     /**
      * Get the amount of a specific item in the DysonSphere
@@ -80,6 +80,51 @@ public interface IDysonSphereContainer {
      * @return the amount of the items matching with the ingredient currently in the DysonSphere
      */
     long getDysonSpherePartCount(Predicate<ItemStack> item);
+
+    /**
+     * Add a new construct to the DysonSphere. May fail if already present
+     * @param construct to add
+     * @return if the construct was added successfully.
+     */
+    boolean addConstruct(Construct construct);
+
+    /**
+     * Remove a construct from the DysonSphere. Fails if the construct does not exist.
+     * @param construct to remove
+     * @return if the construct was successfully removed.
+     */
+    boolean removeConstruct(Construct construct);
+
+    /**
+     * Enable a existing construct, allowing it to work.
+     * May fail if the construct does not exist or is already enabled
+     * @param construct to enable
+     * @return if the construct was successfully enabled
+     */
+    boolean enableConstruct(Construct construct);
+
+    /**
+     * Disable a existing construct, preventing it from working.
+     * May fial if the construct does not exist or is already disabled
+     * @param construct to disable
+     * @return if the construct was successfully disabled
+     */
+    boolean disableConstruct(Construct construct);
+
+    /**
+     * @return Immutable list of all constructs, enabled and disable in the DysonSphere
+     */
+    List<Construct> getAllConstructs();
+
+    /**
+     * @return Immutable list of all enabled constructs in the DysonSphere
+     */
+    List<Construct> getEnabledConstructs();
+
+    /**
+     * @return Immutable list of all disabled constructs in the DysonSphere
+     */
+    List<Construct> getDisabledConstructs();
 
     /**
      * get the energy generation capacity of the Dyson Sphere
