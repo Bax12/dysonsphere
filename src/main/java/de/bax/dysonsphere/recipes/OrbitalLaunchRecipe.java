@@ -11,7 +11,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import de.bax.dysonsphere.util.FluidIngredient;
-import de.bax.dysonsphere.util.SerializationUtil;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

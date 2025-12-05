@@ -2,6 +2,7 @@ package de.bax.dysonsphere.capabilities.dysonSphere;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
@@ -112,19 +113,19 @@ public interface IDysonSphereContainer {
     boolean disableConstruct(Construct construct);
 
     /**
-     * @return Immutable list of all constructs, enabled and disable in the DysonSphere
+     * @return Immutable set of all constructs, enabled and disable in the DysonSphere
      */
-    List<Construct> getAllConstructs();
+    Set<Construct> getAllConstructs();
 
     /**
-     * @return Immutable list of all enabled constructs in the DysonSphere
+     * @return Immutable set of all enabled constructs in the DysonSphere
      */
-    List<Construct> getEnabledConstructs();
+    Set<Construct> getEnabledConstructs();
 
     /**
-     * @return Immutable list of all disabled constructs in the DysonSphere
+     * @return Immutable set of all disabled constructs in the DysonSphere
      */
-    List<Construct> getDisabledConstructs();
+    Set<Construct> getDisabledConstructs();
 
     /**
      * get the energy generation capacity of the Dyson Sphere

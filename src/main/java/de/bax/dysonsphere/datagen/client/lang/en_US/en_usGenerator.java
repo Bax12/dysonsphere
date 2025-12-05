@@ -20,6 +20,7 @@ public class en_usGenerator extends LanguageProvider{
         addBlock(ModBlocks.SMART_ALLOY_BLOCK, "Smart Alloy Block");
         addBlock(ModBlocks.HEAT_PIPE_BLOCK, "Thermal Coupler");
         addBlock(ModBlocks.DS_MONITOR_BLOCK, "Dyson Sphere Observer");
+        addBlock(ModBlocks.DS_CONTROLLER_BLOCK, "Dyson Sphere Control Station");
         addBlock(ModBlocks.RAILGUN_BLOCK, "Electromagnetic Orbital Launcher");
         addBlock(ModBlocks.DS_ENERGY_RECEIVER_BLOCK, "Dyson Sphere Energy Receiver");
         addBlock(ModBlocks.HEAT_EXCHANGER_BLOCK, "Thermal Exchanger");
@@ -90,11 +91,18 @@ public class en_usGenerator extends LanguageProvider{
 
         //constructs
         add("construct.dysonsphere.cargo_launcher", "Cargo Delivery Platform");
+        add("construct.dysonsphere.cargo_launcher_desc", "Allows delivery of solar extracted resources");
         add("construct.dysonsphere.heat_sink", "Stellar Heat Sink");
+        add("construct.dysonsphere.heat_sink_desc", "Reduces Orbital Laser cooldown time");
         add("construct.dysonsphere.helium_mine", "Solar Resource Extractor");
+        add("construct.dysonsphere.helium_mine_desc", "Exctracts liquid helium from the sun");
         add("construct.dysonsphere.plasma_launcher", "Plasma Launcher Platform");
+        add("construct.dysonsphere.plasma_launcher_desc", "Allows using superheated helium instead of lasers for orbital strikes");
         add("construct.dysonsphere.solar_lamp", "Solar Lamp");
+        add("construct.dysonsphere.solar_lamp_desc", "A replacement day-light. In case you start to miss the sunlight");
         add("construct.dysonsphere.stabilizer", "Dyson Sphere Spacial Stabilizer");
+        add("construct.dysonsphere.stabilizer_desc", "Ion stabilizers to prevent the slow drift of the Dyson Sphere into the sun");
+        
 
 
         //guis
@@ -219,6 +227,10 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.grappling_hook_deployed", "GrapplingHooks Deployed: %s/%s");
 
         add("tooltip.dysonsphere.laser_controller_target", "Aiming at: X: %s Y: %s Z: %s");
+
+        add("tooltip.dysonsphere.capsule_solar", "Solar Satellite");
+        add("tooltip.dysonsphere.capsule_laser", "Laser Satellite");
+        add("tooltip.dysonsphere.capsule_structure", "Structure Satellite");
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");

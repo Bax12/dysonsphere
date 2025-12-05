@@ -5,7 +5,7 @@
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "Different $(item)Hooks$() that can be used in a $(thin)Grappling Hook$().$(br)Hooks have multiple stats:$(li)Maximum Hooks: How many hooks can be deployed at the same time.$(li)Hook Gravity: How fast the Hook will fall.$()"
+            "text": "Different $(item)Hooks$() that can be used in a $(thing)Grappling Hook$().$(br)Hooks have multiple stats:$(li)Maximum Hooks: How many hooks can be deployed at the same time.$(li)Hook Gravity: How fast the Hook will fall.$()"
         },
         {
             "type": "patchouli:crafting",
@@ -25,7 +25,7 @@
         {
             "type": "patchouli:crafting",
             "recipe": "dysonsphere:grappling_hook_hook_blaze",
-            "text": "$(o)Excels in the nether!$()$(br)Does not work in water and will set inflammable blocks on fire instead of attaching!$(br)Base Maximum Hooks: 2$(br)Base Hook Gravity: 0.01"
+            "text": "$(o)Excels in the nether!$()$(br)Does not work in water and will set inflammable blocks on fire instead of attaching!$(br)Maximum Hooks: 2$(br)Hook Gravity: 0.01"
         },
         {
             "type": "patchouli:crafting",

@@ -1,4 +1,5 @@
-// 1.20.1	2025-08-09T11:24:43.015567454	Loot Tables
+// 1.20.1	2025-10-04T13:37:58.011349117	Loot Tables
+9cfcc5d9aa9440788a4dd0a0a609aebcf602c1ce data/dysonsphere/loot_tables/blocks/dysonsphere_controller_block.json
 a60fb59f630e155ef5e78f66b0e1068336756439 data/dysonsphere/loot_tables/blocks/dysonsphere_energy_receiver_block.json
 09d6f7e4eb74d446bc1bda915f62b8025c300263 data/dysonsphere/loot_tables/blocks/dysonsphere_monitor_block.json
 9403f5e278f7b2e71ce6ff7a7785bc73cfbeffe8 data/dysonsphere/loot_tables/blocks/heat_converter_block.json

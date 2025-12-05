@@ -29,6 +29,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> DS_MONITOR_BLOCK = registerBlock("dysonsphere_monitor_block", () -> new DSMonitorBlock());
     public static final RegistryObject<Block> RAILGUN_BLOCK = registerBlock("railgun_block", () -> new RailgunBlock());
     public static final RegistryObject<Block> DS_ENERGY_RECEIVER_BLOCK = registerBlock("dysonsphere_energy_receiver_block", () -> new DSEnergyReceiverBlock());
+    public static final RegistryObject<Block> DS_CONTROLLER_BLOCK = registerBlock("dysonsphere_controller_block", () -> new DSControllerBlock());
 
     public static final RegistryObject<Block> HEAT_PIPE_BLOCK = registerBlock("heat_pipe_block", () -> new HeatPipeBlock());
     public static final RegistryObject<Block> HEAT_EXCHANGER_BLOCK = registerBlock("heat_exchanger_block", () -> new HeatExchangerBlock());//5mb/t if >450° + 1mb/t per 50° over 450

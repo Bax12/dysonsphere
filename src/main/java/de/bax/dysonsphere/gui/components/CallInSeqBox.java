@@ -16,7 +16,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
@@ -36,7 +35,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 //This is simpler then changing the access with a mixin
 
 @OnlyIn(Dist.CLIENT)
-public class CallInSeqBox extends AbstractWidget implements Renderable {
+public class CallInSeqBox extends AbstractWidget {
 
     public static final int BACKWARDS = -1;
     public static final int FORWARDS = 1;

@@ -51,7 +51,9 @@ public class CapsuleItem extends Item {
             return Integer.parseInt(name().substring(name().indexOf("_")+1)); //if this ever breaks, it means something with the names is wrong/changed
         }
 
-        
+        public String getType(){
+            return name().substring(0, name().indexOf("_"));
+        }
     }
 
 
@@ -93,6 +95,13 @@ public class CapsuleItem extends Item {
     protected void addClientTooltip(@Nonnull ItemStack pStack, @Nullable Level pLevel, @Nonnull  List<Component> pTooltipComponents, @Nonnull  TooltipFlag pIsAdvanced){
         pTooltipComponents.add(Component.literal("Provided Energy: " + this.type.energyProvided));
         pTooltipComponents.add(Component.literal("Provided Completion: " + this.type.completionProgress));
+    }
+
+    public static Component getTypeName(ItemStack stack){
+        if(stack.getItem() instanceof CapsuleItem cap){
+            return Component.translatable("tooltip.dysonsphere.capsule_" + cap.type.getType().toLowerCase());
+        }
+        return Component.empty();
     }
 
 }

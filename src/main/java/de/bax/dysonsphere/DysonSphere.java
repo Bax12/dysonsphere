@@ -2,6 +2,8 @@ package de.bax.dysonsphere;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -16,7 +18,6 @@ import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookPlayerContaine
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookStringRope;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookTripWireHook;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserPlayerContainer;
-import de.bax.dysonsphere.commands.ModCommands;
 import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.containers.ModContainers;
@@ -27,6 +28,7 @@ import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
 import de.bax.dysonsphere.entityRenderer.TargetDesignatorRenderer;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
+import de.bax.dysonsphere.gui.DsControllerGui;
 import de.bax.dysonsphere.gui.GrapplingHookHarnessInventoryGui;
 import de.bax.dysonsphere.gui.HeatConverterGui;
 import de.bax.dysonsphere.gui.HeatExchangerGui;
@@ -65,6 +67,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -77,6 +80,7 @@ import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -136,15 +140,26 @@ public class DysonSphere
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, DSConfig.getClientConfigSpec());
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DSConfig.getCommonConfigSpec());
-        ModPacketHandler.init();
+        
     }
 
     public void commonSetup(FMLCommonSetupEvent event) {
-
+        ModPacketHandler.init();
         ModCompat.init();
+        // ModConstructs.init();
 
         event.enqueueWork(() -> {
             ModAdvancements.register();
+        });
+    }
+
+    @SubscribeEvent
+    public void addReloadListener(AddReloadListenerEvent event){
+        event.addListener(new ResourceManagerReloadListener() {
+            @Override
+            public void onResourceManagerReload(@Nonnull ResourceManager pResourceManager) {
+                ModConstructs.load(pResourceManager);
+            }
         });
     }
 
@@ -238,6 +253,7 @@ public class DysonSphere
             event.enqueueWork(() -> {
                 MenuScreens.register(ModContainers.RAILGUN_CONTAINER.get(), RailgunGui::new);
                 MenuScreens.register(ModContainers.DS_ENERGY_RECEIVER_CONTAINER.get(), DSEnergyReceiverGui::new);
+                MenuScreens.register(ModContainers.DS_CONTROLLER_CONTAINER.get(), DsControllerGui::new);
                 MenuScreens.register(ModContainers.HEAT_GENERATOR_CONTAINER.get(), HeatGeneratorGui::new);
                 MenuScreens.register(ModContainers.HEAT_EXCHANGER_CONTAINER.get(), HeatExchangerGui::new);
                 MenuScreens.register(ModContainers.HEAT_CONVERTER_CONTAINER.get(), HeatConverterGui::new);

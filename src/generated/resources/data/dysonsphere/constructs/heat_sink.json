@@ -1,0 +1,14 @@
+{
+  "Components": [
+    {
+      "Component": {
+        "tag": "dysonsphere:space_capsules/structure"
+      },
+      "Foundation": 50,
+      "Required": 200
+    }
+  ],
+  "Energy": 0,
+  "Stability": 0.95,
+  "Tier": 0
+}

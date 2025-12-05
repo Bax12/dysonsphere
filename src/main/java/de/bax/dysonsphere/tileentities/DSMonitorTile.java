@@ -3,9 +3,10 @@ package de.bax.dysonsphere.tileentities;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
-import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -13,9 +14,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DSMonitorTile extends BaseTile {
@@ -32,8 +33,14 @@ public class DSMonitorTile extends BaseTile {
     protected float lastUsage = 0;
     protected double lastEnergyDraw = 0;
 
+    protected boolean dirty = false;
+
     public DSMonitorTile(BlockPos pos, BlockState state) {
         super(ModTiles.DS_MONITOR.get(), pos, state);
+    }
+
+    public DSMonitorTile(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     public void tick(){
@@ -47,7 +54,7 @@ public class DSMonitorTile extends BaseTile {
                     dsEnergyDraw = ds.getEnergyRequested();
                 });
             } else {
-                dsParts = new HashMap<>();
+                dsParts.clear();
                 dsEnergy = -1;
                 dsCompletionPercentage = -1;
                 dsUsage = -1;
@@ -80,13 +87,17 @@ public class DSMonitorTile extends BaseTile {
                 lastPartHash = hash;
                 lastUsage = dsUsage;
                 lastEnergyDraw = dsEnergyDraw;
+                dirty = true;
+            }
+            if(dirty){ //to enable sync trigger in child classes
                 sendSyncPackageToNearbyPlayers();
+                dirty = false;
             }
         }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(@Nonnull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.putFloat("completion", dsCompletionPercentage);
         tag.putDouble("energy", dsEnergy);
@@ -105,7 +116,7 @@ public class DSMonitorTile extends BaseTile {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@Nonnull CompoundTag tag) {
         super.load(tag);
         dsCompletionPercentage = tag.getFloat("completion");
         dsEnergy = tag.getDouble("energy");

@@ -21,4 +21,7 @@ public class ModRecipes {
 
     public static final RegistryObject<RecipeType<OrbitalLaunchRecipe>> ORBITAL_LAUNCH_TYPE = TYPES.register("orbital_launch", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "orbital_launch")));
     public static final RegistryObject<RecipeSerializer<OrbitalLaunchRecipe>> ORBITAL_LAUNCH_SERIALIZER = SERIALIZERS.register("orbital_launch", OrbitalLaunchRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<ConstructRecipe>> CONSTRUCT_TYPE = TYPES.register("construct", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "construct")));
+    public static final RegistryObject<RecipeSerializer<ConstructRecipe>> CONSTRUCT_SERIALIZER = SERIALIZERS.register("construct", ConstructRecipe.Serializer::new);
 }

@@ -2,7 +2,6 @@ package de.bax.dysonsphere.capabilities.dysonSphere;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -10,8 +9,8 @@ import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
@@ -287,18 +286,18 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         }
 
         @Override
-        public List<Construct> getAllConstructs(){
-            return ImmutableList.<Construct>builder().addAll(constructsActive).addAll(constructsInactive).build();
+        public Set<Construct> getAllConstructs(){
+            return ImmutableSet.<Construct>builder().addAll(constructsActive).addAll(constructsInactive).build();
         }
 
         @Override
-        public List<Construct> getEnabledConstructs(){
-            return ImmutableList.copyOf(constructsActive);
+        public Set<Construct> getEnabledConstructs(){
+            return ImmutableSet.copyOf(constructsActive);
         }
 
         @Override
-        public List<Construct> getDisabledConstructs(){
-            return ImmutableList.copyOf(constructsInactive);
+        public Set<Construct> getDisabledConstructs(){
+            return ImmutableSet.copyOf(constructsInactive);
         }
 
         @Override

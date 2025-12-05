@@ -1,10 +1,10 @@
 package de.bax.dysonsphere.commands;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -62,12 +62,12 @@ public class DSConstructCommand {
     }
 
     private static int list(CommandSourceStack source){
-        List<Construct> constructsActive = source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).map((ds) -> {
+        Set<Construct> constructsActive = source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).map((ds) -> {
             return ds.getEnabledConstructs();
-        }).orElse(ImmutableList.of());
-        List<Construct> constructsInactive = source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).map((ds) -> {
+        }).orElse(ImmutableSet.of());
+        Set<Construct> constructsInactive = source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).map((ds) -> {
             return ds.getDisabledConstructs();
-        }).orElse(ImmutableList.of());
+        }).orElse(ImmutableSet.of());
         if(constructsActive.isEmpty() && constructsInactive.isEmpty()){
             source.sendSuccess(() -> {
                 return Component.translatable("commands.dysonsphere.constructs.list_empty");

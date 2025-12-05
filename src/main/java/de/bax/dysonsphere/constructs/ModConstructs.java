@@ -1,9 +1,19 @@
 package de.bax.dysonsphere.constructs;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.function.Supplier;
 
+import javax.annotation.Nonnull;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import de.bax.dysonsphere.DysonSphere;
+import de.bax.dysonsphere.constructs.Construct.ComponentCount;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
@@ -25,10 +35,35 @@ public class ModConstructs {
         return REGISTRY.get();
     }
 
+    public static void load(@Nonnull ResourceManager resourceManager){
+        DysonSphere.LOGGER.debug("DysonSphere Constructs loading!");
+        registry().forEach((construct) -> {
+            try (BufferedReader reader = resourceManager.openAsReader(getResourceLocation(construct))){
+                JsonObject json = new Gson().fromJson(reader, JsonObject.class);
+                deserializeConstruct(json, construct);
+            } catch (IOException e){
+                DysonSphere.LOGGER.error("DysonSphere Constructs: File not found: {}", getResourceLocation(construct));
+            }
+        });
+    }
+
+    protected static void deserializeConstruct(JsonObject json, Construct construct) {
+        construct.tier = json.get("Tier").getAsInt();
+        construct.energy = json.get("Energy").getAsInt();
+        construct.stability = json.get("Stability").getAsFloat();
+        json.get("Components").getAsJsonArray().forEach((compJson) -> {
+            construct.components.put(Ingredient.fromJson(((JsonObject)compJson).get("Component")), new ComponentCount(((JsonObject)compJson).get("Required").getAsInt(), ((JsonObject)compJson).get("Foundation").getAsInt()));
+        });
+    }
+
+    protected static @Nonnull ResourceLocation getResourceLocation(Construct construct){
+        return new ResourceLocation(DysonSphere.MODID, "constructs/" + construct.getResourceLocation().getPath() + ".json");
+    }
+
     /*todo: 
         - stats (from json?)
         - recipes (consumed components / catalysts?(catalyst launch recipe?))
-        - commands (add/remove & enable/disable components)
+        - commands (add/remove & enable/disable components) - DONE
         - controller & ui (add/remove & enable/disable components)
         - cargo delivery / receiver
         - ds stability & part damage chance
