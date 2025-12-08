@@ -26,10 +26,10 @@ public class ModConstructs {
 
     public static final RegistryObject<Construct> HELIUM_MINE = CONSTRUCTS.register("helium_mine", () -> new Construct()); //harvest liquid helium
     public static final RegistryObject<Construct> STABILIZER = CONSTRUCTS.register("stabilizer", () -> new Construct()); //reduce ds damage chance
-    public static final RegistryObject<Construct> HEAT_SINK = CONSTRUCTS.register("heat_sink", () -> new Construct());  //reduce laser cooldown period
+    public static final RegistryObject<Construct> HEAT_SINK = CONSTRUCTS.register("heat_sink", () -> new Construct());  //reduce laser cooldown period -- working
     public static final RegistryObject<Construct> CARGO_LAUNCHER = CONSTRUCTS.register("cargo_launcher", () -> new Construct());  //allows sending material back to world (helium, etc...)
     public static final RegistryObject<Construct> PLASMA_LAUNCHER = CONSTRUCTS.register("plasma_launcher", () -> new Construct()); //allows using plasma projectiles instead of lasers for orbital strikes. Needs helium?
-    public static final RegistryObject<Construct> SOLAR_LAMP = CONSTRUCTS.register("solar_lamp", () -> new Construct()); //prevent the sky from darkening with ds progress
+    public static final RegistryObject<Construct> SOLAR_LAMP = CONSTRUCTS.register("solar_lamp", () -> new Construct()); //prevent the sky from darkening with ds progress --working
 
     public static IForgeRegistry<Construct> registry(){
         return REGISTRY.get();

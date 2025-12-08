@@ -87,6 +87,10 @@ public class DSConfig {
         private static ForgeConfigSpec.IntValue LASER_CONTROLLER_ITEM_CHARGE_RATE;   
         private static ForgeConfigSpec.IntValue LASER_CONTROLLER_ITEM_USAGE;
 
+        //Constructs
+        private static ForgeConfigSpec.DoubleValue CONSTRUCT_HEAT_SINK_MULT;
+
+
         //Grappling Hooks
         public static ForgeConfigSpec.IntValue GRAPPLING_HOOK_HOOK_SMART_ALLOY_COUNT;
         public static ForgeConfigSpec.DoubleValue GRAPPLING_HOOK_HOOK_SMART_ALLOY_GRAVITY;
@@ -341,6 +345,13 @@ public class DSConfig {
                         .comment("The amount of energy that a single use of the Laser Controller Item consumes. 0-2147483647. Default 100")
                         .worldRestart()
                         .defineInRange("laserControllerItemChargeRate", 100, 0, Integer.MAX_VALUE);
+
+                //######Constructs Start#####
+                builder.pop(2).push("constructs.heat_sink");
+                CONSTRUCT_HEAT_SINK_MULT = builder
+                        .comment("The multiplier applied to laser cooldowns when the Heat Sink is an active part of the Dyson Sphere")
+                        .defineInRange("heatSinkCooldownMult", 0.5, 0, 1);
+
 
                 //#####Grappling Hooks Start#####
                 builder.pop(2).push("grappling_hooks.hooks.smart_alloy");
@@ -658,6 +669,8 @@ public class DSConfig {
         public static boolean GUI_HEAT_OVERLAY_ENABLED_VALUE;
         public static boolean GUI_ORBITAL_LASER_ENABLED_VALUE;
 
+        public static float CONSTRUCT_HEAT_SINK_MULT_VALUE;
+
 
         @SubscribeEvent
         static void onLoad(final ModConfigEvent event) {
@@ -703,6 +716,8 @@ public class DSConfig {
                         LaserControllerItem.capacity = LASER_CONTROLLER_ITEM_CAPACITY.get();
                         LaserControllerItem.maxInput = LASER_CONTROLLER_ITEM_CHARGE_RATE.get();
                         LaserControllerItem.usage = LASER_CONTROLLER_ITEM_USAGE.get();
+
+                        CONSTRUCT_HEAT_SINK_MULT_VALUE = CONSTRUCT_HEAT_SINK_MULT.get().floatValue();
 
                         GrapplingHookHookItem.TYPE.SMART_ALLOY.count = GRAPPLING_HOOK_HOOK_SMART_ALLOY_COUNT.get();
                         GrapplingHookHookItem.TYPE.SMART_ALLOY.gravity = GRAPPLING_HOOK_HOOK_SMART_ALLOY_GRAVITY.get().floatValue();

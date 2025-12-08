@@ -6,10 +6,11 @@ import java.util.TreeMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
-import de.bax.dysonsphere.items.ModItems;
+import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.network.LaserCooldownSyncPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.tags.DSTags;
@@ -18,7 +19,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -60,6 +60,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
         protected Map<Integer, Integer> laserCooldowns = new TreeMap<Integer, Integer>();//key: gameTick to be available again. value: amount of lasers on this cooldown.
         protected int dsLaserCount = -1;
         protected String currentSequence = "";
+        protected boolean hasHeatSink;
 
         protected LazyOptional<IDSEnergyReceiver> lazyDSReceiver = LazyOptional.of(() -> this);
 
@@ -83,7 +84,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
 
         @Override
         public void putLasersOnCooldown(int gameTick, int laserCount, int cooldownDuration) {
-            laserCooldowns.put(gameTick + cooldownDuration, laserCount);
+            laserCooldowns.put(gameTick + (hasHeatSink ? cooldownDuration : (int) (cooldownDuration * DSConfig.CONSTRUCT_HEAT_SINK_MULT_VALUE)), laserCount);
             //trigger client sync, only Serverside has ServerPlayer
             if(containingEntity instanceof ServerPlayer serverPlayer){
                 ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),new LaserCooldownSyncPackage(laserCooldowns, gameTick, dsLaserCount));
@@ -177,6 +178,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
                     ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),new LaserCooldownSyncPackage(laserCooldowns, containingEntity.tickCount, dsLaserCount));
                 }
             }
+            hasHeatSink = dysonSphere.getAllConstructs().contains(ModConstructs.HEAT_SINK.get());
         }
 
         @Override
