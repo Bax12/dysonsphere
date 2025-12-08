@@ -75,7 +75,7 @@ public class DSConfig {
         private static ForgeConfigSpec.IntValue LASER_PATTERN_CONTROLLER_CAPACITY;                
         private static ForgeConfigSpec.IntValue LASER_PATTERN_CONTROLLER_USE;
 
-        //DS Capsules
+        //DS Capsules //todo rework as data & add tiers
         private static ForgeConfigSpec.IntValue SOLAR_CAPSULE_ENERGY_PROVIDED;                        
         private static ForgeConfigSpec.DoubleValue SOLAR_CAPSULE_COMPLETION;
                         

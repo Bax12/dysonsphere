@@ -253,11 +253,18 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         }
 
         @Override
-        public boolean addConstruct(Construct construct){
+        public boolean addConstruct(Construct construct, boolean enabled){
             if(construct == null) return false;
-            if(!constructsInactive.contains(construct)){
-                return constructsActive.add(construct);
+            if(enabled){
+                if(!constructsInactive.contains(construct)){
+                    return constructsActive.add(construct);
+                }
+            } else {
+                if(!constructsActive.contains(construct)){
+                    return constructsInactive.add(construct);
+                }
             }
+            
             return false;
         }
 

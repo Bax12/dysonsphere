@@ -85,9 +85,10 @@ public interface IDysonSphereContainer {
     /**
      * Add a new construct to the DysonSphere. May fail if already present
      * @param construct to add
+     * @param enabled the initial state of the added construct
      * @return if the construct was added successfully.
      */
-    boolean addConstruct(Construct construct);
+    boolean addConstruct(Construct construct, boolean enabled);
 
     /**
      * Remove a construct from the DysonSphere. Fails if the construct does not exist.

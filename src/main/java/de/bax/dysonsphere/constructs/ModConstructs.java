@@ -61,10 +61,10 @@ public class ModConstructs {
     }
 
     /*todo: 
-        - stats (from json?)
+        - stats (from json?) - DONE
         - recipes (consumed components / catalysts?(catalyst launch recipe?))
         - commands (add/remove & enable/disable components) - DONE
-        - controller & ui (add/remove & enable/disable components)
+        - controller & ui (add/remove & enable/disable components) - DONE
         - cargo delivery / receiver
         - ds stability & part damage chance
         - plasma projectiles

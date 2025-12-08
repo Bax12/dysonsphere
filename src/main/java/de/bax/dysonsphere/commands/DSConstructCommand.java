@@ -102,7 +102,7 @@ public class DSConstructCommand {
 
     private static int addConstruct(CommandSourceStack source, Construct construct){
         boolean added = source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).map((ds) -> {
-            return ds.addConstruct(construct);
+            return ds.addConstruct(construct, false);
         }).orElse(false) ;
         if(added){
             source.sendSuccess(() -> {

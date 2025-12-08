@@ -12,10 +12,14 @@ import com.google.common.collect.ImmutableSet;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.constructs.Construct;
+import de.bax.dysonsphere.network.IUpdateReceiverTile;
+import de.bax.dysonsphere.network.ModPacketHandler;
+import de.bax.dysonsphere.network.TileUpdatePackage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -23,22 +27,22 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class DSControllerTile extends DSMonitorTile {
+public class DSControllerTile extends DSMonitorTile implements IUpdateReceiverTile{
 
-    public static int energyCapacity = 50000;
-    public static int commandEnergy = 1000;
+    public static int ENERGY_CAPACITY = 50000;
+    public static int COMMAND_ENERGY = 1000;
 
-    public EnergyStorage energyStorage = new EnergyStorage(energyCapacity) {
+    public EnergyStorage energyStorage = new EnergyStorage(ENERGY_CAPACITY) {
         public int receiveEnergy(int maxReceive, boolean simulate) {
             if (!simulate) {
-                setChanged();
+                dirty = true;
             }
             return super.receiveEnergy(maxReceive, simulate);
         };
 
         public int extractEnergy(int maxExtract, boolean simulate) {
             if (!simulate) {
-                setChanged();
+                dirty = true;
             }
             return super.extractEnergy(maxExtract, simulate);
         };
@@ -101,6 +105,7 @@ public class DSControllerTile extends DSMonitorTile {
             disabledTags.add(construct.save());
         });
         tag.put("disabledConstructs", disabledTags);
+        tag.put("energy", energyStorage.serializeNBT());
     }
 
     @SuppressWarnings("null")
@@ -108,14 +113,17 @@ public class DSControllerTile extends DSMonitorTile {
     public void load(@Nonnull CompoundTag tag) {
         super.load(tag);
         if (tag.contains("enabledConstructs")) {
-            enabledConstructs = ImmutableSet.copyOf(((ListTag) tag.get("enabledConstructs")).stream().map((con) -> {
+            enabledConstructs = ((ListTag) tag.get("enabledConstructs")).stream().map((con) -> {
                 return Construct.load((CompoundTag) con);
-            }).toList());
+            }).collect(ImmutableSet.toImmutableSet());
         }
         if (tag.contains("disabledConstructs")) {
-            disabledConstructs = ImmutableSet.copyOf(((ListTag) tag.get("disabledConstructs")).stream().map((con) -> {
+            disabledConstructs = ((ListTag) tag.get("disabledConstructs")).stream().map((con) -> {
                 return Construct.load((CompoundTag) con);
-            }).toList());
+            }).collect(ImmutableSet.toImmutableSet());
+        }
+        if(tag.contains("energy")){
+            energyStorage.deserializeNBT(tag.get("energy"));
         }
     }
 
@@ -125,6 +133,57 @@ public class DSControllerTile extends DSMonitorTile {
 
     public Set<Construct> getDisabledConstructs(){
         return ImmutableSet.copyOf(disabledConstructs);
+    }
+
+    public void setConstructs(@Nonnull Set<Construct> enabledConstructs, @Nonnull Set<Construct> disabledConstructs){
+        this.enabledConstructs = ImmutableSet.copyOf(enabledConstructs);
+        this.disabledConstructs = ImmutableSet.copyOf(disabledConstructs);
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public void handleUpdate(CompoundTag updateTag, Player player) {
+        if(this.energyStorage.extractEnergy(COMMAND_ENERGY, false) == COMMAND_ENERGY){
+            this.energyStorage.extractEnergy(COMMAND_ENERGY, true);
+            level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
+            if (updateTag.contains("enabledConstructs")) {
+                ((ListTag) updateTag.get("enabledConstructs")).stream().map((con) -> {
+                    return Construct.load((CompoundTag) con);
+                }).forEach((construct) -> {
+                    if(!dysonsphere.addConstruct(construct, true)){
+                        dysonsphere.enableConstruct(construct);
+                    }
+                });
+                
+            }
+            if (updateTag.contains("disabledConstructs")) {
+                ((ListTag) updateTag.get("disabledConstructs")).stream().map((con) -> {
+                    return Construct.load((CompoundTag) con);
+                }).forEach((construct) -> {
+                    if(!dysonsphere.addConstruct(construct, false)){
+                        dysonsphere.disableConstruct(construct);
+                    }
+                });
+            }
+        });
+        }
+        
+    }
+
+    @Override
+    public void sendGuiUpdate() {
+        CompoundTag tag = new CompoundTag();
+        ListTag enabledTags = new ListTag();
+        enabledConstructs.forEach((construct) -> {
+            enabledTags.add(construct.save());
+        });
+        tag.put("enabledConstructs", enabledTags);
+        ListTag disabledTags = new ListTag();
+        disabledConstructs.forEach((construct) -> {
+            disabledTags.add(construct.save());
+        });
+        tag.put("disabledConstructs", disabledTags);
+        ModPacketHandler.INSTANCE.sendToServer(new TileUpdatePackage(tag, getBlockPos()));
     }
 
 }
