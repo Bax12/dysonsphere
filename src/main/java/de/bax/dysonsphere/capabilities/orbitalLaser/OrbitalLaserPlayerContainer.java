@@ -57,7 +57,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
     public class OrbitalLaserContainer implements IOrbitalLaserContainer, IDSEnergyReceiver {
 
 
-        protected Map<Integer, Integer> laserCooldowns = new TreeMap<Integer, Integer>();//key: gameTick to be available again. value: amount of lasers on this cooldown.
+        protected TreeMap<Integer, Integer> laserCooldowns = new TreeMap<Integer, Integer>();//key: gameTick to be available again. value: amount of lasers on this cooldown.
         protected int dsLaserCount = -1;
         protected String currentSequence = "";
         protected boolean hasHeatSink;
@@ -66,7 +66,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
 
 
         public OrbitalLaserContainer(){
-            if(!containingEntity.level().isClientSide){
+            if(!containingEntity.level().isClientSide()){
                 containingEntity.level().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
                     dsLaserCount = (int) (dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0);
                     dysonsphere.registerEnergyReceiver(lazyDSReceiver);
@@ -76,15 +76,13 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
 
 
         public int getLasersOnCooldown(int gameTick){
-            laserCooldowns.keySet().removeIf((key) -> {
-                return key <= gameTick;
-            });
+            laserCooldowns.headMap(gameTick, true).clear();
             return laserCooldowns.values().stream().mapToInt(Integer::intValue).sum();
         }
 
         @Override
         public void putLasersOnCooldown(int gameTick, int laserCount, int cooldownDuration) {
-            laserCooldowns.put(gameTick + (hasHeatSink ? cooldownDuration : (int) (cooldownDuration * DSConfig.CONSTRUCT_HEAT_SINK_MULT_VALUE)), laserCount);
+            laserCooldowns.put(gameTick + (hasHeatSink ? (int) (cooldownDuration * DSConfig.CONSTRUCT_HEAT_SINK_MULT_VALUE) : cooldownDuration), laserCount);
             //trigger client sync, only Serverside has ServerPlayer
             if(containingEntity instanceof ServerPlayer serverPlayer){
                 ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),new LaserCooldownSyncPackage(laserCooldowns, gameTick, dsLaserCount));
@@ -127,10 +125,8 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
 
         @Override
         public int getTimeToNextCooldown(int gameTick) {
-            laserCooldowns.keySet().removeIf((key) -> {
-                return key <= gameTick;
-            });
-            return laserCooldowns.size() > 0 ? laserCooldowns.keySet().iterator().next() - gameTick : 0;
+            laserCooldowns.headMap(gameTick, true).clear();
+            return laserCooldowns.size() > 0 ? laserCooldowns.firstKey() - gameTick : 0;
         }
 
         @Override
@@ -178,7 +174,7 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
                     ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),new LaserCooldownSyncPackage(laserCooldowns, containingEntity.tickCount, dsLaserCount));
                 }
             }
-            hasHeatSink = dysonSphere.getAllConstructs().contains(ModConstructs.HEAT_SINK.get());
+            hasHeatSink = dysonSphere.getEnabledConstructs().contains(ModConstructs.HEAT_SINK.get());
         }
 
         @Override
