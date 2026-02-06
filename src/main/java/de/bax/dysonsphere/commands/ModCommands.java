@@ -13,5 +13,6 @@ public class ModCommands {
     public static void register(RegisterCommandsEvent event){
         DSComponentCommand.register(event.getDispatcher(), event.getBuildContext());
         DSConstructCommand.register(event.getDispatcher(), event.getBuildContext());
+        DSLogCommand.register(event.getDispatcher(), event.getBuildContext());
     }
 }

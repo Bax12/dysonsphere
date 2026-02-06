@@ -22,16 +22,16 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class DSMonitorTile extends BaseTile {
 
     protected float dsCompletionPercentage = 0;
-    protected double dsEnergy = 0;
+    protected long dsEnergy = 0;
     protected Map<Item, Long> dsParts = new HashMap<>();
     protected float dsUsage = 0;
-    protected double dsEnergyDraw = 0;
+    protected long dsEnergyDraw = 0;
     protected int ticksElapsed = 0;
 
-    protected double lastEnergy = 0;
+    protected long lastEnergy = 0;
     protected int lastPartHash = 0;
     protected float lastUsage = 0;
-    protected double lastEnergyDraw = 0;
+    protected long lastEnergyDraw = 0;
 
     protected boolean dirty = false;
 
@@ -99,10 +99,10 @@ public class DSMonitorTile extends BaseTile {
     @Override
     protected void saveAdditional(@Nonnull CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.putFloat("completion", dsCompletionPercentage);
-        tag.putDouble("energy", dsEnergy);
-        tag.putFloat("usage", dsUsage);
-        tag.putDouble("energy_draw", dsEnergyDraw);
+        tag.putFloat("ds_completion", dsCompletionPercentage);
+        tag.putLong("ds_energy", dsEnergy);
+        tag.putFloat("ds_usage", dsUsage);
+        tag.putLong("ds_energy_draw", dsEnergyDraw);
         CompoundTag invTag = new CompoundTag();
         dsParts.forEach((item, count) -> {
             ResourceLocation itemKey = ForgeRegistries.ITEMS.getKey(item);
@@ -111,18 +111,18 @@ public class DSMonitorTile extends BaseTile {
             }
         });
         if(invTag.size() > 0){
-            tag.put("parts", invTag);
+            tag.put("ds_parts", invTag);
         }
     }
 
     @Override
     public void load(@Nonnull CompoundTag tag) {
         super.load(tag);
-        dsCompletionPercentage = tag.getFloat("completion");
-        dsEnergy = tag.getDouble("energy");
-        dsUsage = tag.getFloat("usage");
-        dsEnergyDraw = tag.getDouble("energy_draw");
-        CompoundTag inv = tag.getCompound("parts");
+        dsCompletionPercentage = tag.getFloat("ds_completion");
+        dsEnergy = tag.getLong("ds_energy");
+        dsUsage = tag.getFloat("ds_usage");
+        dsEnergyDraw = tag.getLong("ds_energy_draw");
+        CompoundTag inv = tag.getCompound("ds_parts");
             if(inv != null){
                 dsParts.clear(); //without it causes issues when removing the last parts of the dysonsphere
                 for(String itemKey : inv.getAllKeys()){
@@ -137,7 +137,7 @@ public class DSMonitorTile extends BaseTile {
         return dsParts;
     }
 
-    public double getDsEnergy() {
+    public long getDsEnergy() {
         return dsEnergy;
     }
     
@@ -149,7 +149,7 @@ public class DSMonitorTile extends BaseTile {
         return dsUsage;
     }
 
-    public double getDsEnergyDraw() {
+    public long getDsEnergyDraw() {
         return dsEnergyDraw;
     }
 }

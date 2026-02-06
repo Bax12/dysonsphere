@@ -1,4 +1,5 @@
-// 1.20.1	2025-10-04T13:37:58.011349117	Loot Tables
+// 1.20.1	2026-02-05T15:01:39.848099842	Loot Tables
+d44a368e4d70ebb289f302fd22bb9f114d2e7e22 data/dysonsphere/loot_tables/blocks/cargo_receiver_block.json
 9cfcc5d9aa9440788a4dd0a0a609aebcf602c1ce data/dysonsphere/loot_tables/blocks/dysonsphere_controller_block.json
 a60fb59f630e155ef5e78f66b0e1068336756439 data/dysonsphere/loot_tables/blocks/dysonsphere_energy_receiver_block.json
 09d6f7e4eb74d446bc1bda915f62b8025c300263 data/dysonsphere/loot_tables/blocks/dysonsphere_monitor_block.json
@@ -19,5 +20,6 @@ d66895b47fe96cdf6d1f3495d17d56fb62de2663 data/dysonsphere/loot_tables/blocks/inp
 6006f2a625d58674e38d12d90b69bf42c7e9a3f7 data/dysonsphere/loot_tables/blocks/laser_controller_block.json
 d59804c92744a20ffeb38f0bde73a2652347c211 data/dysonsphere/loot_tables/blocks/laser_crafter_block.json
 f7e4f3d8f2ad645014dd55eed81805cc9ba5cdfe data/dysonsphere/loot_tables/blocks/laser_pattern_controller_block.json
+e50c681760e8cd776d712cc15a4b963e5a3242a5 data/dysonsphere/loot_tables/blocks/listener_block.json
 14f01b2d131c053a5688b7debc219f99d87cf68e data/dysonsphere/loot_tables/blocks/railgun_block.json
 f4d632aa5758203cc3b44e2654d160aab2d66f6e data/dysonsphere/loot_tables/blocks/smart_alloy_block.json

@@ -9,8 +9,6 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.google.common.collect.ImmutableList;
-
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.fluid.FluidHandlerMap;
 import de.bax.dysonsphere.capabilities.fluid.FluidTankCustom;
@@ -57,7 +55,6 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     public FluidTankCustom inputTank = new FluidTankCustom(fluidCapacity){
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            // return stack.isFluidEqual(new FluidStack(Fluids.WATER, 5)); //TODO adapt to recipes 
             return inputs.stream().anyMatch(i -> i.test(stack));
         }
         protected void onContentsChanged() {
@@ -72,7 +69,6 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     public FluidTankCustom outputTank = new FluidTankCustom(fluidCapacity){
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            // return stack.isFluidEqual(new FluidStack(ModFluids.STEAM.get(), 5)); //TODO adapt to recipes 
             return true; //cannot be filled anyways.
         }
         protected void onContentsChanged() {

@@ -70,7 +70,7 @@ public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTil
         super(ModTiles.DS_ENERGY_RECEIVER.get(), pos, state);
     }
 
-@   Override
+    @Override
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if(cap.equals(DSCapabilities.HEAT)){
             return lazyHeatContainer.cast();

@@ -1,7 +1,9 @@
 package de.bax.dysonsphere.capabilities.dysonSphere;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -9,6 +11,7 @@ import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -20,8 +23,10 @@ import de.bax.dysonsphere.constructs.Construct;
 import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.network.DSLightSyncPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
+import de.bax.dysonsphere.util.RingBuffer;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.item.Item;
@@ -36,6 +41,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag> {
 
     public static final float DS_COMPLETED = 100f; //does this really count as magic number?
+    public static final int DS_LOG_LENGTH = 500;
 
     boolean allowOverworldAccess;
 
@@ -79,11 +85,13 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
     public class DysonSphere implements IDysonSphereContainer {
 
         Map<Item, Long> parts = new HashMap<>();
-        protected double energy = 0.0d; //prone to rounding errors, only visible with large changes in the part lists without restart.
+        protected long energy = 0; //prone to rounding errors, only visible with large changes in the part lists without restart.
         protected float completion = 0.0f; //in percent 0.0 - 100.0
         Set<LazyOptional<IDSEnergyReceiver>> receivers = new HashSet<>();
         Set<Construct> constructsActive = new HashSet<>();
         Set<Construct> constructsInactive = new HashSet<>();
+
+        RingBuffer<Component> log = new RingBuffer<Component>(DS_LOG_LENGTH); //wont be saved to disk.
 
         public CompoundTag save(){
             CompoundTag tag = new CompoundTag();
@@ -157,6 +165,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                         energy += (part.getEnergyProvided() * stack.getCount());
                         completion += (part.getCompletionProgress() * stack.getCount());
                     });
+                    addLogMessage(Component.translatable("log.dysonsphere.part.added", stack.getDisplayName()));
                     updateDSPartListeners();
                 }
                 
@@ -182,6 +191,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                 energy += stats.getA();
                 parts.put(stack.getItem(), count + amount);
 
+                addLogMessage(Component.translatable("log.dysonsphere.part.added_bulk", stack.getDisplayName(), amount));
                 updateDSPartListeners();
                 return amount;
             } else {
@@ -206,6 +216,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                         energy -= (part.getEnergyProvided() * stack.getCount());
                         completion -= (part.getCompletionProgress() * stack.getCount());
                     });
+                    addLogMessage(Component.translatable("log.dysonsphere.part.removed", stack.getDisplayName()));
                     updateDSPartListeners();
                 }
                 return true;
@@ -227,12 +238,14 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                 completion -= singleStats.getB() * amount;
                 energy -= singleStats.getA() * amount;
                 parts.put(stack.getItem(), present - amount);
+                addLogMessage(Component.translatable("log.dysonsphere.part.removed_bulk", stack.getDisplayName(), amount));
                 updateDSPartListeners();
                 return amount;
             } else {
                 completion -= singleStats.getB() * present;
                 energy -= singleStats.getA() * present;
                 parts.remove(stack.getItem());
+                addLogMessage(Component.translatable("log.dysonsphere.part.removed_bulk", stack.getDisplayName(), amount));
                 updateDSPartListeners();
                 return (int) present;
             }
@@ -243,6 +256,18 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                 lazyReceiver.ifPresent((receiver) -> {
                     receiver.handleDysonSphereChange(this);
                 });
+            });
+            constructsActive.forEach((con) -> {
+                con.onDSChange(this);
+                if(!con.canWork()){
+                    disableConstruct(con);
+                }
+            });
+            constructsInactive.forEach((con) -> {
+                con.onDSChange(this);
+                if(con.shouldBreak()){
+                    removeConstruct(con);
+                }
             });
             ModPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new DSLightSyncPackage(completion / DS_COMPLETED));//completion is 0 - 100, light is 0-1
         }
@@ -255,41 +280,61 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         @Override
         public boolean addConstruct(Construct construct, boolean enabled){
             if(construct == null) return false;
+            boolean changed = false;
             if(enabled){
                 if(!constructsInactive.contains(construct)){
-                    return constructsActive.add(construct);
+                    changed = constructsActive.add(construct);
                 }
             } else {
                 if(!constructsActive.contains(construct)){
-                    return constructsInactive.add(construct);
+                    changed = constructsInactive.add(construct);
                 }
             }
-            
-            return false;
+            if(changed) {
+                addLogMessage(Component.translatable("log.dysonsphere.construct.added", construct.getDisplayName()));
+                updateDSPartListeners();
+            }
+            return changed;
         }
 
         @Override
         public boolean removeConstruct(Construct construct){
-            if(!constructsInactive.remove(construct)){
-                return constructsActive.remove(construct);
+            // boolean changed = false;
+            // if(!constructsInactive.remove(construct)){
+            //     changed = constructsActive.remove(construct);
+            // }
+            if(constructsInactive.remove(construct) || constructsActive.remove(construct)) {
+                addLogMessage(Component.translatable("log.dysonsphere.construct.removed", construct.getDisplayName()));
+                updateDSPartListeners();
+                return true;
             }
-            return true;
+            return false;
         }
 
         @Override
         public boolean enableConstruct(Construct construct){
+            boolean changed = false;
             if(constructsInactive.remove(construct)){
-                return constructsActive.add(construct);
+                changed = constructsActive.add(construct);
             }
-            return false;
+            if(changed) {
+                addLogMessage(Component.translatable("log.dysonsphere.construct.enabled", construct.getDisplayName()));
+                updateDSPartListeners();
+            }
+            return changed;
         }
 
         @Override
         public boolean disableConstruct(Construct construct){
+            boolean changed = false;
             if(constructsActive.remove(construct)){
-                return constructsInactive.add(construct);
+                changed = constructsInactive.add(construct);
             }
-            return false;
+            if(changed) {
+                addLogMessage(Component.translatable("log.dysonsphere.construct.disabled", construct.getDisplayName()));
+                updateDSPartListeners();
+            }
+            return changed;
         }
 
         @Override
@@ -308,7 +353,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         }
 
         @Override
-        public double getDysonSphereEnergy() {
+        public long getDysonSphereEnergy() {
             return energy;
         }
 
@@ -322,13 +367,13 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             if(energy <= 0){
                 return Float.NaN;
             }
-            return (float) ((getEnergyRequested() / energy) * DS_COMPLETED);
+            return (float) (((double) getEnergyRequested() / (double) energy) * DS_COMPLETED);
         }
 
         
         @Override
-        public double getEnergyProvided(){
-            double energyProvided = getEnergyRequested();
+        public long getEnergyProvided(){
+            long energyProvided = getEnergyRequested();
             if(energyProvided >= energy){
                 energyProvided = energy;
             }
@@ -343,10 +388,10 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             return energyProvided;
         }
 
-        protected double energyRequested = 0.0d;
+        protected long energyRequested = 0;
         @Override
-        public double getEnergyRequested() {
-            energyRequested = 0.0d;
+        public long getEnergyRequested() {
+            energyRequested = 0;
             receivers.forEach((receiver) -> {
                 receiver.ifPresent((rec) -> {
                     if(rec.canReceive()){
@@ -392,6 +437,16 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             //update client light level
             updateDSPartListeners();
             return true;
+        }
+
+        @Override
+        public List<Component> getDSLog() {
+            return ImmutableList.copyOf(log.iterator());
+        }
+
+        public void addLogMessage(Component msg){
+            
+            log.push(Component.literal(new Date().toString() + ": ").append(msg));
         }
         
     }

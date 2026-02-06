@@ -76,7 +76,7 @@ public class RailgunTile extends BaseTile {
             super.addInputProvider(provider);
             if(provider.isPresent()){
                 setChanged();
-            }//TODO: Sync issues: Removing a hatch does not remove dependend hatches on the client side only.
+            }
         };
 
         public void refreshProvider() {
@@ -125,9 +125,9 @@ public class RailgunTile extends BaseTile {
     
     public void tick() {
         if(!level.isClientSide){
-            if(ticksElapsed == 20){
-                acceptorHandler.markForRefresh();
-            }
+            // if(ticksElapsed == 20){
+            //     acceptorHandler.markForRefresh();
+            // }
             acceptorHandler.tick();
             canAddToDS = true;
             ItemStack invStack = inventory.getStackInSlot(0);
@@ -157,7 +157,7 @@ public class RailgunTile extends BaseTile {
                             }
                             acceptorStorage.extractEnergy(getLaunchEnergy(), false);
                             acceptorHandler.consumeFluidInputs(currentRecipe.fluidInputs()); //we checked the recipe and have no internal tank. there should never be a returned fluid here.
-                            level.playSound(null, worldPosition, ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS);
+                            level.playSound(null, getBlockPos(), ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS);
                         } else {
                             // set unable to add flag
                             canAddToDS = false;
@@ -180,7 +180,7 @@ public class RailgunTile extends BaseTile {
             } 
             if(ticksElapsed % 200 == 20 && ModCompat.isLoaded(ModCompat.MODID.AD_ASTRA)){ //recheck the launch multiplier every 10 seconds. Gravity should not change so frequently, right?
                 float last = launchMult;
-                launchMult = AdAstra.getOrbitalLaunchMult(level, worldPosition);
+                launchMult = AdAstra.getOrbitalLaunchMult(level, getBlockPos());
                 if(last != launchMult){
                     this.setChanged();
                     // lastEnergy = energyStorage.getEnergyStored();
@@ -188,7 +188,7 @@ public class RailgunTile extends BaseTile {
                 }
             }
         } else {
-            level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0);
+            level.markAndNotifyBlock(getBlockPos(), level.getChunkAt(getBlockPos()), getBlockState(), getBlockState(), 2, 0);
             if(!inventory.getStackInSlot(0).isEmpty()){
                 setCurrentRecipe();
             } else {
@@ -216,7 +216,7 @@ public class RailgunTile extends BaseTile {
     }
 
     public boolean canSeeSky(){
-        return level != null && level.canSeeSky(worldPosition.above());
+        return level != null && level.canSeeSky(getBlockPos().above());
     }
 
     public boolean canAddToDS(){
@@ -231,14 +231,14 @@ public class RailgunTile extends BaseTile {
     public void onLoad() {
         super.onLoad();
         if(!level.isClientSide && ModCompat.isLoaded(ModCompat.MODID.AD_ASTRA)){
-            launchMult = AdAstra.getOrbitalLaunchMult(level, worldPosition);
+            launchMult = AdAstra.getOrbitalLaunchMult(level, getBlockPos());
         }
-        acceptorHandler.updateNeighbors(level, worldPosition);
+        acceptorHandler.updateNeighbors(level, getBlockPos());
         acceptorHandler.markForRefresh();
     }
 
     public void onNeighborChange(){
-        acceptorHandler.updateNeighbors(level, worldPosition);
+        acceptorHandler.updateNeighbors(level, getBlockPos());
     }
 
     @Override

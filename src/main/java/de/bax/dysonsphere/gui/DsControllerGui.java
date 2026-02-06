@@ -33,7 +33,7 @@ public class DsControllerGui extends BaseGui<DSControllerContainer> {
 
     private DsDetails dsDetails;
 
-    private Button addButton, removeButton, enableButton, disableButton, confirmButton, cancelButton;
+    private Button addButton, removeButton, enableButton, disableButton, confirmButton, refreshButton;
 
     public DsControllerGui(DSControllerContainer container, Inventory inventory, Component pTitle) {
         super(container, inventory, pTitle);
@@ -55,6 +55,7 @@ public class DsControllerGui extends BaseGui<DSControllerContainer> {
         this.constructActiveList = new ConstructList(this.leftPos + 124, this.topPos + 22, 110, 172, 15);
         
         this.conDetails = new ConstructDetails(this.leftPos + 245, this.topPos, 105, 220);
+        this.conDetails.setDsParts(tile.getDsParts());
 
         this.dsDetails = new DsDetails(tile, this.leftPos - 120, this.topPos + 5, 118, 105);
 
@@ -66,28 +67,28 @@ public class DsControllerGui extends BaseGui<DSControllerContainer> {
         this.addRenderableOnly(constructActiveList);
         this.addRenderableOnly(dsDetails);
 
-        addButton = new PlainTextButton(this.leftPos + 116, this.topPos + 80, 6, 20, Component.literal(">"), (button) -> addConstructButtonPress(), font);
-        addButton.setTooltip(Tooltip.create(Component.literal("Add selected Construct to the Dyson Sphere")));
-        removeButton = new PlainTextButton(this.leftPos + 116, this.topPos + 105, 6, 20, Component.literal("<"), (button) -> removeConstructButtonPress(), font);
-        removeButton.setTooltip(Tooltip.create(Component.literal("Remove selected Construct from the Dyson Sphere")));
+        addButton = new PlainTextButton(this.leftPos + 116, this.topPos + 80, 6, 20, Component.translatable("tooltip.dysonsphere.ds_controller_add_button"), (button) -> addConstructButtonPress(), font);
+        addButton.setTooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_add_button_desc")));
+        removeButton = new PlainTextButton(this.leftPos + 116, this.topPos + 105, 6, 20, Component.translatable("tooltip.dysonsphere.ds_controller_remove_button"), (button) -> removeConstructButtonPress(), font);
+        removeButton.setTooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_remove_button_desc")));
         
-        enableButton = new Button.Builder(Component.literal("Enable"), (button) -> enableConstructButtonPress(true)).bounds(this.leftPos + 128, this.topPos + 198, 50, 15).
-            tooltip(Tooltip.create(Component.literal("Enable the selected Construct"))).build();
-        disableButton = new Button.Builder(Component.literal("Disable"), (button) -> enableConstructButtonPress(false)).bounds(this.leftPos + 183, this.topPos + 198, 50, 15).
-            tooltip(Tooltip.create(Component.literal("Disable the selected Construct"))).build();
+        enableButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_enable_button"), (button) -> enableConstructButtonPress(true)).bounds(this.leftPos + 128, this.topPos + 198, 50, 15).
+            tooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_enable_button_desc"))).build();
+        disableButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_disable_button"), (button) -> enableConstructButtonPress(false)).bounds(this.leftPos + 183, this.topPos + 198, 50, 15).
+            tooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_disable_button_desc"))).build();
 
-        confirmButton = new Button.Builder(Component.literal("Confirm"), (button) -> confirmButtonPress()).bounds(this.leftPos + 6, this.topPos + 198, 50, 15).
-            tooltip(Tooltip.create(Component.translatable("Apply current changes to the Dyson Sphere ({} RF)", DSControllerTile.COMMAND_ENERGY))).build();
+        confirmButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_confirm_button"), (button) -> confirmButtonPress()).bounds(this.leftPos + 6, this.topPos + 198, 50, 15).
+            tooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_confirm_button_desc", DSControllerTile.COMMAND_ENERGY))).build();
 
-        cancelButton = new Button.Builder(Component.literal("Cancel"), (button) -> cancelButtonPress()).bounds(this.leftPos + 61, this.topPos + 198, 50, 15).
-            tooltip(Tooltip.create(Component.literal("Cancel current changes"))).build();
+        refreshButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_refresh_button"), (button) -> refreshButtonPress()).bounds(this.leftPos + 61, this.topPos + 198, 50, 15).
+            tooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_refresh_button_desc"))).build();
 
         this.addRenderableWidget(addButton);
         this.addRenderableWidget(removeButton);
         this.addRenderableWidget(enableButton);
         this.addRenderableWidget(disableButton);
         this.addRenderableWidget(confirmButton);
-        this.addRenderableWidget(cancelButton);
+        this.addRenderableWidget(refreshButton);
     }
 
     protected void addConstructButtonPress(){
@@ -117,7 +118,7 @@ public class DsControllerGui extends BaseGui<DSControllerContainer> {
         tile.sendGuiUpdate();
     }
 
-    protected void cancelButtonPress(){
+    protected void refreshButtonPress(){
         constructActiveList.clear();
         constructInactiveList.clear();
         loadConstructs();
@@ -146,9 +147,9 @@ public class DsControllerGui extends BaseGui<DSControllerContainer> {
         pGuiGraphics.blit(RES_LOC, this.leftPos, this.topPos, 0, 0, 240, 220);
 
         // pGuiGraphics.drawString(font, Component.literal("Available Constructs"), this.leftPos + 5, this.topPos + 5, 0xFFFFFFFF);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.literal("Available Constructs"), this.leftPos + 5, this.topPos + 5, 108, 0xFFFFFFFF, 0, 0xF000F0, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_controller_available_header"), this.leftPos + 5, this.topPos + 5, 108, 0xFFFFFFFF, 0, 0xF000F0, true);
         // pGuiGraphics.drawString(font, Component.literal("Integrated Constructs"), this.leftPos + 125, this.topPos + 5, 0xFFFFFFFF);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.literal("Integrated Constructs"), this.leftPos + 125, this.topPos + 5, 108, 0xFFFFFFFF, 0, 0xF000F0, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_controller_integrated_header"), this.leftPos + 125, this.topPos + 5, 108, 0xFFFFFFFF, 0, 0xF000F0, true);
 
         ConstructList.Entry highlightedEntry = constructActiveList.getHighlightedEntry().orElse(constructInactiveList.getHighlightedEntry().orElse(ConstructList.EMPTY));
         if(highlightedEntry != ConstructList.EMPTY){

@@ -30,13 +30,13 @@ public class CapsuleItem extends Item {
         LASER_0(-50, 0.00001f),
         STRUCTURE_0(0, 0.00001f),
         SOLAR_1(100, 0.000001f),
-        LASER_1(-25, 0.000001f),
+        LASER_1(-50, 0.000001f),
         STRUCTURE_1(0, 0.000001f),
         SOLAR_2(500, 0.0000001f),
-        LASER_2(-5, 0.0000001f),
+        LASER_2(-50, 0.0000001f),
         STRUCTURE_2(0, 0.0000001f),
         SOLAR_3(1000, 0.00000001f),
-        LASER_3(0, 0.00000001f),
+        LASER_3(-50, 0.00000001f),
         STRUCTURE_3(0, 0.00000001f);
 
         public int energyProvided;
@@ -93,8 +93,8 @@ public class CapsuleItem extends Item {
 
     @OnlyIn(Dist.CLIENT)
     protected void addClientTooltip(@Nonnull ItemStack pStack, @Nullable Level pLevel, @Nonnull  List<Component> pTooltipComponents, @Nonnull  TooltipFlag pIsAdvanced){
-        pTooltipComponents.add(Component.literal("Provided Energy: " + this.type.energyProvided));
-        pTooltipComponents.add(Component.literal("Provided Completion: " + this.type.completionProgress));
+        pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.capsule_provided_energy", this.type.energyProvided));
+        pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.capsule_provided_completion", this.type.completionProgress));
     }
 
     public static Component getTypeName(ItemStack stack){

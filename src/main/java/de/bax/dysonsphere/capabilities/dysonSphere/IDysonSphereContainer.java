@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.constructs.Construct;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
@@ -132,7 +133,7 @@ public interface IDysonSphereContainer {
      * get the energy generation capacity of the Dyson Sphere
      * @return RF the DysonSphere can produce per tick
      */
-    double getDysonSphereEnergy();
+    long getDysonSphereEnergy();
 
     /**
      * get the current completion of the Dyson Sphere
@@ -150,13 +151,13 @@ public interface IDysonSphereContainer {
      * get the current energy provided by the Dyson Sphere to receivers
      * @return energy provided per Tick
      */
-    double getEnergyProvided();
+    long getEnergyProvided();
 
     /**
-     * get the toptal energy requested from the Dyson Sphere
+     * get the total energy requested from the Dyson Sphere
      * @return energy requester per Tick
      */
-    double getEnergyRequested();
+    long getEnergyRequested();
 
 
     /**
@@ -174,4 +175,9 @@ public interface IDysonSphereContainer {
      */
     void removeEnergyReceiver(LazyOptional<IDSEnergyReceiver> energyReceiver);
 
+    /**
+     * Get a list of Dyson Sphere change log messages
+     * @return List of Components containing the messages
+     */
+    List<Component> getDSLog();
 }
