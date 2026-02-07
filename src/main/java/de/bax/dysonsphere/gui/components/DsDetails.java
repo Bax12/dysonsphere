@@ -20,6 +20,7 @@ public class DsDetails implements Renderable {
 
     protected final DSMonitorTile tile;
     protected int x, y, width, height;
+    protected boolean dynamicHeight = false;
 
     public DsDetails(DSMonitorTile tile, int x, int y, int width, int height) {
         this.tile = tile;
@@ -34,6 +35,9 @@ public class DsDetails implements Renderable {
     public void render(@Nonnull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         if(tile == null) return;
         if(tile.getDsCompletionPercentage() == -1 ) return;
+        if(dynamicHeight){
+            height = 75 + (tile.getDsParts().size() * 10);
+        }
         pGuiGraphics.fill(this.x, this.y, this.x + width, this.y + height, 0xFFAAAAAA);
         pGuiGraphics.renderOutline(this.x, this.y, width, height, 0xFF222222);
 
@@ -49,11 +53,19 @@ public class DsDetails implements Renderable {
 
         int offset = 0;
         for(Entry<Item, Long> entry : tile.getDsParts().entrySet()){
-            AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey().getName(ItemStack.EMPTY), entry.getValue()), x + 7, y + 42 + offset, width - 9, 0xFFF0F0F0, 0, 0xF000F0, true);
+            AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey().getName(ItemStack.EMPTY), entry.getValue()), x + 2, y + 42 + offset, width - 4, 0xFFF0F0F0, 0, 0xF000F0, true);
             offset += 10;
         }
         AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_usage", df.format(tile.getDsUsage())), x + 2, y + 52 + offset, width - 4, 0xFFF0F0F0, 0, 0xF000F0, true);
         AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_power_draw", df.format(tile.getDsEnergyDraw())), x + 2, y + 62 + offset, width - 4, 0xFFF0F0F0, 0, 0xF000F0, true);
+    }
+
+    public void setDynamicHeight(boolean dynamicHeight){
+        this.dynamicHeight = dynamicHeight;
+    }
+
+    public int getHeight(){
+        return height;
     }
     
 }

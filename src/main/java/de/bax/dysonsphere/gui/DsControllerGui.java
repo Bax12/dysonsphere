@@ -41,24 +41,27 @@ public class DsControllerGui extends BaseGui<DSControllerContainer> {
 
         this.tile = container.tile;
 
-        this.imageWidth = 265;
+        this.imageWidth = 385;
         this.imageHeight = 220;
     }
 
     @SuppressWarnings("null")
     @Override
     protected void init() {
+        this.imageWidth = 385;
         super.init();
-        this.energy = new EnergyDisplay(this.leftPos - 25, this.topPos + 120, tile.energyStorage);
-        this.constructInactiveList = new ConstructList(this.leftPos + 4, this.topPos + 22, 110, 172, 15);
+        this.leftPos -= 60;
+        titleLabelX += 60;
+        this.energy = new EnergyDisplay(this.leftPos + 95, this.topPos + 120, tile.energyStorage);
+        this.constructInactiveList = new ConstructList(this.leftPos + 124, this.topPos + 22, 110, 172, 15);
 
-        this.constructActiveList = new ConstructList(this.leftPos + 124, this.topPos + 22, 110, 172, 15);
+        this.constructActiveList = new ConstructList(this.leftPos + 244, this.topPos + 22, 110, 172, 15);
         
-        this.conDetails = new ConstructDetails(this.leftPos + 245, this.topPos, 105, 220);
+        this.conDetails = new ConstructDetails(this.leftPos + 365, this.topPos, 105, 220);
         this.conDetails.setDsParts(tile.getDsParts());
 
-        this.dsDetails = new DsDetails(tile, this.leftPos - 120, this.topPos + 5, 118, 105);
-
+        this.dsDetails = new DsDetails(tile, this.leftPos, this.topPos + 5, 118, 105);
+        this.dsDetails.setDynamicHeight(true);
         loadConstructs();
 
 
@@ -67,20 +70,20 @@ public class DsControllerGui extends BaseGui<DSControllerContainer> {
         this.addRenderableOnly(constructActiveList);
         this.addRenderableOnly(dsDetails);
 
-        addButton = new PlainTextButton(this.leftPos + 116, this.topPos + 80, 6, 20, Component.translatable("tooltip.dysonsphere.ds_controller_add_button"), (button) -> addConstructButtonPress(), font);
+        addButton = new PlainTextButton(this.leftPos + 236, this.topPos + 80, 6, 20, Component.translatable("tooltip.dysonsphere.ds_controller_add_button"), (button) -> addConstructButtonPress(), font);
         addButton.setTooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_add_button_desc")));
-        removeButton = new PlainTextButton(this.leftPos + 116, this.topPos + 105, 6, 20, Component.translatable("tooltip.dysonsphere.ds_controller_remove_button"), (button) -> removeConstructButtonPress(), font);
+        removeButton = new PlainTextButton(this.leftPos + 236, this.topPos + 105, 6, 20, Component.translatable("tooltip.dysonsphere.ds_controller_remove_button"), (button) -> removeConstructButtonPress(), font);
         removeButton.setTooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_remove_button_desc")));
         
-        enableButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_enable_button"), (button) -> enableConstructButtonPress(true)).bounds(this.leftPos + 128, this.topPos + 198, 50, 15).
+        enableButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_enable_button"), (button) -> enableConstructButtonPress(true)).bounds(this.leftPos + 248, this.topPos + 198, 50, 15).
             tooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_enable_button_desc"))).build();
-        disableButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_disable_button"), (button) -> enableConstructButtonPress(false)).bounds(this.leftPos + 183, this.topPos + 198, 50, 15).
+        disableButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_disable_button"), (button) -> enableConstructButtonPress(false)).bounds(this.leftPos + 303, this.topPos + 198, 50, 15).
             tooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_disable_button_desc"))).build();
 
-        confirmButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_confirm_button"), (button) -> confirmButtonPress()).bounds(this.leftPos + 6, this.topPos + 198, 50, 15).
+        confirmButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_confirm_button"), (button) -> confirmButtonPress()).bounds(this.leftPos + 126, this.topPos + 198, 50, 15).
             tooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_confirm_button_desc", DSControllerTile.COMMAND_ENERGY))).build();
 
-        refreshButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_refresh_button"), (button) -> refreshButtonPress()).bounds(this.leftPos + 61, this.topPos + 198, 50, 15).
+        refreshButton = new Button.Builder(Component.translatable("tooltip.dysonsphere.ds_controller_refresh_button"), (button) -> refreshButtonPress()).bounds(this.leftPos + 181, this.topPos + 198, 50, 15).
             tooltip(Tooltip.create(Component.translatable("tooltip.dysonsphere.ds_controller_refresh_button_desc"))).build();
 
         this.addRenderableWidget(addButton);
@@ -144,27 +147,29 @@ public class DsControllerGui extends BaseGui<DSControllerContainer> {
     protected void renderBg(@Nonnull GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
-        pGuiGraphics.blit(RES_LOC, this.leftPos, this.topPos, 0, 0, 240, 220);
+        pGuiGraphics.blit(RES_LOC, this.leftPos + 120, this.topPos, 0, 0, 240, 220);
 
         // pGuiGraphics.drawString(font, Component.literal("Available Constructs"), this.leftPos + 5, this.topPos + 5, 0xFFFFFFFF);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_controller_available_header"), this.leftPos + 5, this.topPos + 5, 108, 0xFFFFFFFF, 0, 0xF000F0, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_controller_available_header"), this.leftPos + 125, this.topPos + 5, 108, 0xFFFFFFFF, 0, 0xF000F0, true);
         // pGuiGraphics.drawString(font, Component.literal("Integrated Constructs"), this.leftPos + 125, this.topPos + 5, 0xFFFFFFFF);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_controller_integrated_header"), this.leftPos + 125, this.topPos + 5, 108, 0xFFFFFFFF, 0, 0xF000F0, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_controller_integrated_header"), this.leftPos + 245, this.topPos + 5, 108, 0xFFFFFFFF, 0, 0xF000F0, true);
 
         ConstructList.Entry highlightedEntry = constructActiveList.getHighlightedEntry().orElse(constructInactiveList.getHighlightedEntry().orElse(ConstructList.EMPTY));
         if(highlightedEntry != ConstructList.EMPTY){
-            imageWidth = 265 + 85;
+            imageWidth = 385 + 85;
             conDetails.setConstruct(highlightedEntry.construct);
             conDetails.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick, highlightedEntry.isEnabled());
             // pGuiGraphics.drawString(font, highlightedEntry.construct.getDisplayName(), this.leftPos + 240, this.topPos + 10, 0xFFFFFFFF);
             // AssetUtil.renderMaxWidthString(pGuiGraphics, highlightedEntry.construct.getDisplayName(), this.leftPos + 250, this.topPos + 10, 80f, 0xFFFFFFFF, 0, 0xF000F0, false);
         } else {
-            imageWidth = 265;
+            imageWidth = 385;
         }
 
         // pGuiGraphics.drawString(font, highlightedEntry.construct.getDisplayName(), 0, 0, 0);
 
-        energy.draw(pGuiGraphics);
+        
+
+        
         // constructInactiveList.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         // constructActiveList.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 
@@ -172,12 +177,17 @@ public class DsControllerGui extends BaseGui<DSControllerContainer> {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
 
         confirmButton.active = tile.energyStorage.getEnergyStored() >= DSControllerTile.COMMAND_ENERGY;
-        
-
+        int detailHeight = dsDetails.getHeight();
+        if(detailHeight > 105){
+            energy.yPos = this.topPos + detailHeight + 5;
+        } else {
+            energy.yPos = this.topPos + 120;
+        }
+        energy.draw(guiGraphics);
         energy.drawOverlay(guiGraphics, mouseX, mouseY);
     }
 
