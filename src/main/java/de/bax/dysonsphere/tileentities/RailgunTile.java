@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.annotation.Nonnull;
 
@@ -99,6 +100,8 @@ public class RailgunTile extends BaseTile {
 
     protected boolean canAddToDS = true;
 
+    protected int ticksSinceLastLaunch = 50;
+
     public RailgunTile(BlockPos pos, BlockState state) {
         super(ModTiles.RAILGUN.get(), pos, state);
     }
@@ -124,6 +127,7 @@ public class RailgunTile extends BaseTile {
     }
     
     public void tick() {
+        ticksSinceLastLaunch += ticksSinceLastLaunch >= 100 ? 0 : 1;
         if(!level.isClientSide){
             // if(ticksElapsed == 20){
             //     acceptorHandler.markForRefresh();
@@ -157,7 +161,8 @@ public class RailgunTile extends BaseTile {
                             }
                             acceptorStorage.extractEnergy(getLaunchEnergy(), false);
                             acceptorHandler.consumeFluidInputs(currentRecipe.fluidInputs()); //we checked the recipe and have no internal tank. there should never be a returned fluid here.
-                            level.playSound(null, getBlockPos(), ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS);
+                            level.playSound(null, getBlockPos(), ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS, 1.0F, (this.level.random.nextFloat() * 0.2f) + 0.8f);
+                            ticksSinceLastLaunch = 0;
                         } else {
                             // set unable to add flag
                             canAddToDS = false;
@@ -259,6 +264,9 @@ public class RailgunTile extends BaseTile {
         if(tag.contains("acceptor")){
             acceptorHandler.deserializeNBT(tag.getCompound("acceptor"));
         }
+        if(tag.contains("lastLaunch")){
+            ticksSinceLastLaunch = tag.getInt("lastLaunch");
+        }
     }
 
     @Override
@@ -269,6 +277,7 @@ public class RailgunTile extends BaseTile {
         tag.putFloat("launchMult", launchMult);
         tag.putBoolean("canAdd", canAddToDS);
         tag.put("acceptor", acceptorHandler.serializeNBT());
+        tag.putInt("lastLaunch", ticksSinceLastLaunch);
     }
 
     public void dropContent() {
@@ -300,6 +309,10 @@ public class RailgunTile extends BaseTile {
     public void onRemove() {
         this.dropContent();
         acceptorHandler.onRemove();
+    }
+
+    public int getTicksSinceLastLaunch() {
+        return ticksSinceLastLaunch;
     }
     
 

@@ -82,5 +82,11 @@ public class AcceptorFluidDisplay extends BaseDisplay {
             }
         }
     }
+
+    @Override
+    protected boolean isHovered(int mouseX, int mouseY) {
+        if(acceptor.getFluidCapacity() == 0) return false; //No hover when there is nothing to display
+        return super.isHovered(mouseX, mouseY);
+    }
     
 }

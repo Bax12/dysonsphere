@@ -1,5 +1,7 @@
 package de.bax.dysonsphere.gui;
 
+import javax.annotation.Nonnull;
+
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -17,14 +19,14 @@ public abstract class BaseGui<T extends AbstractContainerMenu> extends AbstractC
     }
     
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderLabels(GuiGraphics guiGraphics, int x, int y) {
+    protected void renderLabels(@Nonnull GuiGraphics guiGraphics, int x, int y) {
         guiGraphics.drawString(this.font, this.title, titleLabelX, titleLabelY, 0xFFFFFF, false);
     }
 
