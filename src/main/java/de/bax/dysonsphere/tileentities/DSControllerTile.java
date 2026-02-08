@@ -1,6 +1,8 @@
 package de.bax.dysonsphere.tileentities;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -12,6 +14,7 @@ import com.google.common.collect.ImmutableSet;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.constructs.Construct;
+import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.network.IUpdateReceiverTile;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.network.TileUpdatePackage;
@@ -145,11 +148,13 @@ public class DSControllerTile extends DSMonitorTile implements IUpdateReceiverTi
     public void handleUpdate(CompoundTag updateTag, Player player) {
         if(this.energyStorage.extractEnergy(COMMAND_ENERGY, false) == COMMAND_ENERGY){
             this.energyStorage.extractEnergy(COMMAND_ENERGY, true);
+            List<Construct> constructs = new ArrayList<Construct>(ModConstructs.registry().getValues());
             level.getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
             if (updateTag.contains("enabledConstructs")) {
                 ((ListTag) updateTag.get("enabledConstructs")).stream().map((con) -> {
                     return Construct.load((CompoundTag) con);
                 }).forEach((construct) -> {
+                    constructs.remove(construct);
                     if(!dysonsphere.addConstruct(construct, true)){
                         dysonsphere.enableConstruct(construct);
                     }
@@ -160,9 +165,15 @@ public class DSControllerTile extends DSMonitorTile implements IUpdateReceiverTi
                 ((ListTag) updateTag.get("disabledConstructs")).stream().map((con) -> {
                     return Construct.load((CompoundTag) con);
                 }).forEach((construct) -> {
+                    constructs.remove(construct);
                     if(!dysonsphere.addConstruct(construct, false)){
                         dysonsphere.disableConstruct(construct);
                     }
+                });
+            }
+            if(!constructs.isEmpty()){ //every not send construct was removed, therefor will be removed from the dysonsphere
+                constructs.forEach((con) -> {
+                    dysonsphere.removeConstruct(con);
                 });
             }
         });
