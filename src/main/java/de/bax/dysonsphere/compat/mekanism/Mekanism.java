@@ -42,8 +42,11 @@ public class Mekanism implements IModCompat {
                 event.getObject().getCapability(LASER_RECEPTOR).invalidate();
             });
         } 
-        /*if(event.getObject() instanceof IMekanismHeatHandler heat){ //Currently I see no need for this
-
+        /*if(event.getObject() instanceof IHeatHandler heat){ //Pushing heat to mekansim doesn't work. With and without. But this enables broken interactions with the thermal generator
+            event.addCapability(new ResourceLocation(DysonSphere.MODID, "mek2ds_heat_handler"), new Mek2DSHeatHandler(heat));
+            event.addListener(() -> {
+                event.getObject().getCapability(DSCapabilities.HEAT).invalidate();
+            });
         } else*/ if(event.getObject() instanceof IHeatTile heat){
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "ds2mek_heat_handler"), new DS2MekHeatHandler(heat));
             event.addListener(() -> {
