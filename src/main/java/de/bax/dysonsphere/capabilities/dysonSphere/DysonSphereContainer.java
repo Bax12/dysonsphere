@@ -43,12 +43,13 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
     public static final float DS_COMPLETED = 100f; //does this really count as magic number?
     public static final int DS_LOG_LENGTH = 500;
 
-    boolean allowOverworldAccess;
+    protected boolean allowOverworldAccess;
+    protected Level level;
 
-    DysonSphere dysonSphere = new DysonSphere();
-    LazyOptional<DysonSphere> lazyDysonSphere = LazyOptional.of(() -> dysonSphere);
+    protected DysonSphere dysonSphere = new DysonSphere();
+    protected LazyOptional<DysonSphere> lazyDysonSphere = LazyOptional.of(() -> dysonSphere);
 
-    public DysonSphereContainer(){
+    public DysonSphereContainer(Level level){
         allowOverworldAccess = !(DSConfig.DYSON_SPHERE_DIM_BLACKLIST_VALUE.contains(Level.OVERWORLD.location().toString()) ^ DSConfig.DYSON_SPHERE_IS_WHITELIST_VALUE);
         /*
         inList    whiteList         allowed
@@ -57,6 +58,8 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         1       0               0
         1       1               1
         */
+
+        this.level = level;
     }
 
     @Override
@@ -85,11 +88,13 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
     public class DysonSphere implements IDysonSphereContainer {
 
         Map<Item, Long> parts = new HashMap<>();
-        protected long energy = 0; //prone to rounding errors, only visible with large changes in the part lists without restart.
+        protected long energy = 0;
         protected float completion = 0.0f; //in percent 0.0 - 100.0
         Set<LazyOptional<IDSEnergyReceiver>> receivers = new HashSet<>();
         Set<Construct> constructsActive = new HashSet<>();
         Set<Construct> constructsInactive = new HashSet<>();
+
+        protected long energyRequested = -1;
 
         RingBuffer<Component> log = new RingBuffer<Component>(DS_LOG_LENGTH); //wont be saved to disk.
 
@@ -251,7 +256,10 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             }
         }
 
+        protected long updateDSListenersLastCall = 0;
         protected void updateDSPartListeners(){
+            if(level.getGameTime() - updateDSListenersLastCall < 1) return; //this might cause issues as the first change per tick is propagated, not the last change.
+            updateDSListenersLastCall = level.getGameTime();
             receivers.forEach((lazyReceiver) -> {
                 lazyReceiver.ifPresent((receiver) -> {
                     receiver.handleDysonSphereChange(this);
@@ -367,7 +375,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             if(energy <= 0){
                 return Float.NaN;
             }
-            return (float) (((double) getEnergyRequested() / (double) energy) * DS_COMPLETED);
+            return (float) (((double) getEnergyRequested() / (double) energy)) * 100;
         }
 
         
@@ -388,17 +396,21 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             return energyProvided;
         }
 
-        protected long energyRequested = 0;
+
+        protected long energyRequestLastCall = 0;
         @Override
         public long getEnergyRequested() {
-            energyRequested = 0;
-            receivers.forEach((receiver) -> {
-                receiver.ifPresent((rec) -> {
-                    if(rec.canReceive()){
-                        energyRequested += rec.getMaxReceive();
-                    }
+            if(level.getGameTime() - energyRequestLastCall > 10){ //this method is called way to much for what it is. This should help with large amounts of IDSEnergyReceiver.
+                energyRequested = 0;
+                receivers.forEach((receiver) -> {
+                    receiver.ifPresent((rec) -> {
+                        if(rec.canReceive()){
+                            energyRequested += Math.max(0, rec.getMaxReceive());
+                        }
+                    });
                 });
-            });
+                energyRequestLastCall = level.getGameTime();
+            }
             return energyRequested;
         }
 
@@ -434,6 +446,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         public boolean resetDysonSphereParts() {
             parts.clear();
             completion = 0f;
+            energy = 0;
             //update client light level
             updateDSPartListeners();
             return true;

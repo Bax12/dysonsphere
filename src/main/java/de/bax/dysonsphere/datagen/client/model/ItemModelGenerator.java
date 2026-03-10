@@ -40,11 +40,13 @@ public class ItemModelGenerator extends ItemModelProvider{
             ModItems.TARGET_DESIGNATOR,
             ModItems.LASER_CONTROLLER,
             ModItems.GRAPPLING_HOOK_HARNESS,
-            ModItems.GRAPPLING_HOOK_CONTROLLER
+            ModItems.GRAPPLING_HOOK_CONTROLLER,
+            ModItems.SENSOR_UNIT
         );
 
         Set<Item> complexBlocks = ImmutableSet.of(
             ModBlocks.RAILGUN_BLOCK.get().asItem(),
+            ModBlocks.LISTENER_BLOCK.get().asItem(),
             ModBlocks.INPUT_HATCH_SERIAL_HEAT.get().asItem(),
             ModBlocks.INPUT_HATCH_PARALLEL_HEAT.get().asItem(),
             ModBlocks.INPUT_HATCH_PROXY_HEAT.get().asItem(),

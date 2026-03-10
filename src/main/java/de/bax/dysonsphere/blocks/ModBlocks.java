@@ -1,5 +1,7 @@
 package de.bax.dysonsphere.blocks;
 
+import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
+
 import com.google.common.base.Supplier;
 
 import de.bax.dysonsphere.DysonSphere;
@@ -30,6 +32,10 @@ public class ModBlocks {
     public static final RegistryObject<Block> RAILGUN_BLOCK = registerBlock("railgun_block", () -> new RailgunBlock());
     public static final RegistryObject<Block> DS_ENERGY_RECEIVER_BLOCK = registerBlock("dysonsphere_energy_receiver_block", () -> new DSEnergyReceiverBlock());
     public static final RegistryObject<Block> DS_CONTROLLER_BLOCK = registerBlock("dysonsphere_controller_block", () -> new DSControllerBlock());
+    public static final RegistryObject<Block> CARGO_RECEIVER_BLOCK = registerBlock("cargo_receiver_block", () -> new CargoReceiverBlock());
+    
+    public static final RegistryObject<Block> LISTENER_BLOCK = registerBlock("listener_block", () -> new ListenerBlock());
+    public static final RegistryObject<Block> ENERGY_CONVERTER_BLOCK = registerBlock("energy_converter", () -> new EnergyConverterBlock());
 
     public static final RegistryObject<Block> HEAT_PIPE_BLOCK = registerBlock("heat_pipe_block", () -> new HeatPipeBlock());
     public static final RegistryObject<Block> HEAT_EXCHANGER_BLOCK = registerBlock("heat_exchanger_block", () -> new HeatExchangerBlock());//5mb/t if >450° + 1mb/t per 50° over 450

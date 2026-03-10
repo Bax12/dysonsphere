@@ -24,4 +24,10 @@ public class ModRecipes {
 
     public static final RegistryObject<RecipeType<ConstructRecipe>> CONSTRUCT_TYPE = TYPES.register("construct", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "construct")));
     public static final RegistryObject<RecipeSerializer<ConstructRecipe>> CONSTRUCT_SERIALIZER = SERIALIZERS.register("construct", ConstructRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<CargoDeliveryRecipe>> CARGO_DELIVERY_TYPE  = TYPES.register("cargo_delivery", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "cargo_delivery")));
+    public static final RegistryObject<RecipeSerializer<CargoDeliveryRecipe>> CARGO_DELIVERY_SERIALIZER = SERIALIZERS.register("cargo_delivery", CargoDeliveryRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<ListenerRecipe>> LISTENER_TYPE  = TYPES.register("listener", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "listener")));
+    public static final RegistryObject<RecipeSerializer<ListenerRecipe>> LISTENER_SERIALIZER = SERIALIZERS.register("listener", ListenerRecipe.Serializer::new);
 }

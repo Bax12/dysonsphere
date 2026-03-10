@@ -71,7 +71,7 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
         Font font = Minecraft.getInstance().font;
         Matrix4f matrix = poseStack.last().pose();
 
-
+        //todo: fix out of bounds text with to many lines: squish text in height?
         font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_status"), 0/*width adjust*/, 0/*line feed*/, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
         if(tile.getDsCompletionPercentage() == -1){
             poseStack.pushPose();

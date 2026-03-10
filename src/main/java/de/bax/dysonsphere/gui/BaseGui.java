@@ -12,6 +12,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 
 public abstract class BaseGui<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
 
+    @Nonnull
     public static final ResourceLocation GUI_INVENTORY_LOC = AssetUtil.getGuiLocation("gui_lower");
 
     public BaseGui(T container, Inventory inventory, Component pTitle) {

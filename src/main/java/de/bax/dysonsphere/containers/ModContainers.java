@@ -15,6 +15,8 @@ public class ModContainers {
     public static final RegistryObject<MenuType<RailgunContainer>> RAILGUN_CONTAINER = CONTAINERS.register("railgun_container", () -> IForgeMenuType.create(RailgunContainer::fromNetwork));
     public static final RegistryObject<MenuType<DSEnergyReceiverContainer>> DS_ENERGY_RECEIVER_CONTAINER = CONTAINERS.register("ds_energy_receiver_container", () -> IForgeMenuType.create(DSEnergyReceiverContainer::fromNetwork));
     public static final RegistryObject<MenuType<DSControllerContainer>> DS_CONTROLLER_CONTAINER = CONTAINERS.register("ds_controller_container", () -> IForgeMenuType.create(DSControllerContainer::fromNetwork));
+    public static final RegistryObject<MenuType<CargoReceiverContainer>> CARGO_RECEIVER_CONTAINER = CONTAINERS.register("cargo_receiver_container", () -> IForgeMenuType.create(CargoReceiverContainer::fromNetwork));
+    public static final RegistryObject<MenuType<ListenerContainer>> LISTENER_CONTAINER = CONTAINERS.register("listener_container", () -> IForgeMenuType.create(ListenerContainer::fromNetwork));
     public static final RegistryObject<MenuType<HeatGeneratorContainer>> HEAT_GENERATOR_CONTAINER = CONTAINERS.register("heat_generator_container", () -> IForgeMenuType.create(HeatGeneratorContainer::fromNetwork));
     public static final RegistryObject<MenuType<HeatExchangerContainer>> HEAT_EXCHANGER_CONTAINER = CONTAINERS.register("heat_exchanger_container", () -> IForgeMenuType.create(HeatExchangerContainer::fromNetwork));
     public static final RegistryObject<MenuType<HeatConverterContainer>> HEAT_CONVERTER_CONTAINER = CONTAINERS.register("heat_converter_container", () -> IForgeMenuType.create(HeatConverterContainer::fromNetwork));

@@ -11,7 +11,6 @@ public class ModFluids {
     
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, DysonSphere.MODID);
 
-    public static final RegistryObject<Fluid> STEAM = FLUIDS.register("steam", () -> new BasicGaseousFluid(ModItems.STEAM_BUCKET, "block/steam_still", "fluid.dysonsphere.steam", 450));
-    public static final RegistryObject<Fluid> HELIUM = FLUIDS.register("helium", () -> new BasicGaseousFluid(ModItems.HELIUM_BUCKET, "block/helium_still", "fluid.dysonsphere.helium", 290));
-
+    public static final RegistryObject<Fluid> STEAM = FLUIDS.register("steam", () -> new BasicGaseousFluid(ModItems.STEAM_BUCKET, "block/steam_still", "fluid.dysonsphere.steam", 450, -200));
+    public static final RegistryObject<Fluid> HELIUM = FLUIDS.register("helium", () -> new BasicGaseousFluid(ModItems.HELIUM_BUCKET, "block/helium_still", "fluid.dysonsphere.helium", 4, 125));
 }

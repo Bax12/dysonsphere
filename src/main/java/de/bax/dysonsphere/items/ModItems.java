@@ -61,7 +61,6 @@ public class ModItems {
     public static final RegistryObject<Item> CONSTRUCT_ENDER = registerItem("construct_ender");
     public static final RegistryObject<Item> INGOT_SENTIENT_ALLOY = registerItem("ingot_sentient_alloy");
     public static final RegistryObject<Item> GRAPPLING_HOOK_HARNESS = ITEMS.register("grappling_hook_harness", () -> new GrapplingHookHarnessItem());
-    // public static final RegistryObject<Item> GRAPPLING_HOOK_HARNESS = registerItem("grappling_hook_harness");
     public static final RegistryObject<Item> GRAPPLING_HOOK_CONTROLLER = ITEMS.register("grappling_hook_controller", () -> new GrapplingHookControllerItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_HOOK_SMART_ALLOY = ITEMS.register("grappling_hook_hook_smart_alloy", () -> new GrapplingHookHookItem(0));
     public static final RegistryObject<Item> GRAPPLING_HOOK_HOOK_BLAZE = ITEMS.register("grappling_hook_hook_blaze", () -> new GrapplingHookBlazeHookItem());
@@ -75,6 +74,7 @@ public class ModItems {
     public static final RegistryObject<Item> GRAPPLING_HOOK_ROPE_ENDER = ITEMS.register("grappling_hook_rope_ender", () -> new GrapplingHookEnderRopeItem());
     public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_PRESSURE = ITEMS.register("grappling_hook_engine_pressure", () -> new GrapplingHookPressureEngine());
     public static final RegistryObject<Item> WRENCH = ITEMS.register("wrench", () -> new WrenchItem()); //not really needed?
+    public static final RegistryObject<Item> SENSOR_UNIT = registerItem("sensor_unit");
     
 
     public static RegistryObject<Item> registerItem(String name) {

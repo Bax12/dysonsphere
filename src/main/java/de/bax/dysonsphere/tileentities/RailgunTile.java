@@ -211,7 +211,19 @@ public class RailgunTile extends BaseTile {
         recipes.removeIf((recipe) -> {
             return !recipe.matches(input, extraInputs, fluidInputs);
         });
-        currentRecipe = recipes.size() >= 1 ? recipes.get(0) : null;
+        if(recipes.size() == 1){
+            currentRecipe = recipes.get(0);
+        } else if(recipes.size() > 1){
+            int minEnergyIndex = 0;
+            for(int i = 1; i < recipes.size(); i++){
+                if(recipes.get(minEnergyIndex).baseEnergy() > recipes.get(i).baseEnergy()){
+                    minEnergyIndex = i;
+                }
+            }
+            currentRecipe = recipes.get(minEnergyIndex);
+        } else {
+            currentRecipe = null;
+        }
     }
 
     @Override

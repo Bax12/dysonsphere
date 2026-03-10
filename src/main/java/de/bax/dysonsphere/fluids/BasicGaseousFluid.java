@@ -28,12 +28,14 @@ public class BasicGaseousFluid extends Fluid {
     protected final String texturePath;
     protected final String description;
     protected final int temperature;
+    protected final int density;
 
-    public BasicGaseousFluid(Supplier<Item> steamBucket, String texturePath, String description, int temperature){
+    public BasicGaseousFluid(Supplier<Item> steamBucket, String texturePath, String description, int temperature, int density){
         this.item = steamBucket;
         this.texturePath = texturePath;
         this.description = description;
         this.temperature = temperature;
+        this.density = density;
     }
 
     @Override
@@ -93,7 +95,7 @@ public class BasicGaseousFluid extends Fluid {
 
     @Override
     public FluidType getFluidType() {
-        return new FluidType(FluidType.Properties.create().density(-200).temperature(temperature).viscosity(1).canSwim(false).canConvertToSource(false).descriptionId(description)){
+        return new FluidType(FluidType.Properties.create().density(density).temperature(temperature).viscosity(1).canSwim(false).canConvertToSource(false).descriptionId(description)){
             @Override
             public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
                 consumer.accept(new IClientFluidTypeExtensions() {

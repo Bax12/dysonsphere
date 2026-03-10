@@ -39,6 +39,7 @@ public class RecipeGenerator extends RecipeProvider {
         HeatExchangerRecipeGenerator.buildRecipes(consumer);
         LaserCraftingRecipeGenerator.buildRecipes(consumer);
         OrbitalLaunchRecipeGenerator.buildRecipes(consumer);
+        CargoDeliveryRecipeGenerator.buildRecipes(consumer);
 
         Recipe.shaped(ModItems.CAPSULE_EMPTY.get())
             .pattern("HHH")

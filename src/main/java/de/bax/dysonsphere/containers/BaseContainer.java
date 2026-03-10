@@ -22,13 +22,17 @@ public abstract class BaseContainer extends AbstractContainerMenu {
     protected abstract boolean quickMoveToInventory(ItemStack newStack);
 
     public void addInventorySlots(Inventory inv){
+        addInventorySlots(inv, 8, 97);
+    }
+
+    public void addInventorySlots(Inventory inv, int x, int y){
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                this.addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, 97 + i * 18));
+                this.addSlot(new Slot(inv, j + i * 9 + 9, x + j * 18, y + i * 18));
             }
         }
         for (int i = 0; i < 9; i++) {
-            this.addSlot(new Slot(inv, i, 8 + i * 18, 155));
+            this.addSlot(new Slot(inv, i, 8 + i * 18, y + 58));
         }
     }
 

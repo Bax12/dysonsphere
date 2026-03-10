@@ -20,6 +20,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class RailgunGui extends BaseGui<RailgunContainer> {
 
+    @Nonnull
     public static final ResourceLocation RES_LOC = AssetUtil.getGuiLocation("gui_railgun");
     private final RailgunTile tile;
     private EnergyDisplay energy;
@@ -121,7 +122,7 @@ public class RailgunGui extends BaseGui<RailgunContainer> {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         energy.drawOverlay(guiGraphics, mouseX, mouseY);
         fluid.drawOverlay(guiGraphics, mouseX, mouseY);

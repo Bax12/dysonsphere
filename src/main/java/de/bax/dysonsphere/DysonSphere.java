@@ -27,6 +27,7 @@ import de.bax.dysonsphere.entityRenderer.GrapplingHookRenderer;
 import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
 import de.bax.dysonsphere.entityRenderer.TargetDesignatorRenderer;
 import de.bax.dysonsphere.fluids.ModFluids;
+import de.bax.dysonsphere.gui.CargoReceiverGui;
 import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
 import de.bax.dysonsphere.gui.DsControllerGui;
 import de.bax.dysonsphere.gui.GrapplingHookHarnessInventoryGui;
@@ -41,6 +42,7 @@ import de.bax.dysonsphere.gui.LaserControllerGui;
 import de.bax.dysonsphere.gui.LaserControllerInventoryGui;
 import de.bax.dysonsphere.gui.LaserPatternControllerGui;
 import de.bax.dysonsphere.gui.LaserPatternControllerInventoryGui;
+import de.bax.dysonsphere.gui.ListenerGui;
 import de.bax.dysonsphere.gui.ModHuds;
 import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
@@ -170,7 +172,7 @@ public class DysonSphere
         ResourceKey<Level> dimension = event.getObject().dimension();
         if(dimension.equals(Level.OVERWORLD)){ 
             DysonSphere.LOGGER.info("Attaching Level Capability to {}", dimension.location());
-            event.addCapability(new ResourceLocation(DysonSphere.MODID, "dysonsphere"), new DysonSphereContainer());
+            event.addCapability(new ResourceLocation(DysonSphere.MODID, "dysonsphere"), new DysonSphereContainer(event.getObject()));
             event.addListener(() -> {
                 event.getObject().getCapability(DSCapabilities.DYSON_SPHERE).invalidate();
             });
@@ -247,6 +249,7 @@ public class DysonSphere
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
+        @SuppressWarnings("null")
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
@@ -254,6 +257,8 @@ public class DysonSphere
                 MenuScreens.register(ModContainers.RAILGUN_CONTAINER.get(), RailgunGui::new);
                 MenuScreens.register(ModContainers.DS_ENERGY_RECEIVER_CONTAINER.get(), DSEnergyReceiverGui::new);
                 MenuScreens.register(ModContainers.DS_CONTROLLER_CONTAINER.get(), DsControllerGui::new);
+                MenuScreens.register(ModContainers.CARGO_RECEIVER_CONTAINER.get(), CargoReceiverGui::new);
+                MenuScreens.register(ModContainers.LISTENER_CONTAINER.get(), ListenerGui::new);
                 MenuScreens.register(ModContainers.HEAT_GENERATOR_CONTAINER.get(), HeatGeneratorGui::new);
                 MenuScreens.register(ModContainers.HEAT_EXCHANGER_CONTAINER.get(), HeatExchangerGui::new);
                 MenuScreens.register(ModContainers.HEAT_CONVERTER_CONTAINER.get(), HeatConverterGui::new);

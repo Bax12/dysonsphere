@@ -24,6 +24,7 @@ public class AssetUtil {
 
     public static final NumberFormat FLOAT_FORMAT = NumberFormat.getNumberInstance(Locale.ENGLISH);
     
+    @Nonnull
     public static ResourceLocation getGuiLocation(String file){
         return new ResourceLocation(DysonSphere.MODID, "textures/gui/" + file + ".png");
     }
