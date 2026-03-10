@@ -1,4 +1,14 @@
 {
+  "cargo_delivery": {
+    "sounds": [
+      {
+        "name": "dysonsphere:cargo_delivery",
+        "pitch": 0.25,
+        "volume": 0.4
+      }
+    ],
+    "subtitle": "sound.dysonsphere.cargo_delivery"
+  },
   "ds_renergy_receiver_work": {
     "sounds": [
       {

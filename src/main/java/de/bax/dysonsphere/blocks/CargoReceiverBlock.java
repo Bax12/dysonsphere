@@ -8,9 +8,13 @@ import javax.annotation.Nullable;
 import de.bax.dysonsphere.containers.CargoReceiverContainer;
 import de.bax.dysonsphere.tileentities.CargoReceiverTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
@@ -95,5 +99,18 @@ public class CargoReceiverBlock extends Block implements EntityBlock {
         }
     }
 
+    @Override
+    public void animateTick(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull RandomSource pRandom) {
+        if(pLevel.isClientSide){
+            if(pLevel.getBlockEntity(pPos) instanceof CargoReceiverTile cargoReceiverTile){
+                
+                if(cargoReceiverTile.getCurrentRecipe() != null && cargoReceiverTile.getEnergyStored() >= cargoReceiverTile.getCurrentRecipe().energy()){
+                    //todo add cargo capsule particle
+                }
+                
+            }
+            
+        }
+    }
     
 }

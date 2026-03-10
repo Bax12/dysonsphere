@@ -9,15 +9,17 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.capabilities.fluid.FluidTankCustom;
-import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.network.IUpdateReceiverTile;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.network.TileUpdatePackage;
 import de.bax.dysonsphere.recipes.CargoDeliveryRecipe;
+import de.bax.dysonsphere.sounds.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -74,7 +76,7 @@ public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
         @Override
         public int getMaxReceive() {
             if((isWorking() || isReady()) && curRecipe != null){//should never be working or ready with null recipe. Better safe then sorry.
-                return Math.min(dsPowerDraw, curRecipe.energy());
+                return dsPowerDraw;
             }
             return 0;
         }
@@ -98,7 +100,6 @@ public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
     protected int ticksElapsed = 0;
     protected int energyStored;
     protected int dsPowerDraw;
-    protected boolean canReceive = false;
     protected LazyOptional<IFluidHandler>[] fluidNeighbors = new LazyOptional[6];
     protected CargoDeliveryRecipe curRecipe;
     protected boolean shouldUpdate;
@@ -140,12 +141,16 @@ public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
         if(!level.isClientSide){
             if(ticksElapsed++ % 5 == 0){
                 splitShareFluid();
-                if(level.canSeeSky(worldPosition.above())){
+                if(level.canSeeSky(getBlockPos().above())){
                     if(curRecipe != null){
+                        if(energyStored >= curRecipe.energy()){ //assume we generated the output last tick.
+                            energyStored %= curRecipe.energy();
+                        }
                         if(canOutput()){
                             energyStored += level.getCapability(DSCapabilities.DYSON_SPHERE).map((dysonsphere) -> {
                                 var constructs = dysonsphere.getEnabledConstructs();
                                 if(constructs.containsAll(curRecipe.requiredConstructs())){
+                                    setStatus(Status.READY);
                                     return dsReceiver.getCurrentReceive(dysonsphere);
                                 } else {
                                     setStatus(Status.BLOCKED_CONSTRUCTS);
@@ -153,17 +158,24 @@ public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
                                 return 0;
                             }).orElse(0);
                             if(energyStored >= curRecipe.energy()){
+                                int overflow = energyStored / curRecipe.energy(); //at least 1, so no additional check needed
                                 ItemStack stack = curRecipe.itemOutput().copy();
+                                stack.setCount(stack.getCount() * overflow);
                                 int i = 0;
                                 while(!stack.isEmpty()){
                                     stack = inventory.insertItem(i, stack, false);
                                     i++;
                                     if(i > inventory.getSlots()) break;
                                 }
-                                FluidStack fluid = curRecipe.fluidOutput();
+                                FluidStack fluid = curRecipe.fluidOutput().copy();
+                                fluid.setAmount(fluid.getAmount() * overflow);
                                 tank.fillInternal(fluid, FluidAction.EXECUTE);
-                                energyStored = 0;
+                                // energyStored = 0;
+                                setStatus(Status.WORKING);//for request == recipe.energy() situations
                                 shouldUpdate = true;
+
+                                //
+                                level.playSound(null, getBlockPos(), ModSounds.CARGO_DELIVERY.get(), SoundSource.BLOCKS, 1f, (this.level.random.nextFloat() * 0.2f) + 0.8f);
                             }
                             if(lastEnergy != energyStored){
                                 setStatus(Status.WORKING);
@@ -187,6 +199,15 @@ public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
                     shouldUpdate = false;
                     lastEnergy = energyStored;
                 }
+            }
+        } else {
+            if(curRecipe != null && energyStored > curRecipe.energy()){
+                for (int i = 10; i > 0; i--){
+                        double x = level.random.nextDouble() - 0.5d;
+                        double z = level.random.nextDouble() - 0.5d;
+                        level.addParticle(ParticleTypes.CLOUD, (double)getBlockPos().getX() + x + 0.5d, (double)getBlockPos().getY() + 0.2d, (double)getBlockPos().getZ() + z + 0.5d, x, -0.25d, z);
+                }
+                
             }
         }
     }
@@ -309,10 +330,6 @@ public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
         this.dsPowerDraw = dsPowerDraw;
     }
 
-    public boolean canReceive() {
-        return canReceive;
-    }
-
     public void setCurrentRecipe(CargoDeliveryRecipe curRecipe) {
         this.curRecipe = curRecipe;
     }
@@ -325,6 +342,9 @@ public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
         if(curRecipe == null){
             return 0;
         }
+        if(energyStored >= curRecipe.energy()) {
+            return scale;
+        }
         return ((isWorking() && energyStored == 0) ? scale : (scale * energyStored / curRecipe.energy()));
     }
 
@@ -336,7 +356,6 @@ public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
         } else {
             setCurrentRecipe(null);
         }
-        
     }
 
     @Override
@@ -346,7 +365,6 @@ public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
         if(curRecipe != null){
             tag.putString("recipe", curRecipe.id().toString());
         }
-        
         ModPacketHandler.INSTANCE.sendToServer(new TileUpdatePackage(tag, getBlockPos()));
     }
 

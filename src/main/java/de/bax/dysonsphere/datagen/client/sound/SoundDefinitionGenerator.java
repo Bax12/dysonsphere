@@ -27,6 +27,9 @@ public class SoundDefinitionGenerator extends SoundDefinitionsProvider {
         add(ModSounds.ELECTRIC_WINCH, definition()
         .subtitle("sound.dysonsphere.electric_winch")
         .with(sound(ModSounds.ELECTRIC_WINCH.get().getLocation()).volume(0.4).pitch(0.25)));
+        add(ModSounds.CARGO_DELIVERY, definition()
+        .subtitle("sound.dysonsphere.cargo_delivery")
+        .with(sound(ModSounds.CARGO_DELIVERY.get().getLocation()).volume(0.4).pitch(0.25)));
     }
     
 }

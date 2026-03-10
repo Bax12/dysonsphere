@@ -100,7 +100,7 @@
   "dysonsphere.recipe.laser": "Orbital Laser Strike",
   "dysonsphere.recipe.railgun": "Orbital Launching",
   "dysonsphere.tooltip.pneumaticcraft.pressure": "Pressure: %s/%s bar",
-  "fluid.dysonsphere.helium": "Helium",
+  "fluid.dysonsphere.helium": "Liquid Helium",
   "fluid.dysonsphere.steam": "Steam",
   "item.dysonsphere.bucket_helium": "Liquid Helium Bucket",
   "item.dysonsphere.bucket_steam": "Steam Bucket",

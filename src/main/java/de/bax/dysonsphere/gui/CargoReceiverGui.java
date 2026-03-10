@@ -124,7 +124,7 @@ public class CargoReceiverGui extends BaseGui<CargoReceiverContainer> {
                 case WORKING:
                 case READY:
                     int energyStored = tile.getEnergyStored(), energyRecipe = (tile.getCurrentRecipe() != null) ? tile.getCurrentRecipe().energy() : 0;
-                    tooltip.add(Component.literal("Next Delivery: " + (tile.isWorking() && energyStored == 0 ? energyRecipe : energyStored) +  "/" + energyRecipe));
+                    tooltip.add(Component.literal("Next Delivery: " + AssetUtil.FLOAT_FORMAT.format((tile.isWorking() && energyStored == 0 ? energyRecipe : energyStored)) +  "/" + AssetUtil.FLOAT_FORMAT.format(energyRecipe) + "RF"));
                 
             }
             
