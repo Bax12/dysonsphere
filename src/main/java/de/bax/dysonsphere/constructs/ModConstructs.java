@@ -51,6 +51,7 @@ public class ModConstructs {
         construct.tier = json.get("Tier").getAsInt();
         construct.energy = json.get("Energy").getAsInt();
         construct.stability = json.get("Stability").getAsFloat();
+        construct.components.clear();
         json.get("Components").getAsJsonArray().forEach((compJson) -> {
             construct.components.put(Ingredient.fromJson(((JsonObject)compJson).get("Component")), new ComponentCount(((JsonObject)compJson).get("Required").getAsInt(), ((JsonObject)compJson).get("Foundation").getAsInt()));
         });

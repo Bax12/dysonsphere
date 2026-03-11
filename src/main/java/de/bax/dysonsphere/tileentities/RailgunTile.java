@@ -162,6 +162,7 @@ public class RailgunTile extends BaseTile {
                             acceptorStorage.extractEnergy(getLaunchEnergy(), false);
                             acceptorHandler.consumeFluidInputs(currentRecipe.fluidInputs()); //we checked the recipe and have no internal tank. there should never be a returned fluid here.
                             level.playSound(null, getBlockPos(), ModSounds.RAILGUN_SHOT.get(), SoundSource.BLOCKS, 1.0F, (this.level.random.nextFloat() * 0.2f) + 0.8f);
+                            setChanged();
                             ticksSinceLastLaunch = 0;
                         } else {
                             // set unable to add flag

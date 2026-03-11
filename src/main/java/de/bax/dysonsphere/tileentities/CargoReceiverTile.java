@@ -9,6 +9,7 @@ import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.capabilities.fluid.FluidTankCustom;
+import de.bax.dysonsphere.entities.DeliveryDropEntity;
 import de.bax.dysonsphere.network.IUpdateReceiverTile;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.network.TileUpdatePackage;
@@ -176,6 +177,10 @@ public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
 
                                 //
                                 level.playSound(null, getBlockPos(), ModSounds.CARGO_DELIVERY.get(), SoundSource.BLOCKS, 1f, (this.level.random.nextFloat() * 0.2f) + 0.8f);
+                                DeliveryDropEntity strike = new DeliveryDropEntity(level);
+                                strike.setTargetY(this.getBlockPos().getY()).setPos(this.getBlockPos().getX() + 0.5d, this.getBlockPos().getY() + 200d, this.getBlockPos().getZ() + 0.5d);
+                                
+                                level.addFreshEntity(strike);
                             }
                             if(lastEnergy != energyStored){
                                 setStatus(Status.WORKING);
@@ -201,13 +206,12 @@ public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
                 }
             }
         } else {
-            if(curRecipe != null && energyStored > curRecipe.energy()){
+            if(curRecipe != null && energyStored >= curRecipe.energy()){
                 for (int i = 10; i > 0; i--){
                         double x = level.random.nextDouble() - 0.5d;
                         double z = level.random.nextDouble() - 0.5d;
                         level.addParticle(ParticleTypes.CLOUD, (double)getBlockPos().getX() + x + 0.5d, (double)getBlockPos().getY() + 0.2d, (double)getBlockPos().getZ() + z + 0.5d, x, -0.25d, z);
                 }
-                
             }
         }
     }

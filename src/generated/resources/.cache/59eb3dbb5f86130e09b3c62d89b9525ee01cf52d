@@ -1,8 +1,9 @@
-// 1.20.1	2026-02-05T15:01:39.848099842	Loot Tables
+// 1.20.1	2026-03-10T15:58:26.752290209	Loot Tables
 d44a368e4d70ebb289f302fd22bb9f114d2e7e22 data/dysonsphere/loot_tables/blocks/cargo_receiver_block.json
 9cfcc5d9aa9440788a4dd0a0a609aebcf602c1ce data/dysonsphere/loot_tables/blocks/dysonsphere_controller_block.json
 a60fb59f630e155ef5e78f66b0e1068336756439 data/dysonsphere/loot_tables/blocks/dysonsphere_energy_receiver_block.json
 09d6f7e4eb74d446bc1bda915f62b8025c300263 data/dysonsphere/loot_tables/blocks/dysonsphere_monitor_block.json
+f036d4acf6f6fbeac0905ea2f4efebbe94c6645e data/dysonsphere/loot_tables/blocks/energy_converter.json
 9403f5e278f7b2e71ce6ff7a7785bc73cfbeffe8 data/dysonsphere/loot_tables/blocks/heat_converter_block.json
 c77db67a615c97a4e837a41daa38693f7fd95fd1 data/dysonsphere/loot_tables/blocks/heat_exchanger_block.json
 c2c9fa2dfcb082aebc940eac3a5c09d12b6b8078 data/dysonsphere/loot_tables/blocks/heat_generator_block.json

@@ -25,6 +25,7 @@ import de.bax.dysonsphere.entities.ModEntities;
 import de.bax.dysonsphere.entityRenderer.GrapplingHookHarnessRenderLayer;
 import de.bax.dysonsphere.entityRenderer.GrapplingHookRenderer;
 import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
+import de.bax.dysonsphere.entityRenderer.PlasmaStrikeRenderer;
 import de.bax.dysonsphere.entityRenderer.TargetDesignatorRenderer;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.gui.CargoReceiverGui;
@@ -290,6 +291,7 @@ public class DysonSphere
             event.registerEntityRenderer(ModEntities.TARGET_DESIGNATOR.get(), TargetDesignatorRenderer::new);
             event.registerEntityRenderer(ModEntities.LASER_STRIKE.get(), LaserStrikeRenderer::new);
             event.registerEntityRenderer(ModEntities.GRAPPLING_HOOK.get(), GrapplingHookRenderer::new);
+            event.registerEntityRenderer(ModEntities.DELIVERY_DROP.get(), PlasmaStrikeRenderer::new);
         }
 
         @SubscribeEvent

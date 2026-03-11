@@ -1,4 +1,4 @@
-// 1.20.1	2026-02-05T15:01:39.847456444	Item Models: dysonsphere
+// 1.20.1	2026-03-10T15:58:26.751556196	Item Models: dysonsphere
 ca9c8516bba727e211d6ff0c6a30eb00baffaa7f assets/dysonsphere/models/item/bucket_helium.json
 08df4d89635e2e188dd96816aec2f9bae0ab9a10 assets/dysonsphere/models/item/bucket_steam.json
 ad71aa288cc166e84664bb1845f3b883492beb33 assets/dysonsphere/models/item/cargo_receiver_block.json
@@ -9,6 +9,7 @@ de444c87a9342fa91fc9c1bb89ec065175a42869 assets/dysonsphere/models/item/construc
 e6e9d7c53f489fde5260cf1e6b4dd2dbbb29ae61 assets/dysonsphere/models/item/dysonsphere_controller_block.json
 9e051aad849ea58e432ff05c4788b6bd35155a3f assets/dysonsphere/models/item/dysonsphere_energy_receiver_block.json
 dc2c3454a33c4581da36bdc3659382f029f08a67 assets/dysonsphere/models/item/dysonsphere_monitor_block.json
+d869bf4c91c5ef8bb569fe7edc18d448d829e06c assets/dysonsphere/models/item/energy_converter.json
 612d927e457709acfd611164610fa4eecb83867c assets/dysonsphere/models/item/grappling_hook_engine_electric.json
 4156cfa9098bbbb1b60bd25065de119911309bec assets/dysonsphere/models/item/grappling_hook_engine_electric2.json
 a7aa82f3885b112999f48db98a752f8169e9a43b assets/dysonsphere/models/item/grappling_hook_engine_manual.json

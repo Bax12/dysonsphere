@@ -196,6 +196,9 @@ dependencies {
 
     implementation(fg.deobf("curse.maven:jade-324717:5672013"))
 
+    implementation(fg.deobf("curse.maven:architectury-api-419699:5137938"))
+    implementation(fg.deobf("curse.maven:aaa-particles-979809:7681701"))
+
     compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:5.10.0+1.20.1:api"))
     runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:5.10.0+1.20.1"))
 

@@ -5,6 +5,8 @@ import javax.annotation.Nonnull;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
+import de.bax.dysonsphere.compat.ModCompat;
+import de.bax.dysonsphere.compat.aaaparticle.AAAParticle;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.tileentities.RailgunTile;
 import net.minecraft.client.Minecraft;
@@ -30,6 +32,10 @@ public class RailgunRenderer implements BlockEntityRenderer<RailgunTile> {
         poseStack.scale(1.9f, 1.9f, 1.9f);
 
         poseStack.translate(0, 0, 0.1f * Math.pow((90f - tile.getTicksSinceLastLaunch())/100f, 4));
+
+        if(ModCompat.isLoaded(ModCompat.MODID.AAA_PARTICLE) && tile.getTicksSinceLastLaunch() <= 5){
+            AAAParticle.spawnOrbitalLaunchEmitter(tile.getLevel(), tile.getBlockPos().getX() + 0.5f, tile.getBlockPos().getY() + 2.3f, tile.getBlockPos().getZ() + 0.5f, 245f * ((float)Math.PI / 180F), rotation * ((float)Math.PI / 180F), 0);
+        }
 
         Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(ModItems.RAILGUN.get()), ItemDisplayContext.NONE, combinedLight, combinedOverlay, poseStack, bufferSource, null, 0);
 
