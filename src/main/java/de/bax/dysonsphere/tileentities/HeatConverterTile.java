@@ -87,6 +87,7 @@ public class HeatConverterTile extends BaseTile implements ITintableTile, IHeatT
 
     protected boolean dirty = false;
     protected int ticksElapsed = 0;
+    protected double lastHeat = 0d;
 
     public HeatConverterTile(BlockPos pos, BlockState state) {
         super(ModTiles.HEAT_CONVERTER.get(), pos, state);
@@ -127,6 +128,11 @@ public class HeatConverterTile extends BaseTile implements ITintableTile, IHeatT
             if(dirty){
                 dirty = false;
                 sendSyncPackageToNearbyPlayers();
+            }
+        } else {
+            if(lastHeat != heatHandler.getHeatStored()){
+                level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0);
+                lastHeat = heatHandler.getHeatStored();
             }
         }
     }

@@ -108,6 +108,11 @@ public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTil
 
                 sendSyncPackageToNearbyPlayers();
             }
+        } else {
+            if(lastHeat != heatHandler.getHeatStored()){
+                level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0);
+                lastHeat = heatHandler.getHeatStored();
+            }
         }
     }
 

@@ -116,6 +116,8 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
 
     protected boolean dirty = false;
     protected int ticksElapsed = 0;
+
+    protected double lastHeat = 0d;
     
 
 
@@ -215,7 +217,11 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
                 }
             }
         } else {
-            level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0);
+            if(lastHeat != heatHandler.getHeatStored()){
+                level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0);
+                lastHeat = heatHandler.getHeatStored();
+            }
+            
             if(!input.getStackInSlot(0).isEmpty()){
                 setCurrentRecipe();
             } else {

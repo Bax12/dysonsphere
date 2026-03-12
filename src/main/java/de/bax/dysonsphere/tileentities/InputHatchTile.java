@@ -11,7 +11,6 @@ import de.bax.dysonsphere.capabilities.fluid.FluidTankCustom;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
-import de.bax.dysonsphere.capabilities.inputHatch.IInputAcceptor;
 import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
 import de.bax.dysonsphere.capabilities.inputHatch.InputProviderHandler;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
@@ -102,6 +101,7 @@ public abstract class InputHatchTile extends BaseTile {
     protected boolean dirty = false;
     protected boolean isHeatConducting = false;
     protected int ticksElapsed = 0;
+    protected double lastHeat = 0d;
 
     public InputHatchTile(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -162,7 +162,11 @@ public abstract class InputHatchTile extends BaseTile {
             //     providerHandler.updateNeighbors(level, worldPosition);
             // }
         } else {
-            // level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0); 
+            if(isHeatConducting && lastHeat != heatHandler.getHeatStored()){
+                level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0); 
+                lastHeat = heatHandler.getHeatStored();
+            }
+            
         }
     }
 

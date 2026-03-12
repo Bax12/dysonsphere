@@ -20,6 +20,7 @@ public class ModTiles {
     public static final RegistryObject<BlockEntityType<DSControllerTile>> DS_CONTROLLER = TILES.register("ds_controller", () -> new BlockEntityType<DSControllerTile>(DSControllerTile::new, Set.of(ModBlocks.DS_CONTROLLER_BLOCK.get()), null));
     public static final RegistryObject<BlockEntityType<ListenerTile>> LISTENER = TILES.register("listener", () -> new BlockEntityType<ListenerTile>(ListenerTile::new, Set.of(ModBlocks.LISTENER_BLOCK.get()), null));
     public static final RegistryObject<BlockEntityType<CargoReceiverTile>> CARGO_RECEIVER = TILES.register("cargo_receiver", () -> new BlockEntityType<CargoReceiverTile>(CargoReceiverTile::new, Set.of(ModBlocks.CARGO_RECEIVER_BLOCK.get()), null));
+    public static final RegistryObject<BlockEntityType<EnergyConverterTile>> ENERGY_CONVERTER = TILES.register("energy_converter", () -> new BlockEntityType<>(EnergyConverterTile::new, Set.of(ModBlocks.ENERGY_CONVERTER_BLOCK.get()), null));
 
     public static final RegistryObject<BlockEntityType<HeatPipeTile>> HEAT_PIPE = TILES.register("heat_pipe", () -> new BlockEntityType<HeatPipeTile>(HeatPipeTile::new, Set.of(ModBlocks.HEAT_PIPE_BLOCK.get()), null));
     public static final RegistryObject<BlockEntityType<HeatGeneratorTile>> HEAT_GENERATOR = TILES.register("heat_generator", () -> new BlockEntityType<HeatGeneratorTile>(HeatGeneratorTile::new, Set.of(ModBlocks.HEAT_GENERATOR_BLOCK.get()), null));

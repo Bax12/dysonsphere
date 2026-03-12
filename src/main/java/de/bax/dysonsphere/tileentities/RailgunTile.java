@@ -194,12 +194,12 @@ public class RailgunTile extends BaseTile {
                 }
             }
         } else {
-            level.markAndNotifyBlock(getBlockPos(), level.getChunkAt(getBlockPos()), getBlockState(), getBlockState(), 2, 0);
-            if(!inventory.getStackInSlot(0).isEmpty()){
-                setCurrentRecipe();
-            } else {
-                currentRecipe = null;
-            }
+            // level.markAndNotifyBlock(getBlockPos(), level.getChunkAt(getBlockPos()), getBlockState(), getBlockState(), 2, 0);
+            // if(!inventory.getStackInSlot(0).isEmpty()){
+            //     setCurrentRecipe();
+            // } else {
+            //     currentRecipe = null;
+            // }
             acceptorHandler.tick();
         }
     }

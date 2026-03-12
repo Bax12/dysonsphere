@@ -1,12 +1,8 @@
 package de.bax.dysonsphere.blocks;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import de.bax.dysonsphere.DysonSphere;
-import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
 import de.bax.dysonsphere.color.ModColors.ITintableTileBlock;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.items.tools.WrenchItem;
@@ -36,7 +32,7 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    public BlockEntity newBlockEntity(@Nonnull BlockPos pPos, @Nonnull BlockState pState) {
         return new LaserCrafterTile(pPos, pState);
     }
 
@@ -106,14 +102,14 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
 
     @Override
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@Nonnull Level pLevel, @Nonnull BlockState pState, @Nonnull BlockEntityType<T> pBlockEntityType) {
         return pBlockEntityType == ModTiles.LASER_CRAFTER.get() ? (teLevel, pos, teState, tile) -> {
             ((LaserCrafterTile)tile).tick();
         } : null;
     }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+    public void onRemove(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull BlockState pNewState, boolean pMovedByPiston) {
         if(!pLevel.isClientSide && pLevel.getBlockEntity(pPos) instanceof LaserCrafterTile tile){
             tile.onRemove();
         }
@@ -121,12 +117,12 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
     }
 
     @Override
-    public boolean hasAnalogOutputSignal(BlockState pState) {
+    public boolean hasAnalogOutputSignal(@Nonnull BlockState pState) {
         return true;
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
+    public int getAnalogOutputSignal(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos) {
         return pLevel.getBlockEntity(pPos) instanceof LaserCrafterTile tile ? (int) tile.getNeededChargeRatio() : 0;
     }
 
