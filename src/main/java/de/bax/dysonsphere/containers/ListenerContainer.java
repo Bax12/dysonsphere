@@ -2,6 +2,8 @@ package de.bax.dysonsphere.containers;
 
 import java.util.Objects;
 
+import org.jetbrains.annotations.NotNull;
+
 import de.bax.dysonsphere.tileentities.ListenerTile;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -27,7 +29,12 @@ public class ListenerContainer extends BaseContainer {
             }
         }
         addSlot(new SlotItemHandler(tile.inventory, 9, 106, 26));
-        addSlot(new SlotItemHandler(tile.inventory, 10, 141, 43));
+        addSlot(new SlotItemHandler(tile.inventory, 10, 141, 43){
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return false;
+            }
+        });
 
         addInventorySlots(inv);
     }
@@ -49,7 +56,7 @@ public class ListenerContainer extends BaseContainer {
 
     @Override
     protected boolean quickMoveToInventory(ItemStack newStack) {
-        return !this.moveItemStackTo(newStack, ListenerTile.slotGridStart, ListenerTile.slotGridEnd, false);
+        return  !this.moveItemStackTo(newStack, ListenerTile.slotShards, ListenerTile.slotShards+1, false) && !this.moveItemStackTo(newStack, ListenerTile.slotGridStart, ListenerTile.slotGridEnd+1, false);
     }
     
 }

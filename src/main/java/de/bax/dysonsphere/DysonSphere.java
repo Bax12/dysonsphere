@@ -25,6 +25,7 @@ import de.bax.dysonsphere.entities.ModEntities;
 import de.bax.dysonsphere.entityRenderer.GrapplingHookHarnessRenderLayer;
 import de.bax.dysonsphere.entityRenderer.GrapplingHookRenderer;
 import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
+import de.bax.dysonsphere.entityRenderer.ListenerRenderer;
 import de.bax.dysonsphere.entityRenderer.PlasmaStrikeRenderer;
 import de.bax.dysonsphere.entityRenderer.TargetDesignatorRenderer;
 import de.bax.dysonsphere.fluids.ModFluids;
@@ -287,6 +288,7 @@ public class DysonSphere
             event.registerBlockEntityRenderer(ModTiles.LASER_CONTROLLER.get(), LaserControllerRenderer::new);
             event.registerBlockEntityRenderer(ModTiles.LASER_CRAFTER.get(), LaserCrafterRenderer::new);
             event.registerBlockEntityRenderer(ModTiles.HEAT_EXCHANGER.get(), HeatExchangerRenderer::new);
+            event.registerBlockEntityRenderer(ModTiles.LISTENER.get(), ListenerRenderer::new);
 
             event.registerEntityRenderer(ModEntities.TARGET_DESIGNATOR.get(), TargetDesignatorRenderer::new);
             event.registerEntityRenderer(ModEntities.LASER_STRIKE.get(), LaserStrikeRenderer::new);

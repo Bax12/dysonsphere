@@ -1,11 +1,15 @@
 package de.bax.dysonsphere.recipes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonObject;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.tileentities.ListenerTile;
 import net.minecraft.core.NonNullList;
@@ -15,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
@@ -88,6 +93,26 @@ public record ListenerRecipe(ResourceLocation id, ShapedRecipe internalRecipe) i
             RecipeSerializer.SHAPED_RECIPE.toNetwork(pBuffer, pRecipe.internalRecipe());
         }
 
+    }
+
+    protected static List<ListenerRecipe> recipes;
+
+    public static List<ListenerRecipe> getRecipes(Level level){
+        if(recipes == null){
+            recipes = new ArrayList<>();
+            generateRecipesOnLoad(level);
+        }
+        return recipes;
+    }
+
+    public static void generateRecipesOnLoad(Level level){
+        level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).stream().filter((rec) -> {
+            return rec instanceof ShapedRecipe && rec.getIngredients().stream().anyMatch((ing) -> {
+                return ing.test(rec.getResultItem(level.registryAccess()));
+            });
+        }).forEach((rec) -> {
+            recipes.add(new ListenerRecipe(new ResourceLocation(DysonSphere.MODID, "listener." + rec.getId().getPath()), (ShapedRecipe) rec));
+        });
     }
     
 }

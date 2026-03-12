@@ -44,7 +44,7 @@ public class RailgunRenderer implements BlockEntityRenderer<RailgunTile> {
     }
 
     @Override
-    public boolean shouldRenderOffScreen(RailgunTile tile) {
+    public boolean shouldRenderOffScreen(@Nonnull RailgunTile tile) {
         return true;
     }
 
