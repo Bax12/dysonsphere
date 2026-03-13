@@ -44,19 +44,19 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
         poseStack.pushPose();
         switch (facing) {
             case NORTH:
-                poseStack.translate(0.8F, 0.8F, 0.124F);
+                poseStack.translate(0.8F, 0.85F, 0.124F);
                 break;
             case EAST:
                 poseStack.mulPose(Axis.YN.rotationDegrees(90f));
-                poseStack.translate(0.8F, 0.8F, -0.876F);
+                poseStack.translate(0.8F, 0.85F, -0.876F);
                 break;
             case SOUTH:
                 poseStack.mulPose(Axis.YN.rotationDegrees(180f));
-                poseStack.translate(-0.2F, 0.8F, -0.876F);
+                poseStack.translate(-0.2F, 0.85F, -0.876F);
                 break;
             case WEST:
                 poseStack.mulPose(Axis.YN.rotationDegrees(270f));
-                poseStack.translate(-0.2F, 0.8F, 0.124F);
+                poseStack.translate(-0.2F, 0.85F, 0.124F);
                 break;
         }
 
@@ -101,9 +101,11 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
             poseStack.scale(scale, 1, 1);
             font.drawInBatch(comp, 0, 20F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
             poseStack.popPose();
-            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_parts"), 0, 30F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
-            float drawOffset = 40f;
-            for (Entry<Item, Long> entry : tile.getDsParts().entrySet()){
+            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_usage", df.format(tile.getDsUsage())), 0, 30, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_power_draw", df.format(tile.getDsEnergyDraw())), 0, 40, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_parts"), 0, 50F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+            float drawOffset = 60f;
+            for (Entry<Item, Long> entry : tile.getDsParts().entrySet().stream().sorted((a, b) -> {return b.getValue().compareTo(a.getValue());}).toList()){//we want max first, n should be rather small so the sort should not matter much
                 poseStack.pushPose();
                 comp = Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey().getName(ItemStack.EMPTY), entry.getValue());
                 // DysonSphere.LOGGER.info("DSMonitorRenderer render fontWidth: {}", font.width(comp));
@@ -114,10 +116,14 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
                 font.drawInBatch(comp, 0, drawOffset, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
                 drawOffset += 10f;
                 poseStack.popPose();
+                if(drawOffset >= 150) {
+                    
+                    font.drawInBatch(Component.literal("..."), 10, drawOffset-5, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+                    
+                    break;
+                }
             }
-            matrix = poseStack.last().pose();
-            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_usage", df.format(tile.getDsUsage())), 0, drawOffset + 5, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
-            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_power_draw", df.format(tile.getDsEnergyDraw())), 0, drawOffset + 15, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+            
         }
         
         // Entry<Item, Integer> part = ds.getDysonSphereParts().entrySet().iterator().next();

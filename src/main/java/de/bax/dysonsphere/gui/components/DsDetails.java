@@ -53,7 +53,7 @@ public class DsDetails implements Renderable {
         AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_parts"), x + 2, y + 32, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
 
         int offset = 0;
-        for(Entry<Item, Long> entry : tile.getDsParts().entrySet()){
+        for(Entry<Item, Long> entry : tile.getDsParts().entrySet().stream().sorted((a, b) -> {return b.getValue().compareTo(a.getValue());}).toList()){
             AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey().getName(ItemStack.EMPTY), entry.getValue()), x + 2, y + 42 + offset, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
             offset += 10;
         }
