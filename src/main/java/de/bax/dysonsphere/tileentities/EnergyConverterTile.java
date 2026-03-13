@@ -7,6 +7,11 @@ import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.blocks.OreSpireBlock;
+import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.capabilities.energy.AcceptorEnergyWrapper;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputAcceptor;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider;
+import de.bax.dysonsphere.capabilities.inputHatch.InputAcceptorHandler;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -46,10 +51,27 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
         };
     };
 
+    public InputAcceptorHandler acceptorHandler = new InputAcceptorHandler(this){
+        public void addInputProvider(LazyOptional<IInputProvider> provider) {
+            super.addInputProvider(provider);
+            if(provider.isPresent()){
+                setChanged();
+            }
+        };
+
+        public void refreshProvider() {
+            super.refreshProvider();
+            setChanged();
+        };
+    };
+
     protected LazyOptional<IItemHandler> output = LazyOptional.empty();
     protected ItemStack drop = ItemStack.EMPTY;
 
     protected LazyOptional<IEnergyStorage> lazyEnergy = LazyOptional.of(() -> energyStorage);
+    protected LazyOptional<IInputAcceptor> lazyAcceptor = LazyOptional.of(() -> acceptorHandler);
+
+    public AcceptorEnergyWrapper acceptorStorage = new AcceptorEnergyWrapper(lazyEnergy, acceptorHandler);
 
     protected boolean dirty = false;
     protected int ticksElapsed = 0;
@@ -68,6 +90,9 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
         if(cap.equals(ForgeCapabilities.ENERGY)){
             return lazyEnergy.cast();
         }
+        if(cap.equals(DSCapabilities.INPUT_ACCEPTOR)){
+            return lazyAcceptor.cast();
+        }
         return super.getCapability(cap, side);
     }
 
@@ -75,17 +100,18 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
     public void invalidateCaps() {
         super.invalidateCaps();
         lazyEnergy.invalidate();
+        lazyAcceptor.invalidate();
     }
 
     public void tick(){
         if(!level.isClientSide()){
-            if(energyStorage.getEnergyStored() >= CONVERSION_RATE && !drop.isEmpty()){
+            if(acceptorStorage.getEnergyStored() >= CONVERSION_RATE && !drop.isEmpty()){
                 if(!output.isPresent()){
                     if(level.getBlockState(above).isAir()){
                         level.setBlock(above, ModBlocks.ORE_SPIRE_BLOCK.get().defaultBlockState().setValue(OreSpireBlock.HAS_BASE, true), 3);
                     }
                 } else {
-                    int amount = energyStorage.extractEnergy(Integer.MAX_VALUE, true) / CONVERSION_RATE;
+                    int amount = acceptorStorage.extractEnergy(Integer.MAX_VALUE, true) / CONVERSION_RATE;
                     ItemStack toCreate = drop.copyWithCount(amount);
                     int created = output.map((out) -> {
                         ItemStack toInsert = toCreate;
@@ -96,7 +122,7 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
                         return amount - toInsert.getCount();
                     }).orElse(0);
                     canWork = created > 0;
-                    energyStorage.extractEnergy(created * CONVERSION_RATE, false);
+                    acceptorStorage.extractEnergy(created * CONVERSION_RATE, false);
                 }
                 
             } else {
@@ -118,7 +144,7 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
     }
 
     public void onRemove(){
-
+        acceptorHandler.onRemove();
     }
 
     @Override
