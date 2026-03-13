@@ -54,7 +54,10 @@ public class DSJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(ModBlocks.RAILGUN_BLOCK.get().asItem().getDefaultInstance(), RAILGUN.getRecipeType());
         registration.addRecipeCatalyst(ModBlocks.HEAT_EXCHANGER_BLOCK.get().asItem().getDefaultInstance(), HEAT_EXCHANGER.getRecipeType());
         registration.addRecipeCatalyst(ModBlocks.LASER_CRAFTER_BLOCK.get().asItem().getDefaultInstance(), LASER_CRAFTER.getRecipeType());
-        registration.addRecipeCatalyst(ModBlocks.INPUT_HATCH_PARALLEL.get().asItem().getDefaultInstance(), LASER_CRAFTER.getRecipeType());
+        registration.addRecipeCatalyst(ModBlocks.INPUT_HATCH_PARALLEL.get().asItem().getDefaultInstance(), LASER_CRAFTER.getRecipeType(), RAILGUN.getRecipeType());
+        registration.addRecipeCatalyst(ModBlocks.INPUT_HATCH_SERIAL.get().asItem().getDefaultInstance(), LASER_CRAFTER.getRecipeType(), RAILGUN.getRecipeType());
+        registration.addRecipeCatalyst(ModBlocks.INPUT_HATCH_FLUID.get().asItem().getDefaultInstance(), RAILGUN.getRecipeType());
+        registration.addRecipeCatalyst(ModBlocks.INPUT_HATCH_ENERGY.get().asItem().getDefaultInstance(), RAILGUN.getRecipeType());
     }
 
     @Override

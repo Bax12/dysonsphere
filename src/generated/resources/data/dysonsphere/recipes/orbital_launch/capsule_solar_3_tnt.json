@@ -1,0 +1,16 @@
+{
+  "type": "dysonsphere:orbital_launch",
+  "baseEnergy": 18000000,
+  "extraInputs": [
+    {
+      "item": "minecraft:tnt"
+    }
+  ],
+  "fluidInputs": [],
+  "input": {
+    "item": "dysonsphere:capsule_solar_3"
+  },
+  "launchStack": {
+    "item": "dysonsphere:capsule_solar_3"
+  }
+}

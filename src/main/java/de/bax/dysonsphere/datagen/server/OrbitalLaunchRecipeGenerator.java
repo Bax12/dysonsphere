@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -31,17 +32,41 @@ public class OrbitalLaunchRecipeGenerator {
     public static final String basePath = "orbital_launch";
 
     public static void buildRecipes(Consumer<FinishedRecipe> pWriter){
-        RecipeBuilder.of(ModItems.CAPSULE_SOLAR_0).baseEnergy(90_000).save(pWriter);
-        RecipeBuilder.of(ModItems.CAPSULE_LASER_0).baseEnergy(110_000).save(pWriter);
-        RecipeBuilder.of(ModItems.CAPSULE_STRUCTURE_0).baseEnergy(160_000).save(pWriter);
+        // RecipeBuilder.of(ModItems.CAPSULE_SOLAR_0).baseEnergy(90_000).save(pWriter);
+        // RecipeBuilder.of(ModItems.CAPSULE_LASER_0).baseEnergy(110_000).save(pWriter);
+        // RecipeBuilder.of(ModItems.CAPSULE_STRUCTURE_0).baseEnergy(160_000).save(pWriter);
 
-        RecipeBuilder.of(ModItems.CAPSULE_SOLAR_1).baseEnergy(900_000).save(pWriter);
-        RecipeBuilder.of(ModItems.CAPSULE_LASER_1).baseEnergy(1_100_000).save(pWriter);
-        RecipeBuilder.of(ModItems.CAPSULE_STRUCTURE_1).baseEnergy(1_600_000).save(pWriter);
+        // RecipeBuilder.of(ModItems.CAPSULE_SOLAR_1).baseEnergy(900_000).save(pWriter);
+        // RecipeBuilder.of(ModItems.CAPSULE_LASER_1).baseEnergy(1_100_000).save(pWriter);
+        // RecipeBuilder.of(ModItems.CAPSULE_STRUCTURE_1).baseEnergy(1_600_000).save(pWriter);
 
-        RecipeBuilder.of(ModItems.CAPSULE_SOLAR_1).baseEnergy(90_000).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).save(pWriter, "capsule_solar_1_helium");
-        RecipeBuilder.of(ModItems.CAPSULE_LASER_1).baseEnergy(110_000).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).save(pWriter, "capsule_laser_1_helium");
-        RecipeBuilder.of(ModItems.CAPSULE_STRUCTURE_1).baseEnergy(160_000).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).save(pWriter, "capsule_structure_1_helium");
+        // RecipeBuilder.of(ModItems.CAPSULE_SOLAR_1).baseEnergy(90_000).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).save(pWriter, "capsule_solar_1_helium");
+        // RecipeBuilder.of(ModItems.CAPSULE_LASER_1).baseEnergy(110_000).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).save(pWriter, "capsule_laser_1_helium");
+        // RecipeBuilder.of(ModItems.CAPSULE_STRUCTURE_1).baseEnergy(160_000).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).save(pWriter, "capsule_structure_1_helium");
+
+        addAllLaunchRecipes(ModItems.CAPSULE_SOLAR_0, 90_000, pWriter);
+        addAllLaunchRecipes(ModItems.CAPSULE_SOLAR_1, 900_000, pWriter);
+        addAllLaunchRecipes(ModItems.CAPSULE_SOLAR_2, 9_000_000, pWriter);
+        addAllLaunchRecipes(ModItems.CAPSULE_SOLAR_3, 90_000_000, pWriter);
+
+        addAllLaunchRecipes(ModItems.CAPSULE_LASER_0, 110_000, pWriter);
+        addAllLaunchRecipes(ModItems.CAPSULE_LASER_1, 1_100_000, pWriter);
+        addAllLaunchRecipes(ModItems.CAPSULE_LASER_2, 11_000_000, pWriter);
+        addAllLaunchRecipes(ModItems.CAPSULE_LASER_3, 110_000_000, pWriter);
+
+        addAllLaunchRecipes(ModItems.CAPSULE_STRUCTURE_0, 160_000, pWriter);
+        addAllLaunchRecipes(ModItems.CAPSULE_STRUCTURE_1, 1_600_000, pWriter);
+        addAllLaunchRecipes(ModItems.CAPSULE_STRUCTURE_2, 16_000_000, pWriter);
+        addAllLaunchRecipes(ModItems.CAPSULE_STRUCTURE_3, 160_000_000, pWriter);
+    }
+
+    public static void addAllLaunchRecipes(RegistryObject<Item> launchStack, int baseEnergy, Consumer<FinishedRecipe> pWriter){
+        RecipeBuilder.of(launchStack).baseEnergy(baseEnergy).save(pWriter);
+        RecipeBuilder.of(launchStack).baseEnergy(baseEnergy/10).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).save(pWriter, ForgeRegistries.ITEMS.getKey(launchStack.get()).getPath() + "_helium");
+        RecipeBuilder.of(launchStack).baseEnergy(baseEnergy/5).addExtraInput(Ingredient.of(Blocks.TNT), 1).save(pWriter, ForgeRegistries.ITEMS.getKey(launchStack.get()).getPath() + "_tnt");
+        RecipeBuilder.of(launchStack).baseEnergy(baseEnergy/50).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).addExtraInput(Ingredient.of(Blocks.TNT), 1).save(pWriter, ForgeRegistries.ITEMS.getKey(launchStack.get()).getPath() + "_helium_tnt");
+        RecipeBuilder.of(launchStack).baseEnergy(baseEnergy/100).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).addFluidInput(FluidIngredient.of(DSTags.fluidAntiHelium, 50)).save(pWriter, ForgeRegistries.ITEMS.getKey(launchStack.get()).getPath() + "_anti_helium");
+        RecipeBuilder.of(launchStack).baseEnergy(baseEnergy/500).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).addFluidInput(FluidIngredient.of(DSTags.fluidAntiHelium, 50)).addExtraInput(Ingredient.of(Blocks.TNT), 5).save(pWriter, ForgeRegistries.ITEMS.getKey(launchStack.get()).getPath() + "_anti_helium_tnt");
     }
 
     public static class RecipeBuilder {
