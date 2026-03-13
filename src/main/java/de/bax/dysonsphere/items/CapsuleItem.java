@@ -9,9 +9,11 @@ import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dsPart.IDSPart;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -93,8 +95,24 @@ public class CapsuleItem extends Item {
 
     @OnlyIn(Dist.CLIENT)
     protected void addClientTooltip(@Nonnull ItemStack pStack, @Nullable Level pLevel, @Nonnull  List<Component> pTooltipComponents, @Nonnull  TooltipFlag pIsAdvanced){
-        pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.capsule_provided_energy", this.type.energyProvided));
-        pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.capsule_provided_completion", this.type.completionProgress));
+        pTooltipComponents.add(getDescription());
+        pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.capsule_tier", this.type.getTier()));
+        pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.capsule_provided_energy", this.type.energyProvided).withStyle(ChatFormatting.GRAY));
+        pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.capsule_provided_completion", this.type.completionProgress).withStyle(ChatFormatting.GRAY));
+    }
+
+    @Override
+    public Component getName(@Nonnull ItemStack pStack) {
+        return Component.translatable("item.dysonsphere.capsule");
+    }
+
+    @Override
+    public Component getDescription() {
+        return Component.translatable("tooltip.dysonsphere.capsule_" + this.type.getType().toLowerCase());
+    }
+
+    public Component getContentName(){
+        return ((MutableComponent) getDescription()).append(" ").append(Component.translatable("tooltip.dysonsphere.capsule_tier", this.type.getTier()));
     }
 
     public static Component getTypeName(ItemStack stack){

@@ -45,6 +45,7 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.COIL_IRON, "Iron Wire Coil");
         addItem(ModItems.THERMOPILE, "Iron-Copper Thermopile");
         addItem(ModItems.SOLAR_FOIL,"Solar Foil");
+        add("item.dysonsphere.capsule", "Satellite Space Transfer Capsule");
         addItem(ModItems.CAPSULE_EMPTY, "Space Transfer Capsule (Empty)");
         addItem(ModItems.CAPSULE_SOLAR_0, "Tier 0 Solar Satellite Space Capsule");
         addItem(ModItems.CAPSULE_LASER_0, "Tier 0 Laser Satellite Space Capsule");
@@ -265,6 +266,7 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.capsule_structure", "Structure Satellite");
         add("tooltip.dysonsphere.capsule_provided_energy", "Provided Energy: %s RF/t");
         add("tooltip.dysonsphere.capsule_provided_completion", "Provided Completion: %s");
+        add("tooltip.dysonsphere.capsule_tier", "Tier %s");
 
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");

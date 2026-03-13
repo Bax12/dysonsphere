@@ -12,6 +12,7 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
+import de.bax.dysonsphere.items.CapsuleItem;
 import de.bax.dysonsphere.tileentities.DSMonitorTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -107,7 +108,7 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
             float drawOffset = 60f;
             for (Entry<Item, Long> entry : tile.getDsParts().entrySet().stream().sorted((a, b) -> {return b.getValue().compareTo(a.getValue());}).toList()){//we want max first, n should be rather small so the sort should not matter much
                 poseStack.pushPose();
-                comp = Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey().getName(ItemStack.EMPTY), entry.getValue());
+                comp = Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey() instanceof CapsuleItem capsule ? capsule.getContentName() : entry.getKey().getName(ItemStack.EMPTY), entry.getValue());
                 // DysonSphere.LOGGER.info("DSMonitorRenderer render fontWidth: {}", font.width(comp));
                 scale = Math.min(125F / font.width(comp), 1f);
                 // scale = 2f;
