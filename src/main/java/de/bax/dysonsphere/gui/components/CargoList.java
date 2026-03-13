@@ -10,6 +10,7 @@ import de.bax.dysonsphere.recipes.CargoDeliveryRecipe;
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -65,7 +66,7 @@ public class CargoList extends EntryList {
         public void render(@Nonnull GuiGraphics pGuiGraphics, int pIndex, int x, int y, int width, int height, int pMouseX, int pMouseY, boolean isSelected, float pPartialTick) {
             MutableComponent comp = !recipe.itemOutput().isEmpty() ? recipe.itemOutput().getDisplayName().copy().append(" " + recipe.itemOutput().getCount() + "x") : recipe.fluidOutput().getDisplayName().copy().append(" " + recipe.fluidOutput().getAmount() + "mB");
             // comp.append(Component.literal("- %sRF".formatted(recipe.energy())));
-            AssetUtil.renderMaxWidthString(pGuiGraphics, comp, x, y, width, isSelected ? 0x88444444 : 0xFFFFFFFF, 0x00000000, 0xF000F0, !isSelected);
+            AssetUtil.renderMaxWidthString(pGuiGraphics, comp, x, y, width, isSelected ? 0x88444444 : 0xFFFFFFFF, 0x00000000, LightTexture.FULL_BRIGHT, !isSelected);
         }
 
         public void renderHover(GuiGraphics guiGraphics, Font font, int mouseX, int mouseY){

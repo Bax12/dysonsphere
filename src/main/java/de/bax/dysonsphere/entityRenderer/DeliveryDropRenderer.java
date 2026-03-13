@@ -14,11 +14,11 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 
-public class PlasmaStrikeRenderer extends EntityRenderer<DeliveryDropEntity> {
+public class DeliveryDropRenderer extends EntityRenderer<DeliveryDropEntity> {
 
     public static final ResourceLocation RES_LOC = new ResourceLocation(DysonSphere.MODID, "textures/effects/plasmastrike.png");
 
-    public PlasmaStrikeRenderer(Context pContext) {
+    public DeliveryDropRenderer(Context pContext) {
         super(pContext);
     }
 

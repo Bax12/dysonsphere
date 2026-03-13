@@ -52,12 +52,12 @@ public class LaserPatternControllerBlock extends HorizontalDirectionalBlock impl
     }
 
     @Override
-    protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(@Nonnull Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
     
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
         if(!level.isClientSide && player instanceof ServerPlayer serverPlayer){
             BlockEntity tile = level.getBlockEntity(pos);
             if(tile != null && tile.getType().equals(ModTiles.LASER_PATTERN_CONTROLLER.get())){
@@ -103,7 +103,7 @@ public class LaserPatternControllerBlock extends HorizontalDirectionalBlock impl
     }
 
         @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext col) {
+    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter world, @Nonnull BlockPos pos, @Nonnull CollisionContext col) {
         if(state.hasProperty(FACING)){
             switch (state.getValue(FACING)){
                 case EAST: return Shape_E;
@@ -118,7 +118,7 @@ public class LaserPatternControllerBlock extends HorizontalDirectionalBlock impl
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
         return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
@@ -129,7 +129,7 @@ public class LaserPatternControllerBlock extends HorizontalDirectionalBlock impl
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    public BlockEntity newBlockEntity(@Nonnull BlockPos pPos, @Nonnull BlockState pState) {
         return new LaserPatternControllerTile(pPos, pState);
     }
 
@@ -143,7 +143,7 @@ public class LaserPatternControllerBlock extends HorizontalDirectionalBlock impl
     // }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+    public void onRemove(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull BlockState pNewState, boolean pMovedByPiston) {
         if(!pLevel.isClientSide && pLevel.getBlockEntity(pPos) instanceof LaserPatternControllerTile tile){
             tile.dropContent();
         }

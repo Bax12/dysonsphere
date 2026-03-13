@@ -5,6 +5,7 @@ import java.util.function.Function;
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.InputHatchBlock;
 import de.bax.dysonsphere.blocks.ModBlocks;
+import de.bax.dysonsphere.blocks.OreSpireBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -54,6 +55,8 @@ public class BlockStateGenerator extends BlockStateProvider{
 
         buildPillarBlock(ModBlocks.HEAT_EXCHANGER_BLOCK);
         buildPillarBlock(ModBlocks.HEAT_GENERATOR_BLOCK);
+
+        buildOreSpireBlock(ModBlocks.ORE_SPIRE_BLOCK);
         
     }
     
@@ -121,6 +124,20 @@ public class BlockStateGenerator extends BlockStateProvider{
                     .build();
         });
 
+    }
+
+    private void buildOreSpireBlock(RegistryObject<Block> block){
+        ResourceLocation freeStanding = blockTexture(block.get());
+        ResourceLocation withBase = blockTexture(block.get()).withSuffix("1");
+        ModelFile model = new ModelFile.UncheckedModelFile(freeStanding);
+        Function<BlockState, ModelFile> modelFunc = $ -> model;
+        ModelFile modelBase = new ModelFile.UncheckedModelFile(withBase);
+        Function<BlockState, ModelFile> modelBaseFunc = $ -> modelBase;
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            return state.getValue(OreSpireBlock.HAS_BASE) ?
+                ConfiguredModel.builder().modelFile(modelBaseFunc.apply(state)).build() :
+                ConfiguredModel.builder().modelFile(modelFunc.apply(state)).build();
+        });
     }
 
 

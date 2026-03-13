@@ -1,9 +1,9 @@
-// 1.20.1	2026-03-10T15:58:26.752290209	Loot Tables
+// 1.20.1	2026-03-13T12:44:55.687773697	Loot Tables
 d44a368e4d70ebb289f302fd22bb9f114d2e7e22 data/dysonsphere/loot_tables/blocks/cargo_receiver_block.json
 9cfcc5d9aa9440788a4dd0a0a609aebcf602c1ce data/dysonsphere/loot_tables/blocks/dysonsphere_controller_block.json
 a60fb59f630e155ef5e78f66b0e1068336756439 data/dysonsphere/loot_tables/blocks/dysonsphere_energy_receiver_block.json
 09d6f7e4eb74d446bc1bda915f62b8025c300263 data/dysonsphere/loot_tables/blocks/dysonsphere_monitor_block.json
-f036d4acf6f6fbeac0905ea2f4efebbe94c6645e data/dysonsphere/loot_tables/blocks/energy_converter.json
+725887ca23ea0c09ec9f99c8ad4f0dfdc0aa1882 data/dysonsphere/loot_tables/blocks/energy_converter_block.json
 9403f5e278f7b2e71ce6ff7a7785bc73cfbeffe8 data/dysonsphere/loot_tables/blocks/heat_converter_block.json
 c77db67a615c97a4e837a41daa38693f7fd95fd1 data/dysonsphere/loot_tables/blocks/heat_exchanger_block.json
 c2c9fa2dfcb082aebc940eac3a5c09d12b6b8078 data/dysonsphere/loot_tables/blocks/heat_generator_block.json
@@ -22,5 +22,6 @@ d66895b47fe96cdf6d1f3495d17d56fb62de2663 data/dysonsphere/loot_tables/blocks/inp
 d59804c92744a20ffeb38f0bde73a2652347c211 data/dysonsphere/loot_tables/blocks/laser_crafter_block.json
 f7e4f3d8f2ad645014dd55eed81805cc9ba5cdfe data/dysonsphere/loot_tables/blocks/laser_pattern_controller_block.json
 e50c681760e8cd776d712cc15a4b963e5a3242a5 data/dysonsphere/loot_tables/blocks/listener_block.json
+415ca6a442d46fb86230eb2c755365af7d9b3025 data/dysonsphere/loot_tables/blocks/ore_spire_block.json
 14f01b2d131c053a5688b7debc219f99d87cf68e data/dysonsphere/loot_tables/blocks/railgun_block.json
 f4d632aa5758203cc3b44e2654d160aab2d66f6e data/dysonsphere/loot_tables/blocks/smart_alloy_block.json

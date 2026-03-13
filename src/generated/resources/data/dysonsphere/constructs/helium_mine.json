@@ -2,13 +2,6 @@
   "Components": [
     {
       "Component": {
-        "tag": "dysonsphere:space_capsules/solar"
-      },
-      "Foundation": 10,
-      "Required": 50
-    },
-    {
-      "Component": {
         "tag": "dysonsphere:space_capsules/structure"
       },
       "Foundation": 10,
@@ -20,6 +13,13 @@
       },
       "Foundation": 10,
       "Required": 20
+    },
+    {
+      "Component": {
+        "tag": "dysonsphere:space_capsules/solar"
+      },
+      "Foundation": 10,
+      "Required": 50
     }
   ],
   "Energy": -5000,

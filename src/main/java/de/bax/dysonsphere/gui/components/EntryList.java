@@ -82,7 +82,7 @@ public class EntryList implements Renderable {
         if(i < entryList.size()){
             //render scroll indicator down
             pGuiGraphics.fillGradient(x+1, y+height-2, x+width-1, y+height+3, 0xFFAAAAAA, 0xFFc6c6c6);
-            // AssetUtil.renderMaxWidthString(pGuiGraphics, Component.literal("..."), x, y, width, 0xFFFFFFFF, 0x00000000, 0xF000F0, true);
+            // AssetUtil.renderMaxWidthString(pGuiGraphics, Component.literal("..."), x, y, width, 0xFFFFFFFF, 0x00000000, LightTexture.FULL_BRIGHT, true);
             pGuiGraphics.drawCenteredString(Minecraft.getInstance().font, "...", x + (width/2), y + height - 6, 0xFFFFFFFF);
         }
         if(scrollOffset > 0){

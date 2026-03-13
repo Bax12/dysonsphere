@@ -19,6 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -97,7 +98,7 @@ public class CargoReceiverGui extends BaseGui<CargoReceiverContainer> {
 
 
         fluid.draw(pGuiGraphics);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.literal("Request Energy"), this.leftPos + 8, this.topPos + 121, 60, 0xFFFFFFFF, 0, 0xF000F0, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.literal("Request Energy"), this.leftPos + 8, this.topPos + 121, 60, 0xFFFFFFFF, 0, LightTexture.FULL_BRIGHT, true);
     }
 
     @Override

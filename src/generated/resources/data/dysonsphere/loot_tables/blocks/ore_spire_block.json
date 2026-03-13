@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "dysonsphere:energy_converter"
+          "name": "dysonsphere:ore_spire_block"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "dysonsphere:blocks/energy_converter"
+  "random_sequence": "dysonsphere:blocks/ore_spire_block"
 }

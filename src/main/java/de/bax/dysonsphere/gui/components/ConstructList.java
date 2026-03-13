@@ -12,6 +12,7 @@ import de.bax.dysonsphere.constructs.Construct;
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
@@ -99,7 +100,7 @@ public class ConstructList extends EntryList {
                 comp.withStyle(ChatFormatting.UNDERLINE);
             } 
 
-            AssetUtil.renderMaxWidthString(pGuiGraphics, comp, x, y, width, isSelected ? 0x88444444 : 0xFFFFFFFF, 0x00000000, 0xF000F0, !isSelected);
+            AssetUtil.renderMaxWidthString(pGuiGraphics, comp, x, y, width, isSelected ? 0x88444444 : 0xFFFFFFFF, 0x00000000, LightTexture.FULL_BRIGHT, !isSelected);
         }
 
         public boolean isEnabled() {

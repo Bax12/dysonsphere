@@ -35,7 +35,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> CARGO_RECEIVER_BLOCK = registerBlock("cargo_receiver_block", () -> new CargoReceiverBlock());
     
     public static final RegistryObject<Block> LISTENER_BLOCK = registerBlock("listener_block", () -> new ListenerBlock());
-    public static final RegistryObject<Block> ENERGY_CONVERTER_BLOCK = registerBlock("energy_converter", () -> new EnergyConverterBlock());
+    public static final RegistryObject<Block> ENERGY_CONVERTER_BLOCK = registerBlock("energy_converter_block", () -> new EnergyConverterBlock());
+    public static final RegistryObject<Block> ORE_SPIRE_BLOCK = registerBlock("ore_spire_block", () -> new OreSpireBlock());
 
     public static final RegistryObject<Block> HEAT_PIPE_BLOCK = registerBlock("heat_pipe_block", () -> new HeatPipeBlock());
     public static final RegistryObject<Block> HEAT_EXCHANGER_BLOCK = registerBlock("heat_exchanger_block", () -> new HeatExchangerBlock());//5mb/t if >450° + 1mb/t per 50° over 450

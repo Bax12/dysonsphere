@@ -26,7 +26,7 @@ import de.bax.dysonsphere.entityRenderer.GrapplingHookHarnessRenderLayer;
 import de.bax.dysonsphere.entityRenderer.GrapplingHookRenderer;
 import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
 import de.bax.dysonsphere.entityRenderer.ListenerRenderer;
-import de.bax.dysonsphere.entityRenderer.PlasmaStrikeRenderer;
+import de.bax.dysonsphere.entityRenderer.DeliveryDropRenderer;
 import de.bax.dysonsphere.entityRenderer.TargetDesignatorRenderer;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.gui.CargoReceiverGui;
@@ -60,6 +60,7 @@ import de.bax.dysonsphere.tileRenderer.HeatExchangerRenderer;
 import de.bax.dysonsphere.tileRenderer.LaserControllerRenderer;
 import de.bax.dysonsphere.tileRenderer.LaserCrafterRenderer;
 import de.bax.dysonsphere.tileRenderer.LaserPatternControllerRenderer;
+import de.bax.dysonsphere.tileRenderer.OreSpireRenderer;
 import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.client.Minecraft;
@@ -289,11 +290,12 @@ public class DysonSphere
             event.registerBlockEntityRenderer(ModTiles.LASER_CRAFTER.get(), LaserCrafterRenderer::new);
             event.registerBlockEntityRenderer(ModTiles.HEAT_EXCHANGER.get(), HeatExchangerRenderer::new);
             event.registerBlockEntityRenderer(ModTiles.LISTENER.get(), ListenerRenderer::new);
+            event.registerBlockEntityRenderer(ModTiles.ORE_SPIRE.get(), OreSpireRenderer::new);
 
             event.registerEntityRenderer(ModEntities.TARGET_DESIGNATOR.get(), TargetDesignatorRenderer::new);
             event.registerEntityRenderer(ModEntities.LASER_STRIKE.get(), LaserStrikeRenderer::new);
             event.registerEntityRenderer(ModEntities.GRAPPLING_HOOK.get(), GrapplingHookRenderer::new);
-            event.registerEntityRenderer(ModEntities.DELIVERY_DROP.get(), PlasmaStrikeRenderer::new);
+            event.registerEntityRenderer(ModEntities.DELIVERY_DROP.get(), DeliveryDropRenderer::new);
         }
 
         @SubscribeEvent

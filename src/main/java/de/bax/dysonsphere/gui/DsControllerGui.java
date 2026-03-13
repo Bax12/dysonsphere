@@ -16,6 +16,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.PlainTextButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -150,9 +151,9 @@ public class DsControllerGui extends BaseGui<DSControllerContainer> {
         pGuiGraphics.blit(RES_LOC, this.leftPos + 120, this.topPos, 0, 0, 240, 220);
 
         // pGuiGraphics.drawString(font, Component.literal("Available Constructs"), this.leftPos + 5, this.topPos + 5, 0xFFFFFFFF);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_controller_available_header"), this.leftPos + 125, this.topPos + 5, 108, 0xFFFFFFFF, 0, 0xF000F0, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_controller_available_header"), this.leftPos + 125, this.topPos + 5, 108, 0xFFFFFFFF, 0, LightTexture.FULL_BRIGHT, true);
         // pGuiGraphics.drawString(font, Component.literal("Integrated Constructs"), this.leftPos + 125, this.topPos + 5, 0xFFFFFFFF);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_controller_integrated_header"), this.leftPos + 245, this.topPos + 5, 108, 0xFFFFFFFF, 0, 0xF000F0, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_controller_integrated_header"), this.leftPos + 245, this.topPos + 5, 108, 0xFFFFFFFF, 0, LightTexture.FULL_BRIGHT, true);
 
         ConstructList.Entry highlightedEntry = constructActiveList.getHighlightedEntry().orElse(constructInactiveList.getHighlightedEntry().orElse(ConstructList.EMPTY));
         if(highlightedEntry != ConstructList.EMPTY){
@@ -160,7 +161,7 @@ public class DsControllerGui extends BaseGui<DSControllerContainer> {
             conDetails.setConstruct(highlightedEntry.construct);
             conDetails.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick, highlightedEntry.isEnabled());
             // pGuiGraphics.drawString(font, highlightedEntry.construct.getDisplayName(), this.leftPos + 240, this.topPos + 10, 0xFFFFFFFF);
-            // AssetUtil.renderMaxWidthString(pGuiGraphics, highlightedEntry.construct.getDisplayName(), this.leftPos + 250, this.topPos + 10, 80f, 0xFFFFFFFF, 0, 0xF000F0, false);
+            // AssetUtil.renderMaxWidthString(pGuiGraphics, highlightedEntry.construct.getDisplayName(), this.leftPos + 250, this.topPos + 10, 80f, 0xFFFFFFFF, 0, LightTexture.FULL_BRIGHT, false);
         } else {
             imageWidth = 385;
         }

@@ -11,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Item;
@@ -51,18 +52,18 @@ public class ConstructDetails {
         Font font = Minecraft.getInstance().font; 
 
         if(font.width(header) > width -10){
-            AssetUtil.renderMaxWidthString(pGuiGraphics, header, x + 5, y + 5, width - 10, 0xFFFFFFFF, 0, 0xF000F0, true);
+            AssetUtil.renderMaxWidthString(pGuiGraphics, header, x + 5, y + 5, width - 10, 0xFFFFFFFF, 0, LightTexture.FULL_BRIGHT, true);
         } else {
             pGuiGraphics.drawCenteredString(font, header, x + (width/2), y + 5, 0xFFFFFFFF);
         }
 
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.construct_details_status", (isEnabledComponent ? Component.translatable("tooltip.dysonsphere.construct_details_enabled").withStyle(ChatFormatting.GREEN) :  Component.translatable("tooltip.dysonsphere.construct_details_disabled").withStyle(ChatFormatting.RED))), x + 5, y + 20, width - 10, 0xFFF0F0F0, 0, 0xF000F0, true);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.construct_details_tier", construct.tier), x + 5, y + 30, width - 10, 0xFFF0F0F0, 0, 0xF000F0, true);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.construct_details_stability", AssetUtil.FLOAT_FORMAT.format(construct.stability)), x + 5, y + 40, width - 10, 0xFFF0F0F0, 0, 0xF000F0, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.construct_details_status", (isEnabledComponent ? Component.translatable("tooltip.dysonsphere.construct_details_enabled").withStyle(ChatFormatting.GREEN) :  Component.translatable("tooltip.dysonsphere.construct_details_disabled").withStyle(ChatFormatting.RED))), x + 5, y + 20, width - 10, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.construct_details_tier", construct.tier), x + 5, y + 30, width - 10, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.construct_details_stability", AssetUtil.FLOAT_FORMAT.format(construct.stability)), x + 5, y + 40, width - 10, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
         if(construct.energy > 0){
-            AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.construct_details_energy_provided", construct.energy), x + 5, y + 50, width - 10, 0xFFF0F0F0, 0, 0xF000F0, true);
+            AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.construct_details_energy_provided", construct.energy), x + 5, y + 50, width - 10, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
         } else {
-            AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.construct_details_energy_draw", -construct.energy), x + 5, y + 50, width - 10, 0xFFF0F0F0, 0, 0xF000F0, true);
+            AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.construct_details_energy_draw", -construct.energy), x + 5, y + 50, width - 10, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
         }
         if(!construct.components.isEmpty()){
             pGuiGraphics.drawString(font, Component.translatable("tooltip.dysonsphere.construct_details_components"), x + 5, y + 60, 0xFFF0F0F0);
@@ -86,7 +87,7 @@ public class ConstructDetails {
                 }
                 
 
-                AssetUtil.renderMaxWidthString(pGuiGraphics, CapsuleItem.getTypeName(comp.getKey().getItems()[0]).copy().append(" ").append(required).append("/").append(foundation), x + 10, y + 70 + (10 * index++), 90, 0xFFF0F0F0, 0, 0xF000F0, true);
+                AssetUtil.renderMaxWidthString(pGuiGraphics, CapsuleItem.getTypeName(comp.getKey().getItems()[0]).copy().append(" ").append(required).append("/").append(foundation), x + 10, y + 70 + (10 * index++), 90, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
             }
         }
 

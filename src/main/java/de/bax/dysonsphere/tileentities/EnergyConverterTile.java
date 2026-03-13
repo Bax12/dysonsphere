@@ -5,6 +5,8 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.bax.dysonsphere.blocks.ModBlocks;
+import de.bax.dysonsphere.blocks.OreSpireBlock;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -80,7 +82,7 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
             if(energyStorage.getEnergyStored() >= CONVERSION_RATE && !drop.isEmpty()){
                 if(!output.isPresent()){
                     if(level.getBlockState(above).isAir()){
-                        // level.setBlock(above, base, CONVERSION_RATE); //todo set to Ore-Spire
+                        level.setBlock(above, ModBlocks.ORE_SPIRE_BLOCK.get().defaultBlockState().setValue(OreSpireBlock.HAS_BASE, true), 3);
                     }
                 } else {
                     int amount = energyStorage.extractEnergy(Integer.MAX_VALUE, true) / CONVERSION_RATE;
@@ -93,13 +95,15 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
                         }
                         return amount - toInsert.getCount();
                     }).orElse(0);
-                    // canWork = created > 0;
+                    canWork = created > 0;
                     energyStorage.extractEnergy(created * CONVERSION_RATE, false);
                 }
                 
+            } else {
+                canWork = !drop.isEmpty() && output.isPresent();
             }
             
-            canWork = !drop.isEmpty() && output.isPresent();
+            
             
             if(ticksElapsed++ % 5 == 0 && dirty){
                 dirty = false;
