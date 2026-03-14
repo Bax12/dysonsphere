@@ -1,0 +1,16 @@
+{
+    "name": "Sentient Alloy Ingot",
+    "icon": "dysonsphere:ingot_sentient_alloy",
+    "category": "dysonsphere:materials",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Sentient Alloy Ingot$() is rather strange. It is created by adding sufficient $(thing)Smart Alloy$() to a spark of pseudo-sentients. To obtain the first, using a $(item)Deep Listener$() is recommended"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:ingot_sentient_alloy",
+            "title": "Sentient Propagation"
+        }
+    ]
+}

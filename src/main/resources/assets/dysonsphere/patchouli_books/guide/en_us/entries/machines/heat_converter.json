@@ -1,0 +1,16 @@
+{
+    "name": "Thermostatic Converter",
+    "icon": "dysonsphere:heat_converter_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Thermostatic Converter$() uses heat to generate energy. Rather inefficient, but down to room-temperature without additional infrastructure"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:heat_converter_block",
+            "text": "$(o)Tasty entropy$()"
+        }
+    ]
+}

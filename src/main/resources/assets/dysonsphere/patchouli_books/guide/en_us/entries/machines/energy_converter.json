@@ -1,0 +1,26 @@
+{
+    "name": "Metal Crystallizer",
+    "icon": "dysonsphere:energy_converter_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Metal Crystallizer$() uses energy to entice metal ore to grow into raw crystal spires."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:energy_converter_block",
+            "text": "How much do you need? - Yes"
+        },
+        {
+            "type": "patchouli:spotlight",
+            "item": "dysonsphere:ore_spire_block",
+            "link_recipe": true,
+            "text": "An valid ore block needs to be placed beneath the Crystallizer and an inventory on top. If the top inventory is missing an $(thing)Ore Crystal Spire$() will grow in its place"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "The output amount is only limited by the space in the inventory and the energy supplied. To get more energy into the Crystallizer and $(item)Energy Input Hatch$() can be used."
+        }
+    ]
+}

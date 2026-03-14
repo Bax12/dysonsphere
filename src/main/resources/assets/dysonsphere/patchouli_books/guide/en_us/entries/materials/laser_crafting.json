@@ -11,6 +11,10 @@
             "type": "dysonsphere:laser_recipe",
             "recipe": "dysonsphere:laser_crafting/component_smart_alloy",
             "recipe2": "dysonsphere:laser_crafting/universe_whisper"
+        },
+        {
+            "type": "dysonsphere:laser_recipe",
+            "recipe": "dysonsphere:laser_crafting/sensor_unit"
         }
     ]
 }

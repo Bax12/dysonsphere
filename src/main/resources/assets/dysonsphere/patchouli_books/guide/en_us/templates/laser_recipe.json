@@ -83,8 +83,8 @@
             "image": "dysonsphere:textures/gui/gui_lower.png",
             "width": 65,
             "height": 28,
-            "u": 15,
-            "v": 180,
+            "u": 35,
+            "v": 200,
             "x": 30,
             "y": 85,
             "guard": "#hasRecipe2"

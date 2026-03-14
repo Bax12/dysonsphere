@@ -1,0 +1,22 @@
+{
+    "name": "Mega Constructs",
+    "icon": "dysonsphere:capsule_structure_1",
+    "category": "dysonsphere:concepts",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The Dyson Sphere has space for multiple Mega Constructs on its surface. These structures offer unique functions for the Dyson Sphere"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "All Constructs need to be integrated and the enabled to function. They demand a certain amount of Components to be present to be integrated, and an possibly higher number to be enabled.$(br)When fewer components are available the constructs will stop working or collapse entirely."
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:machines/dysonsphere_controller_block",
+                "dysonsphere:machines/cargo_receiver_block"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "name": "DS Control Station",
+    "icon": "dysonsphere:dysonsphere_controller_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Used to control the $(thing)constructs$() of the $(thing)Dyson Sphere$(). All changes need to be confirmed explicitly.$(br)"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:dysonsphere_controller_block",
+            "title": "DS Control Station"
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:concepts/construct"
+            ]
+        }
+    ]
+}
