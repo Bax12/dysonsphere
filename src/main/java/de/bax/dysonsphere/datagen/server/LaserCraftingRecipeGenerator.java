@@ -37,7 +37,6 @@ public class LaserCraftingRecipeGenerator {
     public static void buildRecipes(Consumer<FinishedRecipe> pWriter) {
         //energy: one mekansim laser: 10 000 full charged amplifier: 5 000 000 000 charge of 100 000 000Fe: 250 000 000 (amplifier has 2.5x higher peak when shooting a single pulse)
         // random orbital: 2 000 000
-        RecipeBuilder.of(Items.EMERALD).input(Ingredient.of(Tags.Items.GEMS_DIAMOND)).energyRequired(10_000_000).save(pWriter);
         RecipeBuilder.of(ModItems.UNIVERSE_WHISPER).input(Ingredient.of(Items.ECHO_SHARD)).energyRequired(2_000_000).save(pWriter);
         RecipeBuilder.of(ModItems.COMPONENT_SMART_ALLOY).input(Ingredient.of(DSTags.itemIngotSmartAlloy)).energyRequired(500_000).save(pWriter);
         RecipeBuilder.of(Items.BUDDING_AMETHYST).input(Ingredient.of(Items.AMETHYST_BLOCK)).energyRequired(5_000_000).save(pWriter);
@@ -92,6 +91,40 @@ public class LaserCraftingRecipeGenerator {
                 .energyRequired(800_000).save(consumer);
             })
             .build(pWriter, RecipeBuilder.getLocation(ModBlocks.INPUT_HATCH_FLUID.getId()));
+
+        ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.CIRCUIT_EXISTS).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModItems.SENSOR_UNIT).input(Ingredient.of(Items.FERMENTED_SPIDER_EYE))
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit), 2)
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 1)
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit), 2)
+                .energyRequired(2_000_000).save(consumer);
+            })
+            .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModItems.SENSOR_UNIT).input(Ingredient.of(Items.FERMENTED_SPIDER_EYE))
+                .addExtraInput(Ingredient.of(DSTags.itemCoilCopper), 2)
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 1)
+                .addExtraInput(Ingredient.of(DSTags.itemCoilCopper), 2)
+                .energyRequired(2_000_000).save(consumer);
+            })
+            .build(pWriter, RecipeBuilder.getLocation(ModItems.SENSOR_UNIT.getId()));
+
+            ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.CIRCUIT_EXISTS).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.CARGO_RECEIVER_BLOCK.get()).input(Ingredient.of(Tags.Items.CHESTS))
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 2)
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit), 1)
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 2)
+                .energyRequired(100_000).save(consumer);
+            })
+            .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.CARGO_RECEIVER_BLOCK.get()).input(Ingredient.of(Tags.Items.CHESTS))
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 2)
+                .addExtraInput(Ingredient.of(DSTags.itemCoilCopper), 1)
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 2)
+                .energyRequired(100_000).save(consumer);
+            })
+            .build(pWriter, RecipeBuilder.getLocation(ModBlocks.CARGO_RECEIVER_BLOCK.getId()));
     }
 
     public static class RecipeBuilder {

@@ -1,0 +1,78 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:circuits"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "dysonsphere:laser_crafting",
+        "extraInputs": [
+          {
+            "item": "dysonsphere:component_smart_alloy"
+          },
+          {
+            "item": "dysonsphere:component_smart_alloy"
+          },
+          {
+            "tag": "forge:circuits"
+          },
+          {
+            "item": "dysonsphere:component_smart_alloy"
+          },
+          {
+            "item": "dysonsphere:component_smart_alloy"
+          }
+        ],
+        "input": {
+          "tag": "forge:chests"
+        },
+        "inputEnergy": 100000,
+        "output": {
+          "item": "dysonsphere:cargo_receiver_block"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:circuits"
+        }
+      ],
+      "recipe": {
+        "type": "dysonsphere:laser_crafting",
+        "extraInputs": [
+          {
+            "item": "dysonsphere:component_smart_alloy"
+          },
+          {
+            "item": "dysonsphere:component_smart_alloy"
+          },
+          {
+            "tag": "forge:coils/copper"
+          },
+          {
+            "item": "dysonsphere:component_smart_alloy"
+          },
+          {
+            "item": "dysonsphere:component_smart_alloy"
+          }
+        ],
+        "input": {
+          "tag": "forge:chests"
+        },
+        "inputEnergy": 100000,
+        "output": {
+          "item": "dysonsphere:cargo_receiver_block"
+        }
+      }
+    }
+  ]
+}

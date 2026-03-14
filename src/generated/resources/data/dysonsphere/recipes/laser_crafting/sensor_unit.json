@@ -1,0 +1,78 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:circuits"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "dysonsphere:laser_crafting",
+        "extraInputs": [
+          {
+            "tag": "forge:circuits"
+          },
+          {
+            "tag": "forge:circuits"
+          },
+          {
+            "item": "dysonsphere:component_smart_alloy"
+          },
+          {
+            "tag": "forge:circuits"
+          },
+          {
+            "tag": "forge:circuits"
+          }
+        ],
+        "input": {
+          "item": "minecraft:fermented_spider_eye"
+        },
+        "inputEnergy": 2000000,
+        "output": {
+          "item": "dysonsphere:sensor_unit"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:circuits"
+        }
+      ],
+      "recipe": {
+        "type": "dysonsphere:laser_crafting",
+        "extraInputs": [
+          {
+            "tag": "forge:coils/copper"
+          },
+          {
+            "tag": "forge:coils/copper"
+          },
+          {
+            "item": "dysonsphere:component_smart_alloy"
+          },
+          {
+            "tag": "forge:coils/copper"
+          },
+          {
+            "tag": "forge:coils/copper"
+          }
+        ],
+        "input": {
+          "item": "minecraft:fermented_spider_eye"
+        },
+        "inputEnergy": 2000000,
+        "output": {
+          "item": "dysonsphere:sensor_unit"
+        }
+      }
+    }
+  ]
+}

@@ -705,7 +705,67 @@ public class RecipeGenerator extends RecipeProvider {
         Recipe.shapeless(ModItems.INGOT_SMART_ALLOY.get(), 9)
             .requires(ModBlocks.SMART_ALLOY_BLOCK.get())
             .save(consumer, ModItems.INGOT_SMART_ALLOY.getId().withSuffix("_uncompress"));
+
+        ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.CIRCUIT_EXISTS).addRecipe((con) -> {
+                Recipe.shaped(ModBlocks.LISTENER_BLOCK.get())
+                    .pattern("CSC")
+                    .pattern("csc")
+                    .pattern("ici")
+                    .define('C', ModItems.COMPONENT_SMART_ALLOY.get())
+                    .define('c', DSTags.itemCircuit)
+                    .define('S', ModItems.SENSOR_UNIT.get())
+                    .define('s', Items.CALIBRATED_SCULK_SENSOR)
+                    .define('i', Tags.Items.INGOTS_IRON)
+                    .save(con);
+            })
+            .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY).addRecipe((con) -> {
+                Recipe.shaped(ModBlocks.LISTENER_BLOCK.get())
+                    .pattern("CSC")
+                    .pattern("csc")
+                    .pattern("ici")
+                    .define('C', ModItems.COMPONENT_SMART_ALLOY.get())
+                    .define('c', DSTags.itemCoilCopper)
+                    .define('S', ModItems.SENSOR_UNIT.get())
+                    .define('s', Items.CALIBRATED_SCULK_SENSOR)
+                    .define('i', Tags.Items.INGOTS_IRON)
+                    .save(con);
+            }).build(consumer, ModBlocks.LISTENER_BLOCK.getId());
+        
+        ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.CIRCUIT_EXISTS).addRecipe((con) -> {
+                Recipe.shaped(ModBlocks.ENERGY_CONVERTER_BLOCK.get())
+                    .pattern("CSC")
+                    .pattern("sSs")
+                    .pattern("CNC")
+                    .define('C', DSTags.itemCircuit)
+                    .define('S', DSTags.itemIngotSentient)
+                    .define('s', DSTags.itemIngotSmartAlloy)
+                    .define('N', Tags.Items.INGOTS_NETHERITE)
+                    .save(con);
+            })
+            .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY).addRecipe((con) -> {
+                Recipe.shaped(ModBlocks.ENERGY_CONVERTER_BLOCK.get())
+                    .pattern("sSs")
+                    .pattern("sSs")
+                    .pattern("sNs")
+                    .define('S', DSTags.itemIngotSentient)
+                    .define('s', DSTags.itemIngotSmartAlloy)
+                    .define('N', Tags.Items.INGOTS_NETHERITE)
+                    .save(con);
+            }).build(consumer, ModBlocks.ENERGY_CONVERTER_BLOCK.getId());
+
+        Recipe.shaped(ModBlocks.DS_CONTROLLER_BLOCK.get())
+            .pattern(" M ")
+            .pattern("MCM")
+            .pattern("SSS")
+            .define('M', ModBlocks.DS_MONITOR_BLOCK.get())
+            .define('C', DSTags.itemCoilCopper)
+            .define('S', DSTags.itemIngotSmartAlloy)
+            .save(consumer);
     }
+
+
     
 
     public static class Recipe {
