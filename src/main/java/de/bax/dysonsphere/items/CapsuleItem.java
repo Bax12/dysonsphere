@@ -81,6 +81,11 @@ public class CapsuleItem extends Item {
                     public float getCompletionProgress() {
                         return type.completionProgress;
                     }
+
+                    @Override
+                    public int getTier() {
+                        return type.getTier();
+                    }
                 }).cast() : LazyOptional.empty();
             }
         };
@@ -113,6 +118,14 @@ public class CapsuleItem extends Item {
 
     public Component getContentName(){
         return ((MutableComponent) getDescription()).append(" ").append(Component.translatable("tooltip.dysonsphere.capsule_tier", this.type.getTier()));
+    }
+
+    public int getTier(){
+        return type.getTier();
+    }
+
+    public String getType(){
+        return type.getType();
     }
 
     public static Component getTypeName(ItemStack stack){

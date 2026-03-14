@@ -35,7 +35,7 @@ public class SkyLightUtil {
     }
 
     public static void changeSkyLight(Vector3f skyLight, float partialTicks){
-        skyLight.lerp(new Vector3f(0, 0, 0), darkenBy * 1.1f);
+        skyLight.lerp(new Vector3f(0, 0, 0), darkenBy);
     }
 
 

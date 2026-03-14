@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import org.antlr.v4.parse.ANTLRParser.prequelConstruct_return;
+
 import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.core.BlockPos;
@@ -26,12 +28,14 @@ public class DSMonitorTile extends BaseTile {
     protected Map<Item, Long> dsParts = new HashMap<>();
     protected float dsUsage = 0;
     protected long dsEnergyDraw = 0;
+    protected float dsStability = 0;
     protected int ticksElapsed = 0;
 
     protected long lastEnergy = 0;
     protected int lastPartHash = 0;
     protected float lastUsage = 0;
     protected long lastEnergyDraw = 0;
+    protected float lastStability = 0;
 
     protected boolean dirty = false;
 
@@ -52,6 +56,7 @@ public class DSMonitorTile extends BaseTile {
                     dsCompletionPercentage = ds.getCompletionPercentage();
                     dsUsage = ds.getUtilization();
                     dsEnergyDraw = ds.getEnergyRequested();
+                    dsStability = ds.getStability();
                 });
             } else {
                 dsParts.clear();
@@ -59,6 +64,7 @@ public class DSMonitorTile extends BaseTile {
                 dsCompletionPercentage = -1;
                 dsUsage = -1;
                 dsEnergyDraw = -1;
+                dsStability = -1;
             }
             
 
@@ -82,11 +88,12 @@ public class DSMonitorTile extends BaseTile {
             //     sendSyncPackageToNearbyPlayers();
             // }
             int hash = dsParts.hashCode();
-            if(lastEnergy != dsEnergy || lastPartHash != hash || lastUsage != dsUsage || lastEnergyDraw != dsEnergyDraw){
+            if(lastEnergy != dsEnergy || lastPartHash != hash || lastUsage != dsUsage || lastEnergyDraw != dsEnergyDraw || lastStability != dsStability){
                 lastEnergy = dsEnergy;
                 lastPartHash = hash;
                 lastUsage = dsUsage;
                 lastEnergyDraw = dsEnergyDraw;
+                lastStability = dsStability;
                 dirty = true;
             }
             if(dirty){ //to enable sync trigger in child classes
@@ -103,6 +110,7 @@ public class DSMonitorTile extends BaseTile {
         tag.putLong("ds_energy", dsEnergy);
         tag.putFloat("ds_usage", dsUsage);
         tag.putLong("ds_energy_draw", dsEnergyDraw);
+        tag.putFloat("ds_stability", dsStability);
         CompoundTag invTag = new CompoundTag();
         dsParts.forEach((item, count) -> {
             ResourceLocation itemKey = ForgeRegistries.ITEMS.getKey(item);
@@ -122,6 +130,7 @@ public class DSMonitorTile extends BaseTile {
         dsEnergy = tag.getLong("ds_energy");
         dsUsage = tag.getFloat("ds_usage");
         dsEnergyDraw = tag.getLong("ds_energy_draw");
+        dsStability = tag.getFloat("ds_stability");
         CompoundTag inv = tag.getCompound("ds_parts");
             if(inv != null){
                 dsParts.clear(); //without it causes issues when removing the last parts of the dysonsphere
@@ -151,5 +160,9 @@ public class DSMonitorTile extends BaseTile {
 
     public long getDsEnergyDraw() {
         return dsEnergyDraw;
+    }
+
+    public float getDsStability() {
+        return dsStability;
     }
 }

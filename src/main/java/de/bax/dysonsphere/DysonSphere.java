@@ -231,8 +231,8 @@ public class DysonSphere
                 laser.getLasersAvailable(0);
             });
             event.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
-                //Sync the current light to the clients on join. Completion is 0.0 - 100.0 while light is 0.0 - 1.0
-                ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new DSLightSyncPackage(ds.getCompletionPercentage() / 100f));
+                //Sync the current light to the clients on join.
+                ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new DSLightSyncPackage(ds));
             });
         }
         

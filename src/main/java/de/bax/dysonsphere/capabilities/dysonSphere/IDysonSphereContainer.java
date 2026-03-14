@@ -180,4 +180,10 @@ public interface IDysonSphereContainer {
      * @return List of Components containing the messages
      */
     List<Component> getDSLog();
+
+    /**
+     * Get the current chance of something breaking on a change in the DysonSphere
+     * @return chance of not breaking from 0.0 to 100.0
+     */
+    float getStability();
 }

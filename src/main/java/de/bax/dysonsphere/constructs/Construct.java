@@ -42,8 +42,8 @@ public class Construct {
         canWork = true;
         for (Entry<Ingredient, ComponentCount> component : components.entrySet()) {
             long count = ds.getDysonSpherePartCount(component.getKey());
-            shouldBreak = shouldBreak || count < component.getValue().foundation();
-            canWork &= !shouldBreak && count > component.getValue().required();
+            shouldBreak |= count < component.getValue().foundation();
+            canWork &= !shouldBreak && count >= component.getValue().required();
             if(shouldBreak){ //not what the var name means, but quite funny.
                 break;
             }

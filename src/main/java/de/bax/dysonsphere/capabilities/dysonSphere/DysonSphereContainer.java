@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import org.checkerframework.checker.units.qual.min;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,8 +22,10 @@ import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dsPart.IDSPart;
 import de.bax.dysonsphere.constructs.Construct;
 import de.bax.dysonsphere.constructs.ModConstructs;
+import de.bax.dysonsphere.items.CapsuleItem;
 import de.bax.dysonsphere.network.DSLightSyncPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
+import de.bax.dysonsphere.tags.DSTags;
 import de.bax.dysonsphere.util.RingBuffer;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -42,6 +45,9 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
 
     public static final float DS_COMPLETED = 100f; //does this really count as magic number?
     public static final int DS_LOG_LENGTH = 500;
+
+    public static float STABILITY_MULT = 0.5f;
+    public static int MAX_BREAK_COUNT = 5;
 
     protected boolean allowOverworldAccess;
     protected Level level;
@@ -136,8 +142,10 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             if(inv != null){
                 for(String itemKey : inv.getAllKeys()){
                     Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemKey));
-                    long count = inv.getLong(itemKey);
-                    parts.put(item, count);
+                    if(item != null){
+                        long count = inv.getLong(itemKey);
+                        parts.put(item, count);
+                    }
                 }
             }
             parts.forEach((item, count) -> {
@@ -149,6 +157,9 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             });
             loadConstructs(tag, "constructsActive", constructsActive);
             loadConstructs(tag, "constructsInactive", constructsInactive);
+            constructsActive.forEach((con) -> {
+                energy += con.energy;
+            });
         }
 
         protected static void loadConstructs(CompoundTag tag, String key, Set<Construct> constructs){
@@ -277,7 +288,8 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                     removeConstruct(con);
                 }
             });
-            ModPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new DSLightSyncPackage(completion / DS_COMPLETED));//completion is 0 - 100, light is 0-1
+            checkStability();
+            ModPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new DSLightSyncPackage(this));
         }
 
         @Override
@@ -300,6 +312,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             }
             if(changed) {
                 addLogMessage(Component.translatable("log.dysonsphere.construct.added", construct.getDisplayName()));
+                energy += construct.energy;
                 updateDSPartListeners();
             }
             return changed;
@@ -313,6 +326,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             // }
             if(constructsInactive.remove(construct) || constructsActive.remove(construct)) {
                 addLogMessage(Component.translatable("log.dysonsphere.construct.removed", construct.getDisplayName()));
+                energy -= construct.energy;
                 updateDSPartListeners();
                 return true;
             }
@@ -327,6 +341,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             }
             if(changed) {
                 addLogMessage(Component.translatable("log.dysonsphere.construct.enabled", construct.getDisplayName()));
+                energy += construct.energy;
                 updateDSPartListeners();
             }
             return changed;
@@ -340,6 +355,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
             }
             if(changed) {
                 addLogMessage(Component.translatable("log.dysonsphere.construct.disabled", construct.getDisplayName()));
+                energy -= construct.energy;
                 updateDSPartListeners();
             }
             return changed;
@@ -445,11 +461,46 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         @Override
         public boolean resetDysonSphereParts() {
             parts.clear();
+            constructsActive.clear();
+            constructsInactive.clear();
             completion = 0f;
             energy = 0;
+            addLogMessage(Component.translatable("log.dysonsphere.reset"));
             //update client light level
             updateDSPartListeners();
             return true;
+        }
+
+        @Override
+        public float getStability() {
+            float stability = DS_COMPLETED - (getCompletionPercentage() * STABILITY_MULT);
+            for(Construct con : constructsActive) {
+                stability *= con.stability;
+            }
+            return stability;
+        }
+
+        protected void checkStability(){
+            if(level.random.nextFloat() > getStability() / 100f){
+                int minTier = Integer.MAX_VALUE;
+                Item minItem = null;
+
+                for(Item item : parts.keySet()){
+                    int tier = item instanceof CapsuleItem cap ? cap.getTier() : item.getDefaultInstance().getCapability(DSCapabilities.DS_PART).map((part) -> {return part.getTier();}).orElse(0);
+                    if(tier < minTier){
+                        minTier = tier;
+                        minItem = item;
+                    }
+                    if(tier == minTier && item.getDefaultInstance().is(DSTags.itemCapsuleStructure)){
+                        minItem = item;
+                    }
+                }
+
+                if(minItem != null){
+                    addLogMessage(Component.translatable("log.dysonsphere.part.broken", minItem.getDefaultInstance().getDisplayName()));
+                    removeDysonSpherePartBulk(minItem.getDefaultInstance(), level.random.nextInt(MAX_BREAK_COUNT)+1);
+                }
+            }
         }
 
         @Override

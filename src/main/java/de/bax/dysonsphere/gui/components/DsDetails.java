@@ -51,15 +51,18 @@ public class DsDetails implements Renderable {
         df.setMaximumFractionDigits(0);
 
         AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_capacity", df.format(tile.getDsEnergy())), x + 2, y + 22, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_parts"), x + 2, y + 32, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
-
+        
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_usage", df.format(tile.getDsUsage())), x + 2, y + 32, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_power_draw", df.format(tile.getDsEnergyDraw())), x + 2, y + 42, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_stability", df.format(tile.getDsStability())), x + 2, y + 52, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
+        
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_parts"), x + 2, y + 62, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
         int offset = 0;
         for(Entry<Item, Long> entry : tile.getDsParts().entrySet().stream().sorted((a, b) -> {return b.getValue().compareTo(a.getValue());}).toList()){
-            AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey() instanceof CapsuleItem capsule ? capsule.getContentName() : entry.getKey().getName(ItemStack.EMPTY), entry.getValue()), x + 2, y + 42 + offset, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
+            AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey() instanceof CapsuleItem capsule ? capsule.getContentName() : entry.getKey().getName(ItemStack.EMPTY), entry.getValue()), x + 2, y + 72 + offset, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
             offset += 10;
         }
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_usage", df.format(tile.getDsUsage())), x + 2, y + 52 + offset, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.ds_monitor_power_draw", df.format(tile.getDsEnergyDraw())), x + 2, y + 62 + offset, width - 4, 0xFFF0F0F0, 0, LightTexture.FULL_BRIGHT, true);
+        
     }
 
     public void setDynamicHeight(boolean dynamicHeight){

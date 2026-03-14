@@ -46,49 +46,49 @@ public class ConstructGenerator implements DataProvider{
         con.energy = -5000;
         con.stability = 0.85f;
         con.tier = 0;
-        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(30, 10));
+        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(50, 20));
         con.components.put(Ingredient.of(DSTags.itemCapsuleLaser), new ComponentCount(20, 10));
-        con.components.put(Ingredient.of(DSTags.itemCapsuleSolar), new ComponentCount(50, 10));
+        con.components.put(Ingredient.of(DSTags.itemCapsuleSolar), new ComponentCount(500, 200));
         constructs.add(con);
 
         con = ModConstructs.STABILIZER.get();
-        con.energy = -250;
+        con.energy = -25000;
         con.stability = 2.5f;
         con.tier = 1;
-        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(50, 50));
-        con.components.put(Ingredient.of(DSTags.itemCapsuleLaser), new ComponentCount(50, 10));
+        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(500, 50));
+        con.components.put(Ingredient.of(DSTags.itemCapsuleLaser), new ComponentCount(500, 100));
         constructs.add(con);
 
         con = ModConstructs.HEAT_SINK.get();
         con.energy = 0;
         con.stability = 0.95f;
         con.tier = 0;
-        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(200, 50));
+        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(2000, 500));
         constructs.add(con);
 
         con = ModConstructs.CARGO_LAUNCHER.get();
-        con.energy = -50;
+        con.energy = -500;
         con.stability = 0.99f;
         con.tier = 0;
-        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(20, 0));
+        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(50, 0));
         con.components.put(Ingredient.of(DSTags.itemCapsuleSolar), new ComponentCount(500, 100));
         constructs.add(con);
 
         con = ModConstructs.PLASMA_LAUNCHER.get();
-        con.energy = -1000;
+        con.energy = -10000;
         con.stability = 0.85f;
         con.tier = 1;
-        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(200, 100));
+        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(500, 100));
         con.components.put(Ingredient.of(DSTags.itemCapsuleLaser), new ComponentCount(500, 100));
-        con.components.put(Ingredient.of(DSTags.itemCapsuleSolar), new ComponentCount(500, 200));
+        con.components.put(Ingredient.of(DSTags.itemCapsuleSolar), new ComponentCount(5000, 200));
         constructs.add(con);
 
         con = ModConstructs.SOLAR_LAMP.get();
-        con.energy = -750;
+        con.energy = -7500;
         con.stability = 1f;
         con.tier = 1;
-        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(200, 200));
-        con.components.put(Ingredient.of(DSTags.itemCapsuleLaser), new ComponentCount(20, 0));
+        con.components.put(Ingredient.of(DSTags.itemCapsuleStructure), new ComponentCount(2000, 200));
+        con.components.put(Ingredient.of(DSTags.itemCapsuleLaser), new ComponentCount(200, 0));
         constructs.add(con);
     }
 
@@ -116,11 +116,12 @@ public class ConstructGenerator implements DataProvider{
         json.addProperty("Energy", construct.energy);
         json.addProperty("Stability", construct.stability);
         JsonArray componentsJson = new JsonArray();
-        construct.components.forEach((component, count) -> {
+        construct.components.entrySet().stream().sorted((a, b) -> {return a.toString().compareTo(b.toString());}).
+        forEach((entry) -> {
             JsonObject compJson = new JsonObject();
-            compJson.add("Component", component.toJson());
-            compJson.addProperty("Required", count.required());
-            compJson.addProperty("Foundation", count.foundation());
+            compJson.add("Component", entry.getKey().toJson());
+            compJson.addProperty("Required", entry.getValue().required());
+            compJson.addProperty("Foundation", entry.getValue().foundation());
             componentsJson.add(compJson);
         });
         json.add("Components", componentsJson);

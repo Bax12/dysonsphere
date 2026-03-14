@@ -2,20 +2,20 @@
   "Components": [
     {
       "Component": {
-        "tag": "dysonsphere:space_capsules/laser"
-      },
-      "Foundation": 10,
-      "Required": 50
-    },
-    {
-      "Component": {
         "tag": "dysonsphere:space_capsules/structure"
       },
       "Foundation": 50,
-      "Required": 50
+      "Required": 500
+    },
+    {
+      "Component": {
+        "tag": "dysonsphere:space_capsules/laser"
+      },
+      "Foundation": 100,
+      "Required": 500
     }
   ],
-  "Energy": -250,
+  "Energy": -25000,
   "Stability": 2.5,
   "Tier": 1
 }

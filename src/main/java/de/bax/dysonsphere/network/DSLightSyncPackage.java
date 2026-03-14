@@ -2,6 +2,8 @@ package de.bax.dysonsphere.network;
 
 import java.util.function.Supplier;
 
+import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
+import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.util.SkyLightUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkDirection;
@@ -13,6 +15,10 @@ public class DSLightSyncPackage {
 
     public DSLightSyncPackage(float darkenBy){
         this.darkenBy = darkenBy;
+    }
+
+    public DSLightSyncPackage(IDysonSphereContainer ds){
+        this.darkenBy = ds.getEnabledConstructs().contains(ModConstructs.SOLAR_LAMP.get()) ? 0 : ds.getCompletionPercentage() / 100f; //completion is 0 - 100, light is 0-1
     }
 
     public void encode(FriendlyByteBuf buf){

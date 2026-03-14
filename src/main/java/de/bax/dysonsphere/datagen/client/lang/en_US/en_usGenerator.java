@@ -168,6 +168,7 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.ds_monitor_part", "  - %s: %sx");
         add("tooltip.dysonsphere.ds_monitor_usage", "Usage: %s%%");
         add("tooltip.dysonsphere.ds_monitor_power_draw", "Energy Draw %s RF/t");
+        add("tooltip.dysonsphere.ds_monitor_stability", "Stability: %s%%");
 
         add("tooltip.dysonsphere.ds_controller_add_button", ">");
         add("tooltip.dysonsphere.ds_controller_add_button_desc", "Add selected Construct to the Dyson Sphere");
@@ -383,7 +384,8 @@ public class en_usGenerator extends LanguageProvider{
         add("log.dysonsphere.construct.removed", "Construct removed: %s");
         add("log.dysonsphere.construct.enabled", "Construct enabled: %s");
         add("log.dysonsphere.construct.disabled", "Construct disabled: %s");
-
+        add("log.dysonsphere.reset", "Dyson Sphere reset!");
+        add("log.dysonsphere.part.broken", "Part %s broke, will be removed");
     }
     
     
