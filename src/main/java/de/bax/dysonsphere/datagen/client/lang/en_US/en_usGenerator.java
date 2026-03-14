@@ -39,6 +39,10 @@ public class en_usGenerator extends LanguageProvider{
         addBlock(ModBlocks.INPUT_HATCH_ENERGY_HEAT, "Energy Input Hatch (heat-transfer)");
         addBlock(ModBlocks.INPUT_HATCH_FLUID, "Fluid Input Hatch");
         addBlock(ModBlocks.INPUT_HATCH_FLUID_HEAT, "Fluid Input Hatch (heat-transfer)");
+        addBlock(ModBlocks.LISTENER_BLOCK, "Deep Listener");
+        addBlock(ModBlocks.ENERGY_CONVERTER_BLOCK, "Metal Crystallizer");
+        addBlock(ModBlocks.CARGO_RECEIVER_BLOCK, "Orbital Delivery Receptor");
+        addBlock(ModBlocks.ORE_SPIRE_BLOCK, "Ore Crystal Spire");
 
         //items
         addItem(ModItems.COIL_COPPER, "Copper Wire Coil");
@@ -85,6 +89,7 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE, "Pneumatic Engine");
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL, "Mechanical Engine");
         addItem(ModItems.WRENCH, "Wrench");
+        addItem(ModItems.SENSOR_UNIT, "Acoustic Sensor Unit");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");
@@ -125,6 +130,8 @@ public class en_usGenerator extends LanguageProvider{
         add("container.dysonsphere.input_hatch_energy_heat", "Energy Input Hatch (heat-transfer)");
         add("container.dysonsphere.input_hatch_fluid", "Fluid Input Hatch");
         add("container.dysonsphere.input_hatch_fluid_heat", "Fluid Input Hatch (heat-transfer)");
+        add("container.dysonsphere.listener", "Deep Listener");
+        add("container.dysonsphere.cargo_receiver", "Orbital Delivery Receptor");
 
         //tooltips
         add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
@@ -185,6 +192,21 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.construct_details_components", "Components:");
         add("tooltip.dysonsphere.construct_details_enabled", "Enabled");
         add("tooltip.dysonsphere.construct_details_disabled", "Disabled");
+
+        add("tooltip.dysonsphere.listener_shard", "May consume multiple per operation");
+        add("tooltip.dysonsphere.listener_result", "If the recipe is ambiguous the result is random");
+
+        add("tooltip.dysonsphere.cargo_receiver_energy", "Dyson Sphere Energy needed: %sRF");
+        add("tooltip.dysonsphere.cargo_receiver_constructs", "Required Constructs: ");
+        add("tooltip.dysonsphere.cargo_receiver_request", "Requested Energy");
+        add("tooltip.dysonsphere.cargo_receiver_request_energy", "Energy dedicated to fulfilling the request");
+        add("tooltip.dysonsphere.cargo_receiver_missing_constructs", "Missing required constructs for delivery");
+        add("tooltip.dysonsphere.cargo_receiver_missing_output", "No space in output for delivery");
+        add("tooltip.dysonsphere.cargo_receiver_missing_sky", "No clear path to deliver from orbit (cannot see the sky)");
+        add("tooltip.dysonsphere.cargo_receiver_delivery", "Next Delivery: %s/%sRF");
+
+        add("tooltip.dysonsphere.energy_converter_base", "Output will match the ore block below the crystallizer");
+        add("tooltip.dysonsphere.energy_converter_energy", "%sRF per result item. Output scales with energy supply");
 
         add("tooltip.dysonsphere.laser_pattern_call_in","Call-In Sequence");
         add("tooltip.dysonsphere.laser_pattern_name", "Name:");
@@ -281,6 +303,9 @@ public class en_usGenerator extends LanguageProvider{
         add("dysonsphere.recipe.heat_exchanger", "Heat Exchange");
         add("dysonsphere.recipe.railgun", "Orbital Launching");
         add("dysonsphere.recipe.laser", "Orbital Laser Strike");
+        add("dysonsphere.recipe.listener", "Strange Whispers");
+        add("dysonsphere.recipe.energy_converter", "Metal Crystallization");
+        add("dysonsphere.recipe.cargo_delivery", "Orbital Cargo Drop");
 
         //advancements
         add("achievement.dysonsphere.root", "Dyson Sphere Project");

@@ -98,7 +98,7 @@ public class CargoReceiverGui extends BaseGui<CargoReceiverContainer> {
 
 
         fluid.draw(pGuiGraphics);
-        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.literal("Request Energy"), this.leftPos + 8, this.topPos + 121, 60, 0xFFFFFFFF, 0, LightTexture.FULL_BRIGHT, true);
+        AssetUtil.renderMaxWidthString(pGuiGraphics, Component.translatable("tooltip.dysonsphere.cargo_receiver_request"), this.leftPos + 8, this.topPos + 121, 60, 0xFFFFFFFF, 0, LightTexture.FULL_BRIGHT, true);
     }
 
     @Override
@@ -107,25 +107,25 @@ public class CargoReceiverGui extends BaseGui<CargoReceiverContainer> {
         fluid.drawOverlay(guiGraphics, mouseX, mouseY);
         
         if(inputBox.isMouseOver(mouseX, mouseY)){
-            guiGraphics.renderComponentTooltip(font, List.of(Component.literal("Energy dedicated to fullfilling the request")), mouseX, mouseY);
+            guiGraphics.renderComponentTooltip(font, List.of(Component.translatable("tooltip.dysonsphere.cargo_receiver_request_energy")), mouseX, mouseY);
         }
         guiGraphics.blit(RES_LOC, this.leftPos + 98, this.topPos + 104, 0, 139, tile.getProgressScaled(67), 10);
         if(mouseX >= this.leftPos + 98 && mouseX <= this.leftPos + 164 && mouseY >= this.topPos + 104 && mouseY <= this.topPos + 113){
             List<Component> tooltip = new ArrayList<>();
             switch (tile.getStatus()) {
                 case BLOCKED_CONSTRUCTS:
-                    tooltip.add(Component.literal("Missing required constructs for delivery"));
+                    tooltip.add(Component.translatable("tooltip.dysonsphere.cargo_receiver_missing_constructs"));
                     break;
                 case BLOCKED_OUTPUT:
-                    tooltip.add(Component.literal("No space in output for delivery"));
+                    tooltip.add(Component.translatable("tooltip.dysonsphere.cargo_receiver_missing_output"));
                     break;
                 case BLOCKED_SKY:
-                    tooltip.add(Component.literal("No clear path to deliver from orbit (cannot see the sky)"));
+                    tooltip.add(Component.translatable("tooltip.dysonsphere.cargo_receiver_missing_sky"));
                     break;
                 case WORKING:
                 case READY:
                     int energyStored = tile.getEnergyStored(), energyRecipe = (tile.getCurrentRecipe() != null) ? tile.getCurrentRecipe().energy() : 0;
-                    tooltip.add(Component.literal("Next Delivery: " + AssetUtil.FLOAT_FORMAT.format((tile.isWorking() && energyStored == 0 ? energyRecipe : energyStored)) +  "/" + AssetUtil.FLOAT_FORMAT.format(energyRecipe) + "RF"));
+                    tooltip.add(Component.translatable("tooltip.dysonsphere.cargo_receiver_delivery", AssetUtil.FLOAT_FORMAT.format((tile.isWorking() && energyStored == 0 ? energyRecipe : energyStored)), AssetUtil.FLOAT_FORMAT.format(energyRecipe)));
                 
             }
             

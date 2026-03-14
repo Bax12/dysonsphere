@@ -129,7 +129,7 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
                 canWork = !drop.isEmpty() && output.isPresent();
             }
             
-            
+            acceptorHandler.tick(); 
             
             if(ticksElapsed++ % 5 == 0 && dirty){
                 dirty = false;
@@ -139,7 +139,8 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
             if(lastWork != canWork){
                 level.markAndNotifyBlock(worldPosition, level.getChunkAt(worldPosition), getBlockState(), getBlockState(), 2, 0);
                 lastWork = canWork;
-            }            
+            }   
+            acceptorHandler.tick();         
         }
     }
 
@@ -152,6 +153,7 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
         super.saveAdditional(pTag);
         pTag.put("energy", energyStorage.serializeNBT());
         pTag.putBoolean("canWork", canWork);
+        pTag.put("acceptor", acceptorHandler.serializeNBT());
     }
 
     @Override
@@ -159,6 +161,7 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
         super.load(pTag);
         energyStorage.deserializeNBT(pTag.get("energy"));
         canWork = pTag.getBoolean("canWork");
+        acceptorHandler.deserializeNBT(pTag.getCompound("acceptor"));
     }
 
     public void onNeighborChange(){
@@ -173,7 +176,7 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
                 return item.is(Tags.Items.RAW_MATERIALS);
             }).findFirst().orElse(ItemStack.EMPTY);
         }
-        
+        acceptorHandler.updateNeighbors(level, worldPosition);
     }
 
     @Override
@@ -182,6 +185,7 @@ public class EnergyConverterTile extends BaseTile implements ITintableTile{
         below = getBlockPos().below(); //we ignore push events, everything else should reload the te, right?
         above = getBlockPos().above();
         onNeighborChange();
+        acceptorHandler.markForRefresh();
     }
 
     @Override

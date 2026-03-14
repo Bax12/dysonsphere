@@ -71,8 +71,8 @@ public class CargoList extends EntryList {
 
         public void renderHover(GuiGraphics guiGraphics, Font font, int mouseX, int mouseY){
             List<Component> msg = new ArrayList<>();
-            msg.add(Component.literal("Dyson Sphere Energy needed: %sRF".formatted(recipe.energy())));
-            msg.add(Component.literal("Required Constructs: "));
+            msg.add(Component.translatable("tooltip.dysonsphere.cargo_receiver_energy".formatted(recipe.energy())));
+            msg.add(Component.translatable("tooltip.dysonsphere.cargo_receiver_constructs"));
             for(var con : recipe.requiredConstructs()){
                 msg.add(con.getDisplayName());
             }
