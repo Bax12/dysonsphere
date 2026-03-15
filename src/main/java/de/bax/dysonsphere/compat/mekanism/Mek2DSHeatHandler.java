@@ -18,7 +18,7 @@ public class Mek2DSHeatHandler implements ICapabilityProvider {
     protected final IHeatContainer heatContainer;
     protected final LazyOptional<IHeatContainer> lazyHeat;
 
-    Mek2DSHeatHandler(IHeatHandler heatHandler){
+    public Mek2DSHeatHandler(IHeatHandler heatHandler){
         this.mekHeat = heatHandler;
 
         heatContainer = new Mek2DSHeatAdapter();
@@ -39,7 +39,9 @@ public class Mek2DSHeatHandler implements ICapabilityProvider {
         @Override
         public double receiveHeat(double maxReceive, boolean simulate) {
             if(!simulate){
-                mekHeat.handleHeat(maxReceive); //mekanism just takes the heat. so we always assume max is possible
+                double oldHeat = mekHeat.getTotalTemperature();
+                mekHeat.handleHeat(maxReceive / DSConfig.MEK_HEAT_EXCHANGE_RATE.get()); //mekanism just takes the heat. so we always assume max is possible
+                return (mekHeat.getTotalTemperature() - oldHeat) * DSConfig.MEK_HEAT_EXCHANGE_RATE.get();
             }
             return maxReceive;
         }
@@ -47,7 +49,9 @@ public class Mek2DSHeatHandler implements ICapabilityProvider {
         @Override
         public double extractHeat(double maxExtract, boolean simulate) {
             if(!simulate){
-                mekHeat.handleHeat(-maxExtract); //mekanism just takes the heat. so we always assume max is possible
+                double oldHeat = mekHeat.getTotalTemperature();
+                mekHeat.handleHeat(-maxExtract / DSConfig.MEK_HEAT_EXCHANGE_RATE.get()); //mekanism just takes the heat. so we always assume max is possible
+                return (oldHeat - mekHeat.getTotalTemperature())* DSConfig.MEK_HEAT_EXCHANGE_RATE.get();
             }
             return maxExtract;
         }
