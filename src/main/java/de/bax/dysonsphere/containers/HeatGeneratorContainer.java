@@ -11,17 +11,16 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 public class HeatGeneratorContainer extends BaseContainer {
     
     public final HeatGeneratorTile tile;
-    public char axis;
+    
 
     public static HeatGeneratorContainer fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data){
-        return new HeatGeneratorContainer(windowId, inv, (HeatGeneratorTile) Objects.requireNonNull(inv.player.level().getBlockEntity(data.readBlockPos())), data.readChar());
+        return new HeatGeneratorContainer(windowId, inv, (HeatGeneratorTile) Objects.requireNonNull(inv.player.level().getBlockEntity(data.readBlockPos())));
     }
 
-    public HeatGeneratorContainer(int windowId, Inventory inv, HeatGeneratorTile tile, char axis) {
+    public HeatGeneratorContainer(int windowId, Inventory inv, HeatGeneratorTile tile) {
         super(ModContainers.HEAT_GENERATOR_CONTAINER.get(), windowId, inv);
 
         this.tile = tile;
-        this.axis = axis;
 
         addInventorySlots(inv);
     }

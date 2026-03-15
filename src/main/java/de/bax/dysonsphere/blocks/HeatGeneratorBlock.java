@@ -58,10 +58,7 @@ public class HeatGeneratorBlock extends Block implements EntityBlock {
             BlockEntity tile = level.getBlockEntity(pos);
             if(tile != null && tile.getType().equals(ModTiles.HEAT_GENERATOR.get())){
                 NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
-                new HeatGeneratorContainer(containerId, playerInventory, (HeatGeneratorTile) tile, ((HeatGeneratorTile) tile).getLastAxis()), Component.translatable("container.dysonsphere.heat_generator")), buf -> {
-                    buf.writeBlockPos(pos);
-                    buf.writeChar(((HeatGeneratorTile) tile).getLastAxis());
-                });
+                new HeatGeneratorContainer(containerId, playerInventory, (HeatGeneratorTile) tile), Component.translatable("container.dysonsphere.heat_generator")), pos);
 
                 return InteractionResult.CONSUME;
             }

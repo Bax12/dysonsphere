@@ -1,6 +1,5 @@
 package de.bax.dysonsphere.capabilities.heat;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -108,6 +107,7 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
         
     }
 
+    @Override
     public double getThermalConductivity(){
         return 0.1;
     }

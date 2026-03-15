@@ -2,6 +2,7 @@ package de.bax.dysonsphere.compat.pneumaticcraft;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.heat.IHeatTile;
+import de.bax.dysonsphere.capabilities.heat.ISidedHeatTile;
 import de.bax.dysonsphere.compat.IModCompat;
 import me.desht.pneumaticcraft.api.heat.IHeatExchangerLogic;
 import me.desht.pneumaticcraft.api.tileentity.IAirHandlerItem;
@@ -32,7 +33,13 @@ public class Pneumaticcraft implements IModCompat {
             event.addListener(() -> {
                 event.getObject().getCapability(HEAT_HANDLER).invalidate();
             });
-        } else */if(event.getObject() instanceof IHeatTile heat){
+        } else */
+        if(event.getObject() instanceof ISidedHeatTile heat){
+            event.addCapability(new ResourceLocation(DysonSphere.MODID, "ds2pnc_heat_handler"), new DS2PCNSidedHeatHandler(heat));
+            event.addListener(() -> {
+                event.getObject().getCapability(HEAT_HANDLER).invalidate();
+            });
+        } else if(event.getObject() instanceof IHeatTile heat){
             event.addCapability(new ResourceLocation(DysonSphere.MODID, "ds2pnc_heat_handler"), new DS2PNCHeatHandler(heat));
             event.addListener(() -> {
                 event.getObject().getCapability(HEAT_HANDLER).invalidate();
