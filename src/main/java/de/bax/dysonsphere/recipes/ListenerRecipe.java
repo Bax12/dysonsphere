@@ -106,9 +106,9 @@ public record ListenerRecipe(ResourceLocation id, ShapedRecipe internalRecipe) i
 
     public static void generateRecipesOnLoad(Level level){
         level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).stream().filter((rec) -> {
-            return rec instanceof ShapedRecipe && rec.getIngredients().stream().anyMatch((ing) -> {
-                return ing.test(rec.getResultItem(level.registryAccess()));
-            });
+            return rec instanceof ShapedRecipe && rec.getIngredients().stream().filter((ing) -> {
+                return ing.test(rec.getResultItem(level.registryAccess())) && ing.getItems().length == 1;
+            }).count() == 1 && rec.getResultItem(level.registryAccess()).getCount() >= 2;
         }).forEach((rec) -> {
             recipes.add(new ListenerRecipe(new ResourceLocation(DysonSphere.MODID, "listener." + rec.getId().getPath()), (ShapedRecipe) rec));
         });
