@@ -1,6 +1,6 @@
 {
   "type": "dysonsphere:orbital_launch",
-  "baseEnergy": 180000,
+  "baseEnergy": 450000,
   "extraInputs": [
     {
       "item": "minecraft:tnt"

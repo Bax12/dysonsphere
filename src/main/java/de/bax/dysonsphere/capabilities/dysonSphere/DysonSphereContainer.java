@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import org.checkerframework.checker.units.qual.min;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +43,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag> {
 
     public static final float DS_COMPLETED = 100f; //does this really count as magic number?
-    public static final int DS_LOG_LENGTH = 500;
+    public static float DS_MAX_COMPLETION = 100f;
+    public static int DS_LOG_LENGTH = 500;
 
     public static float STABILITY_MULT = 0.5f;
     public static int MAX_BREAK_COUNT = 5;
@@ -173,7 +173,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         @Override
         public boolean addDysonSpherePart(ItemStack stack, boolean simulate) {
             if(stack.getCapability(DSCapabilities.DS_PART).isPresent()){
-                if(completion >= DS_COMPLETED) return false; //Deny new parts when already full.
+                if(completion >= DS_MAX_COMPLETION) return false; //Deny new parts when already full.
                 if(!simulate){
                     long count = parts.getOrDefault(stack.getItem(), 0l);
                     parts.put(stack.getItem(), count + stack.getCount());
@@ -202,7 +202,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                 return new Tuple<Integer,Float>(part.getEnergyProvided() * amount, part.getCompletionProgress() * amount);
             }).orElse(new Tuple<>(0, 0f));
             
-            if(completion + stats.getB() <= DS_COMPLETED){
+            if(completion + stats.getB() <= DS_MAX_COMPLETION){
                 completion += stats.getB();
                 energy += stats.getA();
                 parts.put(stack.getItem(), count + amount);
@@ -212,7 +212,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                 return amount;
             } else {
                 float singleCompletion = stats.getB() / amount;
-                int partsToAdd = (int) ((DS_COMPLETED - completion) / singleCompletion);
+                int partsToAdd = (int) ((DS_MAX_COMPLETION - completion) / singleCompletion);
                 return addDysonSpherePartBulk(stack, partsToAdd); //should only ever recurse once.
             }
         }
@@ -383,7 +383,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
 
         @Override
         public float getCompletionPercentage() {
-            return Math.max(0f, Math.min(completion, 100.0f)); //Prevent printing something like 100,001% or -0,00001%
+            return Math.max(0f, Math.min(completion, DS_MAX_COMPLETION)); //Prevent printing something like 100,001% or -0,00001%
         }
 
         @Override
@@ -481,7 +481,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
         }
 
         protected void checkStability(){
-            if(level.random.nextFloat() > getStability() / 100f){
+            if(level.random.nextFloat() * DS_COMPLETED > getStability()){
                 int minTier = Integer.MAX_VALUE;
                 Item minItem = null;
 
@@ -491,7 +491,7 @@ public class DysonSphereContainer implements ICapabilitySerializable<CompoundTag
                         minTier = tier;
                         minItem = item;
                     }
-                    if(tier == minTier && item.getDefaultInstance().is(DSTags.itemCapsuleStructure)){
+                    if(tier == minTier && (item.getDefaultInstance().is(DSTags.itemCapsuleStructure) || !minItem.getDefaultInstance().is(DSTags.itemCapsuleStructure) && level.random.nextFloat() > 0.5)){
                         minItem = item;
                     }
                 }

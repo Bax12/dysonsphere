@@ -2,6 +2,7 @@ package de.bax.dysonsphere.network;
 
 import java.util.function.Supplier;
 
+import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereContainer;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.util.SkyLightUtil;
@@ -18,7 +19,7 @@ public class DSLightSyncPackage {
     }
 
     public DSLightSyncPackage(IDysonSphereContainer ds){
-        this.darkenBy = ds.getEnabledConstructs().contains(ModConstructs.SOLAR_LAMP.get()) ? 0 : ds.getCompletionPercentage() / 100f; //completion is 0 - 100, light is 0-1
+        this.darkenBy = ds.getEnabledConstructs().contains(ModConstructs.SOLAR_LAMP.get()) ? 0 : ds.getCompletionPercentage() / DysonSphereContainer.DS_COMPLETED; //completion is 0 - 100, light is 0-1
     }
 
     public void encode(FriendlyByteBuf buf){

@@ -37,7 +37,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class CargoReceiverTile extends BaseTile implements IUpdateReceiverTile {
 
-    public static final int fluidCapacity = 10000;
+    public static int fluidCapacity = 10000;
 
     public static enum Status {
         READY, //no energy or no recipe

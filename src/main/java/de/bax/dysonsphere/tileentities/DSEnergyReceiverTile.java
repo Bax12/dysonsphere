@@ -31,11 +31,16 @@ import net.minecraftforge.common.util.LazyOptional;
 public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTile, IHeatTile, ITintableTile {
 
     public static double maxHeat = 1700;
+    public static float heatConversionRate = 0.1f;
 
     protected int dsPowerDraw;
     protected boolean canReceive = false;
 
-    public HeatHandler heatHandler = new HeatHandler(maxHeat);
+    public HeatHandler heatHandler = new HeatHandler(maxHeat){
+        public double getThermalConductivity() {
+            return 0.5d;
+        };
+    };
     public IDSEnergyReceiver dsReceiver = new IDSEnergyReceiver() {
 
         @Override
@@ -94,7 +99,7 @@ public class DSEnergyReceiverTile extends BaseTile implements IUpdateReceiverTil
                 canReceive = dsReceiver.canReceive();
                 int receive = dsReceiver.getCurrentReceive(dysonsphere.get());
                 if(receive > 0){
-                    heatHandler.receiveHeat(receive / 10f, false);
+                    heatHandler.receiveHeat(receive * heatConversionRate, false);
                     if(ticksElapsed % 100 == 0){
                         level.playSound(null, worldPosition, ModSounds.DS_ENERGY_RECEIVER_WORK.get(), SoundSource.BLOCKS, 0.2f, 0.8f);
                     }

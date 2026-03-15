@@ -1,6 +1,6 @@
 {
   "type": "dysonsphere:orbital_launch",
-  "baseEnergy": 1800,
+  "baseEnergy": 18000,
   "extraInputs": [
     {
       "item": "minecraft:tnt"
@@ -22,10 +22,6 @@
     {
       "amount": 50,
       "fluid": "forge:helium"
-    },
-    {
-      "amount": 50,
-      "fluid": "forge:anti_helium"
     }
   ],
   "input": {

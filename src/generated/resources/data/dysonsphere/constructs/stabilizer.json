@@ -2,16 +2,16 @@
   "Components": [
     {
       "Component": {
-        "tag": "dysonsphere:space_capsules/structure"
+        "tag": "dysonsphere:space_capsules/laser"
       },
-      "Foundation": 50,
+      "Foundation": 100,
       "Required": 500
     },
     {
       "Component": {
-        "tag": "dysonsphere:space_capsules/laser"
+        "tag": "dysonsphere:space_capsules/structure"
       },
-      "Foundation": 100,
+      "Foundation": 50,
       "Required": 500
     }
   ],

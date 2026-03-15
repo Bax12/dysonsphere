@@ -389,7 +389,7 @@ public abstract class InputHatchTile extends BaseTile {
     public static class Energy extends InputHatchTile{
 
         public static final int SLOTS = 1;
-        public static int energyCapacity = 150000; //todo: add config
+        public static int energyCapacity = 150000;
 
         public EnergyStorage energyStorage = new EnergyStorage(energyCapacity){
             @Override
@@ -491,7 +491,7 @@ public abstract class InputHatchTile extends BaseTile {
         public static final int SLOTS = 2;
         public static final int SLOT_INPUT = 0;
         public static final int SLOT_OUTPUT = 1;
-        public static int fluidCapacity = 10000; //todo: add config
+        public static int fluidCapacity = 10000; 
 
         public FluidTankCustom fluidStorage = new FluidTankCustom(fluidCapacity){
             @Override

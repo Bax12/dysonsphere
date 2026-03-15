@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 
 import javax.annotation.Nonnull;
 
@@ -41,7 +40,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class RailgunTile extends BaseTile {
 
-    public static int baseLaunchEnergy = 90000;
+    // public static int baseLaunchEnergy = 90000;
     public static int energyCapacity = 150000;
 
     public EnergyStorage energyStorage = new EnergyStorage(energyCapacity){

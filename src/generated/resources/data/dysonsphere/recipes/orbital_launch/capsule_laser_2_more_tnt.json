@@ -1,17 +1,24 @@
 {
   "type": "dysonsphere:orbital_launch",
-  "baseEnergy": 550000,
+  "baseEnergy": 2200000,
   "extraInputs": [
+    {
+      "item": "minecraft:tnt"
+    },
+    {
+      "item": "minecraft:tnt"
+    },
+    {
+      "item": "minecraft:tnt"
+    },
+    {
+      "item": "minecraft:tnt"
+    },
     {
       "item": "minecraft:tnt"
     }
   ],
-  "fluidInputs": [
-    {
-      "amount": 50,
-      "fluid": "forge:helium"
-    }
-  ],
+  "fluidInputs": [],
   "input": {
     "item": "dysonsphere:capsule_laser_2"
   },

@@ -20,6 +20,8 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class OreSpireTile extends BaseTile {
 
+    public static int CAPACITY = 1024;
+
     public ItemStackHandler inventory = new ItemStackHandler(1){
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
             ItemStack ret = super.insertItem(slot, stack, simulate);
@@ -46,7 +48,7 @@ public class OreSpireTile extends BaseTile {
 
         @Override
         public int getStackLimit(int slot, @NotNull ItemStack stack) {
-            return 1024; //normal chest holds 1728
+            return CAPACITY; //normal chest holds 1728
         }
 
         @Override

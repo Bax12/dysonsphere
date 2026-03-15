@@ -34,6 +34,7 @@ public class ListenerTile extends BaseTile implements IUpdateReceiverTile {
     public static int energyCapacity = 200000;
     public static int workDuration = 120;
     public static int energyToConsume = 1000;
+    public static float consumptionChance = 0.1f;
 
     public static final int slotGridStart = 0;
     public static final int slotGridEnd = 8;
@@ -136,7 +137,7 @@ public class ListenerTile extends BaseTile implements IUpdateReceiverTile {
                                 finnishWorking();
                             }
                         } else {
-                            if(level.getRandom().nextFloat() < 0.1){
+                            if(level.getRandom().nextFloat() < consumptionChance){
                                 inventory.extractItem(slotShards, 1, false);
                             }
                             energyStorage.extractEnergy(energyToConsume, false);
@@ -145,6 +146,8 @@ public class ListenerTile extends BaseTile implements IUpdateReceiverTile {
                     }
                 } else {
                     workTime = 0;
+                    running = false;
+                    shouldUpdate = true;
                 }
                 if(shouldUpdate){
                     this.sendSyncPackageToNearbyPlayers();
