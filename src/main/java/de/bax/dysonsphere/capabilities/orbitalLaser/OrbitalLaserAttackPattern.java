@@ -66,7 +66,7 @@ public class OrbitalLaserAttackPattern implements INBTSerializable<CompoundTag> 
     }
 
     protected int calcLasersRequired(){
-        return (int) Math.max(1, Math.ceil(strikeCount * (strikeSize / 2f) * (strikeCount / 5f) * (Math.max(4f, (damage - blockDamage)) / 4f)));
+        return (int) Math.max(1, Math.ceil(strikeCount * (strikeSize+1) * (strikeSize+1) * Math.max(4f, (damage - blockDamage)) / 40f));
     }
 
     protected int calcRechargeTime(){

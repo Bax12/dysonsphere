@@ -161,7 +161,7 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
                     if(tile != null){
                         Optional<ILaserReceiver> optionalReceptor = tile.getCapability(DSCapabilities.LASER_RECEIVER, Direction.UP).resolve();
                         if(optionalReceptor.isPresent()){
-                            optionalReceptor.get().receiveLaserEnergy((dmg * blockDmg * ENERGY_MULT));
+                            optionalReceptor.get().receiveLaserEnergy((dmg * blockDmg * size * ENERGY_MULT));
                             return;
                         }
                     }
