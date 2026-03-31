@@ -1,0 +1,21 @@
+{
+  "type": "dysonsphere:orbital_launch",
+  "baseEnergy": 220,
+  "extraInputs": [],
+  "fluidInputs": [
+    {
+      "amount": 1,
+      "fluid": "forge:helium"
+    },
+    {
+      "amount": 1,
+      "fluid": "forge:anti_helium"
+    }
+  ],
+  "input": {
+    "item": "dysonsphere:capsule_laser_0"
+  },
+  "launchStack": {
+    "item": "dysonsphere:capsule_laser_0"
+  }
+}

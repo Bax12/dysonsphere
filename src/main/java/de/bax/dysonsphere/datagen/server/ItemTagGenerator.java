@@ -54,6 +54,7 @@ public class ItemTagGenerator extends ItemTagsProvider {
         tag(DSTags.curioBelt).add(ModItems.GRAPPLING_HOOK_HARNESS.get());
         tag(DSTags.curioHands).add(ModItems.LASER_CONTROLLER.get());
         tag(DSTags.curioBracelet).add(ModItems.LASER_CONTROLLER.get());
+        tag(DSTags.curioAny).add(ModItems.POCKET_DYNAMO.get(), ModItems.POCKET_STAR.get());
 
         tag(DSTags.itemWrench).add(ModItems.WRENCH.get());
         tag(DSTags.itemTool).add(ModItems.WRENCH.get());

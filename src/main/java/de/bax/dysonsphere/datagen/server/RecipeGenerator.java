@@ -40,6 +40,7 @@ public class RecipeGenerator extends RecipeProvider {
         LaserCraftingRecipeGenerator.buildRecipes(consumer);
         OrbitalLaunchRecipeGenerator.buildRecipes(consumer);
         CargoDeliveryRecipeGenerator.buildRecipes(consumer);
+        AnnihilationRecipeGenerator.buildRecipes(consumer);
 
         Recipe.shaped(ModItems.CAPSULE_EMPTY.get())
             .pattern("HHH")

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
-import de.bax.dysonsphere.capabilities.fluid.FluidHandlerMap;
+import de.bax.dysonsphere.capabilities.fluid.FluidHandlerMulti;
 import de.bax.dysonsphere.capabilities.fluid.FluidTankCustom;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
@@ -105,7 +105,7 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
 
     };
 
-    protected FluidHandlerMap handlerMap = new FluidHandlerMap();   
+    protected FluidHandlerMulti handlerMap = new FluidHandlerMulti(2);   
 
     protected LazyOptional<IHeatContainer> lazyHeatContainer = LazyOptional.of(() -> heatHandler);
     protected LazyOptional<IFluidHandler> lazyFluidHandlerMap = LazyOptional.of(() -> handlerMap);
@@ -120,8 +120,8 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
 
     public HeatExchangerTile(BlockPos pos, BlockState state) {
         super(ModTiles.HEAT_EXCHANGER.get(), pos, state);
-        handlerMap.addFluidHandler(Fluids.WATER, inputTank);
-        handlerMap.addFluidHandler(ModFluids.STEAM.get(), outputTank);
+        handlerMap.addFluidHandler(inputTank);
+        handlerMap.addFluidHandler(outputTank);
     }
 
     @Override

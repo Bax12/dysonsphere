@@ -18,6 +18,8 @@ import de.bax.dysonsphere.items.grapplingHook.GrapplingHookWoodHookItem;
 import de.bax.dysonsphere.items.laser.LaserControllerItem;
 import de.bax.dysonsphere.items.laser.LaserPatternItem;
 import de.bax.dysonsphere.items.laser.TargetDesignatorItem;
+import de.bax.dysonsphere.items.tools.PocketDynamoItem;
+import de.bax.dysonsphere.items.tools.PocketStarItem;
 import de.bax.dysonsphere.items.tools.WrenchItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -52,6 +54,7 @@ public class ModItems {
     public static final RegistryObject<Item> RAILGUN = registerItem("railgun");
     public static final RegistryObject<Item> STEAM_BUCKET = ITEMS.register("bucket_steam", () -> new BucketItem(ModFluids.STEAM, new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
     public static final RegistryObject<Item> HELIUM_BUCKET = ITEMS.register("bucket_helium", () -> new BucketItem(ModFluids.HELIUM, new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
+    public static final RegistryObject<Item> ANTI_HELIUM_BUCKET = ITEMS.register("bucket_anti_helium", () -> new BucketItem(ModFluids.ANTI_HELIUM, new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
     public static final RegistryObject<Item> LASER_CONTROLLER = ITEMS.register("laser_controller", () -> new LaserControllerItem());
     public static final RegistryObject<Item> TARGET_DESIGNATOR = ITEMS.register("target_designator", () -> new TargetDesignatorItem());
     public static final RegistryObject<Item> LASER_PATTERN = ITEMS.register("laser_pattern", () -> new LaserPatternItem());
@@ -75,6 +78,8 @@ public class ModItems {
     public static final RegistryObject<Item> GRAPPLING_HOOK_ENGINE_PRESSURE = ITEMS.register("grappling_hook_engine_pressure", () -> new GrapplingHookPressureEngine());
     public static final RegistryObject<Item> WRENCH = ITEMS.register("wrench", () -> new WrenchItem()); //not really needed?
     public static final RegistryObject<Item> SENSOR_UNIT = registerItem("sensor_unit");
+    public static final RegistryObject<Item> POCKET_DYNAMO = ITEMS.register("pocket_dynamo", () -> new PocketDynamoItem());
+    public static final RegistryObject<Item> POCKET_STAR = ITEMS.register("pocket_star", () -> new PocketStarItem());
     
 
     public static RegistryObject<Item> registerItem(String name) {

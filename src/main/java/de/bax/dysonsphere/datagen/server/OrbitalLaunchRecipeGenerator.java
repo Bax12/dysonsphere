@@ -67,7 +67,7 @@ public class OrbitalLaunchRecipeGenerator {
         RecipeBuilder.of(launchStack).baseEnergy(baseEnergy/20).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).addExtraInput(Ingredient.of(Blocks.TNT), 1).save(pWriter, ForgeRegistries.ITEMS.getKey(launchStack.get()).getPath() + "_helium_tnt");
         RecipeBuilder.of(launchStack).baseEnergy(baseEnergy/5).addExtraInput(Ingredient.of(Blocks.TNT), 5).save(pWriter, ForgeRegistries.ITEMS.getKey(launchStack.get()).getPath() + "_more_tnt");
         RecipeBuilder.of(launchStack).baseEnergy(baseEnergy/50).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 50)).addExtraInput(Ingredient.of(Blocks.TNT), 5).save(pWriter, ForgeRegistries.ITEMS.getKey(launchStack.get()).getPath() + "_helium_more_tnt");
-        // RecipeBuilder.of(launchStack).baseEnergy(baseEnergy/100).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 1)).addFluidInput(FluidIngredient.of(DSTags.fluidAntiHelium, 1)).save(pWriter, ForgeRegistries.ITEMS.getKey(launchStack.get()).getPath() + "_anti_helium");        
+        RecipeBuilder.of(launchStack).baseEnergy(baseEnergy/500).addFluidInput(FluidIngredient.of(DSTags.fluidHelium, 1)).addFluidInput(FluidIngredient.of(DSTags.fluidAntiHelium, 1)).save(pWriter, ForgeRegistries.ITEMS.getKey(launchStack.get()).getPath() + "_anti_helium");        
     }
 
     public static class RecipeBuilder {

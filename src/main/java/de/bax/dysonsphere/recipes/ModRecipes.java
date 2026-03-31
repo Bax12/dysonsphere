@@ -30,4 +30,7 @@ public class ModRecipes {
 
     public static final RegistryObject<RecipeType<ListenerRecipe>> LISTENER_TYPE  = TYPES.register("listener", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "listener")));
     public static final RegistryObject<RecipeSerializer<ListenerRecipe>> LISTENER_SERIALIZER = SERIALIZERS.register("listener", ListenerRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<AnnihilationRecipe>> ANNIHILATION_TYPE = TYPES.register("matter_annihilation", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "matter_annihilation")));
+    public static final RegistryObject<RecipeSerializer<AnnihilationRecipe>> ANNIHILATION_SERIALIZER = SERIALIZERS.register("matter_annihilation", AnnihilationRecipe.Serializer::new);
 }

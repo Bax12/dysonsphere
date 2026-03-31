@@ -59,6 +59,7 @@ public class DSTags {
     public static final TagKey<Item> curioBelt = TagKey.create(Registries.ITEM, curioLoc("belt"));
     public static final TagKey<Item> curioHands = TagKey.create(Registries.ITEM, curioLoc("hands"));
     public static final TagKey<Item> curioBracelet = TagKey.create(Registries.ITEM, curioLoc("bracelet"));
+    public static final TagKey<Item> curioAny = TagKey.create(Registries.ITEM, curioLoc("curio"));
 
 
     private static ResourceLocation forgeLoc(String name){

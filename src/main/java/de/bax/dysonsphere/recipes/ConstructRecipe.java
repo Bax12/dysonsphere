@@ -58,6 +58,11 @@ public record ConstructRecipe(ResourceLocation id, List<Ingredient> inputs, Cons
     public RecipeType<?> getType() {
         return ModRecipes.CONSTRUCT_TYPE.get();
     }
+
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
     
 
     public static class Serializer implements RecipeSerializer<ConstructRecipe> {

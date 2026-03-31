@@ -30,8 +30,8 @@ public class BasicGaseousFluid extends Fluid {
     protected final int temperature;
     protected final int density;
 
-    public BasicGaseousFluid(Supplier<Item> steamBucket, String texturePath, String description, int temperature, int density){
-        this.item = steamBucket;
+    public BasicGaseousFluid(Supplier<Item> bucket, String texturePath, String description, int temperature, int density){
+        this.item = bucket;
         this.texturePath = texturePath;
         this.description = description;
         this.temperature = temperature;

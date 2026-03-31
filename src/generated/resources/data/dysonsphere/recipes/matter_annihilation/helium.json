@@ -1,0 +1,12 @@
+{
+  "type": "dysonsphere:matter_annihilation",
+  "fluidAnti": {
+    "amount": 1,
+    "fluid": "forge:anti_helium"
+  },
+  "fluidMatter": {
+    "amount": 1,
+    "fluid": "forge:helium"
+  },
+  "producedEnergy": 26000000000000000
+}

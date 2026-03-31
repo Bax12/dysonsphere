@@ -1,58 +1,63 @@
 package de.bax.dysonsphere.capabilities.fluid;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-//Map implementation to handle multiple FluidTanks for different fluids
-public class FluidHandlerMap implements IFluidHandler {
+public class FluidHandlerMulti implements IFluidHandler {
 
-    protected final Map<Fluid, IFluidHandler> handlerMap;
+    protected final FluidTankCustom fluidHandlers[];
 
-    public FluidHandlerMap() {
-        // LinkedHashMap to ensure iteration order is consistent.
-        this(new LinkedHashMap<Fluid, IFluidHandler>());
+    protected int count = 0;
+
+    public FluidHandlerMulti(int capacity) {
+        this.fluidHandlers = new FluidTankCustom[capacity];
     }
 
-    public FluidHandlerMap(Map<Fluid, IFluidHandler> handlerMap) {
-        this.handlerMap = handlerMap;
+    public FluidHandlerMulti(FluidTankCustom[] tanks){
+        this.fluidHandlers = tanks;
     }
 
-    public void addFluidHandler(Fluid fluid, FluidTank handler) {
-        handlerMap.put(fluid, handler);
+
+    public void addFluidHandler(FluidTankCustom handler) {
+        fluidHandlers[count] = handler;
+        count++;
     }
+
+    
 
     @Override
     public int getTanks() {
-        return handlerMap.size();
+        return count;
     }
 
     @Override
     public @NotNull FluidStack getFluidInTank(int tank) {
-        return ((IFluidHandler) handlerMap.values().toArray()[tank]).getFluidInTank(0);
+        return fluidHandlers[tank].getFluidInTank(0);
     }
 
     @Override
     public int getTankCapacity(int tank) {
-        return ((IFluidHandler) handlerMap.values().toArray()[tank]).getTankCapacity(0);
+        return fluidHandlers[tank].getTankCapacity(0);
     }
 
     @Override
     public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-        return handlerMap.containsKey(stack.getFluid());
+        return fluidHandlers[tank].isFluidValid(0, stack);
     }
 
     @Override
     public int fill(FluidStack resource, FluidAction action) {
         if (resource == FluidStack.EMPTY)
             return 0;
-        IFluidHandler handler = handlerMap.get(resource.getFluid());
+        IFluidHandler handler = null;
+        for(int i = 0; i < count; i++){
+            if(fluidHandlers[i].canFill() && fluidHandlers[i].isFluidValid(0, resource)){
+                handler = fluidHandlers[i];
+                break;
+            }
+        }
         if (handler == null)
             return 0;
         return handler.fill(resource, action);
@@ -62,7 +67,13 @@ public class FluidHandlerMap implements IFluidHandler {
     public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
         if (resource == FluidStack.EMPTY)
             return FluidStack.EMPTY;
-        IFluidHandler handler = handlerMap.get(resource.getFluid());
+        IFluidHandler handler = null;
+        for(int i = 0; i < count; i++){
+            if(fluidHandlers[i].canDrain() && fluidHandlers[i].isFluidValid(0, resource)){
+                handler = fluidHandlers[i];
+                break;
+            }
+        }
         if (handler == null)
             return FluidStack.EMPTY;
         return handler.drain(resource, action);
@@ -70,7 +81,7 @@ public class FluidHandlerMap implements IFluidHandler {
 
     @Override
     public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
-        for (IFluidHandler handler : handlerMap.values()) {
+        for (IFluidHandler handler : fluidHandlers) {
             FluidStack drain = handler.drain(maxDrain, action);
             if (drain != null && !drain.isEmpty())
                 return drain;

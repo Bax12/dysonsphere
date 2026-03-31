@@ -99,6 +99,11 @@ public record OrbitalLaunchRecipe(ResourceLocation id, Ingredient input, ItemSta
         return list;
     }
 
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
     public static class Serializer implements RecipeSerializer<OrbitalLaunchRecipe> {
 
 		@Override

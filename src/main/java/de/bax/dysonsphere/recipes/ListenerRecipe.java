@@ -74,6 +74,13 @@ public record ListenerRecipe(ResourceLocation id, ShapedRecipe internalRecipe) i
         return ModRecipes.LISTENER_TYPE.get();
     }
 
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    
+
     public static class Serializer implements RecipeSerializer<ListenerRecipe> {
 
         @Override
