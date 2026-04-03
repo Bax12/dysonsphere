@@ -1,8 +1,13 @@
 package de.bax.dysonsphere.capabilities.dysonSphere;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
+import de.bax.dysonsphere.constructs.Construct;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
@@ -23,6 +28,14 @@ public interface IDysonSphereContainer {
     boolean addDysonSpherePart(ItemStack stack, boolean simulate);
 
     /**
+     * Bulk add amount of item. 
+     * @param stack the stack representing the item to add
+     * @param amount how many items to add
+     * @return the added amount.
+     */
+    int addDysonSpherePartBulk(ItemStack stack, int amount);
+
+    /**
      * Remove a part to the Dyson Sphere
      * @param stack
      *      the ItemStack to be removed from the DysonSphere (aka launched into the sun orbit)
@@ -33,23 +46,94 @@ public interface IDysonSphereContainer {
      */
     boolean removeDysonSpherePart(ItemStack stack, boolean simulate);
 
+    /**
+     * Bulk remove amount of item. 
+     * @param stack the stack representing the item to remove
+     * @param amount how many items to remove
+     * @return the removed amount.
+     */
+    int removeDysonSpherePartBulk(ItemStack stack, int amount);
+
+    /**
+     * Reset all parts in the Dyson Sphere to 0. 
+     * Make sure this is not called on accident!
+     * @return true if reset was successful
+     */
+    boolean resetDysonSphereParts();
+
 
     /**
      * Get all currently active parts of the Dyson Sphere
      * @return
      *      A ImmutableList of all currently active Parts of the Dyson Sphere.
      */
-    ImmutableMap<Item, Integer> getDysonSphereParts();
+    Map<Item, Long> getDysonSphereParts();
 
+    /**
+     * Get the amount of a specific item in the DysonSphere
+     * @param part the item to check
+     * @return the amount of the item currently in the DysonSphere
+     */
+    long getDysonSpherePartCount(Item part);
 
-    int getDysonSpherePartCount(Item part);
+    /**
+     * Get the amount of a specific Ingredient in the DysonSphere
+     * @param part the Ingredient to check
+     * @return the amount of the items matching with the ingredient currently in the DysonSphere
+     */
+    long getDysonSpherePartCount(Predicate<ItemStack> item);
 
+    /**
+     * Add a new construct to the DysonSphere. May fail if already present
+     * @param construct to add
+     * @param enabled the initial state of the added construct
+     * @return if the construct was added successfully.
+     */
+    boolean addConstruct(Construct construct, boolean enabled);
+
+    /**
+     * Remove a construct from the DysonSphere. Fails if the construct does not exist.
+     * @param construct to remove
+     * @return if the construct was successfully removed.
+     */
+    boolean removeConstruct(Construct construct);
+
+    /**
+     * Enable a existing construct, allowing it to work.
+     * May fail if the construct does not exist or is already enabled
+     * @param construct to enable
+     * @return if the construct was successfully enabled
+     */
+    boolean enableConstruct(Construct construct);
+
+    /**
+     * Disable a existing construct, preventing it from working.
+     * May fial if the construct does not exist or is already disabled
+     * @param construct to disable
+     * @return if the construct was successfully disabled
+     */
+    boolean disableConstruct(Construct construct);
+
+    /**
+     * @return Immutable set of all constructs, enabled and disable in the DysonSphere
+     */
+    Set<Construct> getAllConstructs();
+
+    /**
+     * @return Immutable set of all enabled constructs in the DysonSphere
+     */
+    Set<Construct> getEnabledConstructs();
+
+    /**
+     * @return Immutable set of all disabled constructs in the DysonSphere
+     */
+    Set<Construct> getDisabledConstructs();
 
     /**
      * get the energy generation capacity of the Dyson Sphere
      * @return RF the DysonSphere can produce per tick
      */
-    double getDysonSphereEnergy();
+    long getDysonSphereEnergy();
 
     /**
      * get the current completion of the Dyson Sphere
@@ -67,13 +151,13 @@ public interface IDysonSphereContainer {
      * get the current energy provided by the Dyson Sphere to receivers
      * @return energy provided per Tick
      */
-    double getEnergyProvided();
+    long getEnergyProvided();
 
     /**
-     * get the toptal energy requested from the Dyson Sphere
+     * get the total energy requested from the Dyson Sphere
      * @return energy requester per Tick
      */
-    double getEnergyRequested();
+    long getEnergyRequested();
 
 
     /**
@@ -91,4 +175,15 @@ public interface IDysonSphereContainer {
      */
     void removeEnergyReceiver(LazyOptional<IDSEnergyReceiver> energyReceiver);
 
+    /**
+     * Get a list of Dyson Sphere change log messages
+     * @return List of Components containing the messages
+     */
+    List<Component> getDSLog();
+
+    /**
+     * Get the current chance of something breaking on a change in the DysonSphere
+     * @return chance of not breaking from 0.0 to 100.0
+     */
+    float getStability();
 }

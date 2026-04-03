@@ -1,15 +1,14 @@
 package de.bax.dysonsphere.blocks;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import de.bax.dysonsphere.color.ModColors.ITintableTileBlock;
 import de.bax.dysonsphere.items.ModItems;
+import de.bax.dysonsphere.items.tools.WrenchItem;
 import de.bax.dysonsphere.tileentities.LaserCrafterTile;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -33,18 +32,26 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    public BlockEntity newBlockEntity(@Nonnull BlockPos pPos, @Nonnull BlockState pState) {
         return new LaserCrafterTile(pPos, pState);
     }
 
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+    public InteractionResult use(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer, @Nonnull InteractionHand pHand, @Nonnull BlockHitResult pHit) {
+        // if(pLevel.getBlockEntity(pPos) instanceof LaserCrafterTile tile){
+        //     DysonSphere.LOGGER.debug("laserCrafterBlock: use: parallelProviderCount: {}", tile.acceptorHandler.getProviders(ProviderType.PARALLEL).size());
+        //     DysonSphere.LOGGER.debug("laserCrafterBlock: use: parallelItemCount: {}", tile.acceptorHandler.getItemInputs(ProviderType.PARALLEL).size());
+        // }
         if(!pLevel.isClientSide){
             if(pLevel.getBlockEntity(pPos) instanceof LaserCrafterTile tile){
                 ItemStack playerStack = pPlayer.getMainHandItem();
                 if(playerStack.is(ModItems.TARGET_DESIGNATOR.get())){
                     return InteractionResult.PASS;
+                }
+                if(WrenchItem.isWrench(playerStack)){
+                    tile.acceptorHandler.markForRefresh();
+                    return InteractionResult.SUCCESS;
                 }
                 ItemStack outputStack = tile.output.extractItem(0, Integer.MAX_VALUE, false);
                 //output if output isn't empty
@@ -78,8 +85,7 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
                     }
                 }
             }
-        }
-        
+        }         
         
         
         return InteractionResult.CONSUME;
@@ -96,27 +102,27 @@ public class LaserCrafterBlock extends Block implements EntityBlock, ITintableTi
 
     @Override
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@Nonnull Level pLevel, @Nonnull BlockState pState, @Nonnull BlockEntityType<T> pBlockEntityType) {
         return pBlockEntityType == ModTiles.LASER_CRAFTER.get() ? (teLevel, pos, teState, tile) -> {
             ((LaserCrafterTile)tile).tick();
         } : null;
     }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+    public void onRemove(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull BlockState pNewState, boolean pMovedByPiston) {
         if(!pLevel.isClientSide && pLevel.getBlockEntity(pPos) instanceof LaserCrafterTile tile){
-            tile.dropContent();
+            tile.onRemove();
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
     }
 
     @Override
-    public boolean hasAnalogOutputSignal(BlockState pState) {
+    public boolean hasAnalogOutputSignal(@Nonnull BlockState pState) {
         return true;
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
+    public int getAnalogOutputSignal(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos) {
         return pLevel.getBlockEntity(pPos) instanceof LaserCrafterTile tile ? (int) tile.getNeededChargeRatio() : 0;
     }
 

@@ -1,0 +1,28 @@
+{
+    "name": "Input Hatch and Heat",
+    "icon": "dysonsphere:input_hatch_serial_heat_block",
+    "category": "dysonsphere:input_hatch",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(thing)Heat$()-Transfer variants of the Input Hatches combine the properties of an $(thing)Input Hatch$() and a $(item)Thermal Coupler$()"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:input_hatch_proxy_heat_block",
+            "recipe2": "dysonsphere:input_hatch_parallel_heat_block",
+            "title": "+ Heat Transfer"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:input_hatch_serial_heat_block",
+            "recipe2": "dysonsphere:input_hatch_energy_heat_block",
+            "title": "+ Heat Transfer"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:input_hatch_fluid_heat_block",
+            "title": "+ Heat Transfer"
+        }
+    ]
+}

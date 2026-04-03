@@ -1,5 +1,7 @@
 package de.bax.dysonsphere.tileRenderer;
 
+import javax.annotation.Nonnull;
+
 import org.joml.Quaternionf;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -23,8 +25,7 @@ public class LaserCrafterRenderer implements BlockEntityRenderer<LaserCrafterTil
     }
 
     @Override
-    public void render(LaserCrafterTile pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
-        if(pBlockEntity == null) return;
+    public void render(@Nonnull LaserCrafterTile pBlockEntity, float pPartialTick, @Nonnull PoseStack pPoseStack, @Nonnull MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
         pPoseStack.pushPose();
         pPoseStack.translate(0.5F, 0.4380f, 0.5f);
         pPoseStack.scale(0.4f, 0.4f, 0.4f);

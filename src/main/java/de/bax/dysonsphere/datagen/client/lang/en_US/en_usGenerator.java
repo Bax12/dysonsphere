@@ -17,34 +17,63 @@ public class en_usGenerator extends LanguageProvider{
     @Override
     protected void addTranslations() {
         //blocks
+        addBlock(ModBlocks.SMART_ALLOY_BLOCK, "Smart Alloy Block");
         addBlock(ModBlocks.HEAT_PIPE_BLOCK, "Thermal Coupler");
         addBlock(ModBlocks.DS_MONITOR_BLOCK, "Dyson Sphere Observer");
+        addBlock(ModBlocks.DS_CONTROLLER_BLOCK, "Dyson Sphere Control Station");
         addBlock(ModBlocks.RAILGUN_BLOCK, "Electromagnetic Orbital Launcher");
         addBlock(ModBlocks.DS_ENERGY_RECEIVER_BLOCK, "Dyson Sphere Energy Receiver");
         addBlock(ModBlocks.HEAT_EXCHANGER_BLOCK, "Thermal Exchanger");
         addBlock(ModBlocks.HEAT_GENERATOR_BLOCK, "Thermoelectric Generator");
+        addBlock(ModBlocks.HEAT_CONVERTER_BLOCK, "Thermostatic Converter");
         addBlock(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK, "Laser Pattern Controller Terminal");
         addBlock(ModBlocks.LASER_CONTROLLER_BLOCK, "Laser Control Station");
         addBlock(ModBlocks.LASER_CRAFTER_BLOCK, "Precision Laser Workbench");
-
+        addBlock(ModBlocks.INPUT_HATCH_PARALLEL, "Parallel Input Hatch");
+        addBlock(ModBlocks.INPUT_HATCH_PARALLEL_HEAT, "Parallel Input Hatch (heat-transfer)");
+        addBlock(ModBlocks.INPUT_HATCH_SERIAL, "Serial Input Hatch");
+        addBlock(ModBlocks.INPUT_HATCH_SERIAL_HEAT, "Serial Input Hatch (heat-transfer)");
+        addBlock(ModBlocks.INPUT_HATCH_PROXY, "Proxy Input Hatch");
+        addBlock(ModBlocks.INPUT_HATCH_PROXY_HEAT, "Proxy Input Hatch (heat-transfer)");
+        addBlock(ModBlocks.INPUT_HATCH_ENERGY, "Energy Input Hatch");
+        addBlock(ModBlocks.INPUT_HATCH_ENERGY_HEAT, "Energy Input Hatch (heat-transfer)");
+        addBlock(ModBlocks.INPUT_HATCH_FLUID, "Fluid Input Hatch");
+        addBlock(ModBlocks.INPUT_HATCH_FLUID_HEAT, "Fluid Input Hatch (heat-transfer)");
+        addBlock(ModBlocks.LISTENER_BLOCK, "Deep Listener");
+        addBlock(ModBlocks.ENERGY_CONVERTER_BLOCK, "Metal Crystallizer");
+        addBlock(ModBlocks.CARGO_RECEIVER_BLOCK, "Orbital Delivery Receptor");
+        addBlock(ModBlocks.ORE_SPIRE_BLOCK, "Ore Crystal Spire");
 
         //items
         addItem(ModItems.COIL_COPPER, "Copper Wire Coil");
         addItem(ModItems.COIL_IRON, "Iron Wire Coil");
         addItem(ModItems.THERMOPILE, "Iron-Copper Thermopile");
         addItem(ModItems.SOLAR_FOIL,"Solar Foil");
+        add("item.dysonsphere.capsule", "Satellite Space Transfer Capsule");
         addItem(ModItems.CAPSULE_EMPTY, "Space Transfer Capsule (Empty)");
-        addItem(ModItems.CAPSULE_SOLAR, "Solar Satellite Space Capsule");
-        addItem(ModItems.CAPSULE_LASER, "Laser Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_SOLAR_0, "Tier 0 Solar Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_LASER_0, "Tier 0 Laser Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_STRUCTURE_0, "Tier 0 Structure Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_SOLAR_1, "Tier 1 Solar Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_LASER_1, "Tier 1 Laser Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_STRUCTURE_1, "Tier 1 Structure Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_SOLAR_2, "Tier 2 Solar Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_LASER_2, "Tier 2 Laser Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_STRUCTURE_2, "Tier 2 Structure Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_SOLAR_3, "Tier 3 Solar Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_LASER_3, "Tier 3 Laser Satellite Space Capsule");
+        addItem(ModItems.CAPSULE_STRUCTURE_3, "Tier 3 Structure Satellite Space Capsule");
         addItem(ModItems.HEAT_SHIELDING, "Heat Shielding");
         addItem(ModItems.RAILGUN, "Electromagnetic Launcher");
         addItem(ModItems.STEAM_BUCKET, "Steam Bucket");
-        addItem(ModItems.LASER_CONTROLLER, "Orbital Uplink Bracelet");
+        addItem(ModItems.HELIUM_BUCKET, "Liquid Helium Bucket");
+        addItem(ModItems.LASER_CONTROLLER, "Orbital Uplink Bracer");
         addItem(ModItems.TARGET_DESIGNATOR, "Target Designator");
         addItem(ModItems.LASER_PATTERN, "Orbital Laser Pattern");
         addItem(ModItems.UNIVERSE_WHISPER, "Whisper of the Universe");
         addItem(ModItems.INGOT_SMART_ALLOY, "Smart Alloy Ingot");
         addItem(ModItems.COMPONENT_SMART_ALLOY, "Smart Alloy Component");
+        addItem(ModItems.INGOT_SENTIENT_ALLOY, "Sentient Alloy Ingot");
         addItem(ModItems.CONSTRUCT_ENDER, "Stabilized Ender Construct");
         addItem(ModItems.GRAPPLING_HOOK_HARNESS, "Grappling Hook Frame");
         addItem(ModItems.GRAPPLING_HOOK_CONTROLLER, "Grappling Hook Controller");
@@ -59,20 +88,50 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.GRAPPLING_HOOK_ROPE_ENDER, "Ender Rope");
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE, "Pneumatic Engine");
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL, "Mechanical Engine");
+        addItem(ModItems.WRENCH, "Wrench");
+        addItem(ModItems.SENSOR_UNIT, "Acoustic Sensor Unit");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");
+        add("fluid.dysonsphere.helium", "Liquid Helium");
+
+        //constructs
+        add("construct.dysonsphere.cargo_launcher", "Cargo Delivery Platform");
+        add("construct.dysonsphere.cargo_launcher_desc", "Allows delivery of solar extracted resources");
+        add("construct.dysonsphere.heat_sink", "Stellar Heat Sink");
+        add("construct.dysonsphere.heat_sink_desc", "Reduces Orbital Laser cooldown time");
+        add("construct.dysonsphere.helium_mine", "Solar Resource Extractor");
+        add("construct.dysonsphere.helium_mine_desc", "Extracts liquid helium from the sun");
+        add("construct.dysonsphere.plasma_launcher", "Plasma Launcher Platform");
+        add("construct.dysonsphere.plasma_launcher_desc", "Allows using superheated helium instead of lasers for orbital strikes");
+        add("construct.dysonsphere.solar_lamp", "Solar Lamp");
+        add("construct.dysonsphere.solar_lamp_desc", "A replacement day-light. In case you start to miss the sunlight");
+        add("construct.dysonsphere.stabilizer", "Dyson Sphere Spacial Stabilizer");
+        add("construct.dysonsphere.stabilizer_desc", "Ion stabilizers to prevent the slow drift of the Dyson Sphere into the sun");
+        
 
 
         //guis
         add("container.dysonsphere.railgun", "Electromagnetic Orbital Launcher");
         add("container.dysonsphere.ds_energy_receiver", "Dyson Sphere Energy Receiver");
+        add("container.dysonsphere.ds_controller", "Dyson Sphere Control Station");
         add("container.dysonsphere.heat_generator", "Thermoelectric Generator");
         add("container.dysonsphere.heat_exchanger", "Thermal Exchanger");
+        add("container.dysonsphere.heat_converter", "Thermostatic Converter");
         add("container.dysonsphere.laser_pattern_controller","Laser Pattern Controller Terminal");
         add("container.dysonsphere.laser_controller_inventory", "Active Laser Patterns");
         add("container.dysonsphere.laser_controller_block", "Laser Control Station");
         add("container.dysonsphere.grappling_hook_harness_inventory", "Grappling Hook Frame");
+        add("container.dysonsphere.input_hatch_serial", "Serial Input Hatch");
+        add("container.dysonsphere.input_hatch_serial_heat", "Serial Input Hatch (heat-transfer)");
+        add("container.dysonsphere.input_hatch_parallel", "Parallel Input Hatch");
+        add("container.dysonsphere.input_hatch_parallel_heat", "Parallel Input Hatch (heat-transfer)");
+        add("container.dysonsphere.input_hatch_energy", "Energy Input Hatch");
+        add("container.dysonsphere.input_hatch_energy_heat", "Energy Input Hatch (heat-transfer)");
+        add("container.dysonsphere.input_hatch_fluid", "Fluid Input Hatch");
+        add("container.dysonsphere.input_hatch_fluid_heat", "Fluid Input Hatch (heat-transfer)");
+        add("container.dysonsphere.listener", "Deep Listener");
+        add("container.dysonsphere.cargo_receiver", "Orbital Delivery Receptor");
 
         //tooltips
         add("tooltip.dysonsphere.energy_display", "%s RF / %s RF");
@@ -83,19 +142,25 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.number_input.minus_button","- %s");
         
         add("tooltip.dysonsphere.railgun_launch_energy", "Required Launch Energy: %s RF");
+        add("tooltip.dysonsphere.railgun_base_launch_energy", "Required Base Launch Energy: %s RF");
+        add("tooltip.dysonsphere.railgun_launch_mult", "Local Launch Multiplier: x%s");
+        add("tooltip.dysonsphere.railgun_nosky","Cannot see the sky!");
+        add("tooltip.dysonsphere.railgun_dsfull","Dyson Sphere cannot accept part!");
+
         add("tooltip.dysonsphere.ds_energy_receiver_energy", "To Receive:");
         add("tooltip.dysonsphere.ds_energy_receiver_nosky","Cannot see the sky!");
         add("tooltip.dysonsphere.ds_energy_receiver_wanted", "Wanted Heat Input");
-        add("tooltip.dysonsphere.railgun_nosky","Cannot see the sky!");
-        add("tooltip.dysonsphere.railgun_dsfull","Dyson Sphere cannot accept part!");
+        
         add("tooltip.dysonsphere.heat_generator_neighbor_neg", "Neighbor of Negative %s");
         add("tooltip.dysonsphere.heat_generator_neighbor_pos", "Neighbor of Positive %s");
         add("tooltip.dysonsphere.heat_generator_axis", "Axis: %s");
         add("tooltip.dysonsphere.heat_generator_diff", "Diff: %s°K");
         add("tooltip.dysonsphere.heat_generator_production", "%s RF/t");
+        
         add("tooltip.dysonsphere.heat_exchanger_producing", "Producing: %s mB/t");
         add("tooltip.dysonsphere.heat_exchanger_min_heat", "Minimum Heat: %s°K");
         add("tooltip.dysonsphere.heat_exchanger_heat_bonus", "Output +%s%% per additional %s°K");
+        
         add("tooltip.dysonsphere.ds_monitor_status", ">Dyson Sphere Status");
         add("tooltip.dysonsphere.ds_monitor_completion","Completion: %s%%");
         add("tooltip.dysonsphere.ds_monitor_capacity","Capacity: %s RF/t");
@@ -103,6 +168,47 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.ds_monitor_part", "  - %s: %sx");
         add("tooltip.dysonsphere.ds_monitor_usage", "Usage: %s%%");
         add("tooltip.dysonsphere.ds_monitor_power_draw", "Energy Draw %s RF/t");
+        add("tooltip.dysonsphere.ds_monitor_stability", "Stability: %s%%");
+
+        add("tooltip.dysonsphere.ds_controller_add_button", ">");
+        add("tooltip.dysonsphere.ds_controller_add_button_desc", "Add selected Construct to the Dyson Sphere");
+        add("tooltip.dysonsphere.ds_controller_remove_button", "<");
+        add("tooltip.dysonsphere.ds_controller_remove_button_desc", "Remove selected Construct from the Dyson Sphere");
+        add("tooltip.dysonsphere.ds_controller_enable_button", "Enable");
+        add("tooltip.dysonsphere.ds_controller_enable_button_desc", "Enable the selected Construct");
+        add("tooltip.dysonsphere.ds_controller_disable_button", "Disable");
+        add("tooltip.dysonsphere.ds_controller_disable_button_desc", "Disable the selected Construct");
+        add("tooltip.dysonsphere.ds_controller_confirm_button", "Confirm");
+        add("tooltip.dysonsphere.ds_controller_confirm_button_desc", "Apply current changes to the Dyson Sphere (%s RF)");
+        add("tooltip.dysonsphere.ds_controller_refresh_button", "Refresh");
+        add("tooltip.dysonsphere.ds_controller_refresh_button_desc", "Refresh status of the Dyson Sphere. Discards current changes");
+        add("tooltip.dysonsphere.ds_controller_available_header", "Available Constructs");
+        add("tooltip.dysonsphere.ds_controller_integrated_header", "Integrated Constructs");
+
+        add("tooltip.dysonsphere.construct_details_status", "Status: %s");
+        add("tooltip.dysonsphere.construct_details_tier", "Tier: %s");
+        add("tooltip.dysonsphere.construct_details_stability", "Stability: %s");
+        add("tooltip.dysonsphere.construct_details_energy_provided", "Energy Provided: %s RF/t");
+        add("tooltip.dysonsphere.construct_details_energy_draw", "Energy Draw: %s RF/t");
+        add("tooltip.dysonsphere.construct_details_components", "Components:");
+        add("tooltip.dysonsphere.construct_details_enabled", "Enabled");
+        add("tooltip.dysonsphere.construct_details_disabled", "Disabled");
+
+        add("tooltip.dysonsphere.listener_shard", "May consume multiple per operation");
+        add("tooltip.dysonsphere.listener_result", "If the recipe is ambiguous the result is random");
+
+        add("tooltip.dysonsphere.cargo_receiver_energy", "Dyson Sphere Energy needed: %sRF");
+        add("tooltip.dysonsphere.cargo_receiver_constructs", "Required Constructs: ");
+        add("tooltip.dysonsphere.cargo_receiver_request", "Requested Energy");
+        add("tooltip.dysonsphere.cargo_receiver_request_energy", "Energy dedicated to fulfilling the request");
+        add("tooltip.dysonsphere.cargo_receiver_missing_constructs", "Missing required constructs for delivery");
+        add("tooltip.dysonsphere.cargo_receiver_missing_output", "No space in output for delivery");
+        add("tooltip.dysonsphere.cargo_receiver_missing_sky", "No clear path to deliver from orbit (cannot see the sky)");
+        add("tooltip.dysonsphere.cargo_receiver_delivery", "Next Delivery: %s/%sRF");
+
+        add("tooltip.dysonsphere.energy_converter_base", "Output will match the ore block below the crystallizer");
+        add("tooltip.dysonsphere.energy_converter_energy", "%sRF per result item. Output scales with energy supply");
+
         add("tooltip.dysonsphere.laser_pattern_call_in","Call-In Sequence");
         add("tooltip.dysonsphere.laser_pattern_name", "Name:");
         add("tooltip.dysonsphere.laser_pattern_controller_apply","Apply");
@@ -121,7 +227,9 @@ public class en_usGenerator extends LanguageProvider{
         add("tooltip.dysonsphere.laser_pattern_controller_edit", "Edit");
         add("tooltip.dysonsphere.laser_pattern_controller_missing_energy", "Not enough energy!");
         add("tooltip.dysonsphere.laser_pattern_controller_invalid_pattern", "Pattern invalid, try extending the call-in sequence");
+        
         add("tooltip.dysonsphere.orbital_lasers_unavailable", "Not enough lasers available!");
+        
         add("tooltip.dysonsphere.laser_controller_launch", "Launch");
         add("tooltip.dysonsphere.laser_controller_launching", "Launching...");
         add("tooltip.dysonsphere.laser_controller_claim", "Claim");
@@ -176,6 +284,13 @@ public class en_usGenerator extends LanguageProvider{
 
         add("tooltip.dysonsphere.laser_controller_target", "Aiming at: X: %s Y: %s Z: %s");
 
+        add("tooltip.dysonsphere.capsule_solar", "Solar Satellite");
+        add("tooltip.dysonsphere.capsule_laser", "Laser Satellite");
+        add("tooltip.dysonsphere.capsule_structure", "Structure Satellite");
+        add("tooltip.dysonsphere.capsule_provided_energy", "Provided Energy: %s RF/t");
+        add("tooltip.dysonsphere.capsule_provided_completion", "Provided Completion: %s");
+        add("tooltip.dysonsphere.capsule_tier", "Tier %s");
+
         //itemGroup
         add("itemGroup.dysonsphere_tab", "Dyson Sphere Project");
 
@@ -189,6 +304,9 @@ public class en_usGenerator extends LanguageProvider{
         add("dysonsphere.recipe.heat_exchanger", "Heat Exchange");
         add("dysonsphere.recipe.railgun", "Orbital Launching");
         add("dysonsphere.recipe.laser", "Orbital Laser Strike");
+        add("dysonsphere.recipe.listener", "Strange Whispers");
+        add("dysonsphere.recipe.energy_converter", "Metal Crystallization");
+        add("dysonsphere.recipe.cargo_delivery", "Orbital Cargo Drop");
 
         //advancements
         add("achievement.dysonsphere.root", "Dyson Sphere Project");
@@ -205,7 +323,7 @@ public class en_usGenerator extends LanguageProvider{
         add("achievement.dysonsphere.praise.desc", "Show your devotion with a special Orbital Laser");
         add("achievement.dysonsphere.get_hook_harness", "Gear up!");
         add("achievement.dysonsphere.get_hook_harness.desc", "Get yourself a Grappling Hook Harness. And maybe fill it.");
-        add("achievement.dysonsphere.hook_detach", "EPAH!");
+        add("achievement.dysonsphere.hook_detach", "EPA!");
         add("achievement.dysonsphere.hook_detach.desc", "Experience the consequences of overextending a rope");
         add("achievement.dysonsphere.hook_speed_50", "Mass and Momentum");
         add("achievement.dysonsphere.hook_speed_50.desc", "Experience an Acceleration of over 50 blocks per second from a grappling hook.");
@@ -235,12 +353,39 @@ public class en_usGenerator extends LanguageProvider{
 
         //commands
         add("commands.dysonsphere.list", "Dyson Sphere Parts:");
+        add("commands.dysonsphere.list_empty", "No Parts in the Dyson Sphere");
         add("commands.dysonsphere.add_success", "Added %sx %s to the Dyson Sphere");
         add("commands.dysonsphere.add_failure", "Failed to add %s. Can it fit into the Dyson Sphere?");
         add("commands.dysonsphere.remove_success", "Removed %sx %s from the Dyson Sphere");
         add("commands.dysonsphere.remove_failure", "Failed to remove %s. Is it part of the Dyson Sphere?");
         add("commands.dysonsphere.set_success", "Set %s count to %s (or maximum)");
         add("commands.dysonsphere.set_failure", "Failed to set %s count. Does it belong in a Dyson Sphere?");
+
+        add("commands.dysonsphere.constructs.list", "Dyson Sphere Constructs:");
+        add("commands.dysonsphere.constructs.list_empty", "No Constructs in the Dyson Sphere");
+        add("commands.dysonsphere.constructs.enabled", ": Enabled");
+        add("commands.dysonsphere.constructs.disabled", ": Disabled");
+        add("commands.dysonsphere.constructs.add_success", "Added %s to the Dyson Sphere");
+        add("commands.dysonsphere.constructs.add_failure", "Failed to add %s. Is it already there?");
+        add("commands.dysonsphere.constructs.remove_success", "Removed %s from the Dyson Sphere");
+        add("commands.dysonsphere.constructs.remove_failure", "Failed to remove %s. Is it there?");
+        add("commands.dysonsphere.constructs.enable_success", "Enabled %s.");
+        add("commands.dysonsphere.constructs.enable_failure", "Failed to enable %s. Is it there?");
+        add("commands.dysonsphere.constructs.disable_success", "Disabled %s.");
+        add("commands.dysonsphere.constructs.disable_failure", "Failed to disable %s. Is it there?");
+        add("commands.dysonsphere.log", "Dyson Sphere Changes:");
+
+        //log
+        add("log.dysonsphere.part.added", "Part added: %s");
+        add("log.dysonsphere.part.added_bulk", "Parts added: %s x%s");
+        add("log.dysonsphere.part.removed", "Part removed: %s");
+        add("log.dysonsphere.part.removed_bulk", "Parts removed: %s x%s");
+        add("log.dysonsphere.construct.added", "Construct added: %s");
+        add("log.dysonsphere.construct.removed", "Construct removed: %s");
+        add("log.dysonsphere.construct.enabled", "Construct enabled: %s");
+        add("log.dysonsphere.construct.disabled", "Construct disabled: %s");
+        add("log.dysonsphere.reset", "Dyson Sphere reset!");
+        add("log.dysonsphere.part.broken", "Part %s broke, will be removed");
     }
     
     

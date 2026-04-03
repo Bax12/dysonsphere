@@ -1,0 +1,15 @@
+{
+    "name": "Proxy Input Hatch",
+    "icon": "dysonsphere:input_hatch_proxy_block",
+    "category": "dysonsphere:input_hatch",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The Proxy Input Hatch does nothing on its own, but allows other Input Hatches to connect through them. Effectively expanding the input hatch chain."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:input_hatch_proxy_block"
+        }
+    ]
+}

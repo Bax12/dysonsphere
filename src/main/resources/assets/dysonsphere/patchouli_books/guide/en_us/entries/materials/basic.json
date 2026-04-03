@@ -24,11 +24,13 @@
         },
         {
             "type": "patchouli:crafting",
-            "recipe": "dysonsphere:ingot_smart_alloy"
+            "recipe": "dysonsphere:ingot_smart_alloy",
+            "recipe2": "dysonsphere:smart_alloy_block"
         },
         {
             "type": "patchouli:crafting",
-            "recipe": "dysonsphere:construct_ender"
+            "recipe": "dysonsphere:ingot_smart_alloy_uncompress",
+            "recipe2": "dysonsphere:construct_ender"
         }
     ]
 }

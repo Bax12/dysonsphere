@@ -46,7 +46,7 @@ public static final VoxelShape Shape_W = Stream.of(Block.box(2,0,1,9,15,15), Blo
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext col) {
+    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter world, @Nonnull BlockPos pos, @Nonnull CollisionContext col) {
         if(state.hasProperty(FACING)){
             switch (state.getValue(FACING)){
                 case EAST: return Shape_E;
@@ -61,7 +61,7 @@ public static final VoxelShape Shape_W = Stream.of(Block.box(2,0,1,9,15,15), Blo
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
         return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
@@ -89,7 +89,7 @@ public static final VoxelShape Shape_W = Stream.of(Block.box(2,0,1,9,15,15), Blo
 
     @Override
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@Nonnull Level level, @Nonnull BlockState state, @Nonnull BlockEntityType<T> type) {
         return type.equals(ModTiles.DS_MONITOR.get()) ? (teLevel, pos, teState, tile) -> {
             ((DSMonitorTile) tile).tick();
         } : null;

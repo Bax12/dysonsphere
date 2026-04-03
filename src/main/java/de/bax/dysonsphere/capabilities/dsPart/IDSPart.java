@@ -17,4 +17,10 @@ public interface IDSPart {
      * @return the contribution of a single part
      */
     float getCompletionProgress();
+
+    /**
+     * the quality tier of the part, used for break priority
+     * @return the tier of the item
+     */
+    int getTier();
 }

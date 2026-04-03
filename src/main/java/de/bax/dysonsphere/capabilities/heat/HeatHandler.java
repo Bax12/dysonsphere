@@ -1,6 +1,5 @@
 package de.bax.dysonsphere.capabilities.heat;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,6 +33,10 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
     public HeatHandler(double heat, double maxHeat){
         this.heat = heat;
         this.maxHeat = maxHeat;
+    }
+
+    public boolean shouldAirTrade(){
+        return true;
     }
 
     @Override
@@ -95,7 +98,7 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
                 if (neighborHandler.isPresent()){
                     neighborList[dir.ordinal()] = neighborHandler;
                 }
-            } else if(level.getBlockState(neiPos).isAir()){
+            } else if(shouldAirTrade() && level.getBlockState(neiPos).isAir()){
                 neighborList[dir.ordinal()] = LazyOptional.of(() -> new AirHeatHandler());
             } else {
                 neighborList[dir.ordinal()] = LazyOptional.empty();
@@ -104,8 +107,9 @@ public class HeatHandler implements IHeatContainer, INBTSerializable<CompoundTag
         
     }
 
+    @Override
     public double getThermalConductivity(){
-        return 1;
+        return 0.1;
     }
 
     public void splitShare(){

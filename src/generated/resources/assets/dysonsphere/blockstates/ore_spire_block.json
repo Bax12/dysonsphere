@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "attached=false": {
+      "model": "dysonsphere:block/ore_spire_block"
+    },
+    "attached=true": {
+      "model": "dysonsphere:block/ore_spire_block1"
+    }
+  }
+}

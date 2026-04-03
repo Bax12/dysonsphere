@@ -2,6 +2,8 @@ package de.bax.dysonsphere.gui;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import de.bax.dysonsphere.containers.HeatExchangerContainer;
@@ -51,7 +53,7 @@ public class HeatExchangerGui extends BaseGui<HeatExchangerContainer> {
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float f, int x, int y) {
+    protected void renderBg(@Nonnull GuiGraphics guiGraphics, float f, int x, int y) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         guiGraphics.blit(GUI_INVENTORY_LOC, this.leftPos, this.topPos + 93, 0, 0, 176, 86);//resourcename, onscreenX, onscreenY, pngStartX, pngStartY, pngEndX, pngEndY

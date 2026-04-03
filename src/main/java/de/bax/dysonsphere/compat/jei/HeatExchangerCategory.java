@@ -3,6 +3,8 @@ package de.bax.dysonsphere.compat.jei;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.gui.BaseGui;
@@ -10,6 +12,7 @@ import de.bax.dysonsphere.gui.HeatExchangerGui;
 import de.bax.dysonsphere.recipes.HeatExchangerRecipe;
 import de.bax.dysonsphere.util.AssetUtil;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -19,10 +22,12 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.world.level.material.Fluid;
 
 public class HeatExchangerCategory implements IRecipeCategory<HeatExchangerRecipe> {
     
+    protected IDrawableStatic heatScale;
+
     @Override
     public RecipeType<HeatExchangerRecipe> getRecipeType() {
         return RecipeType.create(DysonSphere.MODID, "heat_exchanger", HeatExchangerRecipe.class);
@@ -44,20 +49,23 @@ public class HeatExchangerCategory implements IRecipeCategory<HeatExchangerRecip
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, HeatExchangerRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(@Nonnull IRecipeLayoutBuilder builder, @Nonnull HeatExchangerRecipe recipe, @Nonnull IFocusGroup focuses) {
         IDrawable overlay = DSJeiPlugin.guiHelper.drawableBuilder(BaseGui.GUI_INVENTORY_LOC, 0, 180, 12, 28).build();
-        builder.addSlot(RecipeIngredientRole.INPUT, 5, 5).addFluidStack(recipe.input().getFluid(), recipe.input().getAmount()).setFluidRenderer(100, false, 10, 26).setOverlay(overlay, -1, -1);
+        IRecipeSlotBuilder inputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 5, 5).setFluidRenderer(100, false, 10, 26).setOverlay(overlay, -1, -1);
+        for(Fluid fluid : recipe.input().getFluids()){
+            inputSlot.addFluidStack(fluid, recipe.input().getAmount());
+        }
         builder.addSlot(RecipeIngredientRole.OUTPUT, 52, 5).addFluidStack(recipe.output().getFluid(), recipe.output().getAmount()).setFluidRenderer(100, false, 10, 26).setOverlay(overlay, -1, -1);
+        heatScale = DSJeiPlugin.guiHelper.drawableBuilder(BaseGui.GUI_INVENTORY_LOC, 106, 142, 9, 32).build();
     }
 
     @Override
-    public void draw(HeatExchangerRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        IDrawableStatic heatScale = DSJeiPlugin.guiHelper.drawableBuilder(BaseGui.GUI_INVENTORY_LOC, 106, 142, 9, 32).build();
+    public void draw(@Nonnull HeatExchangerRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, @Nonnull GuiGraphics guiGraphics, double mouseX, double mouseY) {
         heatScale.draw(guiGraphics, 29, 2);
     }
 
     @Override
-    public List<Component> getTooltipStrings(HeatExchangerRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+    public List<Component> getTooltipStrings(@Nonnull HeatExchangerRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if(mouseX >= 29 && mouseX <= 38 && mouseY >= 2 && mouseY <= 34){
             // NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
             List<Component> tooltips = new ArrayList<>(2);

@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import de.bax.dysonsphere.containers.RailgunContainer;
+import de.bax.dysonsphere.items.tools.WrenchItem;
 import de.bax.dysonsphere.sounds.ModSounds;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import de.bax.dysonsphere.tileentities.RailgunTile;
@@ -19,8 +20,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -43,7 +46,7 @@ public class RailgunBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext col) {
+    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter world, @Nonnull BlockPos pos, @Nonnull CollisionContext col) {
         return Shape;
     }
 
@@ -54,13 +57,13 @@ public class RailgunBlock extends Block implements EntityBlock {
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
         return new RailgunTile(pos, state);
     }
 
     @Override
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@Nonnull Level level, @Nonnull BlockState state, @Nonnull BlockEntityType<T> type) {
         return type == ModTiles.RAILGUN.get() ? (teLevel, pos, teState, tile) -> {
             ((RailgunTile) tile).tick();
         } : null;
@@ -76,19 +79,24 @@ public class RailgunBlock extends Block implements EntityBlock {
     //     return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     // }
 
+    @SuppressWarnings("deprecation") //we need the super call.
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+    public void onRemove(@Nonnull BlockState pState, @Nonnull Level pLevel, @Nonnull BlockPos pPos, @Nonnull BlockState pNewState, boolean pMovedByPiston) {
         if(!pLevel.isClientSide && pLevel.getBlockEntity(pPos) instanceof RailgunTile tile){
-            tile.dropContent();
+            tile.onRemove();
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
         if(!level.isClientSide && player instanceof ServerPlayer serverPlayer){
-            BlockEntity tile = level.getBlockEntity(pos);
-            if(tile != null && tile.getType().equals(ModTiles.RAILGUN.get())){
+            if(level.getBlockEntity(pos) instanceof RailgunTile tile){
+                ItemStack playerStack = player.getMainHandItem();
+                if(WrenchItem.isWrench(playerStack)){
+                    tile.acceptorHandler.markForRefresh();
+                    return InteractionResult.SUCCESS;
+                }
                 // player.openMenu(new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
                 // new RailgunContainer(containerId, playerInventory, (RailgunTile) tile), Component.translatable("container.dysonsphere.railgun")));
                 // if(player.isCrouching()){
@@ -108,13 +116,13 @@ public class RailgunBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+    public void animateTick(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull RandomSource random) {
         if(level.isClientSide){
-            BlockEntity tile = level.getBlockEntity(pos);
-            if(tile instanceof RailgunTile railgunTile){
-                int energy = railgunTile.energyStorage.getEnergyStored();
-                int energyCap = railgunTile.energyStorage.getMaxEnergyStored();
-                int i = energy == energyCap ? 0 : (int) (50f * energy / railgunTile.getLaunchEnergy());
+            if(level.getBlockEntity(pos) instanceof RailgunTile railgunTile){
+                // int energy = railgunTile.energyStorage.getEnergyStored();
+                // int energyCap = railgunTile.energyStorage.getMaxEnergyStored();
+                // int i = energy == energyCap ? 0 : (int) (50f * energy / railgunTile.getLaunchEnergy());
+                int i = railgunTile.getEnergyScaled(50f);
                 if(i != 0){
                     level.playLocalSound(pos.getX() + 0.5f, pos.getY() + 1.5f, pos.getZ() + 0.5f, ModSounds.RAILGUN_CHARGE.get(), SoundSource.BLOCKS, 0.3f * i / 50f, 0.9f, false);
                 } 
@@ -129,6 +137,13 @@ public class RailgunBlock extends Block implements EntityBlock {
     @Override
     public boolean propagatesSkylightDown(@Nonnull BlockState pState, @Nonnull BlockGetter pLevel, @Nonnull BlockPos pPos) {
         return false;
+    }
+
+    @Override
+    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
+        if(level.getBlockEntity(pos) instanceof RailgunTile tile){
+            tile.onNeighborChange();
+        }
     }
 
     

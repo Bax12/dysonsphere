@@ -3,9 +3,12 @@ package de.bax.dysonsphere.tileentities;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
+import org.antlr.v4.parse.ANTLRParser.prequelConstruct_return;
+
 import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
-import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -13,27 +16,35 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DSMonitorTile extends BaseTile {
 
     protected float dsCompletionPercentage = 0;
-    protected double dsEnergy = 0;
-    protected Map<Item, Integer> dsParts = new HashMap<>();
+    protected long dsEnergy = 0;
+    protected Map<Item, Long> dsParts = new HashMap<>();
     protected float dsUsage = 0;
-    protected double dsEnergyDraw = 0;
+    protected long dsEnergyDraw = 0;
+    protected float dsStability = 0;
     protected int ticksElapsed = 0;
 
-    protected double lastEnergy = 0;
+    protected long lastEnergy = 0;
     protected int lastPartHash = 0;
     protected float lastUsage = 0;
-    protected double lastEnergyDraw = 0;
+    protected long lastEnergyDraw = 0;
+    protected float lastStability = 0;
+
+    protected boolean dirty = false;
 
     public DSMonitorTile(BlockPos pos, BlockState state) {
         super(ModTiles.DS_MONITOR.get(), pos, state);
+    }
+
+    public DSMonitorTile(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     public void tick(){
@@ -45,13 +56,15 @@ public class DSMonitorTile extends BaseTile {
                     dsCompletionPercentage = ds.getCompletionPercentage();
                     dsUsage = ds.getUtilization();
                     dsEnergyDraw = ds.getEnergyRequested();
+                    dsStability = ds.getStability();
                 });
             } else {
-                dsParts = new HashMap<>();
+                dsParts.clear();
                 dsEnergy = -1;
                 dsCompletionPercentage = -1;
                 dsUsage = -1;
                 dsEnergyDraw = -1;
+                dsStability = -1;
             }
             
 
@@ -75,58 +88,65 @@ public class DSMonitorTile extends BaseTile {
             //     sendSyncPackageToNearbyPlayers();
             // }
             int hash = dsParts.hashCode();
-            if(lastEnergy != dsEnergy || lastPartHash != hash || lastUsage != dsUsage || lastEnergyDraw != dsEnergyDraw){
+            if(lastEnergy != dsEnergy || lastPartHash != hash || lastUsage != dsUsage || lastEnergyDraw != dsEnergyDraw || lastStability != dsStability){
                 lastEnergy = dsEnergy;
                 lastPartHash = hash;
                 lastUsage = dsUsage;
                 lastEnergyDraw = dsEnergyDraw;
+                lastStability = dsStability;
+                dirty = true;
+            }
+            if(dirty){ //to enable sync trigger in child classes
                 sendSyncPackageToNearbyPlayers();
+                dirty = false;
             }
         }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(@Nonnull CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.putFloat("completion", dsCompletionPercentage);
-        tag.putDouble("energy", dsEnergy);
-        tag.putFloat("usage", dsUsage);
-        tag.putDouble("energy_draw", dsEnergyDraw);
+        tag.putFloat("ds_completion", dsCompletionPercentage);
+        tag.putLong("ds_energy", dsEnergy);
+        tag.putFloat("ds_usage", dsUsage);
+        tag.putLong("ds_energy_draw", dsEnergyDraw);
+        tag.putFloat("ds_stability", dsStability);
         CompoundTag invTag = new CompoundTag();
         dsParts.forEach((item, count) -> {
             ResourceLocation itemKey = ForgeRegistries.ITEMS.getKey(item);
             if(itemKey != null){
-                invTag.putInt(itemKey.toString(), count);
+                invTag.putLong(itemKey.toString(), count);
             }
         });
         if(invTag.size() > 0){
-            tag.put("parts", invTag);
+            tag.put("ds_parts", invTag);
         }
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@Nonnull CompoundTag tag) {
         super.load(tag);
-        dsCompletionPercentage = tag.getFloat("completion");
-        dsEnergy = tag.getDouble("energy");
-        dsUsage = tag.getFloat("usage");
-        dsEnergyDraw = tag.getDouble("energy_draw");
-        CompoundTag inv = tag.getCompound("parts");
+        dsCompletionPercentage = tag.getFloat("ds_completion");
+        dsEnergy = tag.getLong("ds_energy");
+        dsUsage = tag.getFloat("ds_usage");
+        dsEnergyDraw = tag.getLong("ds_energy_draw");
+        dsStability = tag.getFloat("ds_stability");
+        CompoundTag inv = tag.getCompound("ds_parts");
             if(inv != null){
                 dsParts.clear(); //without it causes issues when removing the last parts of the dysonsphere
                 for(String itemKey : inv.getAllKeys()){
                     Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemKey));
-                    int count = inv.getInt(itemKey);
+                    long count = inv.getLong(itemKey);
                     dsParts.put(item, count);
                 }
             }
     }
 
-    public Map<Item, Integer> getDsParts() {
+    public Map<Item, Long> getDsParts() {
         return dsParts;
     }
 
-    public double getDsEnergy() {
+    public long getDsEnergy() {
         return dsEnergy;
     }
     
@@ -138,7 +158,11 @@ public class DSMonitorTile extends BaseTile {
         return dsUsage;
     }
 
-    public double getDsEnergyDraw() {
+    public long getDsEnergyDraw() {
         return dsEnergyDraw;
+    }
+
+    public float getDsStability() {
+        return dsStability;
     }
 }

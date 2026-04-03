@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "dysonsphere:block/smart_alloy_block"
+  }
+}

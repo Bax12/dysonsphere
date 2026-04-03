@@ -1,5 +1,7 @@
 package de.bax.dysonsphere.containers;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -20,18 +22,22 @@ public abstract class BaseContainer extends AbstractContainerMenu {
     protected abstract boolean quickMoveToInventory(ItemStack newStack);
 
     public void addInventorySlots(Inventory inv){
+        addInventorySlots(inv, 8, 97);
+    }
+
+    public void addInventorySlots(Inventory inv, int x, int y){
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                this.addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, 97 + i * 18));
+                this.addSlot(new Slot(inv, j + i * 9 + 9, x + j * 18, y + i * 18));
             }
         }
         for (int i = 0; i < 9; i++) {
-            this.addSlot(new Slot(inv, i, 8 + i * 18, 155));
+            this.addSlot(new Slot(inv, i, 8 + i * 18, y + 58));
         }
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int slot) {
+    public ItemStack quickMoveStack(@Nonnull Player player, int slot) {
         int inventoryStart = getInventorySlotCount();
         int inventoryEnd = inventoryStart + 26;
         int hotbarStart = inventoryEnd + 1;
@@ -84,7 +90,7 @@ public abstract class BaseContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@Nonnull Player player) {
         return player.distanceToSqr(getTileEntity().getBlockPos().getX() + 0.5D, getTileEntity().getBlockPos().getY() + 0.5D, getTileEntity().getBlockPos().getZ() + 0.5D) <= 64 && !getTileEntity().isRemoved() && getTileEntity().getLevel().getBlockEntity(getTileEntity().getBlockPos()) == getTileEntity();
     }
 

@@ -1,5 +1,6 @@
 {
   "type": "dysonsphere:laser_crafting",
+  "extraInputs": [],
   "input": {
     "tag": "forge:ingots/nitinol"
   },

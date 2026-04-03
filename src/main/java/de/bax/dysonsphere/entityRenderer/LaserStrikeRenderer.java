@@ -1,5 +1,7 @@
 package de.bax.dysonsphere.entityRenderer;
 
+import javax.annotation.Nonnull;
+
 import org.joml.Math;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -9,6 +11,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import de.bax.dysonsphere.DysonSphere;
+import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.entities.LaserStrikeEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -35,12 +38,12 @@ public class LaserStrikeRenderer extends EntityRenderer<LaserStrikeEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(LaserStrikeEntity entity) {
+    public ResourceLocation getTextureLocation(@Nonnull LaserStrikeEntity entity) {
         return RES_LOC;
     }
     
     @Override
-    public void render(LaserStrikeEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
+    public void render(@Nonnull LaserStrikeEntity entity, float entityYaw, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource bufferSource, int light) {
         poseStack.pushPose();
         
         VertexConsumer builder = bufferSource.getBuffer(RenderType.entityTranslucent(RES_LOC, false));
@@ -64,8 +67,9 @@ public class LaserStrikeRenderer extends EntityRenderer<LaserStrikeEntity> {
     }
 
     @Override
-    public boolean shouldRender(LaserStrikeEntity p_114491_, Frustum p_114492_, double p_114493_, double p_114494_, double p_114495_) {
-        return true;
+    public boolean shouldRender(@Nonnull LaserStrikeEntity p_114491_, @Nonnull Frustum p_114492_, double p_114493_, double p_114494_, double p_114495_) {
+        return !ModCompat.isLoaded(ModCompat.MODID.AAA_PARTICLE);
+        // return true;
     }
 
     public static void drawBeam(float size, float opacity, float maxY, PoseStack matrixStack, VertexConsumer builder, int packedLightIn) {

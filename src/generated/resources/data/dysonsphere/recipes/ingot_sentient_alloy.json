@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "forge:ingots/nitinol"
+    },
+    "S": {
+      "tag": "forge:ingots/sentient"
+    }
+  },
+  "pattern": [
+    "III",
+    "ISI",
+    "III"
+  ],
+  "result": {
+    "count": 2,
+    "item": "dysonsphere:ingot_sentient_alloy"
+  },
+  "show_notification": true
+}

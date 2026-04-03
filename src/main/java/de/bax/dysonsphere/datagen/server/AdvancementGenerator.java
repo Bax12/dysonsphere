@@ -60,7 +60,7 @@ public class AdvancementGenerator implements ForgeAdvancementProvider.Advancemen
         Advancement laser_strike = Advancement.Builder.advancement()
         .parent(ds_start)
         .addCriterion("laser_strike", LaserStrikeTrigger.TriggerInstance.instance())
-        .display(display(ModItems.CAPSULE_LASER.get(), "laser_strike"))
+        .display(display(ModItems.CAPSULE_LASER_0.get(), "laser_strike"))
         .save(saver, "dysonsphere:laser_strike");
         
         Advancement praise = Advancement.Builder.advancement()

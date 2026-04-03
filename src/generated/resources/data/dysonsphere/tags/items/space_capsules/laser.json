@@ -1,5 +1,8 @@
 {
   "values": [
-    "dysonsphere:capsule_laser"
+    "dysonsphere:capsule_laser_0",
+    "dysonsphere:capsule_laser_1",
+    "dysonsphere:capsule_laser_2",
+    "dysonsphere:capsule_laser_3"
   ]
 }

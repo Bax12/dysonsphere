@@ -1,15 +1,21 @@
 package de.bax.dysonsphere.datagen.server;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import de.bax.dysonsphere.DysonSphere;
+import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.recipes.ModRecipes;
 import de.bax.dysonsphere.tags.DSTags;
+import de.bax.dysonsphere.util.SerializationUtil;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -19,6 +25,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -30,16 +37,100 @@ public class LaserCraftingRecipeGenerator {
     public static void buildRecipes(Consumer<FinishedRecipe> pWriter) {
         //energy: one mekansim laser: 10 000 full charged amplifier: 5 000 000 000 charge of 100 000 000Fe: 250 000 000 (amplifier has 2.5x higher peak when shooting a single pulse)
         // random orbital: 2 000 000
-        RecipeBuilder.of(Items.EMERALD).input(Ingredient.of(Tags.Items.GEMS_DIAMOND)).energyRequired(10_000_000).save(pWriter);
         RecipeBuilder.of(ModItems.UNIVERSE_WHISPER).input(Ingredient.of(Items.ECHO_SHARD)).energyRequired(2_000_000).save(pWriter);
         RecipeBuilder.of(ModItems.COMPONENT_SMART_ALLOY).input(Ingredient.of(DSTags.itemIngotSmartAlloy)).energyRequired(500_000).save(pWriter);
         RecipeBuilder.of(Items.BUDDING_AMETHYST).input(Ingredient.of(Items.AMETHYST_BLOCK)).energyRequired(5_000_000).save(pWriter);
         RecipeBuilder.of(ModItems.GRAPPLING_HOOK_ROPE_ENDER).input(Ingredient.of(ModItems.CONSTRUCT_ENDER.get())).energyRequired(600_000).save(pWriter);
+
+        ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.GEAR_TAG_EMPTY).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_SERIAL.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
+                .addExtraInput(Ingredient.of(DSTags.itemCoilCopper),4)
+                .energyRequired(300_000).save(consumer);
+            })
+            .addCondition(RecipeConditions.GEAR_EXISTS).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_SERIAL.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
+                .addExtraInput(Ingredient.of(DSTags.itemGear),6)
+                .energyRequired(300_000).save(consumer);
+            })
+            .build(pWriter, RecipeBuilder.getLocation(ModBlocks.INPUT_HATCH_SERIAL.getId()));
+
+        ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_ENERGY.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
+                .addExtraInput(Ingredient.of(DSTags.itemCoilCopper),4)
+                .addExtraInput(Ingredient.of(DSTags.itemCoilIron),4)
+                .energyRequired(800_000).save(consumer);
+            })
+            .addCondition(RecipeConditions.CIRCUIT_EXISTS).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_ENERGY.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit),1) //for a prettier pattern
+                .addExtraInput(Ingredient.of(ModItems.HEAT_SHIELDING.get()),1)
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit),2)
+                .addExtraInput(Ingredient.of(ModItems.HEAT_SHIELDING.get()),1)
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit),1)
+                .energyRequired(800_000).save(consumer);
+            })
+            .build(pWriter, RecipeBuilder.getLocation(ModBlocks.INPUT_HATCH_ENERGY.getId()));
+
+        ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.GEAR_TAG_EMPTY).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_FLUID.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
+                .addExtraInput(Ingredient.of(DSTags.itemIngotSmartAlloy),2)
+                .addExtraInput(Ingredient.of(Items.BUCKET),2)
+                .addExtraInput(Ingredient.of(DSTags.itemIngotSmartAlloy),2)
+                .energyRequired(800_000).save(consumer);
+            })
+            .addCondition(RecipeConditions.GEAR_EXISTS).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.INPUT_HATCH_FLUID.get()).input(Ingredient.of(ModBlocks.INPUT_HATCH_PROXY.get()))
+                .addExtraInput(Ingredient.of(DSTags.itemGear),1) //for a prettier pattern
+                .addExtraInput(Ingredient.of(Items.BUCKET),1)
+                .addExtraInput(Ingredient.of(DSTags.itemGear),2)
+                .addExtraInput(Ingredient.of(Items.BUCKET),1)
+                .addExtraInput(Ingredient.of(DSTags.itemGear),1)
+                .energyRequired(800_000).save(consumer);
+            })
+            .build(pWriter, RecipeBuilder.getLocation(ModBlocks.INPUT_HATCH_FLUID.getId()));
+
+        ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.CIRCUIT_EXISTS).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModItems.SENSOR_UNIT).input(Ingredient.of(Items.FERMENTED_SPIDER_EYE))
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit), 2)
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 1)
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit), 2)
+                .energyRequired(2_000_000).save(consumer);
+            })
+            .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModItems.SENSOR_UNIT).input(Ingredient.of(Items.FERMENTED_SPIDER_EYE))
+                .addExtraInput(Ingredient.of(DSTags.itemCoilCopper), 2)
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 1)
+                .addExtraInput(Ingredient.of(DSTags.itemCoilCopper), 2)
+                .energyRequired(2_000_000).save(consumer);
+            })
+            .build(pWriter, RecipeBuilder.getLocation(ModItems.SENSOR_UNIT.getId()));
+
+            ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.CIRCUIT_EXISTS).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.CARGO_RECEIVER_BLOCK.get()).input(Ingredient.of(Tags.Items.CHESTS))
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 2)
+                .addExtraInput(Ingredient.of(DSTags.itemCircuit), 1)
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 2)
+                .energyRequired(100_000).save(consumer);
+            })
+            .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY).addRecipe((consumer) -> {
+                RecipeBuilder.of(ModBlocks.CARGO_RECEIVER_BLOCK.get()).input(Ingredient.of(Tags.Items.CHESTS))
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 2)
+                .addExtraInput(Ingredient.of(DSTags.itemCoilCopper), 1)
+                .addExtraInput(Ingredient.of(ModItems.COMPONENT_SMART_ALLOY.get()), 2)
+                .energyRequired(100_000).save(consumer);
+            })
+            .build(pWriter, RecipeBuilder.getLocation(ModBlocks.CARGO_RECEIVER_BLOCK.getId()));
     }
 
     public static class RecipeBuilder {
 
         private Ingredient input;
+        private List<Ingredient> extraInputs = new ArrayList<>();
         private ItemStack output;
         private long energyRequired;
 
@@ -69,30 +160,47 @@ public class LaserCraftingRecipeGenerator {
             return this;
         }
 
+        public RecipeBuilder addExtraInput(Ingredient extraInput){
+            extraInputs.add(extraInput);
+            return this;
+        }
+
+        public RecipeBuilder addExtraInput(Ingredient extraInput, int amount){
+            for(int i = 0; i < amount; i++){
+                extraInputs.add(extraInput);
+            }
+            return this;
+        }
+
         public void save(Consumer<FinishedRecipe> consumer){
             this.save(consumer, ForgeRegistries.ITEMS.getKey(output.getItem()));
         }
 
         public void save(Consumer<FinishedRecipe> consumer, ResourceLocation location){
-            consumer.accept(new Recipe(getLocation(location), input, output, energyRequired));
+            consumer.accept(new Recipe(getLocation(location), input, extraInputs, output, energyRequired));
         }
 
-        public ResourceLocation getLocation(ResourceLocation location){
+        public static ResourceLocation getLocation(ResourceLocation location){
             return getLocation(location.getPath());
         }
 
-        public ResourceLocation getLocation(String path){
+        public static ResourceLocation getLocation(String path){
             return new ResourceLocation(DysonSphere.MODID, basePath + "/" + path);
         }
 
     }
 
-    public static record Recipe(ResourceLocation id, Ingredient input, ItemStack output, long inputEnergy) implements FinishedRecipe{
+    public static record Recipe(ResourceLocation id, Ingredient input, List<Ingredient> extraInputs, ItemStack output, long inputEnergy) implements FinishedRecipe{
 
         @Override
-        public void serializeRecipeData(JsonObject pJson) {
+        public void serializeRecipeData(@Nonnull JsonObject pJson) {
             pJson.add("input", input.toJson());
-            pJson.add("output", serializeItemStack(output));
+            JsonArray jsonExtras = new JsonArray();
+            for(Ingredient extra : extraInputs){
+                jsonExtras.add(extra.toJson());
+            }
+            pJson.add("extraInputs", jsonExtras);
+            pJson.add("output", SerializationUtil.serializeItemStack(output));
             pJson.addProperty("inputEnergy", inputEnergy);
         }
 
@@ -118,19 +226,7 @@ public class LaserCraftingRecipeGenerator {
             return null;
         }
 
-        private static JsonObject serializeItemStack(ItemStack stack){
-            JsonObject json = new JsonObject();
-
-            json.addProperty("item", ForgeRegistries.ITEMS.getKey(stack.getItem()).toString());
-            if(stack.hasTag()){
-                json.addProperty("tag", stack.getTag().getAsString());
-            }
-            if(stack.getCount() > 1){
-                json.addProperty("count", stack.getCount());
-            }           
-            
-            return json;
-        }
+        
 
     }
     

@@ -10,6 +10,8 @@ import com.google.gson.JsonObject;
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.fluids.ModFluids;
 import de.bax.dysonsphere.recipes.ModRecipes;
+import de.bax.dysonsphere.util.FluidIngredient;
+import de.bax.dysonsphere.util.SerializationUtil;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -22,13 +24,13 @@ public class HeatExchangerRecipeGenerator {
     public static final String basePath = "heat_exchanging";
 
     public static void buildRecipes(Consumer<FinishedRecipe> pWriter){
-        RecipeBuilder.of(new FluidStack(ModFluids.STEAM.get(), 50)).input(new FluidStack(Fluids.WATER, 5)).minHeat(450).heatConsumption(0.05d).heatScaling(50).scalingFactor(0.2f).save(pWriter);
+        RecipeBuilder.of(new FluidStack(ModFluids.STEAM.get(), 50)).input(FluidIngredient.of(Fluids.WATER, 5)).minHeat(450).heatConsumption(0.05d).heatScaling(50).scalingFactor(0.2f).save(pWriter);
     }
 
 
 
     public static class RecipeBuilder {
-        private FluidStack input;
+        private FluidIngredient input;
         private FluidStack output;
         private double minHeat;
         private double heatConsumption;
@@ -48,7 +50,7 @@ public class HeatExchangerRecipeGenerator {
         /**
          * @param input the fluidStack that get consumed every 5 working ticks.
          */
-        public RecipeBuilder input(FluidStack input){
+        public RecipeBuilder input(FluidIngredient input){
             this.input = input;
             return this;
         }
@@ -107,12 +109,12 @@ public class HeatExchangerRecipeGenerator {
         }
     }
 
-    public static record  Recipe(ResourceLocation id, FluidStack input, FluidStack output, double minHeat, double heatConsumption, float heatScaling, float scalingFactor) implements FinishedRecipe {
+    public static record  Recipe(ResourceLocation id, FluidIngredient input, FluidStack output, double minHeat, double heatConsumption, float heatScaling, float scalingFactor) implements FinishedRecipe {
 
         @Override
         public void serializeRecipeData(@Nonnull JsonObject pJson) {
-            pJson.add("input", serializeFluidStack(input));
-            pJson.add("output", serializeFluidStack(output));
+            pJson.add("input", input.toJson());
+            pJson.add("output", SerializationUtil.serializeFluidStack(output));
             pJson.addProperty("minHeat", minHeat);
             pJson.addProperty("heatConsumption", heatConsumption);
             pJson.addProperty("heatScaling", heatScaling);
@@ -141,13 +143,7 @@ public class HeatExchangerRecipeGenerator {
             return null;
         }
 
-        private static JsonObject serializeFluidStack(FluidStack stack){
-            JsonObject json = new JsonObject();
 
-            json.addProperty("fluid", ForgeRegistries.FLUIDS.getKey(stack.getFluid()).toString());
-            json.addProperty("amount", stack.getAmount());
-            return json;
-        }
 
     }
 

@@ -11,6 +11,9 @@ public class DSTags {
     
 
     public static final TagKey<Fluid> fluidSteam = TagKey.create(Registries.FLUID, forgeLoc("steam"));
+    public static final TagKey<Fluid> fluidHelium = TagKey.create(Registries.FLUID, forgeLoc("helium"));
+    public static final TagKey<Fluid> fluidAntiHelium = TagKey.create(Registries.FLUID, forgeLoc("anti_helium"));
+    public static final TagKey<Fluid> fluidGaseous = TagKey.create(Registries.FLUID, forgeLoc("gaseous"));
 
     public static final TagKey<Item> itemCoil = TagKey.create(Registries.ITEM, forgeLoc("coils"));
     public static final TagKey<Item> itemCoilCopper = TagKey.create(Registries.ITEM, forgeLoc("coils/copper"));
@@ -18,6 +21,7 @@ public class DSTags {
 
     public static final TagKey<Item> itemIngot = TagKey.create(Registries.ITEM, forgeLoc("ingots"));
     public static final TagKey<Item> itemIngotSmartAlloy = TagKey.create(Registries.ITEM, forgeLoc("ingots/nitinol"));
+    public static final TagKey<Item> itemIngotSentient = TagKey.create(Registries.ITEM, forgeLoc("ingots/sentient"));
 
     public static final TagKey<Item> itemIngotNickel = TagKey.create(Registries.ITEM, forgeLoc("ingots/nickel"));
     public static final TagKey<Item> itemIngotTitanium = TagKey.create(Registries.ITEM, forgeLoc("ingots/titanium"));
@@ -31,10 +35,19 @@ public class DSTags {
     public static final TagKey<Item> itemWireCopper = TagKey.create(Registries.ITEM, forgeLoc("wires/copper"));
     public static final TagKey<Item> itemWireIron = TagKey.create(Registries.ITEM, forgeLoc("wires/iron"));
 
+    public static final TagKey<Item> itemWrench = TagKey.create(Registries.ITEM, forgeLoc("wrenches"));
+    public static final TagKey<Item> itemToolWrench = TagKey.create(Registries.ITEM, forgeLoc("tools/wrench"));
+    public static final TagKey<Item> itemTool = TagKey.create(Registries.ITEM, forgeLoc("tools"));
+
     public static final TagKey<Item> itemCapsule = TagKey.create(Registries.ITEM, modLoc("space_capsules"));
     public static final TagKey<Item> itemCapsuleEmpty = TagKey.create(Registries.ITEM, modLoc("space_capsules/empty"));
     public static final TagKey<Item> itemCapsuleSolar = TagKey.create(Registries.ITEM, modLoc("space_capsules/solar"));
     public static final TagKey<Item> itemCapsuleLaser = TagKey.create(Registries.ITEM, modLoc("space_capsules/laser"));
+    public static final TagKey<Item> itemCapsuleStructure = TagKey.create(Registries.ITEM, modLoc("space_capsules/structure"));
+    public static final TagKey<Item> itemCapsuleT0 = TagKey.create(Registries.ITEM, modLoc("space_capsules/tier0"));
+    public static final TagKey<Item> itemCapsuleT1 = TagKey.create(Registries.ITEM, modLoc("space_capsules/tier1"));
+    public static final TagKey<Item> itemCapsuleT2 = TagKey.create(Registries.ITEM, modLoc("space_capsules/tier2"));
+    public static final TagKey<Item> itemCapsuleT3 = TagKey.create(Registries.ITEM, modLoc("space_capsules/tier3"));
 
     public static final TagKey<Item> itemGrapplingHookComponent = TagKey.create(Registries.ITEM, modLoc("grappling_hook_components"));
     public static final TagKey<Item> itemGrapplingHookHook = TagKey.create(Registries.ITEM, modLoc("grappling_hook_components/hook"));
@@ -46,6 +59,7 @@ public class DSTags {
     public static final TagKey<Item> curioBelt = TagKey.create(Registries.ITEM, curioLoc("belt"));
     public static final TagKey<Item> curioHands = TagKey.create(Registries.ITEM, curioLoc("hands"));
     public static final TagKey<Item> curioBracelet = TagKey.create(Registries.ITEM, curioLoc("bracelet"));
+    public static final TagKey<Item> curioAny = TagKey.create(Registries.ITEM, curioLoc("curio"));
 
 
     private static ResourceLocation forgeLoc(String name){

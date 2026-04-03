@@ -1,0 +1,72 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:circuits"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "tag": "forge:coils/copper"
+          },
+          "E": {
+            "item": "dysonsphere:construct_ender"
+          },
+          "S": {
+            "tag": "forge:ingots/sentient"
+          }
+        },
+        "pattern": [
+          "SES",
+          "CEC",
+          "SES"
+        ],
+        "result": {
+          "item": "dysonsphere:heat_converter_block"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:circuits"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "tag": "forge:circuits"
+          },
+          "E": {
+            "item": "dysonsphere:construct_ender"
+          },
+          "S": {
+            "tag": "forge:ingots/sentient"
+          }
+        },
+        "pattern": [
+          "SES",
+          "CEC",
+          "SES"
+        ],
+        "result": {
+          "item": "dysonsphere:heat_converter_block"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

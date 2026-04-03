@@ -12,6 +12,7 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
+import de.bax.dysonsphere.items.CapsuleItem;
 import de.bax.dysonsphere.tileentities.DSMonitorTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -44,19 +45,19 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
         poseStack.pushPose();
         switch (facing) {
             case NORTH:
-                poseStack.translate(0.8F, 0.8F, 0.124F);
+                poseStack.translate(0.8F, 0.85F, 0.124F);
                 break;
             case EAST:
                 poseStack.mulPose(Axis.YN.rotationDegrees(90f));
-                poseStack.translate(0.8F, 0.8F, -0.876F);
+                poseStack.translate(0.8F, 0.85F, -0.876F);
                 break;
             case SOUTH:
                 poseStack.mulPose(Axis.YN.rotationDegrees(180f));
-                poseStack.translate(-0.2F, 0.8F, -0.876F);
+                poseStack.translate(-0.2F, 0.85F, -0.876F);
                 break;
             case WEST:
                 poseStack.mulPose(Axis.YN.rotationDegrees(270f));
-                poseStack.translate(-0.2F, 0.8F, 0.124F);
+                poseStack.translate(-0.2F, 0.85F, 0.124F);
                 break;
         }
 
@@ -71,7 +72,7 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
         Font font = Minecraft.getInstance().font;
         Matrix4f matrix = poseStack.last().pose();
 
-
+        //todo: fix out of bounds text with to many lines: squish text in height?
         font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_status"), 0/*width adjust*/, 0/*line feed*/, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
         if(tile.getDsCompletionPercentage() == -1){
             poseStack.pushPose();
@@ -94,24 +95,36 @@ public class DSMonitorRenderer implements BlockEntityRenderer<DSMonitorTile> {
             // DysonSphere.LOGGER.info("DSMonitorRenderer render dscompletion: {}", tile.getDsCompletionPercentage()); //tile delivers 0.0 wrongfully.
             font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_completion", df.format(tile.getDsCompletionPercentage())), 0, 10F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
             df.setMaximumFractionDigits(0);
-            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_capacity", df.format(tile.getDsEnergy())), 0, 20F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
-            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_parts"), 0, 30F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
-            float drawOffset = 40f;
-            for (Entry<Item, Integer> entry : tile.getDsParts().entrySet()){
+            poseStack.pushPose();
+            var comp = Component.translatable("tooltip.dysonsphere.ds_monitor_capacity", df.format(tile.getDsEnergy()));
+            float scale = Math.min(125F / font.width(comp), 1f);
+            matrix = poseStack.last().pose();
+            poseStack.scale(scale, 1, 1);
+            font.drawInBatch(comp, 0, 20F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+            poseStack.popPose();
+            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_usage", df.format(tile.getDsUsage())), 0, 30, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_power_draw", df.format(tile.getDsEnergyDraw())), 0, 40, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_parts"), 0, 50F, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+            float drawOffset = 60f;
+            for (Entry<Item, Long> entry : tile.getDsParts().entrySet().stream().sorted((a, b) -> {return b.getValue().compareTo(a.getValue());}).toList()){//we want max first, n should be rather small so the sort should not matter much
                 poseStack.pushPose();
-                var comp = Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey().getName(ItemStack.EMPTY), entry.getValue());
+                comp = Component.translatable("tooltip.dysonsphere.ds_monitor_part", entry.getKey() instanceof CapsuleItem capsule ? capsule.getContentName() : entry.getKey().getName(ItemStack.EMPTY), entry.getValue());
                 // DysonSphere.LOGGER.info("DSMonitorRenderer render fontWidth: {}", font.width(comp));
-                float scale = Math.min(125F / font.width(comp), 1f);
+                scale = Math.min(125F / font.width(comp), 1f);
                 // scale = 2f;
                 poseStack.scale(scale, 1, 1);
                 matrix = poseStack.last().pose();
                 font.drawInBatch(comp, 0, drawOffset, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
                 drawOffset += 10f;
                 poseStack.popPose();
+                if(drawOffset >= 150) {
+                    
+                    font.drawInBatch(Component.literal("..."), 10, drawOffset-5, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+                    
+                    break;
+                }
             }
-            matrix = poseStack.last().pose();
-            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_usage", df.format(tile.getDsUsage())), 0, drawOffset + 5, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
-            font.drawInBatch(Component.translatable("tooltip.dysonsphere.ds_monitor_power_draw", df.format(tile.getDsEnergyDraw())), 0, drawOffset + 15, -1, false, matrix, bufferSource, DisplayMode.NORMAL, j, combinedLight);
+            
         }
         
         // Entry<Item, Integer> part = ds.getDysonSphereParts().entrySet().iterator().next();

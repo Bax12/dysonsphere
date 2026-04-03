@@ -2,13 +2,17 @@ package de.bax.dysonsphere.compat.jei;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
 import de.bax.dysonsphere.gui.BaseGui;
 import de.bax.dysonsphere.gui.RailgunGui;
-import de.bax.dysonsphere.tileentities.RailgunTile;
+import de.bax.dysonsphere.recipes.OrbitalLaunchRecipe;
 import de.bax.dysonsphere.util.AssetUtil;
+import de.bax.dysonsphere.util.FluidIngredient;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -18,13 +22,16 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.material.Fluid;
 
-public class RailgunRecipeCategory implements IRecipeCategory<RailgunRecipeCategory.RailgunRecipe> {
+public class RailgunRecipeCategory implements IRecipeCategory<OrbitalLaunchRecipe> {
     
+    protected IDrawableStatic powerScale;
+
     @Override
-    public RecipeType<RailgunRecipe> getRecipeType() {
-        return RecipeType.create(DysonSphere.MODID, "railgun", RailgunRecipeCategory.RailgunRecipe.class);
+    public RecipeType<OrbitalLaunchRecipe> getRecipeType() {
+        return RecipeType.create(DysonSphere.MODID, "railgun", OrbitalLaunchRecipe.class);
     }
 
     @Override
@@ -34,7 +41,7 @@ public class RailgunRecipeCategory implements IRecipeCategory<RailgunRecipeCateg
 
     @Override
     public IDrawable getBackground() {
-        return DSJeiPlugin.guiHelper.drawableBuilder(RailgunGui.RES_LOC, 50, 11, 65, 73).build();
+        return DSJeiPlugin.guiHelper.drawableBuilder(RailgunGui.RES_LOC, 50, 11, 87, 78).build();
     }
 
     @Override
@@ -43,34 +50,49 @@ public class RailgunRecipeCategory implements IRecipeCategory<RailgunRecipeCateg
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, RailgunRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 30, 53).addItemStack(recipe.capsule);
+    public void setRecipe(@Nonnull IRecipeLayoutBuilder builder, @Nonnull OrbitalLaunchRecipe recipe, @Nonnull IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 30, 53).addIngredients(recipe.input());
+        powerScale = DSJeiPlugin.guiHelper.drawableBuilder(BaseGui.GUI_INVENTORY_LOC, 43, 91, 9, 64).build();
+        IDrawable overlay = DSJeiPlugin.guiHelper.drawableBuilder(BaseGui.GUI_INVENTORY_LOC, 0, 180, 12, 28).build();
+        
+        int offsetY = 0, offsetX = 0;
+        for(Ingredient ingredient : recipe.extraInputs()){
+            builder.addSlot(RecipeIngredientRole.INPUT, 55 + offsetX, 64 - offsetY).addIngredients(ingredient);
+            offsetY += 16;
+            if(offsetY > 64){
+                offsetY = 0;   //four vertical, then horizontal to the right
+                offsetX += 20; //to many will leave the recipe area or collide with fluids.
+            }
+        }
+
+        offsetY = offsetX = 0;
+        for(FluidIngredient fluidIngredient : recipe.fluidInputs()){
+            IRecipeSlotBuilder fluidInput = builder.addSlot(RecipeIngredientRole.INPUT, 75 - offsetX, 5 + offsetY).setFluidRenderer(500, false, 10, 26).setOverlay(overlay, -1, -1);
+            for(Fluid fluid : fluidIngredient.getFluids()){
+                fluidInput.addFluidStack(fluid, fluidIngredient.getAmount());
+            }
+            offsetY += 35;
+            if(offsetY > 35){ //two vertical, then expand horizontal to the left
+                offsetY = 0;   //will look really ugly with 5+ fluids...
+                offsetX += 11;
+            }
+        }
     }
 
     @Override
-    public void draw(RailgunRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        IDrawableStatic powerScale = DSJeiPlugin.guiHelper.drawableBuilder(BaseGui.GUI_INVENTORY_LOC, 43, 91, 9, 64).build();
+    public void draw(@Nonnull OrbitalLaunchRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, @Nonnull GuiGraphics guiGraphics, double mouseX, double mouseY) {
         powerScale.draw(guiGraphics, 5, 5);
     }
 
     @Override
-    public List<Component> getTooltipStrings(RailgunRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+    public List<Component> getTooltipStrings(@Nonnull OrbitalLaunchRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if(mouseX >= 5 && mouseX <= 14 && mouseY >= 5 && mouseY <= 69){
             // NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
-            return List.of(Component.translatable("tooltip.dysonsphere.railgun_launch_energy", AssetUtil.FLOAT_FORMAT.format(RailgunTile.baseLaunchEnergy)));
+            return List.of(Component.translatable("tooltip.dysonsphere.railgun_base_launch_energy", AssetUtil.FLOAT_FORMAT.format(recipe.baseEnergy())));
         }
         return List.of();
     }
 
 
-    
-
-    public static class RailgunRecipe {
-        ItemStack capsule;
-
-        public RailgunRecipe(ItemStack capsule){
-            this.capsule = capsule;
-        }
-    }
 
 }

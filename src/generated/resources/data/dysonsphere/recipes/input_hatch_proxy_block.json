@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "dysonsphere:component_smart_alloy"
+    },
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "I": {
+      "tag": "forge:coils/iron"
+    }
+  },
+  "pattern": [
+    "ICI",
+    "CHC",
+    "ICI"
+  ],
+  "result": {
+    "item": "dysonsphere:input_hatch_proxy_block"
+  },
+  "show_notification": true
+}

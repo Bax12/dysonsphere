@@ -1,0 +1,84 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:gears"
+        }
+      ],
+      "recipe": {
+        "type": "dysonsphere:laser_crafting",
+        "extraInputs": [
+          {
+            "tag": "forge:ingots/nitinol"
+          },
+          {
+            "tag": "forge:ingots/nitinol"
+          },
+          {
+            "item": "minecraft:bucket"
+          },
+          {
+            "item": "minecraft:bucket"
+          },
+          {
+            "tag": "forge:ingots/nitinol"
+          },
+          {
+            "tag": "forge:ingots/nitinol"
+          }
+        ],
+        "input": {
+          "item": "dysonsphere:input_hatch_proxy_block"
+        },
+        "inputEnergy": 800000,
+        "output": {
+          "item": "dysonsphere:input_hatch_fluid_block"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:gears"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "dysonsphere:laser_crafting",
+        "extraInputs": [
+          {
+            "tag": "forge:gears"
+          },
+          {
+            "item": "minecraft:bucket"
+          },
+          {
+            "tag": "forge:gears"
+          },
+          {
+            "tag": "forge:gears"
+          },
+          {
+            "item": "minecraft:bucket"
+          },
+          {
+            "tag": "forge:gears"
+          }
+        ],
+        "input": {
+          "item": "dysonsphere:input_hatch_proxy_block"
+        },
+        "inputEnergy": 800000,
+        "output": {
+          "item": "dysonsphere:input_hatch_fluid_block"
+        }
+      }
+    }
+  ]
+}

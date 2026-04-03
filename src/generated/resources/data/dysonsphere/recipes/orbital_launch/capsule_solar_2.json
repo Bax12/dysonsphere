@@ -1,0 +1,12 @@
+{
+  "type": "dysonsphere:orbital_launch",
+  "baseEnergy": 9000000,
+  "extraInputs": [],
+  "fluidInputs": [],
+  "input": {
+    "item": "dysonsphere:capsule_solar_2"
+  },
+  "launchStack": {
+    "item": "dysonsphere:capsule_solar_2"
+  }
+}

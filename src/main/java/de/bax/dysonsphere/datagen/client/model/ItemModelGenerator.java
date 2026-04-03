@@ -23,23 +23,46 @@ public class ItemModelGenerator extends ItemModelProvider{
     @Override
     protected void registerModels() {
         Set<RegistryObject<Item>> complexItems = ImmutableSet.of(
-            ModItems.CAPSULE_SOLAR,
             ModItems.CAPSULE_EMPTY,
-            ModItems.CAPSULE_LASER,
+            ModItems.CAPSULE_SOLAR_0,
+            ModItems.CAPSULE_LASER_0,
+            ModItems.CAPSULE_STRUCTURE_0,
+            ModItems.CAPSULE_SOLAR_1,
+            ModItems.CAPSULE_LASER_1,
+            ModItems.CAPSULE_STRUCTURE_1,
+            ModItems.CAPSULE_SOLAR_2,
+            ModItems.CAPSULE_LASER_2,
+            ModItems.CAPSULE_STRUCTURE_2,
+            ModItems.CAPSULE_SOLAR_3,
+            ModItems.CAPSULE_LASER_3,
+            ModItems.CAPSULE_STRUCTURE_3,
             ModItems.RAILGUN,
             ModItems.TARGET_DESIGNATOR,
             ModItems.LASER_CONTROLLER,
             ModItems.GRAPPLING_HOOK_HARNESS,
-            ModItems.GRAPPLING_HOOK_CONTROLLER
+            ModItems.GRAPPLING_HOOK_CONTROLLER,
+            ModItems.SENSOR_UNIT
         );
 
         Set<Item> complexBlocks = ImmutableSet.of(
-            ModBlocks.RAILGUN_BLOCK.get().asItem()
+            ModBlocks.RAILGUN_BLOCK.get().asItem(),
+            ModBlocks.LISTENER_BLOCK.get().asItem(),
+            ModBlocks.INPUT_HATCH_SERIAL_HEAT.get().asItem(),
+            ModBlocks.INPUT_HATCH_PARALLEL_HEAT.get().asItem(),
+            ModBlocks.INPUT_HATCH_PROXY_HEAT.get().asItem(),
+            ModBlocks.INPUT_HATCH_ENERGY_HEAT.get().asItem(),
+            ModBlocks.INPUT_HATCH_FLUID_HEAT.get().asItem()
         );
 
         
         ModItems.ITEMS.getEntries().stream().filter(i -> !complexItems.contains(i)).forEach(this::simpleItem);
         ModBlocks.ITEM_BLOCKS.getEntries().stream().filter(i -> !complexBlocks.contains(i.get())).forEach(this::simpleBlock);
+
+        getBuilder(ModBlocks.INPUT_HATCH_SERIAL_HEAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + ModBlocks.INPUT_HATCH_SERIAL.getId().getPath())));
+        getBuilder(ModBlocks.INPUT_HATCH_PARALLEL_HEAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + ModBlocks.INPUT_HATCH_PARALLEL.getId().getPath())));
+        getBuilder(ModBlocks.INPUT_HATCH_PROXY_HEAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + ModBlocks.INPUT_HATCH_PROXY.getId().getPath())));
+        getBuilder(ModBlocks.INPUT_HATCH_ENERGY_HEAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + ModBlocks.INPUT_HATCH_ENERGY.getId().getPath())));
+        getBuilder(ModBlocks.INPUT_HATCH_FLUID_HEAT.getId().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + ModBlocks.INPUT_HATCH_FLUID.getId().getPath())));
     }
     
 

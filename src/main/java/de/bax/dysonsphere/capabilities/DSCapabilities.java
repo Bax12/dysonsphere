@@ -9,6 +9,8 @@ import de.bax.dysonsphere.capabilities.grapplingHook.IGrapplingHookFrame;
 import de.bax.dysonsphere.capabilities.grapplingHook.IGrapplingHookHook;
 import de.bax.dysonsphere.capabilities.grapplingHook.IGrapplingHookRope;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputAcceptor;
+import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider;
 import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.capabilities.orbitalLaser.IOrbitalLaserContainer;
 import de.bax.dysonsphere.capabilities.orbitalLaser.IOrbitalLaserPatternContainer;
@@ -23,6 +25,8 @@ public class DSCapabilities {
     public static final Capability<IHeatContainer> HEAT = CapabilityManager.get(new CapabilityToken<>(){});
     public static final Capability<IDSEnergyReceiver> DS_ENERGY_RECEIVER = CapabilityManager.get(new CapabilityToken<>(){});
     public static final Capability<ILaserReceiver> LASER_RECEIVER = CapabilityManager.get(new CapabilityToken<>(){});
+    public static final Capability<IInputProvider> INPUT_PROVIDER = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<IInputAcceptor> INPUT_ACCEPTOR = CapabilityManager.get(new CapabilityToken<>() {});
 
     //Items
     public static final Capability<IDSPart> DS_PART = CapabilityManager.get(new CapabilityToken<>(){});

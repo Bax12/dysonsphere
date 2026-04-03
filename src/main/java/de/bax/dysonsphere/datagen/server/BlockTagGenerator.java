@@ -2,6 +2,8 @@ package de.bax.dysonsphere.datagen.server;
 
 import java.util.concurrent.CompletableFuture;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.DysonSphere;
@@ -17,7 +19,7 @@ public class BlockTagGenerator extends BlockTagsProvider {
     }
 
     @Override
-    protected void addTags(Provider provider) {
+    protected void addTags(@Nonnull Provider provider) {
         
     }
     

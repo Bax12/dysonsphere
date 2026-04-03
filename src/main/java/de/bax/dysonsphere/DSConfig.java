@@ -2,13 +2,12 @@ package de.bax.dysonsphere;
 
 import java.util.List;
 
+import de.bax.dysonsphere.capabilities.dysonSphere.DysonSphereContainer;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookChainRope;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookStringRope;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookTripWireHook;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.entities.LaserStrikeEntity;
-import de.bax.dysonsphere.items.CapsuleLaserItem;
-import de.bax.dysonsphere.items.CapsuleSolarItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookBlazeHookItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookElectricEngineItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookEnderRopeItem;
@@ -18,17 +17,22 @@ import de.bax.dysonsphere.items.grapplingHook.GrapplingHookSlimeHookItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookSteamEngineItem;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookWoodHookItem;
 import de.bax.dysonsphere.items.laser.LaserControllerItem;
+import de.bax.dysonsphere.tileentities.CargoReceiverTile;
 import de.bax.dysonsphere.tileentities.DSEnergyReceiverTile;
+import de.bax.dysonsphere.tileentities.EnergyConverterTile;
+import de.bax.dysonsphere.tileentities.HeatConverterTile;
 import de.bax.dysonsphere.tileentities.HeatExchangerTile;
 import de.bax.dysonsphere.tileentities.HeatGeneratorTile;
 import de.bax.dysonsphere.tileentities.HeatPipeTile;
+import de.bax.dysonsphere.tileentities.InputHatchTile;
 import de.bax.dysonsphere.tileentities.LaserControllerTile;
 import de.bax.dysonsphere.tileentities.LaserCrafterTile;
 import de.bax.dysonsphere.tileentities.LaserPatternControllerTile;
+import de.bax.dysonsphere.tileentities.ListenerTile;
+import de.bax.dysonsphere.tileentities.OreSpireTile;
 import de.bax.dysonsphere.tileentities.RailgunTile;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
@@ -41,8 +45,12 @@ public class DSConfig {
         //####COMMON####
 
         //Dysonsphere
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> DYSON_SPHERE_DIM_BLACKLIST;
+        private static ConfigValue<List<? extends String>> DYSON_SPHERE_DIM_BLACKLIST;
         private static ForgeConfigSpec.BooleanValue DYSON_SPHERE_IS_WHITELIST;
+        private static ForgeConfigSpec.DoubleValue DYSON_SPHERE_STABILITY_MULT;
+        private static ForgeConfigSpec.IntValue DYSON_SPHERE_MAX_BREAK_COUNT;
+        private static ForgeConfigSpec.IntValue DYSON_SPHERE_LOG_LENGTH;
+        private static ForgeConfigSpec.DoubleValue DYSON_SPHERE_MAX_COMPLETION;
 
         //General
         private static ForgeConfigSpec.DoubleValue GENERAL_HEAT_AMBIENT;
@@ -50,6 +58,7 @@ public class DSConfig {
 
         //Machines
         private static ForgeConfigSpec.DoubleValue DS_ENERGY_RECEIVER_MAX_HEAT;
+        private static ForgeConfigSpec.DoubleValue DS_ENERGY_RECEIVER_CONVERSION_RATE;
                         
         private static ForgeConfigSpec.DoubleValue HEAT_EXCHANGER_MAX_HEAT;
         private static ForgeConfigSpec.IntValue HEAT_EXCHANGER_FLUID_CAPACITY;
@@ -60,9 +69,19 @@ public class DSConfig {
         private static ForgeConfigSpec.IntValue HEAT_GENERATOR_ENERGY_GENERATED;
                         
         private static ForgeConfigSpec.DoubleValue HEAT_PIPE_MAX_HEAT;
-                        
-        private static ForgeConfigSpec.IntValue RAILGUN_LAUNCH_ENERGY;
+        
+        private static ForgeConfigSpec.DoubleValue HEAT_CONVERTER_MAX_HEAT;
+        private static ForgeConfigSpec.IntValue HEAT_CONVERTER_ENERGY_CAPACITY;
+        private static ForgeConfigSpec.DoubleValue HEAT_CONVERTER_CONVERSION_RATE;
+        private static ForgeConfigSpec.DoubleValue HEAT_CONVERTER_WORK_RATE;
+        private static ForgeConfigSpec.DoubleValue HEAT_CONVERTER_BASE_HEAT;
+
         private static ForgeConfigSpec.IntValue RAILGUN_ENERGY_CAPACITY;
+
+        private static ForgeConfigSpec.IntValue ORE_SPIRE_CAPACITY;
+
+        private static ForgeConfigSpec.IntValue ENERGY_CONVERTER_ENERGY_CAPACITY;
+        private static ForgeConfigSpec.IntValue ENERGY_CONVERTER_CONVERSION_RATE;
                         
         private static ForgeConfigSpec.IntValue LASER_CONTROLLER_TILE_ENERGY_USAGE;
         private static ForgeConfigSpec.IntValue LASER_CONTROLLER_TILE_ENERGY_CAPACITY;
@@ -78,17 +97,26 @@ public class DSConfig {
         private static ForgeConfigSpec.IntValue LASER_PATTERN_CONTROLLER_CAPACITY;                
         private static ForgeConfigSpec.IntValue LASER_PATTERN_CONTROLLER_USE;
 
-        //DS Capsules
-        private static ForgeConfigSpec.IntValue SOLAR_CAPSULE_ENERGY_PROVIDED;                        
-        private static ForgeConfigSpec.DoubleValue SOLAR_CAPSULE_COMPLETION;
-                        
-        private static ForgeConfigSpec.IntValue LASER_CAPSULE_ENERGY_CONSUMED;           
-        private static ForgeConfigSpec.DoubleValue LASER_CAPSULE_COMPLETION;
+        private static ForgeConfigSpec.IntValue LISTENER_ENERGY_CAPACITY;
+        private static ForgeConfigSpec.IntValue LISTENER_WORK_DURATION;
+        private static ForgeConfigSpec.IntValue LISTENER_ENERGY_USAGE;
+        private static ForgeConfigSpec.DoubleValue LISTENER_CONSUMPTION_CHANCE;
+
+        private static ForgeConfigSpec.IntValue CARGO_RECEIVER_FLUID_CAPACITY;
+
+        //input hatches
+        private static ForgeConfigSpec.DoubleValue INPUT_HATCH_MAX_HEAT;
+        private static ForgeConfigSpec.IntValue INPUT_HATCH_ENERGY_CAPACITY;
+        private static ForgeConfigSpec.IntValue INPUT_HATCH_FLUID_CAPACITY;
         
         //Tools
         private static ForgeConfigSpec.IntValue LASER_CONTROLLER_ITEM_CAPACITY;        
         private static ForgeConfigSpec.IntValue LASER_CONTROLLER_ITEM_CHARGE_RATE;   
         private static ForgeConfigSpec.IntValue LASER_CONTROLLER_ITEM_USAGE;
+
+        //Constructs
+        private static ForgeConfigSpec.DoubleValue CONSTRUCT_HEAT_SINK_MULT;
+
 
         //Grappling Hooks
         public static ForgeConfigSpec.IntValue GRAPPLING_HOOK_HOOK_SMART_ALLOY_COUNT;
@@ -210,6 +238,20 @@ public class DSConfig {
                         .comment("If the dimensionBlacklist should be used as a whitelist instead, Default: false")
                         .worldRestart()
                         .define("dimensionIsWhitelist", false);
+                DYSON_SPHERE_STABILITY_MULT = builder
+                        .comment("Multiplier applied to the stability in the formula stability = 100% - (completion * instabilityMult). 0 means no breaking ever. 1 mean 100% chance for breaks with 100% completion.")
+                        .defineInRange("instabilityMult", 0.5d, 0.0d, 100.0d);
+                DYSON_SPHERE_MAX_BREAK_COUNT = builder
+                        .comment("How many parts of the Dyson Sphere can break at once. Randomised from 1 to maxBreakCount. The parts will always be the same type.")
+                        .defineInRange("maxBreakCount", 5, 1, Integer.MAX_VALUE);
+                DYSON_SPHERE_LOG_LENGTH = builder
+                        .comment("The length of Dyson Sphere Change log to keep. Setting it to 0 might save some ram")
+                        .worldRestart()
+                        .defineInRange("logLength", 500, 0, Integer.MAX_VALUE);
+                DYSON_SPHERE_MAX_COMPLETION = builder
+                        .comment("To how many % the Dyson Sphere can be assembled. Reducing the value wont affect an already assembled sphere, but prevent new parts from being added. 0 basically disables the Dyson Sphere, values over 100 might cause strange behavior")
+                        .defineInRange("maxCompletion", 100d, 0d, Double.MAX_VALUE);
+
                 //#####General Start#####
                 builder.pop().push("general.heat");
                 GENERAL_HEAT_AMBIENT = builder
@@ -228,6 +270,10 @@ public class DSConfig {
                         .comment("The upper limit of heat capacity of the dyson sphere energy receiver. 0-1.7976931348623157E308. Default 1700")
                         .worldRestart()
                         .defineInRange("dsEnergyReceiverMaxHeat", 1700, 0, Double.MAX_VALUE);
+                DS_ENERGY_RECEIVER_CONVERSION_RATE = builder
+                        .comment("The multiplier to convert one energy units to heat units")
+                        .worldRestart()
+                        .defineInRange("dsEnergyReceiverConversionRate", 0.1d, 0d, 100d);
 
                 builder.pop().push("heat_exchanger");
                 HEAT_EXCHANGER_MAX_HEAT = builder
@@ -261,14 +307,49 @@ public class DSConfig {
                         .worldRestart()
                         .defineInRange("heatPipeMaxHeat", 1950d, 0, Double.MAX_VALUE);
 
+                builder.pop().push("heat_converter");
+                HEAT_CONVERTER_MAX_HEAT = builder
+                        .comment("The upper limit of heat capacity of the heat converter. 0-1.7976931348623157E308. Default 1700")
+                        .worldRestart()
+                        .defineInRange("heatConverterMaxHeat", 1700, 0, Double.MAX_VALUE);
+                HEAT_CONVERTER_ENERGY_CAPACITY = builder
+                        .comment("The energy capacity of the heat converter 1-2147483647. Default 20000")
+                        .worldRestart()
+                        .defineInRange("heatConverterEnergyCapacity", 20000, 0, Integer.MAX_VALUE);
+                HEAT_CONVERTER_CONVERSION_RATE = builder
+                        .comment("The multiplier to convert heat units to energy untis")
+                        .worldRestart()
+                        .defineInRange("heatConverterConversionRate", 0.5d, 0d, 100f);
+                HEAT_CONVERTER_WORK_RATE = builder
+                        .comment("The base work rate of the heat converter, how much heat is converted per tick")
+                        .worldRestart()
+                        .defineInRange("heatConverterWorkRate", 2d, 0d, 100f);
+                HEAT_CONVERTER_BASE_HEAT = builder
+                        .comment("The base amount of heat required for conversion to start. Divide by workRate for the minimum heat value achievable of the converter")
+                        .worldRestart()
+                        .defineInRange("heatConverterBaseHeat", 600d, 0d, Double.MAX_VALUE);
+
                 builder.pop().push("railgun");
-                RAILGUN_LAUNCH_ENERGY = builder
-                        .comment("The base energy required for the railgun to launch a single item from earth. (Changes based on gravity and sun distance with ad astra) 0-2147483647. Default 90000")
-                        .defineInRange("railgunLaunchEnergy", 90000, 0, Integer.MAX_VALUE);
                 RAILGUN_ENERGY_CAPACITY = builder
                         .comment("The energy capacity of the railgun. Must be bigger then the launchEnergy for the railgun to work. 1-2147483647. Default 150000")
                         .worldRestart()
                         .defineInRange("railgunEnergyCapacity", 150000, 1, Integer.MAX_VALUE);
+
+                builder.pop().push("ore_spire");
+                ORE_SPIRE_CAPACITY = builder
+                        .comment("Item Capacity of the ore spire")
+                        .worldRestart()
+                        .defineInRange("oreSpireCapacity", 1024, 1, Integer.MAX_VALUE);
+
+                builder.pop().push("energy_converter");
+                ENERGY_CONVERTER_ENERGY_CAPACITY = builder
+                        .comment("The internal energy capacity of the energy converter")
+                        .worldRestart()
+                        .defineInRange("energyConverterEnergyCapacity", 200_000, 1, Integer.MAX_VALUE);
+                ENERGY_CONVERTER_CONVERSION_RATE = builder
+                        .comment("The energy required to generate a single output item")
+                        .worldRestart()
+                        .defineInRange("energyConverterConversionRate", 10_000, 0, Integer.MAX_VALUE);
                 
                 builder.pop().push("laser_controller_tile");
                 LASER_CONTROLLER_TILE_ENERGY_USAGE = builder
@@ -312,23 +393,45 @@ public class DSConfig {
                         .comment("The amount of energy the Laser Pattern Controller uses per Saved pattern. 0-2147483647. Default 100")
                         .worldRestart()
                         .defineInRange("laserPatternControllerEnergyUsage", 100, 0, Integer.MAX_VALUE);
+                
 
-                //#####DS Capsules Start#####
-                builder.pop(2).push("space_capsules.solar");
-                SOLAR_CAPSULE_ENERGY_PROVIDED = builder
-                        .comment("The energy a single solar capsule provides per tick once added to the dyson sphere. 0-2147483647. Default 10")
-                        .defineInRange("solarCapsuleEnergyProvided", 10, 0, Integer.MAX_VALUE);
-                SOLAR_CAPSULE_COMPLETION = builder
-                        .comment("The dyson sphere completion a single solar capsule adds. 0.0-1.0. Default 0.00001")
-                        .defineInRange("solarCapsuleCompletion", 0.00001, 0, 1);
+                builder.pop().push("listener");
+                LISTENER_ENERGY_CAPACITY = builder
+                        .comment("The internal energy capacity of the listener.")
+                        .worldRestart()
+                        .defineInRange("listenerEnergyCapacity", 200000, 1, Integer.MAX_VALUE);
+                LISTENER_WORK_DURATION = builder
+                        .comment("The duration in ticks the listener needs for one operation")
+                        .worldRestart()
+                        .defineInRange("listenerWorkDuration", 120, 0, 50000);
+                LISTENER_ENERGY_USAGE = builder
+                        .comment("The energy consumed by the listener per working tick")
+                        .worldRestart()
+                        .defineInRange("listenerEnergyUsage", 1000, 1, Integer.MAX_VALUE);
+                LISTENER_CONSUMPTION_CHANCE = builder
+                        .comment("The chance the listener consumes a whisper per working tick")
+                        .worldRestart()
+                        .defineInRange("listenerConsumptionChance", 0.1d, 0d, 1d);
 
-                builder.pop().push("laser");
-                LASER_CAPSULE_ENERGY_CONSUMED = builder
-                        .comment("The energy a single laser capsule consumes per tick once added to the dyson sphere. 0-2147483647. Default 50")
-                        .defineInRange("laserCapsuleEnergyConsumed", 50, 0, Integer.MAX_VALUE);
-                LASER_CAPSULE_COMPLETION = builder
-                        .comment("The dyson sphere completion a laser solar capsule adds. 0.0-1.0. Default 0.00001")
-                        .defineInRange("laserCapsuleCompletion", 0.00001, 0, 1);
+                builder.pop().push("cargo_receiver");
+                CARGO_RECEIVER_FLUID_CAPACITY = builder
+                        .comment("The fluid capacity of the cargo receiver")
+                        .worldRestart()
+                        .defineInRange("cargoReceiverFluidCapacity", 10000, 0, Integer.MAX_VALUE);
+
+                builder.pop().push("input_hatch");
+                INPUT_HATCH_MAX_HEAT = builder
+                        .comment("The upper limit of heat capacity of the input hatch. 0-1.7976931348623157E308. Default 1700")
+                        .worldRestart()
+                        .defineInRange("inputHatchMaxHeat", 1700, 0, Double.MAX_VALUE);
+                INPUT_HATCH_FLUID_CAPACITY = builder
+                        .comment("The fluid capacity of the input hatch")
+                        .worldRestart()
+                        .defineInRange("inputHatchFluidCapacity", 10000, 0, Integer.MAX_VALUE);
+                INPUT_HATCH_ENERGY_CAPACITY = builder
+                        .comment("The internal energy capacity of the input hatch.")
+                        .worldRestart()
+                        .defineInRange("inputHatchEnergyCapacity", 150000, 1, Integer.MAX_VALUE);
 
                 //#####Tools Start#####
                 builder.pop(2).push("tools.laser_controller_item");
@@ -344,6 +447,13 @@ public class DSConfig {
                         .comment("The amount of energy that a single use of the Laser Controller Item consumes. 0-2147483647. Default 100")
                         .worldRestart()
                         .defineInRange("laserControllerItemChargeRate", 100, 0, Integer.MAX_VALUE);
+
+                //######Constructs Start#####
+                builder.pop(2).push("constructs.heat_sink");
+                CONSTRUCT_HEAT_SINK_MULT = builder
+                        .comment("The multiplier applied to laser cooldowns when the Heat Sink is an active part of the Dyson Sphere")
+                        .defineInRange("heatSinkCooldownMult", 0.5, 0, 1);
+
 
                 //#####Grappling Hooks Start#####
                 builder.pop(2).push("grappling_hooks.hooks.smart_alloy");
@@ -648,7 +758,7 @@ public class DSConfig {
                         .comment("Wether the Heat Overly Gui is visible when looking at a heated tile entity. Default: true")
                         .define("guiHeatOverlayEnabled", true);
                 GUI_ORBITAL_LASER_ENABLED = builder
-                        .comment("Wether the Orbital Laser Gui is visible when wearing a Orbital Laser Controller. Note the Controller is unusable without. Default: true")
+                        .comment("Wether the Orbital Laser Gui is visible when wearing an Orbital Laser Controller. Note the Controller is unusable without. Default: true")
                         .define("guiOrbitalLaserEnabled", true);
 
                 return builder.build();
@@ -661,6 +771,8 @@ public class DSConfig {
         public static boolean GUI_HEAT_OVERLAY_ENABLED_VALUE;
         public static boolean GUI_ORBITAL_LASER_ENABLED_VALUE;
 
+        public static float CONSTRUCT_HEAT_SINK_MULT_VALUE;
+
 
         @SubscribeEvent
         static void onLoad(final ModConfigEvent event) {
@@ -669,12 +781,17 @@ public class DSConfig {
                 if(event.getConfig().getType().equals(Type.COMMON)){
                         DYSON_SPHERE_DIM_BLACKLIST_VALUE = ((List<String>) DYSON_SPHERE_DIM_BLACKLIST.get());
                         DYSON_SPHERE_IS_WHITELIST_VALUE = DYSON_SPHERE_IS_WHITELIST.get();
+                        DysonSphereContainer.STABILITY_MULT = DYSON_SPHERE_STABILITY_MULT.get().floatValue();
+                        DysonSphereContainer.MAX_BREAK_COUNT = DYSON_SPHERE_MAX_BREAK_COUNT.get();
+                        DysonSphereContainer.DS_LOG_LENGTH = DYSON_SPHERE_LOG_LENGTH.get();
+                        DysonSphereContainer.DS_MAX_COMPLETION = DYSON_SPHERE_MAX_COMPLETION.get().floatValue();
                         
                         HeatHandler.HEAT_AMBIENT = GENERAL_HEAT_AMBIENT.get();
 
                         LaserStrikeEntity.ENERGY_MULT = GENERAL_LASER_ENERGY_MULT.get();
 
                         DSEnergyReceiverTile.maxHeat = DS_ENERGY_RECEIVER_MAX_HEAT.get();
+                        DSEnergyReceiverTile.heatConversionRate = DS_ENERGY_RECEIVER_CONVERSION_RATE.get().floatValue();
 
                         HeatExchangerTile.maxHeat = HEAT_EXCHANGER_MAX_HEAT.get();
                         HeatExchangerTile.fluidCapacity = HEAT_EXCHANGER_FLUID_CAPACITY.get();
@@ -686,8 +803,18 @@ public class DSConfig {
 
                         HeatPipeTile.maxHeat = HEAT_PIPE_MAX_HEAT.get();
 
-                        RailgunTile.baseLaunchEnergy = RAILGUN_LAUNCH_ENERGY.get();
+                        HeatConverterTile.MAX_HEAT = HEAT_CONVERTER_MAX_HEAT.get();
+                        HeatConverterTile.ENERGY_CAPACITY = HEAT_CONVERTER_ENERGY_CAPACITY.get();
+                        HeatConverterTile.CONVERSION_RATE = HEAT_CONVERTER_CONVERSION_RATE.get().floatValue();
+                        HeatConverterTile.BASE_WORK_RATE = HEAT_CONVERTER_WORK_RATE.get().floatValue();
+                        HeatConverterTile.BASE_HEAT = HEAT_CONVERTER_BASE_HEAT.get();
+
                         RailgunTile.energyCapacity = RAILGUN_ENERGY_CAPACITY.get();
+
+                        OreSpireTile.CAPACITY = ORE_SPIRE_CAPACITY.get();
+
+                        EnergyConverterTile.ENERGY_CAPACITY = ENERGY_CONVERTER_ENERGY_CAPACITY.get();
+                        EnergyConverterTile.CONVERSION_RATE = ENERGY_CONVERTER_CONVERSION_RATE.get();
 
                         LaserControllerTile.energyUsage = LASER_CONTROLLER_TILE_ENERGY_USAGE.get();
                         LaserControllerTile.energyCapacity = LASER_CONTROLLER_TILE_ENERGY_CAPACITY.get();
@@ -703,9 +830,22 @@ public class DSConfig {
                         LaserPatternControllerTile.energyCapacity = LASER_PATTERN_CONTROLLER_CAPACITY.get();
                         LaserPatternControllerTile.encodeEnergyUsage = LASER_PATTERN_CONTROLLER_USE.get();
 
+                        ListenerTile.energyCapacity = LISTENER_ENERGY_CAPACITY.get();
+                        ListenerTile.workDuration = LISTENER_WORK_DURATION.get();
+                        ListenerTile.energyToConsume = LISTENER_ENERGY_USAGE.get();
+                        ListenerTile.consumptionChance = LISTENER_CONSUMPTION_CHANCE.get().floatValue();
+
+                        CargoReceiverTile.fluidCapacity = CARGO_RECEIVER_FLUID_CAPACITY.get();
+
+                        InputHatchTile.MAX_HEAT = INPUT_HATCH_MAX_HEAT.get();
+                        InputHatchTile.Energy.energyCapacity = INPUT_HATCH_ENERGY_CAPACITY.get();
+                        InputHatchTile.Fluid.fluidCapacity = INPUT_HATCH_FLUID_CAPACITY.get();
+
                         LaserControllerItem.capacity = LASER_CONTROLLER_ITEM_CAPACITY.get();
                         LaserControllerItem.maxInput = LASER_CONTROLLER_ITEM_CHARGE_RATE.get();
                         LaserControllerItem.usage = LASER_CONTROLLER_ITEM_USAGE.get();
+
+                        CONSTRUCT_HEAT_SINK_MULT_VALUE = CONSTRUCT_HEAT_SINK_MULT.get().floatValue();
 
                         GrapplingHookHookItem.TYPE.SMART_ALLOY.count = GRAPPLING_HOOK_HOOK_SMART_ALLOY_COUNT.get();
                         GrapplingHookHookItem.TYPE.SMART_ALLOY.gravity = GRAPPLING_HOOK_HOOK_SMART_ALLOY_GRAVITY.get().floatValue();
@@ -774,12 +914,6 @@ public class DSConfig {
                         GrapplingHookChainRope.MAX_DISTANCE = GRAPPLING_HOOK_ROPE_CHAIN_MAX_DISTANCE.get().floatValue();
                         GrapplingHookChainRope.WINCH_FORCE = GRAPPLING_HOOK_ROPE_CHAIN_WINCH_FORCE.get().floatValue();
                         GrapplingHookChainRope.GRAVITY = GRAPPLING_HOOK_ROPE_CHAIN_GRAVITY.get().floatValue();
-
-                        CapsuleSolarItem.energyProvided = SOLAR_CAPSULE_ENERGY_PROVIDED.get();
-                        CapsuleSolarItem.completionProgress = SOLAR_CAPSULE_COMPLETION.get().floatValue();
-                        
-                        CapsuleLaserItem.energyProvided = -LASER_CAPSULE_ENERGY_CONSUMED.get();
-                        CapsuleLaserItem.completionProgress = LASER_CAPSULE_COMPLETION.get().floatValue();
 
                         DysonSphere.LOGGER.info("Common Config loaded!");
                 }

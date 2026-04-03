@@ -1,0 +1,24 @@
+{
+    "name": "Deep Listener",
+    "icon": "dysonsphere:listener_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "The $(item)Deep Listener$() uses the radiation and noise of the universe captured in echo shards to brute-force lost patterns and forgotten information."
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "dysonsphere:listener_block",
+            "text": "$(o)Somewhere out there the truth lies. Just listen closely...$()"
+        },
+        {
+            "type": "patchouli:text",
+            "text": "The input recipe needs to be equal to the recreation recipe of the desired output. Replacing the targeted item itself with an $(item)Whisper of the Universe$(). An large amount of $(item)Whispers of the Universe$() will be consumed in the process."
+        },
+        {
+            "type": "patchouli:text",
+            "text": "If the recipe is not unique the created output will be random. If the recipe is invalid all material is lost without creating an output. If the Listener looses energy while working it has to restart at the beginning."
+        }
+    ]
+}

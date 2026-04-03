@@ -27,6 +27,7 @@ public class DSComponentCommand {
         dispatcher.register(Commands.literal("dysonsphere").requires((req) -> {
             return req.hasPermission(2);//Same as weather, no idea what it means
         })
+        .then(Commands.literal("part")
         .then(Commands.literal("add").then(Commands.argument("DSPart", ItemArgument.item(context)).executes((command) -> {
             return add(command.getSource(), ItemArgument.getItem(command, "DSPart").getItem(), 1);
         })
@@ -47,22 +48,24 @@ public class DSComponentCommand {
         }).then(Commands.argument("DSPart", ItemArgument.item(context)).executes((command) -> {
             return list(command.getSource(), ItemArgument.getItem(command, "DSPart").getItem());
         })))
-        );
+        .then(Commands.literal("reset").then(Commands.literal("yesIWantToWipeTheDysonSphere").executes((command) -> {
+            return reset(command.getSource());
+        })))
+        ));
     }
 
     private static int list(CommandSourceStack source, Item item){
-        Map<Item, Integer> parts = source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).map((dysonSphere) -> {
+        Map<Item, Long> parts = source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).map((dysonSphere) -> {
             return dysonSphere.getDysonSphereParts();
         }).orElse(ImmutableMap.of());
         if(parts.isEmpty()){
             source.sendSuccess(() -> {
                 return Component.translatable("commands.dysonsphere.list_empty");
             }, true);
-        }
-        if(item != null){
+        } else if(item != null){
             source.sendSuccess(() -> {
                 return Component.translatable("commands.dysonsphere.list").append(Component.literal("\n"))
-                .append(item.getDefaultInstance().getDisplayName()).append(Component.literal(" : " + parts.getOrDefault(item, 0)));
+                .append(item.getDefaultInstance().getDisplayName()).append(Component.literal(" : " + parts.getOrDefault(item, 0l)));
             }, true);
         } else {
             MutableComponent msg = Component.translatable("commands.dysonsphere.list");
@@ -81,9 +84,10 @@ public class DSComponentCommand {
     private static int add(CommandSourceStack source, Item item, int count){
         ItemStack defaultStack = item.getDefaultInstance();
         int added = source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).map((dysonsphere) -> {
-            int i = count;
-            while (dysonsphere.addDysonSpherePart(defaultStack, false) && --i > 0); //prevents overfilling and allows counts bigger then maxStackSize
-            return count - i;
+            // int i = count;
+            // while (dysonsphere.addDysonSpherePart(defaultStack, false) && --i > 0); //prevents overfilling and allows counts bigger then maxStackSize
+            // return count - i;
+            return dysonsphere.addDysonSpherePartBulk(defaultStack, count);
         }).orElse(0);
         if(added != 0){
             source.sendSuccess(() -> {
@@ -98,9 +102,10 @@ public class DSComponentCommand {
     private static int remove(CommandSourceStack source, Item item, int count){
         ItemStack defaultStack = item.getDefaultInstance();
         int removed = source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).map((dysonsphere) -> {
-            int i = count;
-            while (dysonsphere.removeDysonSpherePart(defaultStack, false) && --i > 0);
-            return count - i;
+            // int i = count;
+            // while (dysonsphere.removeDysonSpherePart(defaultStack, false) && --i > 0);
+            // return count - i;
+            return dysonsphere.removeDysonSpherePartBulk(defaultStack, count);
         }).orElse(0);
         if(removed != 0){
             source.sendSuccess(() -> {
@@ -117,7 +122,7 @@ public class DSComponentCommand {
 
         //add or remove as needed
         if(source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).map((dysonsphere) -> {
-            int diff = count - dysonsphere.getDysonSpherePartCount(item);
+            long diff = count - dysonsphere.getDysonSpherePartCount(item);
             while(diff > 0 && dysonsphere.addDysonSpherePart(defaultStack, false)){//diff > 0 if we have not enough parts, so add until then
                 diff--;
             }
@@ -134,5 +139,12 @@ public class DSComponentCommand {
         }
 
         return count;
+    }
+
+    private static int reset(CommandSourceStack source){
+        source.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
+            dysonsphere.resetDysonSphereParts();
+        });
+        return 0;
     }
 }

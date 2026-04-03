@@ -1,0 +1,22 @@
+{
+    "name": "Orbital Delivery",
+    "icon": "dysonsphere:cargo_receiver_block",
+    "category": "dysonsphere:machines",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "Use $(thing)constructs$() of the $(thing)Dyson Sphere$() to fulfill cargo demands. The requests need a certain amount of Dyson Sphere energy dedicated to them, once reached a cargo drop will land in the receptor making the request."
+        },
+        {
+            "type": "dysonsphere:laser_recipe",
+            "recipe": "dysonsphere:laser_crafting/cargo_receiver_block",
+            "text": "Keep the sky clear and prepare for impact"
+        },
+        {
+            "type": "patchouli:relations",
+            "entries": [
+                "dysonsphere:concepts/construct"
+            ]
+        }
+    ]
+}

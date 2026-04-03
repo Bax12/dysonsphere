@@ -1,12 +1,9 @@
 package de.bax.dysonsphere.gui.components;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.fluid.FluidTankCustom;
 import de.bax.dysonsphere.gui.BaseGui;
 import de.bax.dysonsphere.util.AssetUtil;

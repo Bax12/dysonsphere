@@ -9,11 +9,11 @@ import net.minecraft.network.chat.Component;
 
 public abstract class BaseDisplay {
     
-    protected final int xPos;
-    protected final int yPos;
+    public int xPos;
+    public int yPos;
 
-    protected int height = 85;
-    protected int width = 21;
+    public int height = 85;
+    public int width = 21;
 
     public BaseDisplay(int x, int y){
         this.xPos = x;

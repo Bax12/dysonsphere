@@ -1,11 +1,11 @@
 {
-    "name": "Orbital Uplink Bracelet",
+    "name": "Orbital Uplink Bracer",
     "icon": "dysonsphere:laser_controller",
     "category": "dysonsphere:tools",
     "pages": [
         {
             "type": "patchouli:text",
-            "text": "The $(item)Orbital Uplink Bracelet$() is used to control $(thing)Orbital Lasers$().$(br)It needs to be charged with $(thing)RF$() and to be configured with $(item)Orbital Laser Patterns$(). The Patterns need to be configured in a $(item)Laser Pattern Controller Terminal$() before they can be used."
+            "text": "The $(item)Orbital Uplink Bracer$() is used to control $(thing)Orbital Lasers$().$(br)It needs to be charged with $(thing)RF$() and to be configured with $(item)Orbital Laser Patterns$(). The Patterns need to be configured in a $(item)Laser Pattern Controller Terminal$() before they can be used."
         },
         {
             "type": "patchouli:crafting",

@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
+
 import de.bax.dysonsphere.advancements.ModAdvancements;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
+import de.bax.dysonsphere.compat.ModCompat;
+import de.bax.dysonsphere.compat.aaaparticle.AAAParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -46,6 +50,8 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
     protected float homingArea = 10f;
     protected float homingSpeed = 1f;
 
+    // protected List<Runnable> destroyListener = new ArrayList<>();
+
 
     protected LivingEntity owner;
 
@@ -81,11 +87,11 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
             this.discard();
         }
         if(isStriking()){
-            moveToSurface();
             if(isHoming()){
                 //move towards nearest entity by homingSpeed, running on client and server prevents stuttering movement
-                if(homingTarget == null || homingTarget.isDeadOrDying()){
-                    homingTarget = level().getNearestEntity(LivingEntity.class, TargetingConditions.forCombat(), owner, this.getX(), this.getY(), this.getZ(), new AABB(this.getPosition(1).add(homingArea, level().getMaxBuildHeight(), homingArea), this.getPosition(1f).subtract(homingArea, homingArea, homingArea)));
+                // if(homingTarget == null || homingTarget.isDeadOrDying()){
+                if((this.lifetime - startStriking) % 10 == 0){
+                    homingTarget = level().getNearestEntity(LivingEntity.class, TargetingConditions.forCombat(), owner, this.getX(), this.getY() + 50, this.getZ(), new AABB(this.getPosition(1).add(homingArea, level().getMaxBuildHeight(), homingArea), this.getPosition(1f).subtract(homingArea, homingArea, homingArea)));
                 } 
                 if(homingTarget != null) {
                     Vec3 distance = homingTarget.getPosition(1f).subtract(this.getPosition(1f));
@@ -94,13 +100,15 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
                         homingTarget = null;
                     } else {
                         if(distance.lengthSqr() > homingSpeed){
-                            distance = distance.scale(homingSpeed * homingSpeed / distance.lengthSqr());
+                            distance = distance.normalize().scale(homingSpeed);
                         }
                         // this.move(MoverType.SELF, distance);
-                        this.setPos(this.getX() + distance.x, this.getY() + distance.y, this.getZ() + distance.z);
+                        this.setPos(this.getX() + distance.x, this.getY(), this.getZ() + distance.z);
+                        this.setDeltaMovement(distance.x, 0, distance.z);
                     }
                 }
             }
+            moveToSurface();
             if((this.lifetime - startStriking) % 10 == 0){
                 if(!level().isClientSide){
                     damageAOE();
@@ -114,8 +122,15 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
                     // }
                 }
             }
-            
+            if(ModCompat.isLoaded(ModCompat.MODID.AAA_PARTICLE) && this.lifetime - startStriking == 0){
+                AAAParticle.bindLaserEmitter(this);
+            }
         }
+        // if(isLingering()){
+        //     destroyListener.forEach((runner) -> {
+        //         runner.run();
+        //     });
+        // }
         lifetime++;
     }
 
@@ -123,7 +138,7 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
         Vec3 startPos = new Vec3(this.getX(), level().getMaxBuildHeight(), this.getZ());
         Vec3 endPos = new Vec3(this.getX(), level().getMinBuildHeight(), this.getZ());
         BlockHitResult hit = this.level().clip(new ClipContext(startPos, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-        this.setPos(this.getX(), hit.getLocation().y - 0.55f, this.getZ());
+        this.setPos(this.getX(), hit.getLocation().y, this.getZ());
     }
 
     protected void dealBlockDamage(){
@@ -131,7 +146,7 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
         if(this.blockDmg == 0)  return;
         float radius = Math.max(0.75f, (size / 10f) - 1f);
         
-        Stream<BlockPos> blocks = BlockPos.betweenClosedStream(new AABB(this.getX() + radius, this.getY() + 20, this.getZ() + radius, this.getX() - radius, this.getY(), this.getZ() -radius));
+        Stream<BlockPos> blocks = BlockPos.betweenClosedStream(new AABB(this.getX() + radius, this.getY() + 20, this.getZ() + radius, this.getX() - radius, this.getY()-1, this.getZ() -radius));
         
         
         
@@ -146,7 +161,7 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
                     if(tile != null){
                         Optional<ILaserReceiver> optionalReceptor = tile.getCapability(DSCapabilities.LASER_RECEIVER, Direction.UP).resolve();
                         if(optionalReceptor.isPresent()){
-                            optionalReceptor.get().receiveLaserEnergy((dmg * blockDmg * ENERGY_MULT));
+                            optionalReceptor.get().receiveLaserEnergy((dmg * blockDmg * size * ENERGY_MULT));
                             return;
                         }
                     }
@@ -319,8 +334,12 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
         return end;
     }
 
+    public int getStrikeTime(){
+        return startLingering - startStriking;
+    }
+
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(@Nonnull CompoundTag tag) {
         
         if(tag.contains("startAiming")){
             startAiming = tag.getInt("startAiming");
@@ -351,7 +370,7 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag tag) {
         tag.putInt("startAiming", startAiming);
         tag.putInt("startStriking", startStriking);
         tag.putInt("startLingering", startLingering);
@@ -431,6 +450,12 @@ public class LaserStrikeEntity extends Entity implements IEntityAdditionalSpawnD
     public LivingEntity getOwner() {
         return owner;
     }
+
+    // public void addDestroyListener(Runnable runner){
+    //     destroyListener.add(runner);
+    // }
+
+    
     
     
 

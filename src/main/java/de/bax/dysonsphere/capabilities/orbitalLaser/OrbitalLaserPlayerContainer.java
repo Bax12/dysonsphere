@@ -1,22 +1,24 @@
 package de.bax.dysonsphere.capabilities.orbitalLaser;
 
-import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.TreeMap;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.bax.dysonsphere.DSConfig;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.dsEnergyReciever.IDSEnergyReceiver;
 import de.bax.dysonsphere.capabilities.dysonSphere.IDysonSphereContainer;
-import de.bax.dysonsphere.items.ModItems;
+import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.network.LaserCooldownSyncPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
+import de.bax.dysonsphere.tags.DSTags;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -54,51 +56,65 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
 
     public class OrbitalLaserContainer implements IOrbitalLaserContainer, IDSEnergyReceiver {
 
+        public static record LaserCooldown(int gameTick, int count) {};
 
-        protected Map<Integer, Integer> laserCooldowns = new TreeMap<Integer, Integer>();//key: gameTick to be available again. value: amount of lasers on this cooldown.
-        protected int dsLaserCount = -1;
+        protected PriorityQueue<LaserCooldown> laserCooldowns = new PriorityQueue<LaserCooldown>(10, (arg0, arg1) -> Integer.compare(arg0.gameTick(), arg1.gameTick()));//key: gameTick to be available again. value: amount of lasers on this cooldown.
+        protected int dsLaserAvailableCount = -1;
+        protected int dsLaserCooldownCount = -1;
         protected String currentSequence = "";
+        protected boolean hasHeatSink;
 
         protected LazyOptional<IDSEnergyReceiver> lazyDSReceiver = LazyOptional.of(() -> this);
 
+        
+
 
         public OrbitalLaserContainer(){
-            if(!containingEntity.level().isClientSide){
+            if(!containingEntity.level().isClientSide()){
                 containingEntity.level().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
-                    dsLaserCount = dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(ModItems.CAPSULE_LASER.get()) : 0;
+                    dsLaserAvailableCount = (int) (dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0);
                     dysonsphere.registerEnergyReceiver(lazyDSReceiver);
                 });
             }
         }
 
-
+        @Override
         public int getLasersOnCooldown(int gameTick){
-            laserCooldowns.keySet().removeIf((key) -> {
-                return key <= gameTick;
-            });
-            return laserCooldowns.values().stream().mapToInt(Integer::intValue).sum();
+            tickCooldowns(gameTick);
+            return dsLaserCooldownCount != -1 ? dsLaserCooldownCount : (dsLaserCooldownCount = laserCooldowns.stream().mapToInt(LaserCooldown::count).sum());
+        }
+
+        protected void tickCooldowns(int gameTick){
+            LaserCooldown cooldown;
+            while ((cooldown = laserCooldowns.peek()) != null && cooldown.gameTick() <= gameTick) {
+                laserCooldowns.poll();
+                dsLaserCooldownCount = -1; //at least on laser is of cooldown, so recalc the count.
+            }
         }
 
         @Override
         public void putLasersOnCooldown(int gameTick, int laserCount, int cooldownDuration) {
-            laserCooldowns.put(gameTick + cooldownDuration, laserCount);
+            laserCooldowns.add(new LaserCooldown(gameTick + (hasHeatSink ? (int) (cooldownDuration * DSConfig.CONSTRUCT_HEAT_SINK_MULT_VALUE) : cooldownDuration), laserCount));
+
+            dsLaserCooldownCount = -1; //at least on laser more is on cooldown, so recalc the count.
+
             //trigger client sync, only Serverside has ServerPlayer
             if(containingEntity instanceof ServerPlayer serverPlayer){
-                ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),new LaserCooldownSyncPackage(laserCooldowns, gameTick, dsLaserCount));
+                ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new LaserCooldownSyncPackage(laserCooldowns, gameTick, dsLaserAvailableCount));
             }
         }
 
         public CompoundTag save(int gameTick){
             CompoundTag tag = new CompoundTag();
             CompoundTag laserTag = new CompoundTag();
-            laserCooldowns.forEach((key, value) -> {
-                int ticksRemaining = key - gameTick;
+            laserCooldowns.forEach((cooldown) -> {
+                int ticksRemaining = cooldown.gameTick() - gameTick;
                 if(ticksRemaining > 0){
-                    laserTag.putInt(Integer.toString(ticksRemaining), value);
+                    laserTag.putInt(Integer.toString(ticksRemaining), cooldown.count());
                 }
             });
             tag.put("lasers", laserTag);
-            tag.putInt("dsLasers", dsLaserCount);
+            tag.putInt("dsLasers", dsLaserAvailableCount);
             return tag;
         }
 
@@ -109,41 +125,39 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
                 laserTag.getAllKeys().forEach((keyName) -> {
                     int key = Integer.parseInt(keyName);
                     int value = laserTag.getInt(keyName);
-                    laserCooldowns.put(key, value);
+                    laserCooldowns.add(new LaserCooldown(key, value));
                 });
             }
             if(!containingEntity.level().isClientSide){
                 containingEntity.level().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((dysonsphere) -> {
-                    dsLaserCount = dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(ModItems.CAPSULE_LASER.get()) : 0;
+                    dsLaserAvailableCount = (int) (dysonsphere.getDysonSphereEnergy() >= 0 ? dysonsphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0);
                     dysonsphere.registerEnergyReceiver(lazyDSReceiver);
                 });
             } else {
-                dsLaserCount = tag.getInt("dsLasers");
+                dsLaserAvailableCount = tag.getInt("dsLasers");
             }
         }
 
         @Override
         public int getTimeToNextCooldown(int gameTick) {
-            laserCooldowns.keySet().removeIf((key) -> {
-                return key <= gameTick;
-            });
-            return laserCooldowns.size() > 0 ? laserCooldowns.keySet().iterator().next() - gameTick : 0;
+            tickCooldowns(gameTick);
+            return laserCooldowns.size() > 0 ? laserCooldowns.peek().gameTick() - gameTick : 0;
         }
 
         @Override
         public int getLasersAvailable(int gameTick) {
             int onCooldown = getLasersOnCooldown(gameTick);
-            return Math.max(0, dsLaserCount - onCooldown);
+            return Math.max(0, dsLaserAvailableCount - onCooldown);
         }
 
         @Override
         public void setDysonSphereLaserCount(int laserCount) {
-            this.dsLaserCount = laserCount;
+            this.dsLaserAvailableCount = laserCount;
         }
 
         @Override
         public int getDysonSphereLaserCount() {
-            return dsLaserCount;
+            return dsLaserAvailableCount;
         }
 
         @Override
@@ -168,13 +182,14 @@ public class OrbitalLaserPlayerContainer implements ICapabilitySerializable<Comp
 
         @Override
         public void handleDysonSphereChange(IDysonSphereContainer dysonSphere) {
-            int count = dysonSphere.getDysonSphereEnergy() >= 0 ? dysonSphere.getDysonSpherePartCount(ModItems.CAPSULE_LASER.get()) : 0;//return 0 if dysonsphere is overloaded, not using utaisation as we ignore the wordly consumers for our lasers
-            if(count != dsLaserCount){
-                dsLaserCount = count;
+            int count = (int) (dysonSphere.getDysonSphereEnergy() >= 0 ? dysonSphere.getDysonSpherePartCount(Ingredient.of(DSTags.itemCapsuleLaser)) : 0);//return 0 if dysonsphere is overloaded, not using utilization as we ignore the worldly consumers for our lasers
+            if(count != dsLaserAvailableCount){
+                dsLaserAvailableCount = count;
                 if(containingEntity instanceof ServerPlayer serverPlayer){
-                    ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),new LaserCooldownSyncPackage(laserCooldowns, containingEntity.tickCount, dsLaserCount));
+                    ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer),new LaserCooldownSyncPackage(laserCooldowns, containingEntity.tickCount, dsLaserAvailableCount));
                 }
             }
+            hasHeatSink = dysonSphere.getEnabledConstructs().contains(ModConstructs.HEAT_SINK.get());
         }
 
         @Override

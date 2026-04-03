@@ -1,0 +1,84 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:circuits"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "item": "dysonsphere:component_smart_alloy"
+          },
+          "S": {
+            "item": "dysonsphere:sensor_unit"
+          },
+          "c": {
+            "tag": "forge:circuits"
+          },
+          "i": {
+            "tag": "forge:ingots/iron"
+          },
+          "s": {
+            "item": "minecraft:calibrated_sculk_sensor"
+          }
+        },
+        "pattern": [
+          "CSC",
+          "csc",
+          "ici"
+        ],
+        "result": {
+          "item": "dysonsphere:listener_block"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:tag_empty",
+          "tag": "forge:circuits"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "item": "dysonsphere:component_smart_alloy"
+          },
+          "S": {
+            "item": "dysonsphere:sensor_unit"
+          },
+          "c": {
+            "tag": "forge:coils/copper"
+          },
+          "i": {
+            "tag": "forge:ingots/iron"
+          },
+          "s": {
+            "item": "minecraft:calibrated_sculk_sensor"
+          }
+        },
+        "pattern": [
+          "CSC",
+          "csc",
+          "ici"
+        ],
+        "result": {
+          "item": "dysonsphere:listener_block"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

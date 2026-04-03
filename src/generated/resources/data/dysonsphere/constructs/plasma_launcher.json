@@ -1,0 +1,28 @@
+{
+  "Components": [
+    {
+      "Component": {
+        "tag": "dysonsphere:space_capsules/solar"
+      },
+      "Foundation": 200,
+      "Required": 5000
+    },
+    {
+      "Component": {
+        "tag": "dysonsphere:space_capsules/structure"
+      },
+      "Foundation": 100,
+      "Required": 500
+    },
+    {
+      "Component": {
+        "tag": "dysonsphere:space_capsules/laser"
+      },
+      "Foundation": 100,
+      "Required": 500
+    }
+  ],
+  "Energy": -10000,
+  "Stability": 0.85,
+  "Tier": 1
+}

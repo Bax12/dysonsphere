@@ -78,7 +78,7 @@ public class DSEnergyReceiverGui extends BaseGui<DSEnergyReceiverContainer> {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         heat.drawOverlay(guiGraphics, mouseX, mouseY);
         if(mouseX >= this.leftPos + 73 && mouseY >= this.topPos + 29 && mouseX < this.leftPos + 73 + 34 && mouseY < this.topPos + 29 + 34 && (!tile.canReceive())){

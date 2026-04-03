@@ -2,6 +2,8 @@ package de.bax.dysonsphere.datagen.server;
 
 import java.util.concurrent.CompletableFuture;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nullable;
 
 import de.bax.dysonsphere.DysonSphere;
@@ -21,18 +23,27 @@ public class ItemTagGenerator extends ItemTagsProvider {
     }
 
     @Override
-    protected void addTags(Provider provider) {
+    protected void addTags(@Nonnull Provider provider) {
         tag(DSTags.itemCoil).add(ModItems.COIL_COPPER.get(), ModItems.COIL_IRON.get());
         tag(DSTags.itemCoilCopper).add(ModItems.COIL_COPPER.get());
         tag(DSTags.itemCoilIron).add(ModItems.COIL_IRON.get());
 
-        tag(DSTags.itemIngot).add(ModItems.INGOT_SMART_ALLOY.get());
+        tag(DSTags.itemIngot).add(ModItems.INGOT_SMART_ALLOY.get(), ModItems.INGOT_SENTIENT_ALLOY.get());
         tag(DSTags.itemIngotSmartAlloy).add(ModItems.INGOT_SMART_ALLOY.get());
+        tag(DSTags.itemIngotSentient).add(ModItems.INGOT_SENTIENT_ALLOY.get());
 
-        tag(DSTags.itemCapsule).add(ModItems.CAPSULE_SOLAR.get(), ModItems.CAPSULE_EMPTY.get(), ModItems.CAPSULE_LASER.get());
+        tag(DSTags.itemCapsule).add(ModItems.CAPSULE_SOLAR_0.get(), ModItems.CAPSULE_SOLAR_1.get(), ModItems.CAPSULE_SOLAR_2.get(), ModItems.CAPSULE_SOLAR_3.get(),
+            ModItems.CAPSULE_LASER_0.get(), ModItems.CAPSULE_LASER_1.get(), ModItems.CAPSULE_LASER_2.get(), ModItems.CAPSULE_LASER_3.get(),
+            ModItems.CAPSULE_STRUCTURE_0.get(), ModItems.CAPSULE_STRUCTURE_1.get(), ModItems.CAPSULE_STRUCTURE_2.get(), ModItems.CAPSULE_STRUCTURE_3.get());
         tag(DSTags.itemCapsuleEmpty).add(ModItems.CAPSULE_EMPTY.get());
-        tag(DSTags.itemCapsuleSolar).add(ModItems.CAPSULE_SOLAR.get());
-        tag(DSTags.itemCapsuleLaser).add(ModItems.CAPSULE_LASER.get());
+        tag(DSTags.itemCapsuleSolar).add(ModItems.CAPSULE_SOLAR_0.get(), ModItems.CAPSULE_SOLAR_1.get(), ModItems.CAPSULE_SOLAR_2.get(), ModItems.CAPSULE_SOLAR_3.get());
+        tag(DSTags.itemCapsuleLaser).add(ModItems.CAPSULE_LASER_0.get(), ModItems.CAPSULE_LASER_1.get(), ModItems.CAPSULE_LASER_2.get(), ModItems.CAPSULE_LASER_3.get());
+        tag(DSTags.itemCapsuleStructure).add(ModItems.CAPSULE_STRUCTURE_0.get(), ModItems.CAPSULE_STRUCTURE_1.get(), ModItems.CAPSULE_STRUCTURE_2.get(), ModItems.CAPSULE_STRUCTURE_3.get());
+        tag(DSTags.itemCapsuleT0).add(ModItems.CAPSULE_LASER_0.get(), ModItems.CAPSULE_SOLAR_0.get(), ModItems.CAPSULE_STRUCTURE_0.get());
+        tag(DSTags.itemCapsuleT1).add(ModItems.CAPSULE_LASER_1.get(), ModItems.CAPSULE_SOLAR_1.get(), ModItems.CAPSULE_STRUCTURE_1.get());
+        tag(DSTags.itemCapsuleT2).add(ModItems.CAPSULE_LASER_2.get(), ModItems.CAPSULE_SOLAR_2.get(), ModItems.CAPSULE_STRUCTURE_2.get());
+        tag(DSTags.itemCapsuleT3).add(ModItems.CAPSULE_LASER_3.get(), ModItems.CAPSULE_SOLAR_3.get(), ModItems.CAPSULE_STRUCTURE_3.get());
+        
 
         tag(DSTags.itemGrapplingHookComponent).add(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get(), ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2.get(), ModItems.GRAPPLING_HOOK_ENGINE_MANUAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.get(), ModItems.GRAPPLING_HOOK_ENGINE_STEAM.get(), ModItems.GRAPPLING_HOOK_HOOK_BLAZE.get(), ModItems.GRAPPLING_HOOK_HOOK_SLIME.get(), ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY.get(), ModItems.GRAPPLING_HOOK_HOOK_WOOD.get(), ModItems.GRAPPLING_HOOK_ROPE_ENDER.get(), Items.CHAIN, Items.STRING, Items.TRIPWIRE_HOOK);
         tag(DSTags.itemGrapplingHookHook).add(ModItems.GRAPPLING_HOOK_HOOK_BLAZE.get(), ModItems.GRAPPLING_HOOK_HOOK_SLIME.get(), ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY.get(), ModItems.GRAPPLING_HOOK_HOOK_WOOD.get(), Items.TRIPWIRE_HOOK);
@@ -43,6 +54,11 @@ public class ItemTagGenerator extends ItemTagsProvider {
         tag(DSTags.curioBelt).add(ModItems.GRAPPLING_HOOK_HARNESS.get());
         tag(DSTags.curioHands).add(ModItems.LASER_CONTROLLER.get());
         tag(DSTags.curioBracelet).add(ModItems.LASER_CONTROLLER.get());
+        tag(DSTags.curioAny).add(ModItems.POCKET_DYNAMO.get(), ModItems.POCKET_STAR.get());
+
+        tag(DSTags.itemWrench).add(ModItems.WRENCH.get());
+        tag(DSTags.itemTool).add(ModItems.WRENCH.get());
+        tag(DSTags.itemToolWrench).add(ModItems.WRENCH.get());
     }
     
     

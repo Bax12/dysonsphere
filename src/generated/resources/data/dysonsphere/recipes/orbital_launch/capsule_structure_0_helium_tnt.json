@@ -1,0 +1,21 @@
+{
+  "type": "dysonsphere:orbital_launch",
+  "baseEnergy": 8000,
+  "extraInputs": [
+    {
+      "item": "minecraft:tnt"
+    }
+  ],
+  "fluidInputs": [
+    {
+      "amount": 50,
+      "fluid": "forge:helium"
+    }
+  ],
+  "input": {
+    "item": "dysonsphere:capsule_structure_0"
+  },
+  "launchStack": {
+    "item": "dysonsphere:capsule_structure_0"
+  }
+}

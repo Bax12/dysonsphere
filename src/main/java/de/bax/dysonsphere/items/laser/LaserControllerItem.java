@@ -2,6 +2,8 @@ package de.bax.dysonsphere.items.laser;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,79 +80,38 @@ public class LaserControllerItem extends Item {
 
 
     @Override
-    public void appendHoverText(ItemStack stack, @javax.annotation.Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        // var format = NumberFormat.getInstance(Locale.ENGLISH);
+    public void appendHoverText(@Nonnull ItemStack stack, @javax.annotation.Nullable Level level, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flag) {
         stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
             tooltip.add(Component.translatable("tooltip.dysonsphere.energy_display", AssetUtil.FLOAT_FORMAT.format(energy.getEnergyStored()), AssetUtil.FLOAT_FORMAT.format(energy.getMaxEnergyStored())));
         });
-        //todo replace with hud gui -- done
-        // stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((container) -> {
-        //     container.getStackInSlot(0).getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((pattern) -> {
-        //         tooltip.add(Component.literal("Pattern0: " + pattern.getPattern().getCallInSequence()));    
-        //     });
-        // });
-
-        // Minecraft.getInstance().player.getCapability(DSCapabilities.ORBITAL_LASER).ifPresent((laser) -> {
-        //     tooltip.add(Component.literal("OnCooldown: " + laser.getLasersOnCooldown(Minecraft.getInstance().player.tickCount)));
-        // });
-
-        // tooltip.add(Component.literal("Stacks: " + stack.getOrCreateTagElement("inventory").getAsString()));
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if(!level.isClientSide){
-            // if(player.isCrouching()){
-                //feed itemstack into networkhooks.openscreen additionalData
-                NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
-                    new LaserControllerInventoryContainer(containerId, playerInventory, stack), Component.translatable("container.dysonsphere.laser_controller_inventory")),
-                    data -> data.writeItem(stack));
-            // } else {
-            //     stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
-            //         stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((inventory) -> {
-            //             if(energy.getEnergyStored() >= usage){
-            //                 energy.extractEnergy(usage, false);
-            //                 ItemStack patternStack = inventory.getStackInSlot(0);
-            //                 if(!patternStack.isEmpty()){
-            //                     patternStack.getCapability(DSCapabilities.ORBITAL_LASER_PATTERN_CONTAINER).ifPresent((patternContainer) -> {
-            //                         ItemStack targetDesignator = new ItemStack(ModItems.TARGET_DESIGNATOR.get());
-            //                         if(hand.equals(InteractionHand.MAIN_HAND)) {
-            //                             TargetDesignatorItem.setContainedStack(targetDesignator, stack);
-            //                         } else {
-            //                             ItemStack mainHandStack = player.getMainHandItem();
-            //                             TargetDesignatorItem.setContainedStack(targetDesignator, mainHandStack);
-            //                         }
-            //                         TargetDesignatorItem.setOrbitalStrikePattern(targetDesignator, patternContainer.getPattern());
-            //                         player.setItemInHand(InteractionHand.MAIN_HAND, targetDesignator);
-                                    
-                                    
-            //                     });
-            //                 }
-            //             }
-            //         });
-            //     });
-            // }
-            // player.getInventory().setChanged();
+            NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
+                new LaserControllerInventoryContainer(containerId, playerInventory, stack), Component.translatable("container.dysonsphere.laser_controller_inventory")),
+                data -> data.writeItem(stack));
         }
 
         return InteractionResultHolder.success(stack);
     }
 
     @Override
-    public boolean isBarVisible(ItemStack pStack) {
+    public boolean isBarVisible(@Nonnull ItemStack pStack) {
         return true;
     }
 
     @Override
-    public int getBarColor(ItemStack pStack) {
+    public int getBarColor(@Nonnull ItemStack pStack) {
         return 0xDD2222;
     }
 
     @Override
-    public int getBarWidth(ItemStack pStack) {
+    public int getBarWidth(@Nonnull ItemStack pStack) {
         return pStack.getCapability(ForgeCapabilities.ENERGY).map((energy) -> {
-            return (int) (13f * energy.getEnergyStored() / energy.getMaxEnergyStored());
+            return 13 * energy.getEnergyStored() / energy.getMaxEnergyStored();
         }).orElse(0);
     }
 

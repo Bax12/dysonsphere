@@ -2,6 +2,8 @@ package de.bax.dysonsphere;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -17,26 +19,38 @@ import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookStringRope;
 import de.bax.dysonsphere.capabilities.grapplingHook.GrapplingHookTripWireHook;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserPlayerContainer;
 import de.bax.dysonsphere.compat.ModCompat;
+import de.bax.dysonsphere.constructs.ModConstructs;
 import de.bax.dysonsphere.containers.ModContainers;
 import de.bax.dysonsphere.entities.ModEntities;
 import de.bax.dysonsphere.entityRenderer.GrapplingHookHarnessRenderLayer;
 import de.bax.dysonsphere.entityRenderer.GrapplingHookRenderer;
 import de.bax.dysonsphere.entityRenderer.LaserStrikeRenderer;
+import de.bax.dysonsphere.entityRenderer.ListenerRenderer;
+import de.bax.dysonsphere.entityRenderer.DeliveryDropRenderer;
 import de.bax.dysonsphere.entityRenderer.TargetDesignatorRenderer;
 import de.bax.dysonsphere.fluids.ModFluids;
+import de.bax.dysonsphere.gui.CargoReceiverGui;
 import de.bax.dysonsphere.gui.DSEnergyReceiverGui;
+import de.bax.dysonsphere.gui.DsControllerGui;
 import de.bax.dysonsphere.gui.GrapplingHookHarnessInventoryGui;
+import de.bax.dysonsphere.gui.HeatConverterGui;
 import de.bax.dysonsphere.gui.HeatExchangerGui;
 import de.bax.dysonsphere.gui.HeatGeneratorGui;
+import de.bax.dysonsphere.gui.InputHatchEnergyGui;
+import de.bax.dysonsphere.gui.InputHatchFluidGui;
+import de.bax.dysonsphere.gui.InputHatchParallelGui;
+import de.bax.dysonsphere.gui.InputHatchSerialGui;
 import de.bax.dysonsphere.gui.LaserControllerGui;
 import de.bax.dysonsphere.gui.LaserControllerInventoryGui;
 import de.bax.dysonsphere.gui.LaserPatternControllerGui;
 import de.bax.dysonsphere.gui.LaserPatternControllerInventoryGui;
+import de.bax.dysonsphere.gui.ListenerGui;
 import de.bax.dysonsphere.gui.ModHuds;
 import de.bax.dysonsphere.gui.RailgunGui;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.items.grapplingHook.GrapplingHookHarnessItem;
 import de.bax.dysonsphere.keybinds.ModKeyBinds;
+import de.bax.dysonsphere.network.DSLightSyncPackage;
 import de.bax.dysonsphere.network.ModPacketHandler;
 import de.bax.dysonsphere.recipes.ModRecipes;
 import de.bax.dysonsphere.sounds.ModSounds;
@@ -46,6 +60,7 @@ import de.bax.dysonsphere.tileRenderer.HeatExchangerRenderer;
 import de.bax.dysonsphere.tileRenderer.LaserControllerRenderer;
 import de.bax.dysonsphere.tileRenderer.LaserCrafterRenderer;
 import de.bax.dysonsphere.tileRenderer.LaserPatternControllerRenderer;
+import de.bax.dysonsphere.tileRenderer.OreSpireRenderer;
 import de.bax.dysonsphere.tileRenderer.RailgunRenderer;
 import de.bax.dysonsphere.tileentities.ModTiles;
 import net.minecraft.client.Minecraft;
@@ -57,6 +72,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -69,6 +85,7 @@ import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -80,6 +97,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.network.PacketDistributor;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(DysonSphere.MODID)
@@ -114,6 +132,7 @@ public class DysonSphere
         ModEntities.ENTITIES.register(modEventBus);
         ModRecipes.TYPES.register(modEventBus);
         ModRecipes.SERIALIZERS.register(modEventBus);
+        ModConstructs.CONSTRUCTS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -126,15 +145,26 @@ public class DysonSphere
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, DSConfig.getClientConfigSpec());
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DSConfig.getCommonConfigSpec());
-        ModPacketHandler.init();
+        
     }
 
     public void commonSetup(FMLCommonSetupEvent event) {
-
+        ModPacketHandler.init();
         ModCompat.init();
+        // ModConstructs.init();
 
         event.enqueueWork(() -> {
             ModAdvancements.register();
+        });
+    }
+
+    @SubscribeEvent
+    public void addReloadListener(AddReloadListenerEvent event){
+        event.addListener(new ResourceManagerReloadListener() {
+            @Override
+            public void onResourceManagerReload(@Nonnull ResourceManager pResourceManager) {
+                ModConstructs.load(pResourceManager);
+            }
         });
     }
 
@@ -145,7 +175,7 @@ public class DysonSphere
         ResourceKey<Level> dimension = event.getObject().dimension();
         if(dimension.equals(Level.OVERWORLD)){ 
             DysonSphere.LOGGER.info("Attaching Level Capability to {}", dimension.location());
-            event.addCapability(new ResourceLocation(DysonSphere.MODID, "dysonsphere"), new DysonSphereContainer());
+            event.addCapability(new ResourceLocation(DysonSphere.MODID, "dysonsphere"), new DysonSphereContainer(event.getObject()));
             event.addListener(() -> {
                 event.getObject().getCapability(DSCapabilities.DYSON_SPHERE).invalidate();
             });
@@ -200,7 +230,10 @@ public class DysonSphere
                 laser.putLasersOnCooldown(0, 0, 0);//call with zero laser to trigger sync
                 laser.getLasersAvailable(0);
             });
-            
+            event.getLevel().getCapability(DSCapabilities.DYSON_SPHERE).ifPresent((ds) -> {
+                //Sync the current light to the clients on join.
+                ModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new DSLightSyncPackage(ds));
+            });
         }
         
     }
@@ -215,24 +248,32 @@ public class DysonSphere
         });
     }
 
-
+    //this should probably be its own class. 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
+        @SuppressWarnings("null")
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
             event.enqueueWork(() -> {
                 MenuScreens.register(ModContainers.RAILGUN_CONTAINER.get(), RailgunGui::new);
                 MenuScreens.register(ModContainers.DS_ENERGY_RECEIVER_CONTAINER.get(), DSEnergyReceiverGui::new);
+                MenuScreens.register(ModContainers.DS_CONTROLLER_CONTAINER.get(), DsControllerGui::new);
+                MenuScreens.register(ModContainers.CARGO_RECEIVER_CONTAINER.get(), CargoReceiverGui::new);
+                MenuScreens.register(ModContainers.LISTENER_CONTAINER.get(), ListenerGui::new);
                 MenuScreens.register(ModContainers.HEAT_GENERATOR_CONTAINER.get(), HeatGeneratorGui::new);
                 MenuScreens.register(ModContainers.HEAT_EXCHANGER_CONTAINER.get(), HeatExchangerGui::new);
+                MenuScreens.register(ModContainers.HEAT_CONVERTER_CONTAINER.get(), HeatConverterGui::new);
                 MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER_CONTAINER.get(), LaserPatternControllerGui::new);
                 MenuScreens.register(ModContainers.LASER_CONTROLLER_INVENTORY_CONTAINER.get(), LaserControllerInventoryGui::new);
                 MenuScreens.register(ModContainers.LASER_PATTERN_CONTROLLER_INVENTORY_CONTAINER.get(), LaserPatternControllerInventoryGui::new);
                 MenuScreens.register(ModContainers.LASER_CONTROLLER_CONTAINER.get(), LaserControllerGui::new);
                 MenuScreens.register(ModContainers.GRAPPLING_HOOK_HARNESS_INVENTORY_CONTAINER.get(), GrapplingHookHarnessInventoryGui::new);
-
+                MenuScreens.register(ModContainers.INPUT_HATCH_SERIAL_CONTAINER.get(), InputHatchSerialGui::new);
+                MenuScreens.register(ModContainers.INPUT_HATCH_PARALLEL_CONTAINER.get(), InputHatchParallelGui::new);
+                MenuScreens.register(ModContainers.INPUT_HATCH_ENERGY_CONTAINER.get(), InputHatchEnergyGui::new);
+                MenuScreens.register(ModContainers.INPUT_HATCH_FLUID_CONTAINER.get(), InputHatchFluidGui::new);
 
                 // ItemProperties.register(ModItems.GRAPPLING_HOOK_HARNESS.get(), new ResourceLocation(MODID, "has_parts"), GrapplingHookHarnessItem.getItemPropertiesAllParts());
                 ItemProperties.register(ModItems.GRAPPLING_HOOK_HARNESS.get(), new ResourceLocation(MODID, "has_hook"), GrapplingHookHarnessItem.getItemPropertiesHook());
@@ -248,10 +289,13 @@ public class DysonSphere
             event.registerBlockEntityRenderer(ModTiles.LASER_CONTROLLER.get(), LaserControllerRenderer::new);
             event.registerBlockEntityRenderer(ModTiles.LASER_CRAFTER.get(), LaserCrafterRenderer::new);
             event.registerBlockEntityRenderer(ModTiles.HEAT_EXCHANGER.get(), HeatExchangerRenderer::new);
+            event.registerBlockEntityRenderer(ModTiles.LISTENER.get(), ListenerRenderer::new);
+            event.registerBlockEntityRenderer(ModTiles.ORE_SPIRE.get(), OreSpireRenderer::new);
 
             event.registerEntityRenderer(ModEntities.TARGET_DESIGNATOR.get(), TargetDesignatorRenderer::new);
             event.registerEntityRenderer(ModEntities.LASER_STRIKE.get(), LaserStrikeRenderer::new);
             event.registerEntityRenderer(ModEntities.GRAPPLING_HOOK.get(), GrapplingHookRenderer::new);
+            event.registerEntityRenderer(ModEntities.DELIVERY_DROP.get(), DeliveryDropRenderer::new);
         }
 
         @SubscribeEvent

@@ -6,7 +6,6 @@ import javax.annotation.Nonnull;
 
 import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.ModBlocks;
-import de.bax.dysonsphere.compat.ModCompat;
 import de.bax.dysonsphere.items.ModItems;
 import de.bax.dysonsphere.tags.DSTags;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -21,10 +20,10 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.AndCondition;
-import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
 import net.minecraftforge.common.crafting.conditions.OrCondition;
 
 public class RecipeGenerator extends RecipeProvider {
@@ -39,6 +38,9 @@ public class RecipeGenerator extends RecipeProvider {
     protected void buildRecipes(@Nonnull Consumer<FinishedRecipe> consumer) {
         HeatExchangerRecipeGenerator.buildRecipes(consumer);
         LaserCraftingRecipeGenerator.buildRecipes(consumer);
+        OrbitalLaunchRecipeGenerator.buildRecipes(consumer);
+        CargoDeliveryRecipeGenerator.buildRecipes(consumer);
+        AnnihilationRecipeGenerator.buildRecipes(consumer);
 
         Recipe.shaped(ModItems.CAPSULE_EMPTY.get())
             .pattern("HHH")
@@ -52,7 +54,7 @@ public class RecipeGenerator extends RecipeProvider {
         ConditionalRecipe.builder()
         .addCondition(RecipeConditions.LUMIUM_TAG_EMPTY)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.CAPSULE_SOLAR.get())
+            Recipe.shaped(ModItems.CAPSULE_SOLAR_0.get())
             .pattern("SSS")
             .pattern("CEC")
             .pattern("GHG")
@@ -65,7 +67,7 @@ public class RecipeGenerator extends RecipeProvider {
         })
         .addCondition(RecipeConditions.LUMIUM_EXISTS)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.CAPSULE_SOLAR.get())
+            Recipe.shaped(ModItems.CAPSULE_SOLAR_0.get())
             .pattern("SSS")
             .pattern("CEC")
             .pattern("LHL")
@@ -76,7 +78,7 @@ public class RecipeGenerator extends RecipeProvider {
             .define('H', ModItems.HEAT_SHIELDING.get())
             .save(con);
         })
-        .build(consumer, ModItems.CAPSULE_SOLAR.getId());
+        .build(consumer, ModItems.CAPSULE_SOLAR_0.getId());
 
         ConditionalRecipe.builder()
         .addCondition(RecipeConditions.WIRE_COPPER_TAG_EMPTY)
@@ -129,7 +131,7 @@ public class RecipeGenerator extends RecipeProvider {
         ConditionalRecipe.builder()
         .addCondition(RecipeConditions.TUNGSTEN_TAG_EMPTY)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.HEAT_SHIELDING.get())
+            Recipe.shaped(ModItems.HEAT_SHIELDING.get(), 2)
             .pattern("BBB")
             .pattern("BCB")
             .pattern("BBB")
@@ -139,7 +141,7 @@ public class RecipeGenerator extends RecipeProvider {
         })
         .addCondition(RecipeConditions.TUNGSTEN_EXISTS)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.HEAT_SHIELDING.get())
+            Recipe.shaped(ModItems.HEAT_SHIELDING.get(), 4)
             .pattern("BTB")
             .pattern("TCT")
             .pattern("BTB")
@@ -269,12 +271,45 @@ public class RecipeGenerator extends RecipeProvider {
             .define('T', ModItems.THERMOPILE.get())
             .save(consumer);
 
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY)
+        .addRecipe((con)-> {
+            Recipe.shaped(ModBlocks.HEAT_CONVERTER_BLOCK.get())
+                .pattern("SES")
+                .pattern("CEC")
+                .pattern("SES")
+                .define('S', DSTags.itemIngotSentient)
+                .define('E', ModItems.CONSTRUCT_ENDER.get())
+                .define('C', DSTags.itemCoilCopper)
+                .save(con);
+        })
+        .addCondition(RecipeConditions.CIRCUIT_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModBlocks.HEAT_CONVERTER_BLOCK.get())
+                .pattern("SES")
+                .pattern("CEC")
+                .pattern("SES")
+                .define('S', DSTags.itemIngotSentient)
+                .define('E', ModItems.CONSTRUCT_ENDER.get())
+                .define('C', DSTags.itemCircuit)
+                .save(con);
+        })
+        .build(consumer, ModBlocks.HEAT_CONVERTER_BLOCK.getId());
+
         
         Recipe.shapeless(Items.BAKED_POTATO, 8)
             .requires(Items.POTATO, 8)
             .requires(ModItems.STEAM_BUCKET.get())
             .save(consumer, new ResourceLocation(DysonSphere.MODID, "baked_potato"));
             
+        Recipe.shaped(ModItems.INGOT_SENTIENT_ALLOY.get(), 2)
+            .pattern("III")
+            .pattern("ISI")
+            .pattern("III")
+            .define('I', DSTags.itemIngotSmartAlloy)
+            .define('S', DSTags.itemIngotSentient)
+            .save(consumer);
+
         ConditionalRecipe.builder()
         .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY)
         .addRecipe((con) -> {
@@ -395,7 +430,7 @@ public class RecipeGenerator extends RecipeProvider {
         ConditionalRecipe.builder()
         .addCondition(RecipeConditions.SIGNALUM_TAG_EMPTY)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.CAPSULE_LASER.get())
+            Recipe.shaped(ModItems.CAPSULE_LASER_0.get())
                 .pattern("SCS")
                 .pattern("TET")
                 .pattern("HRH")
@@ -409,7 +444,7 @@ public class RecipeGenerator extends RecipeProvider {
         })
         .addCondition(RecipeConditions.SIGNALUM_EXISTS)
         .addRecipe((con) -> {
-            Recipe.shaped(ModItems.CAPSULE_LASER.get())
+            Recipe.shaped(ModItems.CAPSULE_LASER_0.get())
                 .pattern("SCS")
                 .pattern("sEs")
                 .pattern("TsT")
@@ -420,7 +455,16 @@ public class RecipeGenerator extends RecipeProvider {
                 .define('s', DSTags.itemIngotSignalum)
                 .save(con);
         })
-        .build(consumer, ModItems.CAPSULE_LASER.getId());
+        .build(consumer, ModItems.CAPSULE_LASER_0.getId());
+
+        Recipe.shaped(ModItems.CAPSULE_STRUCTURE_0.get())
+            .pattern("SCS")
+            .pattern("SES")
+            .pattern("SCS")
+            .define('S', ModItems.COMPONENT_SMART_ALLOY.get())
+            .define('C', Items.LIGHT_GRAY_CONCRETE)
+            .define('E', ModItems.CAPSULE_EMPTY.get())
+            .save(consumer);
 
         Recipe.shaped(ModItems.CONSTRUCT_ENDER.get())
             .pattern("ECE")
@@ -584,8 +628,145 @@ public class RecipeGenerator extends RecipeProvider {
         })
         .build(consumer, ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.getId());
 
+        Recipe.shaped(ModBlocks.INPUT_HATCH_PROXY.get())
+            .pattern("ICI")
+            .pattern("CHC")
+            .pattern("ICI")
+            .define('I', DSTags.itemCoilIron)
+            .define('C', ModItems.COMPONENT_SMART_ALLOY.get())
+            .define('H', Blocks.HOPPER)
+            .save(consumer);
+
+        ConditionalRecipe.builder()
+        .addCondition(RecipeConditions.GEAR_TAG_EMPTY)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModBlocks.INPUT_HATCH_PARALLEL.get())
+            .pattern("SPS")
+            .pattern("SHS")
+            .pattern("SPS")
+            .define('S', DSTags.itemIngotSmartAlloy)
+            .define('P', Items.PISTON)
+            .define('H', ModBlocks.INPUT_HATCH_PROXY.get())
+            .save(con);
+        })
+        .addCondition(RecipeConditions.GEAR_EXISTS)
+        .addRecipe((con) -> {
+            Recipe.shaped(ModBlocks.INPUT_HATCH_PARALLEL.get())
+            .pattern("GGG")
+            .pattern("SHS")
+            .pattern("GGG")
+            .define('S', DSTags.itemIngotSmartAlloy)
+            .define('G', DSTags.itemGear)
+            .define('H', ModBlocks.INPUT_HATCH_PROXY.get())
+            .save(con);
+        })
+        .build(consumer, ModBlocks.INPUT_HATCH_PARALLEL.getId());
+
+
+        Recipe.shapeless(ModBlocks.INPUT_HATCH_PARALLEL_HEAT.get())
+            .requires(ModBlocks.INPUT_HATCH_PARALLEL.get())
+            .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
+            .save(consumer);
+
+        Recipe.shapeless(ModBlocks.INPUT_HATCH_SERIAL_HEAT.get())
+            .requires(ModBlocks.INPUT_HATCH_SERIAL.get())
+            .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
+            .save(consumer);
+
+        Recipe.shapeless(ModBlocks.INPUT_HATCH_PROXY_HEAT.get())
+            .requires(ModBlocks.INPUT_HATCH_PROXY.get())
+            .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
+            .save(consumer);
+
+        Recipe.shapeless(ModBlocks.INPUT_HATCH_ENERGY_HEAT.get())
+            .requires(ModBlocks.INPUT_HATCH_ENERGY.get())
+            .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
+            .save(consumer);
+
+        Recipe.shapeless(ModBlocks.INPUT_HATCH_FLUID_HEAT.get())
+            .requires(ModBlocks.INPUT_HATCH_FLUID.get())
+            .requires(ModBlocks.HEAT_PIPE_BLOCK.get())
+            .save(consumer);
+
+        Recipe.shaped(ModItems.WRENCH.get())
+            .pattern("I I")
+            .pattern(" C ")
+            .pattern(" I ")
+            .define('I', DSTags.itemIngotSmartAlloy)
+            .define('C', DSTags.itemCoilCopper)
+            .save(consumer);
+
+        Recipe.shaped(ModBlocks.SMART_ALLOY_BLOCK.get())
+            .pattern("III")
+            .pattern("III")
+            .pattern("III")
+            .define('I', ModItems.INGOT_SMART_ALLOY.get())
+            .save(consumer);
         
+        Recipe.shapeless(ModItems.INGOT_SMART_ALLOY.get(), 9)
+            .requires(ModBlocks.SMART_ALLOY_BLOCK.get())
+            .save(consumer, ModItems.INGOT_SMART_ALLOY.getId().withSuffix("_uncompress"));
+
+        ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.CIRCUIT_EXISTS).addRecipe((con) -> {
+                Recipe.shaped(ModBlocks.LISTENER_BLOCK.get())
+                    .pattern("CSC")
+                    .pattern("csc")
+                    .pattern("ici")
+                    .define('C', ModItems.COMPONENT_SMART_ALLOY.get())
+                    .define('c', DSTags.itemCircuit)
+                    .define('S', ModItems.SENSOR_UNIT.get())
+                    .define('s', Items.CALIBRATED_SCULK_SENSOR)
+                    .define('i', Tags.Items.INGOTS_IRON)
+                    .save(con);
+            })
+            .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY).addRecipe((con) -> {
+                Recipe.shaped(ModBlocks.LISTENER_BLOCK.get())
+                    .pattern("CSC")
+                    .pattern("csc")
+                    .pattern("ici")
+                    .define('C', ModItems.COMPONENT_SMART_ALLOY.get())
+                    .define('c', DSTags.itemCoilCopper)
+                    .define('S', ModItems.SENSOR_UNIT.get())
+                    .define('s', Items.CALIBRATED_SCULK_SENSOR)
+                    .define('i', Tags.Items.INGOTS_IRON)
+                    .save(con);
+            }).build(consumer, ModBlocks.LISTENER_BLOCK.getId());
+        
+        ConditionalRecipe.builder()
+            .addCondition(RecipeConditions.CIRCUIT_EXISTS).addRecipe((con) -> {
+                Recipe.shaped(ModBlocks.ENERGY_CONVERTER_BLOCK.get())
+                    .pattern("CSC")
+                    .pattern("sSs")
+                    .pattern("CNC")
+                    .define('C', DSTags.itemCircuit)
+                    .define('S', DSTags.itemIngotSentient)
+                    .define('s', DSTags.itemIngotSmartAlloy)
+                    .define('N', Tags.Items.INGOTS_NETHERITE)
+                    .save(con);
+            })
+            .addCondition(RecipeConditions.CIRCUIT_TAG_EMPTY).addRecipe((con) -> {
+                Recipe.shaped(ModBlocks.ENERGY_CONVERTER_BLOCK.get())
+                    .pattern("sSs")
+                    .pattern("sSs")
+                    .pattern("sNs")
+                    .define('S', DSTags.itemIngotSentient)
+                    .define('s', DSTags.itemIngotSmartAlloy)
+                    .define('N', Tags.Items.INGOTS_NETHERITE)
+                    .save(con);
+            }).build(consumer, ModBlocks.ENERGY_CONVERTER_BLOCK.getId());
+
+        Recipe.shaped(ModBlocks.DS_CONTROLLER_BLOCK.get())
+            .pattern(" M ")
+            .pattern("MCM")
+            .pattern("SSS")
+            .define('M', ModBlocks.DS_MONITOR_BLOCK.get())
+            .define('C', DSTags.itemCoilCopper)
+            .define('S', DSTags.itemIngotSmartAlloy)
+            .save(consumer);
     }
+
+
     
 
     public static class Recipe {

@@ -25,6 +25,7 @@
           "BBB"
         ],
         "result": {
+          "count": 2,
           "item": "dysonsphere:heat_shielding"
         },
         "show_notification": true
@@ -60,6 +61,7 @@
           "BTB"
         ],
         "result": {
+          "count": 4,
           "item": "dysonsphere:heat_shielding"
         },
         "show_notification": true

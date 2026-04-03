@@ -1,0 +1,138 @@
+package de.bax.dysonsphere.items;
+
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import de.bax.dysonsphere.capabilities.DSCapabilities;
+import de.bax.dysonsphere.capabilities.dsPart.IDSPart;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
+
+public class CapsuleItem extends Item {
+    
+    public enum TYPE {
+
+        SOLAR_0(10, 0.00001f),
+        LASER_0(-50, 0.00001f),
+        STRUCTURE_0(0, 0.00001f),
+        SOLAR_1(100, 0.000001f),
+        LASER_1(-50, 0.000001f),
+        STRUCTURE_1(0, 0.000001f),
+        SOLAR_2(500, 0.0000001f),
+        LASER_2(-50, 0.0000001f),
+        STRUCTURE_2(0, 0.0000001f),
+        SOLAR_3(1000, 0.00000001f),
+        LASER_3(-50, 0.00000001f),
+        STRUCTURE_3(0, 0.00000001f);
+
+        public int energyProvided;
+        public float completionProgress;
+
+        TYPE(int energyProvided, float completionProgress){
+            this.energyProvided = energyProvided;
+            this.completionProgress = completionProgress;
+        }
+
+        public int getTier(){
+            return Integer.parseInt(name().substring(name().indexOf("_")+1)); //if this ever breaks, it means something with the names is wrong/changed
+        }
+
+        public String getType(){
+            return name().substring(0, name().indexOf("_"));
+        }
+    }
+
+
+    protected TYPE type;
+
+    public CapsuleItem(TYPE type) {
+        super(new Item.Properties());
+        this.type = type;
+    }
+
+    @Override
+    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+        return new ICapabilityProvider() {
+            @Override
+            public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+                return cap.equals(DSCapabilities.DS_PART) ? LazyOptional.of(() -> new IDSPart() {
+                    @Override
+                    public int getEnergyProvided() {
+                        return type.energyProvided;
+                    }
+                    
+                    @Override
+                    public float getCompletionProgress() {
+                        return type.completionProgress;
+                    }
+
+                    @Override
+                    public int getTier() {
+                        return type.getTier();
+                    }
+                }).cast() : LazyOptional.empty();
+            }
+        };
+    }
+
+    @Override
+    public void appendHoverText(@Nonnull ItemStack pStack, @javax.annotation.Nullable Level pLevel, @Nonnull List<Component> pTooltipComponents, @Nonnull TooltipFlag pIsAdvanced) {
+        if(pLevel != null && pLevel.isClientSide){
+            addClientTooltip(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    protected void addClientTooltip(@Nonnull ItemStack pStack, @Nullable Level pLevel, @Nonnull  List<Component> pTooltipComponents, @Nonnull  TooltipFlag pIsAdvanced){
+        pTooltipComponents.add(getDescription());
+        pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.capsule_tier", this.type.getTier()));
+        pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.capsule_provided_energy", this.type.energyProvided).withStyle(ChatFormatting.GRAY));
+        pTooltipComponents.add(Component.translatable("tooltip.dysonsphere.capsule_provided_completion", this.type.completionProgress).withStyle(ChatFormatting.GRAY));
+    }
+
+    @Override
+    public Component getName(@Nonnull ItemStack pStack) {
+        return Component.translatable("item.dysonsphere.capsule");
+    }
+
+    @Override
+    public Component getDescription() {
+        return Component.translatable("tooltip.dysonsphere.capsule_" + this.type.getType().toLowerCase());
+    }
+
+    public Component getContentName(){
+        return ((MutableComponent) getDescription()).append(" ").append(Component.translatable("tooltip.dysonsphere.capsule_tier", this.type.getTier()));
+    }
+
+    public int getTier(){
+        return type.getTier();
+    }
+
+    public String getType(){
+        return type.getType();
+    }
+
+    public static Component getTypeName(ItemStack stack){
+        if(stack.getItem() instanceof CapsuleItem cap){
+            return Component.translatable("tooltip.dysonsphere.capsule_" + cap.type.getType().toLowerCase());
+        }
+        return Component.empty();
+    }
+
+}

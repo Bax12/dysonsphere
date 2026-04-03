@@ -1,5 +1,6 @@
 package de.bax.dysonsphere.blocks;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import de.bax.dysonsphere.containers.HeatGeneratorContainer;
@@ -31,13 +32,13 @@ public class HeatGeneratorBlock extends Block implements EntityBlock {
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
         return new HeatGeneratorTile(pos, state);
     }
 
     @Override
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@Nonnull Level level, @Nonnull BlockState state, @Nonnull BlockEntityType<T> type) {
         return type.equals(ModTiles.HEAT_GENERATOR.get()) ? (teLevel, pos, teState, tile) -> {
             ((HeatGeneratorTile) tile).tick();
         } : null;
@@ -52,15 +53,12 @@ public class HeatGeneratorBlock extends Block implements EntityBlock {
     }
     
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hitResult) {
         if(!level.isClientSide && player instanceof ServerPlayer serverPlayer){
             BlockEntity tile = level.getBlockEntity(pos);
             if(tile != null && tile.getType().equals(ModTiles.HEAT_GENERATOR.get())){
                 NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvided) -> 
-                new HeatGeneratorContainer(containerId, playerInventory, (HeatGeneratorTile) tile, ((HeatGeneratorTile) tile).getLastAxis()), Component.translatable("container.dysonsphere.heat_generator")), buf -> {
-                    buf.writeBlockPos(pos);
-                    buf.writeChar(((HeatGeneratorTile) tile).getLastAxis());
-                });
+                new HeatGeneratorContainer(containerId, playerInventory, (HeatGeneratorTile) tile), Component.translatable("container.dysonsphere.heat_generator")), pos);
 
                 return InteractionResult.CONSUME;
             }

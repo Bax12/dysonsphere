@@ -1,5 +1,5 @@
 {
     "name": "Space Capsules",
     "description": "A list of space capsules that can be launched with the $(item)Electromagnetic Orbital Launcher$() and added to a $(thing)Dyson Sphere$()",
-    "icon": "dysonsphere:capsule_solar"
+    "icon": "dysonsphere:capsule_solar_0"
 }
