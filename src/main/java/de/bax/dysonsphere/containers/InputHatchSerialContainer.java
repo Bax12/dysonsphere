@@ -45,7 +45,7 @@ public class InputHatchSerialContainer extends BaseContainer {
 
     @Override
     protected boolean quickMoveToInventory(ItemStack newStack) {
-        return !this.moveItemStackTo(newStack, 0, 5, false);
+        return !this.moveItemStackTo(newStack, 0, InputHatchTile.Serial.SLOTS, false);
     }
     
 }

@@ -41,6 +41,10 @@ public class RecipeGenerator extends RecipeProvider {
         OrbitalLaunchRecipeGenerator.buildRecipes(consumer);
         CargoDeliveryRecipeGenerator.buildRecipes(consumer);
         AnnihilationRecipeGenerator.buildRecipes(consumer);
+        SchematicBaseInputGenerator.buildRecipes(consumer);
+        SchematicResultGenerator.buildRecipes(consumer);
+        MelterRecipeGenerator.buildRecipes(consumer);
+        CrystallizerRecipeGenerator.buildRecipes(consumer);
 
         Recipe.shaped(ModItems.CAPSULE_EMPTY.get())
             .pattern("HHH")

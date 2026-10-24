@@ -115,7 +115,7 @@ public class PocketStarItem extends Item {
         }
     }
 
-    protected void chargeInventory(ItemStack stack, Entity entity){
+    public static void chargeInventory(ItemStack stack, Entity entity){
         if(getEnergyStored(stack) > 0 && entity instanceof Player player) {
             for (ItemStack targetStack : player.getInventory().offhand) {
                 transferEnergy(stack, targetStack);
@@ -134,7 +134,7 @@ public class PocketStarItem extends Item {
         }
     }
 
-    protected void transferEnergy(ItemStack stack, ItemStack targetStack){
+    public static void transferEnergy(ItemStack stack, ItemStack targetStack){
         targetStack.getCapability(ForgeCapabilities.ENERGY).ifPresent((targetEnergy) -> {
             int transfer = targetEnergy.receiveEnergy((int) extractEnergy(stack, Integer.MAX_VALUE, true), true);
             if(transfer > 0){

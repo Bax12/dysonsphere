@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.orbitalLaser.OrbitalLaserAttackPattern;
 import de.bax.dysonsphere.entities.TargetDesignatorEntity;

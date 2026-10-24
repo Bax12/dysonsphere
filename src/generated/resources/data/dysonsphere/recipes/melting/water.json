@@ -1,0 +1,13 @@
+{
+  "type": "dysonsphere:melter",
+  "heatAbsorbed": 50.0,
+  "input": {
+    "item": "minecraft:ice"
+  },
+  "minHeat": 250.0,
+  "output": {
+    "amount": 250,
+    "fluid": "minecraft:water"
+  },
+  "workTime": 20
+}

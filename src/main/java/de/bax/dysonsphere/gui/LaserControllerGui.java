@@ -123,7 +123,7 @@ public class LaserControllerGui extends BaseGui<LaserControllerContainer> {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         energy.drawOverlay(guiGraphics, mouseX, mouseY);
     }

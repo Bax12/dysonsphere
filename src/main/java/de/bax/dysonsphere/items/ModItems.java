@@ -18,6 +18,8 @@ import de.bax.dysonsphere.items.grapplingHook.GrapplingHookWoodHookItem;
 import de.bax.dysonsphere.items.laser.LaserControllerItem;
 import de.bax.dysonsphere.items.laser.LaserPatternItem;
 import de.bax.dysonsphere.items.laser.TargetDesignatorItem;
+import de.bax.dysonsphere.items.schematics.BluePrintBookItem;
+import de.bax.dysonsphere.items.schematics.BlueprintItem;
 import de.bax.dysonsphere.items.tools.PocketDynamoItem;
 import de.bax.dysonsphere.items.tools.PocketStarItem;
 import de.bax.dysonsphere.items.tools.WrenchItem;
@@ -55,6 +57,7 @@ public class ModItems {
     public static final RegistryObject<Item> STEAM_BUCKET = ITEMS.register("bucket_steam", () -> new BucketItem(ModFluids.STEAM, new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
     public static final RegistryObject<Item> HELIUM_BUCKET = ITEMS.register("bucket_helium", () -> new BucketItem(ModFluids.HELIUM, new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
     public static final RegistryObject<Item> ANTI_HELIUM_BUCKET = ITEMS.register("bucket_anti_helium", () -> new BucketItem(ModFluids.ANTI_HELIUM, new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
+    public static final RegistryObject<Item> MOLTEN_SILICON_BUCKET = ITEMS.register("bucket_molten_silicon", () -> new BucketItem(ModFluids.MOLTEN_SILICON, new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET)));
     public static final RegistryObject<Item> LASER_CONTROLLER = ITEMS.register("laser_controller", () -> new LaserControllerItem());
     public static final RegistryObject<Item> TARGET_DESIGNATOR = ITEMS.register("target_designator", () -> new TargetDesignatorItem());
     public static final RegistryObject<Item> LASER_PATTERN = ITEMS.register("laser_pattern", () -> new LaserPatternItem());
@@ -80,7 +83,15 @@ public class ModItems {
     public static final RegistryObject<Item> SENSOR_UNIT = registerItem("sensor_unit");
     public static final RegistryObject<Item> POCKET_DYNAMO = ITEMS.register("pocket_dynamo", () -> new PocketDynamoItem());
     public static final RegistryObject<Item> POCKET_STAR = ITEMS.register("pocket_star", () -> new PocketStarItem());
-    
+    public static final RegistryObject<Item> BLUEPRINT = ITEMS.register("blueprint", () -> new BlueprintItem());
+    public static final RegistryObject<Item> BLUEPRINT_BOOK = ITEMS.register("blueprint_book", () -> new BluePrintBookItem());
+    public static final RegistryObject<Item> CIRCUIT_0 = registerItem("circuit_0");
+    public static final RegistryObject<Item> CIRCUIT_1 = registerItem("circuit_1");
+    public static final RegistryObject<Item> CIRCUIT_2 = registerItem("circuit_2");
+    public static final RegistryObject<Item> CIRCUIT_3 = registerItem("circuit_3");
+    public static final RegistryObject<Item> SILICON = registerItem("silicon");
+    public static final RegistryObject<Item> SILICON_BOULE = ITEMS.register("silicon_boule", () -> new SeededItem());
+    public static final RegistryObject<Item> SILICON_WAFER = ITEMS.register("silicon_wafer", () -> new SeededItem());
 
     public static RegistryObject<Item> registerItem(String name) {
         return ITEMS.register(name, () -> new Item(new Item.Properties()));

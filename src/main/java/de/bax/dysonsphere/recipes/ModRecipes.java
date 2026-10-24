@@ -33,4 +33,16 @@ public class ModRecipes {
 
     public static final RegistryObject<RecipeType<AnnihilationRecipe>> ANNIHILATION_TYPE = TYPES.register("matter_annihilation", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "matter_annihilation")));
     public static final RegistryObject<RecipeSerializer<AnnihilationRecipe>> ANNIHILATION_SERIALIZER = SERIALIZERS.register("matter_annihilation", AnnihilationRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<SchematicResultRecipe>> SCHEMATIC_RESULT_TYPE = TYPES.register("schematic_result", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "schematic_result")));
+    public static final RegistryObject<RecipeSerializer<SchematicResultRecipe>> SCHEMATIC_RESULT_SERIALIZER = SERIALIZERS.register("schematic_result", SchematicResultRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<SchematicBaseInputRecipe>> SCHEMATIC_INPUT_TYPE = TYPES.register("schematic_input", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "schematic_input")));
+    public static final RegistryObject<RecipeSerializer<SchematicBaseInputRecipe>> SCHEMATIC_INPUT_SERIALIZER = SERIALIZERS.register("schematic_input", SchematicBaseInputRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<MelterRecipe>> MELTER_TYPE = TYPES.register("melter", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "melter")));
+    public static final RegistryObject<RecipeSerializer<MelterRecipe>> MELTER_SERIALIZER = SERIALIZERS.register("melter", MelterRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<CrystallizerRecipe>> CRYSTALLIZER_TYPE = TYPES.register("crystallizer", () -> RecipeType.simple(new ResourceLocation(DysonSphere.MODID, "crystallizer")));
+    public static final RegistryObject<RecipeSerializer<CrystallizerRecipe>> CRYSTALLIZER_SERIALIZER = SERIALIZERS.register("crystallizer", CrystallizerRecipe.Serializer::new);
 }

@@ -17,7 +17,8 @@ public interface IInputProvider {
         SERIAL,
         PROXY,
         ENERGY,
-        FLUID;
+        FLUID,
+        SCHEMATIC;
     }
     
     public BlockEntity getTile();

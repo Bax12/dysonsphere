@@ -39,11 +39,21 @@ public class FluidIngredient implements Predicate<FluidStack> {
         }
     }
 
+    /**
+     * Return true if fluid matches and amount is greater or equal then required
+     */
     @Override
     public boolean test(FluidStack fluidStack) {
         if(amount > fluidStack.getAmount()) { //a to small fluid input never matches.
             return false;
         }
+        return matchesFluid(fluidStack);
+    }
+
+    /**
+     * Return true if fluid matches, amount is ignored
+     */
+    public boolean matchesFluid(FluidStack fluidStack){
         if(fluids == null){
             initFluids();
         }

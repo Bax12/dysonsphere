@@ -1,0 +1,9 @@
+{
+  "type": "dysonsphere:schematic_input",
+  "element": {
+    "id": "dysonsphere:or"
+  },
+  "input": {
+    "tag": "forge:gems/prismarine"
+  }
+}

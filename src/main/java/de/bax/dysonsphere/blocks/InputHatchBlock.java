@@ -11,6 +11,7 @@ import de.bax.dysonsphere.color.ModColors.ITintableTileBlock;
 import de.bax.dysonsphere.containers.InputHatchEnergyContainer;
 import de.bax.dysonsphere.containers.InputHatchFluidContainer;
 import de.bax.dysonsphere.containers.InputHatchParallelContainer;
+import de.bax.dysonsphere.containers.InputHatchSchematicContainer;
 import de.bax.dysonsphere.containers.InputHatchSerialContainer;
 import de.bax.dysonsphere.items.tools.WrenchItem;
 import de.bax.dysonsphere.tileentities.InputHatchTile;
@@ -79,7 +80,9 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
         ENERGY,
         ENERGY_HEAT,
         FLUID,
-        FLUID_HEAT;
+        FLUID_HEAT, 
+        SCHEMATIC,
+        SCHEMATIC_HEAT;
 
         
         public boolean isHeatConducting(){
@@ -125,6 +128,10 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
                 return new InputHatchTile.Fluid(pPos, pState);
             case FLUID_HEAT:
                 return new InputHatchTile.FluidHeat(pPos, pState);
+            case SCHEMATIC:
+                return new InputHatchTile.Schematic(pPos, pState);
+            case SCHEMATIC_HEAT:
+                return new InputHatchTile.SchematicHeat(pPos, pState);
         }
         return null;
     }
@@ -184,6 +191,10 @@ public class InputHatchBlock extends Block implements EntityBlock, ITintableTile
 
                 NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvider) ->
                 new InputHatchFluidContainer(containerId, playerInventory, fluid), Component.translatable("container.dysonsphere.input_hatch_fluid" + (type.isHeatConducting() ? "_heat" : ""))), pPos);
+                return InteractionResult.CONSUME;
+            } else if(tile instanceof InputHatchTile.Schematic schematic){
+                NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider((containerId, playerInventory, playerProvider) -> 
+                new InputHatchSchematicContainer(containerId, playerInventory, schematic), Component.translatable("container.dysonsphere.input_hatch_schematic" + (type.isHeatConducting() ? "_heat" : ""))), pPos);
                 return InteractionResult.CONSUME;
             }
         }

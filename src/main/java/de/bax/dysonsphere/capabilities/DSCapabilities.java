@@ -14,7 +14,8 @@ import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider;
 import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.capabilities.orbitalLaser.IOrbitalLaserContainer;
 import de.bax.dysonsphere.capabilities.orbitalLaser.IOrbitalLaserPatternContainer;
-
+import de.bax.dysonsphere.capabilities.schematic.ISchematicContainer;
+import de.bax.dysonsphere.capabilities.seed.ISeededItem;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -35,6 +36,8 @@ public class DSCapabilities {
     public static final Capability<IGrapplingHookEngine> GRAPPLING_HOOK_ENGINE = CapabilityManager.get(new CapabilityToken<>(){});
     public static final Capability<IGrapplingHookRope> GRAPPLING_HOOK_ROPE = CapabilityManager.get(new CapabilityToken<>(){});
     public static final Capability<IGrapplingHookHook> GRAPPLING_HOOK_HOOK = CapabilityManager.get(new CapabilityToken<>(){});
+    public static final Capability<ISchematicContainer> SCHEMATIC_CONTAINER = CapabilityManager.get(new CapabilityToken<>(){});
+    public static final Capability<ISeededItem> SEEDED = CapabilityManager.get(new CapabilityToken<>(){});
 
     //Level
     public static final Capability<IDysonSphereContainer> DYSON_SPHERE = CapabilityManager.get(new CapabilityToken<>(){});

@@ -44,6 +44,9 @@ public class ItemTagGenerator extends ItemTagsProvider {
         tag(DSTags.itemCapsuleT2).add(ModItems.CAPSULE_LASER_2.get(), ModItems.CAPSULE_SOLAR_2.get(), ModItems.CAPSULE_STRUCTURE_2.get());
         tag(DSTags.itemCapsuleT3).add(ModItems.CAPSULE_LASER_3.get(), ModItems.CAPSULE_SOLAR_3.get(), ModItems.CAPSULE_STRUCTURE_3.get());
         
+        tag(DSTags.itemSilicon).add(ModItems.SILICON.get());
+        tag(DSTags.itemSiliconWafer).add(ModItems.SILICON_WAFER.get());
+        tag(DSTags.itemSiliconBoule).add(ModItems.SILICON_BOULE.get());
 
         tag(DSTags.itemGrapplingHookComponent).add(ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC.get(), ModItems.GRAPPLING_HOOK_ENGINE_ELECTRIC_2.get(), ModItems.GRAPPLING_HOOK_ENGINE_MANUAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL.get(), ModItems.GRAPPLING_HOOK_ENGINE_PRESSURE.get(), ModItems.GRAPPLING_HOOK_ENGINE_STEAM.get(), ModItems.GRAPPLING_HOOK_HOOK_BLAZE.get(), ModItems.GRAPPLING_HOOK_HOOK_SLIME.get(), ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY.get(), ModItems.GRAPPLING_HOOK_HOOK_WOOD.get(), ModItems.GRAPPLING_HOOK_ROPE_ENDER.get(), Items.CHAIN, Items.STRING, Items.TRIPWIRE_HOOK);
         tag(DSTags.itemGrapplingHookHook).add(ModItems.GRAPPLING_HOOK_HOOK_BLAZE.get(), ModItems.GRAPPLING_HOOK_HOOK_SLIME.get(), ModItems.GRAPPLING_HOOK_HOOK_SMART_ALLOY.get(), ModItems.GRAPPLING_HOOK_HOOK_WOOD.get(), Items.TRIPWIRE_HOOK);

@@ -1,0 +1,9 @@
+{
+  "type": "dysonsphere:schematic_input",
+  "element": {
+    "id": "dysonsphere:nor"
+  },
+  "input": {
+    "tag": "forge:gems/lapis"
+  }
+}

@@ -14,6 +14,7 @@ public class DSTags {
     public static final TagKey<Fluid> fluidHelium = TagKey.create(Registries.FLUID, forgeLoc("helium"));
     public static final TagKey<Fluid> fluidAntiHelium = TagKey.create(Registries.FLUID, forgeLoc("anti_helium"));
     public static final TagKey<Fluid> fluidGaseous = TagKey.create(Registries.FLUID, forgeLoc("gaseous"));
+    public static final TagKey<Fluid> fluidMoltenSilicon = TagKey.create(Registries.FLUID, forgeLoc("molten_silicon"));
 
     public static final TagKey<Item> itemCoil = TagKey.create(Registries.ITEM, forgeLoc("coils"));
     public static final TagKey<Item> itemCoilCopper = TagKey.create(Registries.ITEM, forgeLoc("coils/copper"));
@@ -61,6 +62,9 @@ public class DSTags {
     public static final TagKey<Item> curioBracelet = TagKey.create(Registries.ITEM, curioLoc("bracelet"));
     public static final TagKey<Item> curioAny = TagKey.create(Registries.ITEM, curioLoc("curio"));
 
+    public static final TagKey<Item> itemSiliconWafer = TagKey.create(Registries.ITEM, forgeLoc("silicon_wafer"));
+    public static final TagKey<Item> itemSilicon = TagKey.create(Registries.ITEM, forgeLoc("silicon"));
+    public static final TagKey<Item> itemSiliconBoule = TagKey.create(Registries.ITEM, forgeLoc("silicon_boule"));
 
     private static ResourceLocation forgeLoc(String name){
         return new ResourceLocation("forge", name);

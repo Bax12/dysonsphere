@@ -8,8 +8,6 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import de.bax.dysonsphere.capabilities.energy.ItemEnergyHandler;
-import de.bax.dysonsphere.compat.ModCompat;
-import de.bax.dysonsphere.compat.curio.Curios;
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,7 +25,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
 
 public class PocketDynamoItem extends Item {
 
@@ -53,10 +50,9 @@ public class PocketDynamoItem extends Item {
             @Override
             public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
                 if(cap.equals(ForgeCapabilities.ENERGY)){
-                    return LazyOptional.of(side == null ? () -> new ItemEnergyHandler(stack, capacity) : () -> new ItemEnergyHandler(stack, capacity){
-                        @Override
-                        public boolean canReceive() {
-                            return false;
+                    return LazyOptional.of(() -> new ItemEnergyHandler(stack, capacity) {
+                        public int receiveEnergy(int maxReceive, boolean simulate) {
+                            return 0;
                         };
                     }).cast();
                 }
@@ -68,51 +64,20 @@ public class PocketDynamoItem extends Item {
     @Override
     public void inventoryTick(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull Entity entity, int pSlotId, boolean pIsSelected) {
         if(!level.isClientSide()){
-            stack.getCapability(ForgeCapabilities.ENERGY).ifPresent((energy) -> {
-                CompoundTag tag = stack.getOrCreateTag();
-                long lastGenTick = tag.getLong("lastGen");
-                BlockPos lastGenPos = BlockPos.of(tag.getLong("lastPos"));
-                // DysonSphere.LOGGER.debug("PocketDynamo invTick tick: {}, lastTick: {}, pos: {}, lastPos {}", level.getGameTime(), lastGenTick, entity.getOnPos(), lastGenPos);
-                if(level.getGameTime() - lastGenTick  > minDelay && entity.getOnPos().distSqr(lastGenPos) > minDistance){
-                    energy.receiveEnergy(productionRate, false);
-                    tag.putLong("lastGen", level.getGameTime());
-                    tag.putLong("lastPos", entity.getOnPos().asLong());
-                    stack.setTag(tag);
-                }
+            CompoundTag tag = stack.getOrCreateTag();
+            long lastGenTick = tag.getLong("lastGen");
+            BlockPos lastGenPos = BlockPos.of(tag.getLong("lastPos"));
+            // DysonSphere.LOGGER.debug("PocketDynamo invTick tick: {}, lastTick: {}, pos: {}, lastPos {}", level.getGameTime(), lastGenTick, entity.getOnPos(), lastGenPos);
+            if(level.getGameTime() - lastGenTick  > minDelay && entity.getOnPos().distSqr(lastGenPos) > minDistance){
+                PocketStarItem.receiveEnergy(stack, productionRate, false);
+                tag.putLong("lastGen", level.getGameTime());
+                tag.putLong("lastPos", entity.getOnPos().asLong());
+                stack.setTag(tag);
+            }
 
-                chargeInventory(energy, entity);
-            });
+            PocketStarItem.chargeInventory(stack, entity);
         }
     }
-
-    protected void chargeInventory(IEnergyStorage energy, Entity entity){
-        if(energy.getEnergyStored() > 0 && entity instanceof Player player) {
-            for (ItemStack targetStack : player.getInventory().offhand) {
-                transferEnergy(energy, targetStack);
-            };
-            for (ItemStack targetStack : player.getInventory().armor) {
-                transferEnergy(energy, targetStack);
-            };
-            for (ItemStack targetStack : player.getInventory().items) {
-                transferEnergy(energy, targetStack);
-            };
-            if(ModCompat.isLoaded(ModCompat.MODID.CURIOS)){
-                Curios.getMatchingCurios(player, (itemStack) -> {return itemStack.getCapability(ForgeCapabilities.ENERGY).isPresent();}).forEach((targetStack) -> {
-                    transferEnergy(energy, targetStack);
-                });
-            }
-        }
-    }
-
-    protected void transferEnergy(IEnergyStorage energy, ItemStack targetStack){
-        targetStack.getCapability(ForgeCapabilities.ENERGY).ifPresent((targetEnergy) -> {
-            int transfer = targetEnergy.receiveEnergy(energy.extractEnergy(Integer.MAX_VALUE, true), true);
-            if(transfer > 0){
-                targetEnergy.receiveEnergy(energy.extractEnergy(transfer, false), false);
-            }
-        });
-    }
-
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
@@ -124,16 +89,14 @@ public class PocketDynamoItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand pUsedHand) {
         ItemStack stack = player.getItemInHand(pUsedHand);
-        stack.getCapability(ForgeCapabilities.ENERGY).ifPresent((energy) -> {
-            CompoundTag tag = stack.getOrCreateTag();
-            long lastGenTick = tag.getLong("lastGen");
-            if(level.getGameTime() - lastGenTick > minDelay){
-                energy.receiveEnergy(productionRate, false);
-                tag.putLong("lastGen", level.getGameTime());
-                tag.putLong("lastPos", player.getOnPos().asLong());
-                stack.setTag(tag);
-            }
-        });
+        CompoundTag tag = stack.getOrCreateTag();
+        long lastGenTick = tag.getLong("lastGen");
+        if(level.getGameTime() - lastGenTick > minDelay){
+            PocketStarItem.receiveEnergy(stack, productionRate, false);
+            tag.putLong("lastGen", level.getGameTime());
+            tag.putLong("lastPos", player.getOnPos().asLong());
+            stack.setTag(tag);
+        }
         return InteractionResultHolder.consume(stack);
     }
 

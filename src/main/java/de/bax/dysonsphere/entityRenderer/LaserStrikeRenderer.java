@@ -48,6 +48,15 @@ public class LaserStrikeRenderer extends EntityRenderer<LaserStrikeEntity> {
         
         VertexConsumer builder = bufferSource.getBuffer(RenderType.entityTranslucent(RES_LOC, false));
         
+        
+
+        ////TODO rework to this at some point
+        // var diff = entity.getPosition(partialTicks).subtract(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition());
+        // diff = diff.multiply(1, 0, 1);
+        // float angle = diff.toVector3f().angleSigned(0, 0, 1, 0, -1, 0);
+        // pPoseStack.mulPose(new Quaternionf().rotateAxis(angle, 0, 1, 0));
+
+
         // poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
         poseStack.mulPose(new Quaternionf().rotateAxis((float)Math.PI * (-Minecraft.getInstance().gameRenderer.getMainCamera().getYRot() / 180f), 0, 1, 0));
         

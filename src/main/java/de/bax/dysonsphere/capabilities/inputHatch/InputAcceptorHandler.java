@@ -5,11 +5,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.inputHatch.IInputProvider.ProviderType;
+import de.bax.dysonsphere.schematic.Schematic;
+import de.bax.dysonsphere.schematic.SchematicRecipe;
 import de.bax.dysonsphere.util.FluidIngredient;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,7 +31,15 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<CompoundTag> {
 
-    public Set<LazyOptional<IInputProvider>> inputProviders = new HashSet<>();
+    // public Set<LazyOptional<IInputProvider>> inputProviders = new HashSet<>();//TODO: split based on provider type
+
+    protected Set<LazyOptional<IInputProvider>> providerParallel = new HashSet<>();
+    protected Set<LazyOptional<IInputProvider>> providerSerial = new HashSet<>();
+    protected Set<LazyOptional<IInputProvider>> providerProxy = new HashSet<>(); //only needed to save and load - has no unique function
+    protected Set<LazyOptional<IInputProvider>> providerEnergy = new HashSet<>();
+    protected Set<LazyOptional<IInputProvider>> providerFluid = new HashSet<>();
+    protected Set<LazyOptional<IInputProvider>> providerSchematic = new HashSet<>();
+
     protected Set<BlockPos> inputProviderPosSet = new HashSet<>();
 
     protected final BlockEntity tile;
@@ -52,7 +65,23 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
     }
 
     public List<LazyOptional<IInputProvider>> getProviders(ProviderType type){
-        return inputProviders.stream().filter((entry -> entry.map((provider) -> {return provider.getType().equals(type);}).orElse(false))).collect(Collectors.toList());
+        switch (type) {
+            case PARALLEL:
+                return ImmutableList.copyOf(providerParallel);
+            case SERIAL:
+                return ImmutableList.copyOf(providerSerial);
+            case PROXY:
+                return ImmutableList.copyOf(providerProxy);
+            case ENERGY:
+                return ImmutableList.copyOf(providerEnergy);
+            case FLUID:
+                return ImmutableList.copyOf(providerFluid);
+            case SCHEMATIC:
+                return ImmutableList.copyOf(providerSchematic);
+        }
+        return List.of();
+        
+        // return inputProviders.stream().filter((entry -> entry.map((provider) -> {return provider.getType().equals(type);}).orElse(false))).collect(Collectors.toList());
     }
 
     protected List<ItemStack> getInventoryFromProviders(List<LazyOptional<IInputProvider>> lazyProviders){
@@ -79,7 +108,9 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         return stacks;
     }
 
-    //return remainder of input list, that was not consumed from input hatches.
+    /**
+     * return remainder of input list, that was not consumed from input hatches.
+     */
     public List<Ingredient> consumeItemInputs(List<Ingredient> ingredient){
         List<Ingredient> mutableIngredients = new ArrayList<>(ingredient);
         consumeItemInputType(mutableIngredients, ProviderType.SERIAL);
@@ -198,6 +229,37 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         return mutableIngredients;
     }
 
+    public Optional<SchematicRecipe> getSchematicRecipe() {
+        Optional<SchematicRecipe> recipe = Optional.empty();
+        List<LazyOptional<IInputProvider>> schematicProviders = getProviders(ProviderType.SCHEMATIC);
+        if(!schematicProviders.isEmpty()){
+            var schematicProvider = schematicProviders.get(0); //if there is more then one don't care
+            recipe = schematicProvider.map((provider) -> {
+                if(provider.getAcceptor().map((acceptor) -> { return acceptor.equals(this); }).orElse(false)){
+                    ItemStack schematicContainer = provider.getInventory().map((inventory) -> {
+                        return inventory.getStackInSlot(0); //schematic provider only has one slot
+                    }).orElse(ItemStack.EMPTY);
+                    return schematicContainer.getCapability(DSCapabilities.SCHEMATIC_CONTAINER).map((container) -> {
+                        if(container.getSchematic() instanceof Schematic iSchematic){
+                            return iSchematic;
+                        }
+                        return null;
+                    }).map((schematic) -> {
+                        ItemStack output = Schematic.getResultFromSchematic(tile.getLevel(), schematic).orElse(ItemStack.EMPTY);
+                        List<Ingredient> ingredients = Schematic.getInputsFromSchematic(tile.getLevel(), schematic);
+                        if(!output.isEmpty() && !ingredients.isEmpty()){
+                            return new SchematicRecipe(output, ingredients);
+                        }
+                        return null;
+                    }).orElse(null);
+                    
+                }
+                return null;
+            });
+        }
+        return recipe;
+    }
+
     public void updateNeighbors(Level level, BlockPos pos){
         for(Direction dir : Direction.values()){
             BlockEntity neighbor = level.getBlockEntity(pos.relative(dir));
@@ -208,6 +270,19 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
                 }
             }
         }
+    }
+
+    protected void clearInputProviders(){
+        providerParallel.clear();
+        providerSerial.clear();
+        providerProxy.clear();
+        providerEnergy.clear();
+        providerFluid.clear();
+        providerSchematic.clear();
+    }
+
+    protected Iterable<LazyOptional<IInputProvider>> getInputProviders(){
+        return Iterables.concat(providerParallel, providerSerial, providerProxy, providerEnergy, providerFluid, providerSchematic);
     }
 
     public void tick(){
@@ -223,7 +298,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
         // if(!inputProviderPosSet.isEmpty()){ //used to load providers and sync them to the client.
         
         if(unpackPosList){
-            inputProviders.clear(); //will never be called when no provider is present, keeping the old ones in the client memory.
+            clearInputProviders(); //will never be called when no provider is present, keeping the old ones in the client memory.
             for(BlockPos pos : inputProviderPosSet){
                 Level level = tile.getLevel();
                 if(level != null){
@@ -241,29 +316,38 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
     @Override
     public void addInputProvider(LazyOptional<IInputProvider> provider) {
         if(provider.isPresent()) {
-            if(inputProviders.add(provider)){
-                provider.ifPresent((input) -> {
-                    input.updateUplink();
-                });
-                onChange();
+            IInputProvider prov = provider.resolve().get();
+            switch (prov.getType()) {
+                case PARALLEL:
+                    providerParallel.add(provider);
+                    break;
+                case SERIAL:
+                    providerSerial.add(provider);
+                    break;
+                case PROXY:
+                    providerProxy.add(provider);
+                    break;
+                case ENERGY:
+                    providerEnergy.add(provider);
+                    break;
+                case FLUID:
+                    providerFluid.add(provider);
+                    break;
+                case SCHEMATIC:
+                    providerSchematic.add(provider);
+                    break;
             }
+            prov.updateUplink();
+            onChange();
         }
     }
-
-    // @Override
-    // public void removeInputProvider(LazyOptional<IInputProvider> provider) {
-    //     inputProviders.remove(provider);
-    //     // provider.ifPresent((input) -> {
-    //     //     input.updateUplink();
-    //     // });
-    // }
 
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
         List<Long> packedPosList = new ArrayList<>();
 
-        for(LazyOptional<IInputProvider> lazyProvider : inputProviders){
+        for(LazyOptional<IInputProvider> lazyProvider : getInputProviders()){
             lazyProvider.ifPresent((provider) -> {
                 packedPosList.add(provider.getTile().getBlockPos().asLong());
             });
@@ -295,7 +379,7 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
 
     public void onRemove(){
         shouldRefreshProvider = false;
-        for(LazyOptional<IInputProvider> lazyProvider : inputProviders){
+        for(LazyOptional<IInputProvider> lazyProvider : getInputProviders()){
             lazyProvider.ifPresent((provider) -> {
                 provider.resetUplink();
             });
@@ -314,12 +398,12 @@ public class InputAcceptorHandler implements IInputAcceptor, INBTSerializable<Co
 
     public void refreshProvider() {
         shouldRefreshProvider = false;
-        inputProviders.forEach((lazyProvider) -> {
+        getInputProviders().forEach((lazyProvider) -> {
             lazyProvider.ifPresent((provider) -> {
                 provider.resetUplink();
             });
         });
-        inputProviders.clear();
+        clearInputProviders();
         updateSubUplink(Arrays.asList(neighborList));
         onChange();
     }

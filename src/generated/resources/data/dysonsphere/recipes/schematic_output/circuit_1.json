@@ -1,0 +1,10 @@
+{
+  "type": "dysonsphere:schematic_result",
+  "inputCount": 4,
+  "maxDontCare": 4,
+  "minDontCare": 2,
+  "output": {
+    "item": "dysonsphere:circuit_1"
+  },
+  "outputCount": 4
+}

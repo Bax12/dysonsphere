@@ -62,7 +62,7 @@ public class GrapplingHookSteamEngineItem extends Item {
                         @Override
                         public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
                             // return stack.isFluidEqual(new FluidStack(ModFluids.STEAM.get(), 5));
-                            return tankWhitelist.test(stack);
+                            return tankWhitelist.matchesFluid(stack);
                         }
                         public boolean canFillFluidType(FluidStack fluid) {
                             return isFluidValid(0, fluid);

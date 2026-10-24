@@ -90,6 +90,12 @@ public class en_usGenerator extends LanguageProvider{
         addItem(ModItems.GRAPPLING_HOOK_ENGINE_MECHANICAL, "Mechanical Engine");
         addItem(ModItems.WRENCH, "Wrench");
         addItem(ModItems.SENSOR_UNIT, "Acoustic Sensor Unit");
+        addItem(ModItems.BLUEPRINT, "Circuit Schematic");
+        addItem(ModItems.BLUEPRINT_BOOK, "Schematic Book");
+        addItem(ModItems.CIRCUIT_0, "Simple Logic Circuit");
+        addItem(ModItems.CIRCUIT_1, "Basic Logic Circuit");
+        addItem(ModItems.CIRCUIT_2, "Improved Logic Circuit");
+        addItem(ModItems.CIRCUIT_3, "Advanced Logic Circuit");
 
         //fluids
         add("fluid.dysonsphere.steam", "Steam");

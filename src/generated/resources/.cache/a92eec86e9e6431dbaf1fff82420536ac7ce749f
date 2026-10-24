@@ -1,4 +1,6 @@
-// 1.20.1	2025-07-20T12:18:45.484217906	Tags for minecraft:fluid mod id dysonsphere
-8c0e63bf553dc8c83da9cbd3584d60cf09b272e3 data/forge/tags/fluids/gaseous.json
+// 1.20.1	2026-09-19T22:56:59.848055855	Tags for minecraft:fluid mod id dysonsphere
+d97bc6814c53c908dc397b4b5a778aa798d1faeb data/forge/tags/fluids/anti_helium.json
+bf1581d2e2af2adb3659d6a3cefc8cc1973585f0 data/forge/tags/fluids/gaseous.json
 5bedd60ad1e310cd18cb8bbe1cc5c5f1eafa8d14 data/forge/tags/fluids/helium.json
+901f479e729d42cbcb9b605266773a1a8c704b35 data/forge/tags/fluids/molten_silicon.json
 758b12fd62f35f995620664df4a950e95648da1f data/forge/tags/fluids/steam.json

@@ -31,6 +31,9 @@ public class BlockStateGenerator extends BlockStateProvider{
         buildHorizontalBlock(ModBlocks.DS_MONITOR_BLOCK);
         buildHorizontalBlock(ModBlocks.DS_CONTROLLER_BLOCK);
         buildHorizontalBlock(ModBlocks.LASER_PATTERN_CONTROLLER_BLOCK);
+        buildHorizontalBlock(ModBlocks.HEATING_CHAMBER_BLOCK);
+        buildHorizontalBlock(ModBlocks.SCHEMATIC_WORKBENCH_BLOCK);
+        buildHorizontalBlock(ModBlocks.SILICON_CRYSTALLIZER_BLOCK);
 
         buildModel(ModBlocks.RAILGUN_BLOCK);
         buildModel(ModBlocks.DS_ENERGY_RECEIVER_BLOCK);
@@ -40,18 +43,25 @@ public class BlockStateGenerator extends BlockStateProvider{
         buildModel(ModBlocks.CARGO_RECEIVER_BLOCK);
         buildModel(ModBlocks.LISTENER_BLOCK);
         buildModel(ModBlocks.ENERGY_CONVERTER_BLOCK);
+        buildModel(ModBlocks.HEAT_MELTER_BLOCK);
+        buildModel(ModBlocks.INDUCTION_MELTER_BLOCK);
+
+        buildDirectionalBlock(ModBlocks.LASER_REDIRECTOR_BLOCK);
+        buildDirectionalBlock(ModBlocks.LASER_REDIRECTOR_TOGGLE_BLOCK);
 
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_SERIAL);
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_PARALLEL);
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_PROXY);
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_ENERGY);
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_FLUID);
+        buildInputHatchBlock(ModBlocks.INPUT_HATCH_SCHEMATIC);
 
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_SERIAL_HEAT, blockTexture(ModBlocks.INPUT_HATCH_SERIAL.get()));
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_PARALLEL_HEAT, blockTexture(ModBlocks.INPUT_HATCH_PARALLEL.get()));
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_PROXY_HEAT, blockTexture(ModBlocks.INPUT_HATCH_PROXY.get()));
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_ENERGY_HEAT, blockTexture(ModBlocks.INPUT_HATCH_ENERGY.get()));
         buildInputHatchBlock(ModBlocks.INPUT_HATCH_FLUID_HEAT, blockTexture(ModBlocks.INPUT_HATCH_FLUID.get()));
+        buildInputHatchBlock(ModBlocks.INPUT_HATCH_SCHEMATIC_HEAT, blockTexture(ModBlocks.INPUT_HATCH_SCHEMATIC.get()));
 
         buildPillarBlock(ModBlocks.HEAT_EXCHANGER_BLOCK);
         buildPillarBlock(ModBlocks.HEAT_GENERATOR_BLOCK);
@@ -138,6 +148,13 @@ public class BlockStateGenerator extends BlockStateProvider{
                 ConfiguredModel.builder().modelFile(modelBaseFunc.apply(state)).build() :
                 ConfiguredModel.builder().modelFile(modelFunc.apply(state)).build();
         });
+    }
+
+    private void buildDirectionalBlock(RegistryObject<Block> block){
+        ResourceLocation location = blockTexture(block.get());
+        ModelFile model = new ModelFile.UncheckedModelFile(location);
+        Function<BlockState, ModelFile> modelFunc = $ -> model;
+        directionalBlock(block.get(), modelFunc);
     }
 
 

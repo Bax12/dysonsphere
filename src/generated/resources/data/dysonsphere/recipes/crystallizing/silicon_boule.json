@@ -1,0 +1,12 @@
+{
+  "type": "dysonsphere:crystallizer",
+  "heatCapacity": 5000.0,
+  "input": {
+    "amount": 4000,
+    "fluid": "dysonsphere:molten_silicon"
+  },
+  "maxHeat": 700.0,
+  "output": {
+    "item": "dysonsphere:silicon_boule"
+  }
+}

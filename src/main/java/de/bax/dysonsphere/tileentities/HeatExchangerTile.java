@@ -55,7 +55,7 @@ public class HeatExchangerTile extends BaseTile implements IHeatTile{
     public FluidTankCustom inputTank = new FluidTankCustom(fluidCapacity){
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return inputs.stream().anyMatch(i -> i.test(stack));
+            return inputs.stream().anyMatch(i -> i.matchesFluid(stack));
         }
         protected void onContentsChanged() {
             shouldUpdate = true;

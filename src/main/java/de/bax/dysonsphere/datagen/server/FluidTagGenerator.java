@@ -27,6 +27,7 @@ public class FluidTagGenerator extends FluidTagsProvider{
         tag(DSTags.fluidHelium).add(ModFluids.HELIUM.get());
         tag(DSTags.fluidAntiHelium).add(ModFluids.ANTI_HELIUM.get());
         tag(DSTags.fluidGaseous).add(ModFluids.STEAM.get(), ModFluids.ANTI_HELIUM.get());
+        tag(DSTags.fluidMoltenSilicon).add(ModFluids.MOLTEN_SILICON.get());
     }
 
 

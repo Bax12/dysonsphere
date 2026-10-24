@@ -1,7 +1,8 @@
-// 1.20.1	2025-08-10T23:51:28.661821029	Tags for minecraft:item mod id dysonsphere
+// 1.20.1	2026-09-19T22:56:59.848356529	Tags for minecraft:item mod id dysonsphere
 be6bfd5075f01d29330dd4cb8e5c05688de517bd data/curios/tags/items/back.json
 be6bfd5075f01d29330dd4cb8e5c05688de517bd data/curios/tags/items/belt.json
 4942b962d24a4b203fa76fb05e54743b46c67ae5 data/curios/tags/items/bracelet.json
+86dfa7cf63f345b6b4b3b7b8719ed77f7e9dc513 data/curios/tags/items/curio.json
 4942b962d24a4b203fa76fb05e54743b46c67ae5 data/curios/tags/items/hands.json
 0e4690193a3cd59e0c1c76821c64f1d528404201 data/dysonsphere/tags/items/grappling_hook_components.json
 9418f62851e3132a49484291369c43ef4cba7e39 data/dysonsphere/tags/items/grappling_hook_components/engine.json
@@ -22,6 +23,9 @@ b855986449f7e11619f1d69f0728a97ba9f3c430 data/forge/tags/items/coils/copper.json
 6cd858fbb530dfd5560a28deace7f76ed6f2fcbd data/forge/tags/items/ingots.json
 7ba1390baf206d8505f35a2b7099f640984f7069 data/forge/tags/items/ingots/nitinol.json
 bf193a7be36dda47c4492f0b66ad430e0c4b9103 data/forge/tags/items/ingots/sentient.json
+78b4e70bed2830cf1dac1c81852f56a950bab276 data/forge/tags/items/silicon.json
+f644de6d65100c8e4e8beb2da21718331bb6fb1f data/forge/tags/items/silicon_boule.json
+8de632a785f38e8473d51879921f8b499be04b54 data/forge/tags/items/silicon_wafer.json
 1b0217b682d170c7744d3cdc1b061b12d86e43ea data/forge/tags/items/tools.json
 1b0217b682d170c7744d3cdc1b061b12d86e43ea data/forge/tags/items/tools/wrench.json
 1b0217b682d170c7744d3cdc1b061b12d86e43ea data/forge/tags/items/wrenches.json

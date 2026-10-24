@@ -9,12 +9,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.blocks.OreSpireBlock;
 import de.bax.dysonsphere.tileentities.OreSpireTile;
 import de.bax.dysonsphere.util.AssetUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -28,8 +26,10 @@ import net.minecraft.world.item.ItemStack;
 public class OreSpireRenderer implements BlockEntityRenderer<OreSpireTile> {
 
     protected static final ResourceLocation RES_LOC = new ResourceLocation("block/stone");
+    protected static TextureAtlasSprite sprite;
 
     public OreSpireRenderer(BlockEntityRendererProvider.Context context) {
+        sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(RES_LOC);
     }
 
     @Override
@@ -64,8 +64,6 @@ public class OreSpireRenderer implements BlockEntityRenderer<OreSpireTile> {
         if (tile.getMaxInventory() > 256) {
             pPoseStack.pushPose();
             pPoseStack.mulPose(Axis.YP.rotationDegrees(23));
-
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(RES_LOC);
 
             renderCuboid(pPoseStack, pBuffer, sprite, 0.4375f, 0.1875f, 0.4375f, pPackedLight);
 
@@ -239,7 +237,7 @@ public class OreSpireRenderer implements BlockEntityRenderer<OreSpireTile> {
         poseStack.popPose();
     }
 
-    private static void quad(VertexConsumer vc, Matrix4f pose, Matrix3f normalMatrix, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float u1, float v1, float u2, float v2, float nx, float ny, float nz, int light) {
+    public static void quad(VertexConsumer vc, Matrix4f pose, Matrix3f normalMatrix, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float u1, float v1, float u2, float v2, float nx, float ny, float nz, int light) {
         drawVertex(pose, normalMatrix, vc, x1, y1, z1, u1, v1, nx, ny, nz, light);
         drawVertex(pose, normalMatrix, vc, x2, y2, z2, u2, v1, nx, ny, nz, light);
         drawVertex(pose, normalMatrix, vc, x3, y3, z3, u2, v2, nx, ny, nz, light);

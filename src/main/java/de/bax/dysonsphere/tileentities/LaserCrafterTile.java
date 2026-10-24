@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 
+import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import de.bax.dysonsphere.capabilities.heat.HeatHandler;
 import de.bax.dysonsphere.capabilities.heat.IHeatContainer;
@@ -21,9 +22,12 @@ import de.bax.dysonsphere.capabilities.orbitalLaser.ILaserReceiver;
 import de.bax.dysonsphere.color.ModColors.ITintableTile;
 import de.bax.dysonsphere.recipes.LaserCraftingRecipe;
 import de.bax.dysonsphere.recipes.ModRecipes;
+import de.bax.dysonsphere.schematic.SchematicRecipe;
+import de.bax.dysonsphere.tags.DSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -36,6 +40,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITintableTile, IHeatTile{
 
+    public static final ResourceLocation DYNAMIC_RESOURCE_LOCATION = new ResourceLocation(DysonSphere.MODID, "dynamic_schematic_laser_crafting_recipe");
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
@@ -44,6 +49,8 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     public static double MAX_HEAT = 1700;
     public static double ENERGY_INPUT_HEAT_RESISTANCE = 50d;
     public static double ENERGY_BLEED_TO_HEAT = 50d;
+
+    public static int SCHEMATIC_CRAFTING_BASE_ENERGY = 10;
 
 
     public ItemStackHandler input = new ItemStackHandler(1) {
@@ -188,11 +195,17 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
                         if((currentRecipe.matches(input.getStackInSlot(0), acceptorHandler.getItemInputs(ProviderType.PARALLEL)))){
                             if(energy >= currentRecipe.inputEnergy()){
                                 if(canOutput()){
+                                    ItemStack inputStack = input.getStackInSlot(0), outputStack = currentRecipe.output();
+                                    inputStack.getCapability(DSCapabilities.SEEDED).ifPresent((seedIn) -> {
+                                        outputStack.getCapability(DSCapabilities.SEEDED).ifPresent((seedOut) -> {
+                                            seedOut.setSeed(seedIn.getSeed()); //keep seed for seeded item transformations (aka cutting boules into wavers)
+                                        });
+                                    });
                                     List<Ingredient> ingredients = acceptorHandler.consumeItemInputs(currentRecipe.allInputs());
                                     if(ingredients.contains(currentRecipe.input())){ //consume input only if not provided by input providers
                                         input.extractItem(0, 1, false);
                                     }
-                                    output.insertItem(0, currentRecipe.output(), false);
+                                    output.insertItem(0, outputStack, false);
                                     energy = Math.max(0, energy - currentRecipe.inputEnergy()); 
                                     currentRecipe = null;
                                 }
@@ -208,7 +221,7 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
                     }
                     bleedEnergy();
                 }   
-                heatHandler.splitShare();             
+                heatHandler.splitShare();
                 acceptorHandler.tick();
                 if(dirty){
                     dirty = false;
@@ -240,13 +253,43 @@ public class LaserCrafterTile extends BaseTile implements ILaserReceiver, ITinta
     }
 
     protected void setCurrentRecipe(){
-        List<LaserCraftingRecipe> recipes = new ArrayList<>(level.getRecipeManager().getAllRecipesFor(ModRecipes.LASER_CRAFTING_TYPE.get()));
         ItemStack input = this.input.getStackInSlot(0);
         List<ItemStack> extraInputs = acceptorHandler.getItemInputs(ProviderType.PARALLEL);
+        if(!acceptorHandler.getProviders(ProviderType.SCHEMATIC).isEmpty() && setSchematicRecipe(input, extraInputs)){
+            return;
+        }
+        
+        List<LaserCraftingRecipe> recipes = new ArrayList<>(level.getRecipeManager().getAllRecipesFor(ModRecipes.LASER_CRAFTING_TYPE.get()));
         recipes.removeIf((recipe) -> {
             return !recipe.matches(input, extraInputs);
         });
         currentRecipe = recipes.size() >= 1 ? recipes.get(0) : null; //ambiguous recipe ==> whatever recipe
+    }
+
+    protected boolean setSchematicRecipe(ItemStack input, List<ItemStack> extraInputs){
+        if(!input.is(DSTags.itemSiliconWafer)) return false;
+        Optional<SchematicRecipe> optionalRecipe = acceptorHandler.getSchematicRecipe();
+        if(optionalRecipe.isPresent()){
+            SchematicRecipe recipe = optionalRecipe.get();
+            int energy = SCHEMATIC_CRAFTING_BASE_ENERGY * recipe.inputs().size();
+            List<Ingredient> extraIngredients = new ArrayList<>(recipe.inputs());
+            input.getCapability(DSCapabilities.SEEDED).ifPresent((seededItem) -> {
+                ItemStack seed = seededItem.getSeed();
+                for(Ingredient ingredient : recipe.inputs()){//need stable iterator while changing the ingredient list
+                    if(ingredient.test(seed)){ //remove all extra input demands that match the seed. Double all that do not match.
+                        extraIngredients.remove(ingredient);
+                    } else {
+                        extraIngredients.add(ingredient);
+                    }
+                }
+            });
+            currentRecipe = new LaserCraftingRecipe(DYNAMIC_RESOURCE_LOCATION, Ingredient.of(input), extraIngredients, recipe.output(), energy);
+            if(currentRecipe.matches(input, extraInputs)){//easier then to check extraInputs beforehand
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected boolean canOutput(){

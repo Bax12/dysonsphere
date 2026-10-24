@@ -399,7 +399,7 @@ public abstract class InputHatchTile extends BaseTile {
                 }
                 return super.extractEnergy(maxExtract, simulate);
             }
-
+            @Override
             public int receiveEnergy(int maxReceive, boolean simulate) {
                 if(!simulate){
                     setChanged();
@@ -600,6 +600,46 @@ public abstract class InputHatchTile extends BaseTile {
         
     }
 
+    public static class Schematic extends InputHatchTile {
+
+        public Schematic(BlockPos pos, BlockState state) {
+            super(ModTiles.INPUT_HATCH_SCHEMATIC.get(), pos, state);
+        }
+
+        public Schematic(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+            super(type, pos, state);
+        }
+
+        @Override
+        public int getSignalStrength() {
+            ItemStack stack = input.getStackInSlot(0);
+            return stack.getCount() / stack.getMaxStackSize();
+        }
+
+        @Override
+        protected ProviderType getProviderType() {
+            return ProviderType.SCHEMATIC;
+        }
+
+        @Override
+        protected int getSlotCount() {
+            return 1;
+        }
+
+        @Override
+        protected int getSlotSize(int slot) {
+            return 1;
+        }
+
+        @Override
+        protected boolean allowItem(int slot, ItemStack stack) {
+            return stack.getCapability(DSCapabilities.SCHEMATIC_CONTAINER).map((container) -> {
+                return container.getSchematic() != null;
+            }).orElse(false);
+        }
+
+    }
+
     public static class SerialHeat extends Serial implements ITintableTile, IHeatTile{
         
         public SerialHeat(BlockPos pos, BlockState state){
@@ -670,5 +710,17 @@ public abstract class InputHatchTile extends BaseTile {
         
     }
 
+    public static class SchematicHeat extends Schematic implements ITintableTile, IHeatTile{
+
+        public SchematicHeat(BlockPos pos, BlockState state) {
+            super(ModTiles.INPUT_HATCH_SCHEMATIC_HEAT.get(), pos, state);
+            this.isHeatConducting = true;
+        }
+
+        @Override
+        public IHeatContainer getHeatContainer() {
+            return heatHandler;
+        }
+    }
 
 }

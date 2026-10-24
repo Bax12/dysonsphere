@@ -51,7 +51,7 @@ public class InputHatchSerialGui extends BaseGui<InputHatchSerialContainer> {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         if(isHeat){
             heat.drawOverlay(guiGraphics, mouseX, mouseY);

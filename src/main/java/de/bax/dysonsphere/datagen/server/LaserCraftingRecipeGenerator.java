@@ -41,6 +41,7 @@ public class LaserCraftingRecipeGenerator {
         RecipeBuilder.of(ModItems.COMPONENT_SMART_ALLOY).input(Ingredient.of(DSTags.itemIngotSmartAlloy)).energyRequired(500_000).save(pWriter);
         RecipeBuilder.of(Items.BUDDING_AMETHYST).input(Ingredient.of(Items.AMETHYST_BLOCK)).energyRequired(5_000_000).save(pWriter);
         RecipeBuilder.of(ModItems.GRAPPLING_HOOK_ROPE_ENDER).input(Ingredient.of(ModItems.CONSTRUCT_ENDER.get())).energyRequired(600_000).save(pWriter);
+        RecipeBuilder.of(ModItems.SILICON_WAFER, 64).input(Ingredient.of(ModItems.SILICON_BOULE.get())).energyRequired(500_000).save(pWriter);
 
         ConditionalRecipe.builder()
             .addCondition(RecipeConditions.GEAR_TAG_EMPTY).addRecipe((consumer) -> {
@@ -148,6 +149,10 @@ public class LaserCraftingRecipeGenerator {
 
         public static RecipeBuilder of(RegistryObject<Item> output){
             return new RecipeBuilder(new ItemStack(output.get()));
+        }
+
+        public static RecipeBuilder of(RegistryObject<Item> output, int amount){
+            return new RecipeBuilder(new ItemStack(output.get(), amount));
         }
 
         public RecipeBuilder input(Ingredient input){

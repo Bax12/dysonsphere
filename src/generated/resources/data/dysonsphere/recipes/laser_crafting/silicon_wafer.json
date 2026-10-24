@@ -1,0 +1,12 @@
+{
+  "type": "dysonsphere:laser_crafting",
+  "extraInputs": [],
+  "input": {
+    "item": "dysonsphere:silicon_boule"
+  },
+  "inputEnergy": 500000,
+  "output": {
+    "count": 64,
+    "item": "dysonsphere:silicon_wafer"
+  }
+}

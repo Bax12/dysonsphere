@@ -14,4 +14,5 @@ public class ModFluids {
     public static final RegistryObject<Fluid> STEAM = FLUIDS.register("steam", () -> new BasicGaseousFluid(ModItems.STEAM_BUCKET, "block/steam_still", "fluid.dysonsphere.steam", 450, -200));
     public static final RegistryObject<Fluid> HELIUM = FLUIDS.register("helium", () -> new BasicGaseousFluid(ModItems.HELIUM_BUCKET, "block/helium_still", "fluid.dysonsphere.helium", 4, 125));
     public static final RegistryObject<Fluid> ANTI_HELIUM = FLUIDS.register("anti_helium", () -> new BasicGaseousFluid(ModItems.ANTI_HELIUM_BUCKET, "block/anti_helium_still", "fluid.dysonsphere.anti_helium", 4, -125));
+    public static final RegistryObject<Fluid> MOLTEN_SILICON = FLUIDS.register("molten_silicon", () -> new BasicGaseousFluid(ModItems.MOLTEN_SILICON_BUCKET, "block/molten_silicon_still", "fluid.dysonsphere.molten_silicon", 1690, 2500));
 }

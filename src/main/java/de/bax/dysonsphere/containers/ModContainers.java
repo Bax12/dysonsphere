@@ -29,4 +29,9 @@ public class ModContainers {
     public static final RegistryObject<MenuType<InputHatchParallelContainer>> INPUT_HATCH_PARALLEL_CONTAINER = CONTAINERS.register("input_hatch_parallel_container", () -> IForgeMenuType.create(InputHatchParallelContainer::fromNetwork));
     public static final RegistryObject<MenuType<InputHatchEnergyContainer>> INPUT_HATCH_ENERGY_CONTAINER = CONTAINERS.register("input_hatch_energy_container", () -> IForgeMenuType.create(InputHatchEnergyContainer::fromNetwork));
     public static final RegistryObject<MenuType<InputHatchFluidContainer>> INPUT_HATCH_FLUID_CONTAINER = CONTAINERS.register("input_hatch_fluid_container", () -> IForgeMenuType.create(InputHatchFluidContainer::fromNetwork));
+    public static final RegistryObject<MenuType<InputHatchSchematicContainer>> INPUT_HATCH_SCHEMATIC_CONTAINER = CONTAINERS.register("input_hatch_schematic_container", () -> IForgeMenuType.create(InputHatchSchematicContainer::fromNetwork));    
+    public static final RegistryObject<MenuType<MelterContainer>> MELTER_CONTAINER = CONTAINERS.register("melter_container", () -> IForgeMenuType.create(MelterContainer::fromNetwork));
+    public static final RegistryObject<MenuType<SiliconCrystallizerContainer>> SILICON_CRYSTALLIZER_CONTAINER = CONTAINERS.register("silicon_crystallizer_container", () -> IForgeMenuType.create(SiliconCrystallizerContainer::fromNetwork));
+    public static final RegistryObject<MenuType<SchematicWorkbenchTableContainer>> SCHEMATIC_WORKBENCH_TABLE_CONTAINER = CONTAINERS.register("schematic_workbench_table_container", () -> IForgeMenuType.create(SchematicWorkbenchTableContainer::fromNetwork));
+    public static final RegistryObject<MenuType<SchematicWorkbenchInventoryContainer>> SCHEMATIC_WORKBENCH_INVENTORY_CONTAINER = CONTAINERS.register("schematic_workbench_inventory_container", () -> IForgeMenuType.create(SchematicWorkbenchInventoryContainer::fromNetwork));
 }

@@ -1,0 +1,13 @@
+{
+  "type": "dysonsphere:melter",
+  "heatAbsorbed": 25.0,
+  "input": {
+    "tag": "forge:silicon_wafer"
+  },
+  "minHeat": 1475.0,
+  "output": {
+    "amount": 50,
+    "fluid": "dysonsphere:molten_silicon"
+  },
+  "workTime": 20
+}

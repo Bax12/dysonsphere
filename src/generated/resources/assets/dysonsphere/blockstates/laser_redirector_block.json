@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "dysonsphere:block/laser_redirector_block",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "dysonsphere:block/laser_redirector_block",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "dysonsphere:block/laser_redirector_block",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "dysonsphere:block/laser_redirector_block",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "dysonsphere:block/laser_redirector_block"
+    },
+    "facing=west": {
+      "model": "dysonsphere:block/laser_redirector_block",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

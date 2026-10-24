@@ -1,0 +1,9 @@
+{
+  "type": "dysonsphere:schematic_input",
+  "element": {
+    "id": "dysonsphere:nand"
+  },
+  "input": {
+    "tag": "forge:gems/amethyst"
+  }
+}

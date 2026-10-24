@@ -1,7 +1,5 @@
 package de.bax.dysonsphere.blocks;
 
-import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
-
 import com.google.common.base.Supplier;
 
 import de.bax.dysonsphere.DysonSphere;
@@ -37,17 +35,23 @@ public class ModBlocks {
     public static final RegistryObject<Block> LISTENER_BLOCK = registerBlock("listener_block", () -> new ListenerBlock());
     public static final RegistryObject<Block> ENERGY_CONVERTER_BLOCK = registerBlock("energy_converter_block", () -> new EnergyConverterBlock());
     public static final RegistryObject<Block> ORE_SPIRE_BLOCK = registerBlock("ore_spire_block", () -> new OreSpireBlock());
-
+    public static final RegistryObject<Block> INDUCTION_MELTER_BLOCK = registerBlock("induction_melter_block", () -> new InductionMelterBlock());
+    public static final RegistryObject<Block> SILICON_CRYSTALLIZER_BLOCK = registerBlock("silicon_crystallizer_block", () -> new SiliconCrystallizerBlock());
+    public static final RegistryObject<Block> SCHEMATIC_WORKBENCH_BLOCK = registerBlock("schematic_workbench_block", () -> new SchematicWorkbenchBlock());
+    
     public static final RegistryObject<Block> HEAT_PIPE_BLOCK = registerBlock("heat_pipe_block", () -> new HeatPipeBlock());
     public static final RegistryObject<Block> HEAT_EXCHANGER_BLOCK = registerBlock("heat_exchanger_block", () -> new HeatExchangerBlock());//5mb/t if >450° + 1mb/t per 50° over 450
     public static final RegistryObject<Block> HEAT_GENERATOR_BLOCK = registerBlock("heat_generator_block", () -> new HeatGeneratorBlock());//1RF/T per 10°difference
     public static final RegistryObject<Block> HEAT_CONVERTER_BLOCK = registerBlock("heat_converter_block", () -> new HeatConverterBlock());
+    public static final RegistryObject<Block> HEAT_MELTER_BLOCK = registerBlock("heat_melter_block", () -> new HeatMelterBlock());
+    public static final RegistryObject<Block> HEATING_CHAMBER_BLOCK = registerBlock("heating_chamber_block", () -> new HeatingChamberBlock());
 
     public static final RegistryObject<Block> LASER_PATTERN_CONTROLLER_BLOCK = registerBlock("laser_pattern_controller_block", () -> new LaserPatternControllerBlock());
     public static final RegistryObject<Block> LASER_CONTROLLER_BLOCK = registerBlock("laser_controller_block", () -> new LaserControllerBlock());
     public static final RegistryObject<Block> LASER_CRAFTER_BLOCK = registerBlock("laser_crafter_block", () -> new LaserCrafterBlock());
+    public static final RegistryObject<Block> LASER_REDIRECTOR_BLOCK = registerBlock("laser_redirector_block", () -> new LaserRedirectorBlock(false));
+    public static final RegistryObject<Block> LASER_REDIRECTOR_TOGGLE_BLOCK = registerBlock("laser_redirector_toggle_block", () -> new LaserRedirectorBlock(true));
     
-
     public static final RegistryObject<Block> INPUT_HATCH_SERIAL = registerBlockWithColorItem("input_hatch_serial_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.SERIAL));
     public static final RegistryObject<Block> INPUT_HATCH_PARALLEL = registerBlockWithColorItem("input_hatch_parallel_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.PARALLEL));
     public static final RegistryObject<Block> INPUT_HATCH_SERIAL_HEAT = registerBlockWithColorItem("input_hatch_serial_heat_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.SERIAL_HEAT));
@@ -58,7 +62,10 @@ public class ModBlocks {
     public static final RegistryObject<Block> INPUT_HATCH_ENERGY_HEAT = registerBlockWithColorItem("input_hatch_energy_heat_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.ENERGY_HEAT));
     public static final RegistryObject<Block> INPUT_HATCH_FLUID = registerBlockWithColorItem("input_hatch_fluid_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.FLUID));
     public static final RegistryObject<Block> INPUT_HATCH_FLUID_HEAT = registerBlockWithColorItem("input_hatch_fluid_heat_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.FLUID_HEAT));
+    public static final RegistryObject<Block> INPUT_HATCH_SCHEMATIC = registerBlockWithColorItem("input_hatch_schematic_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.SCHEMATIC));
+    public static final RegistryObject<Block> INPUT_HATCH_SCHEMATIC_HEAT = registerBlockWithColorItem("input_hatch_schematic_heat_block", () -> new InputHatchBlock(InputHatchBlock.TYPE.SCHEMATIC_HEAT));
 
+    
     public static RegistryObject<Block> registerBlock(String name, Supplier<? extends Block> sup) {
         RegistryObject<Block> block = BLOCKS.register(name, sup);
         ITEM_BLOCKS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));

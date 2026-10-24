@@ -3,7 +3,6 @@ package de.bax.dysonsphere.capabilities.inputHatch;
 import java.util.Arrays;
 import java.util.Set;
 
-import de.bax.dysonsphere.DysonSphere;
 import de.bax.dysonsphere.capabilities.DSCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
